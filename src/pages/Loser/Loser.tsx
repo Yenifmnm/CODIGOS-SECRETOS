@@ -1,0 +1,32 @@
+import { ResultLayout } from '../../components/promo/ResultLayout';
+import { TreasureChest } from '../../components/promo/TreasureChest';
+import { useSession } from '../../app/SessionContext';
+import { box } from '../../app/stage';
+import cofreCerrado from '../../assets/promo/cofre-cerrado.webp';
+
+/** PERDISTE — Figma 23:3159. El cofre queda cerrado, con un balanceo sutil. */
+export default function Loser() {
+  const { lastResult, codeCount } = useSession();
+
+  return (
+    <ResultLayout
+      pageTitle="Estuviste cerca"
+      title="Estuviste cerca"
+      titleSize={140}
+      message="¡Seguí participando, cada código te acerca más al tesoro galáctico!"
+      messageSize={40}
+      messageY={616}
+      ctaY={730}
+      code={lastResult?.code}
+      codeRedeemed
+      codeCount={codeCount}
+      scene={
+        <TreasureChest
+          mode="idle"
+          style={{ ...box({ x: 1161, y: 490, w: 444, h: 444 }), zIndex: 5 }}
+        />
+      }
+      mobileScene={<img src={cofreCerrado} alt="" aria-hidden="true" className="m-art--sm" />}
+    />
+  );
+}

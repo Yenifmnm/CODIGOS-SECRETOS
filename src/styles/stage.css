@@ -1,0 +1,102 @@
+/* -------------------------------------------------------------------------
+   Escenario cinematográfico.
+
+   El Figma está construido sobre un lienzo de 1920x1080. En vez de escalar la
+   página entera con transform, el "stage" es un contenedor de consulta que
+   mantiene la relación 16:9. Cada elemento se posiciona en unidades `cqw`
+   derivadas de sus coordenadas de diseño (helper `u()` en src/app/stage.ts),
+   de modo que la composición escala proporcionalmente y sin deformarse.
+
+   Dos capas con encuadres distintos, a propósito:
+
+   - `.stage__bg` COVER: el fondo galáctico siempre llena la ventana. Recortar
+     estrellas no se nota y evita cualquier banda vacía.
+   - `.stage__inner` CONTAIN: la composición entra ENTERA, pase lo que pase.
+     Una ventana de navegador nunca es 16:9 exacto (el chrome del browser se
+     come 100-180px de alto), así que con `max()` el lienzo se escalaba por el
+     lado más grande y el menú y el cofre quedaban cortados fuera de pantalla.
+
+   El arte pensado para sangrar (planeta en x=-104, nave hasta x=2338) sigue
+   desbordando `.stage__inner` y llena los laterales: `container-type: size` no
+   aplica contención de pintado, y el recorte final lo hace `.stage`.
+   ------------------------------------------------------------------------- */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #0b1642;
+}
+
+/* Fondo: cubre el viewport (se recorta el sobrante, y está bien). */
+.stage__bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: max(100vw, calc(100dvh * 16 / 9));
+  height: max(100dvh, calc(100vw * 9 / 16));
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Composición: se contiene en el viewport (nunca se corta). */
+.stage__inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: min(100vw, calc(100dvh * 16 / 9));
+  height: min(100dvh, calc(100vw * 9 / 16));
+  container-type: size;
+  container-name: stage;
+  z-index: 1;
+}
+
+/* Capa de contenido: todo lo posicionado en coordenadas de diseño. */
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+.abs {
+  position: absolute;
+}
+
+/* Imágenes decorativas: nunca capturan el puntero ni el foco. */
+.deco {
+  pointer-events: none;
+  user-select: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.deco--cover {
+  object-fit: cover;
+}
+
+/* ---------- Vista mobile: flujo vertical real ---------- */
+.mstage {
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(16px, 5vw, 28px);
+  padding-bottom: clamp(40px, 12vw, 72px);
+  gap: clamp(14px, 4vw, 26px);
+  text-align: center;
+}
+
+.mstage__bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}

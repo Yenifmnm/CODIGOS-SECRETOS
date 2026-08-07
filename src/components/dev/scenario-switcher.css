@@ -1,0 +1,46 @@
+.dev-switch {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 9999;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 12px;
+}
+
+.dev-switch__handle {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(11, 22, 66, 0.92);
+  color: var(--c-cyan);
+  border: 1px solid rgba(9, 234, 255, 0.5);
+  cursor: pointer;
+}
+
+.dev-switch__panel {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(9, 234, 255, 0.4);
+  background: rgba(11, 22, 66, 0.96);
+  color: #fff;
+  display: grid;
+  gap: 6px;
+  min-width: 210px;
+}
+
+.dev-switch__panel legend {
+  padding-inline: 4px;
+  color: var(--c-cyan);
+}
+
+.dev-switch__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.dev-switch__hint {
+  margin: 4px 0 0;
+  opacity: 0.65;
+}

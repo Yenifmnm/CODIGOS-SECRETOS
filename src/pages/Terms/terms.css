@@ -1,0 +1,140 @@
+/* BASES Y CONDICIONES — Figma 22:3021 */
+
+.terms__inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Cinta con el título: 799,381 dentro del stage → 452,128 dentro del pergamino. */
+.terms__heading {
+  position: absolute;
+  left: 36.868%; /* (799-347)/1226 */
+  top: 16.41%; /* (381-253)/780 */
+  width: 26.754%; /* 328/1226 */
+  height: 7.436%; /* 58/780 */
+  margin: 0;
+  display: grid;
+  place-items: center;
+  clip-path: polygon(0% 0%, 100% 0%, 96% 50%, 100% 100%, 0% 100%, 4% 50%);
+  background: linear-gradient(180deg, #fcd45a 0%, var(--c-gold) 48%, var(--c-orange) 100%);
+  color: var(--c-brown-dark);
+  font-family: var(--font-display);
+  font-size: 2.083cqw; /* 40 */
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* Área de texto: 556,471 → 843x376 dentro del stage. */
+.terms__scroll {
+  position: absolute;
+  left: 17.05%; /* (556-347)/1226 */
+  top: 27.95%; /* (471-253)/780 */
+  width: 68.76%; /* 843/1226 */
+  height: 48.2%; /* 376/780 */
+  overflow-y: auto;
+  padding-right: 2.2%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-brown) rgba(216, 131, 28, 0.5);
+}
+
+.terms__scroll::-webkit-scrollbar {
+  width: 11px;
+}
+
+.terms__scroll::-webkit-scrollbar-track {
+  background: rgba(216, 131, 28, 0.5);
+  border-radius: 50px;
+}
+
+.terms__scroll::-webkit-scrollbar-thumb {
+  background: var(--c-brown);
+  border-radius: 50px;
+}
+
+.terms__body {
+  font-family: var(--font-display);
+  font-size: 2.083cqw; /* 40 */
+  line-height: 1.16;
+  color: var(--c-brown-dark);
+  text-align: center;
+}
+
+.terms__body p {
+  margin: 0 0 0.7em;
+}
+
+.terms__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* CTA: 799,865 → 36.87%, 78.46% */
+.terms__cta {
+  position: absolute;
+  left: 36.868%;
+  top: 78.46%;
+}
+
+/* Ralph con el catalejo: pequeño gesto de "lectura" al abrirse el pergamino. */
+.terms__ralph {
+  transform-origin: 40% 80%;
+}
+
+.terms__ralph--reading {
+  animation: ralph-read 5.2s ease-in-out 0.2s infinite alternate;
+}
+
+@keyframes ralph-read {
+  0% {
+    transform: rotate(-1.6deg) translateY(0);
+  }
+  50% {
+    transform: rotate(0.6deg) translateY(-0.7%);
+  }
+  100% {
+    transform: rotate(-0.4deg) translateY(-0.3%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terms__ralph--reading {
+    animation: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 899px) {
+  .terms__inner {
+    position: static;
+    inset: auto;
+  }
+
+  .terms__parchment--mobile .terms__heading,
+  .terms__heading {
+    position: static;
+    width: min(280px, 76vw);
+    height: 48px;
+    margin: 0 auto 16px;
+    font-size: clamp(17px, 4.8vw, 22px);
+  }
+
+  .terms__scroll {
+    position: static;
+    width: 100%;
+    height: min(46vh, 340px);
+    padding-right: 10px;
+  }
+
+  .terms__body {
+    font-size: clamp(15px, 4.2vw, 18px);
+    text-align: left;
+  }
+
+  .terms__cta {
+    position: static;
+    margin: 18px auto 0;
+    display: block;
+  }
+}

@@ -1,0 +1,88 @@
+import { Stage } from '../../components/layout/Stage';
+import { Deco } from '../../components/layout/Deco';
+import { PurosolShip } from '../../components/promo/PurosolShip';
+import { TelescopeMagnifier } from '../../components/promo/TelescopeMagnifier';
+import { CloseButton } from '../../components/navigation/CloseButton';
+import { box, u } from '../../app/stage';
+import './code-help.css';
+
+import logoCodigos from '../../assets/logos/codigos-secretos.webp';
+import jugos from '../../assets/promo/jugos.webp';
+import portal from '../../assets/planets/portal.webp';
+import destello from '../../assets/effects/destello.webp';
+import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
+import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
+
+const PACK_ALT =
+  'Pack de jugos PuroSol con el sticker promocional. El código secreto está impreso en el sticker, en el frente del envase.';
+
+const CONTACT = [
+  '*GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO*',
+  '¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!',
+];
+
+/** DÓNDE ESTÁ EL CÓDIGO — Figma 19:2982. */
+export default function CodeHelp() {
+  const note = (
+    <>
+      {CONTACT.map((line) => (
+        <p key={line}>{line}</p>
+      ))}
+    </>
+  );
+
+  return (
+    <Stage
+      title="¿Dónde encuentro el código secreto?"
+      compactMenu
+      mobile={
+        <div className="m-stack" id="contenido">
+          <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo m-logo--sm" />
+          <p className="m-title">
+            Buscá el Código Secreto en los stickers de Purosol
+          </p>
+          <TelescopeMagnifier src={jugos} alt={PACK_ALT} description={PACK_ALT} zoom={2.2} />
+          <div className="m-note">{note}</div>
+          <CloseButton to="/participar" />
+        </div>
+      }
+    >
+      <Deco src={destello} x={-117} y={540} w={415} h={275} opacity={0.5}
+        float={{ amplitude: 9, duration: 5.6 }} />
+      <Deco src={destello} x={1603} y={287} w={415} h={275}
+        float={{ amplitude: 8, duration: 4.8, delay: 0.6 }} />
+      <Deco src={planetaVit1} x={1073} y={-57} w={339} h={166} blur={5} opacity={0.9}
+        float={{ amplitude: 5, duration: 6.8, drift: 4 }} />
+      <Deco src={planetaVit2} x={1851} y={146} w={169} h={184} rotate={15.05} blur={5} opacity={0.8}
+        float={{ amplitude: 6, duration: 7.2, delay: 1.1 }} />
+      <Deco src={portal} x={521} y={733} w={330} h={269} opacity={0.6}
+        float={{ amplitude: 7, duration: 6, delay: 0.4 }} />
+
+      <PurosolShip flipped style={{ ...box({ x: -258, y: 731, w: 664, h: 455 }), zIndex: 3 }} />
+
+      <Deco src={logoCodigos} x={129} y={312} w={669} h={499} zIndex={4}
+        glow="0 0 3cqw #09eaff" float={{ amplitude: 8, duration: 5.4 }} />
+
+      <div className="codehelp__halo abs" style={{ ...box({ x: 686, y: 731, w: 1496, h: 1277 }), zIndex: 1 }} />
+
+      <p className="t-display t-gold codehelp__title abs" style={{ left: u(1410), top: u(176), fontSize: u(60), width: u(558), zIndex: 6 }}>
+        Buscá el Código Secreto en los stickers de Purosol
+      </p>
+
+      <TelescopeMagnifier
+        src={jugos}
+        alt={PACK_ALT}
+        description={PACK_ALT}
+        zoom={2.2}
+        className="codehelp__pack"
+        style={{ ...box({ x: 1200, y: 157, w: 467, h: 765 }), zIndex: 6 }}
+      />
+
+      <div className="codehelp__note abs" style={{ ...box({ x: 1095, y: 935, w: 640, h: 82 }), zIndex: 7 }} id="contenido">
+        {note}
+      </div>
+
+      <CloseButton to="/participar" style={{ left: u(1758), top: u(41) }} />
+    </Stage>
+  );
+}

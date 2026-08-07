@@ -1,0 +1,46 @@
+/* DÓNDE ESTÁ EL CÓDIGO — Figma 19:2982 */
+
+.codehelp__halo {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(9, 234, 255, 0.26) 0%,
+    rgba(9, 234, 255, 0.12) 40%,
+    rgba(9, 234, 255, 0) 66%
+  );
+  pointer-events: none;
+}
+
+.codehelp__title {
+  margin: 0;
+  text-align: center;
+  line-height: 1.08;
+  transform: translateX(-50%);
+  white-space: normal;
+}
+
+.codehelp__note {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5cqw 2.4cqw;
+  border-radius: 200px;
+  background: var(--c-cyan-50);
+  font-family: var(--font-display);
+  font-size: 1.302cqw; /* 25 */
+  line-height: 1.12;
+  color: #fff;
+  text-align: center;
+}
+
+.codehelp__note p {
+  margin: 0;
+}
+
+@media (max-width: 899px) {
+  .codehelp__note {
+    position: static;
+    width: 100%;
+  }
+}

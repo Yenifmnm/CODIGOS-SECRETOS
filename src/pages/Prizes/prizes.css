@@ -1,0 +1,13 @@
+/* PREMIOS — Figma 57:86 */
+
+.prizes__name {
+  text-align: center;
+  transition: opacity 220ms var(--ease-soft);
+}
+
+@media (max-width: 899px) {
+  .prizes__name {
+    position: static;
+    transform: none;
+  }
+}

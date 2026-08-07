@@ -1,0 +1,32 @@
+import { ResultLayout } from '../../components/promo/ResultLayout';
+import { TreasureChest } from '../../components/promo/TreasureChest';
+import { useSession } from '../../app/SessionContext';
+import { box } from '../../app/stage';
+import cofreCerrado from '../../assets/promo/cofre-cerrado.webp';
+
+/** CÓDIGO INEXISTENTE — Figma 131:131. */
+export default function CodeNotFound() {
+  const { lastResult, codeCount } = useSession();
+
+  return (
+    <ResultLayout
+      pageTitle="Código fuera de órbita"
+      title="¡Código fuera de órbita!"
+      titleSize={100}
+      message="Este código secreto no existe. Ingresá uno nuevo para seguir avanzando."
+      messageSize={40}
+      messageY={616}
+      ctaY={730}
+      code={lastResult?.code}
+      codeRedeemed={false}
+      codeCount={codeCount}
+      scene={
+        <TreasureChest
+          mode="idle"
+          style={{ ...box({ x: 1161, y: 490, w: 444, h: 444 }), zIndex: 5 }}
+        />
+      }
+      mobileScene={<img src={cofreCerrado} alt="" aria-hidden="true" className="m-art--sm" />}
+    />
+  );
+}

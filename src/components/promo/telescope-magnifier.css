@@ -1,0 +1,93 @@
+/* Catalejo-lupa sobre el pack — pantalla 19:2982 */
+
+.telescope {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.telescope__viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  border-radius: 18px;
+}
+
+.telescope__base {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.telescope__lens {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  /* El fondo del pack no es opaco: el color evita ver a través del lente. */
+  background-color: rgba(11, 22, 66, 0.55);
+  opacity: 0;
+  transition: opacity 200ms var(--ease-soft);
+  will-change: transform, background-position;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 6px rgba(136, 51, 7, 0.9),
+    0 0 0 11px var(--c-gold),
+    0 0 0 14px rgba(136, 51, 7, 0.95),
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    inset 0 0 26px rgba(9, 234, 255, 0.35);
+}
+
+.telescope__viewport--active .telescope__lens {
+  opacity: 1;
+}
+
+/* Reflejo del cristal. */
+.telescope__rim {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+      circle at 32% 26%,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0) 42%
+    ),
+    radial-gradient(circle at 50% 50%, rgba(9, 234, 255, 0) 62%, rgba(9, 234, 255, 0.28) 100%);
+  pointer-events: none;
+}
+
+.telescope__hint {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 100%;
+  margin: 0.7cqw 0 0;
+  font-family: var(--font-display);
+  font-size: 1.146cqw; /* 22 */
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  opacity: 0.85;
+  text-align: center;
+}
+
+@media (max-width: 899px) {
+  .telescope {
+    position: relative;
+    width: min(320px, 78vw);
+    aspect-ratio: 467 / 765;
+  }
+
+  .telescope__hint {
+    position: static;
+    transform: none;
+    font-size: clamp(12px, 3.4vw, 15px);
+    margin-top: 10px;
+  }
+}

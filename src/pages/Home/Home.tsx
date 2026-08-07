@@ -1,0 +1,174 @@
+import { useNavigate } from 'react-router-dom';
+import { Stage } from '../../components/layout/Stage';
+import { Deco } from '../../components/layout/Deco';
+import { PromoButton } from '../../components/buttons/PromoButton';
+import { TreasureChest } from '../../components/promo/TreasureChest';
+import { PurosolShip } from '../../components/promo/PurosolShip';
+import { box, centeredText } from '../../app/stage';
+
+import logoCodigos from '../../assets/logos/codigos-secretos.webp';
+import planetaPremios from '../../assets/planets/planeta-premios.webp';
+import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
+import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
+import glow from '../../assets/effects/glow.webp';
+import destello from '../../assets/effects/destello.webp';
+import auriculares from '../../assets/prizes/auriculares.webp';
+import playstation from '../../assets/prizes/playstation.webp';
+import nintendo from '../../assets/prizes/nintendo.webp';
+
+/**
+ * INICIO — Figma 13:49.
+ *
+ * Coordenadas tomadas 1:1 del diseño. Cada elemento es una capa independiente
+ * (nada de screenshot de fondo) para poder flotar a distinta profundidad.
+ */
+export default function Home() {
+  const navigate = useNavigate();
+  const goParticipar = () => navigate('/participar');
+
+  return (
+    <Stage title="El Tesoro Galáctico de los Códigos Secretos 2026" mobile={<HomeMobile onStart={goParticipar} />}>
+      {/* --- Universo lejano --- */}
+      <Deco
+        src={planetaVit2}
+        x={7}
+        y={60}
+        w={169}
+        h={184}
+        rotate={15.05}
+        blur={5}
+        opacity={0.8}
+        float={{ amplitude: 6, duration: 6.4, delay: 0.4, drift: 3 }}
+      />
+      <Deco
+        src={planetaVit1}
+        x={1073}
+        y={962}
+        w={339}
+        h={166}
+        blur={5}
+        opacity={0.9}
+        float={{ amplitude: 5, duration: 7, delay: 1.1, drift: -4 }}
+      />
+      <Deco
+        src={destello}
+        x={1276}
+        y={171}
+        w={415}
+        h={275}
+        float={{ amplitude: 9, duration: 4.6, delay: 0.2 }}
+      />
+
+      {/* --- Nave: entra navegando desde la derecha y queda flotando --- */}
+      <PurosolShip variant="enter" style={{ ...box({ x: 1322, y: 273, w: 1016, h: 696 }), zIndex: 3 }} />
+
+      {/* --- Cúmulo de premios (izquierda) --- */}
+      <Deco src={glow} x={-211} y={390} w={883} h={561} opacity={0.9} />
+      <Deco
+        src={planetaPremios}
+        x={-104}
+        y={205}
+        w={503}
+        h={510}
+        float={{ amplitude: 7, duration: 6.8, delay: 0.9, rotate: 1.2 }}
+      />
+      <Deco
+        src={playstation}
+        x={7}
+        y={400}
+        w={279}
+        h={280}
+        float={{ amplitude: 11, duration: 4.2, delay: 0.6, rotate: -2 }}
+      />
+      <Deco
+        src={nintendo}
+        x={107}
+        y={580}
+        w={278}
+        h={279}
+        float={{ amplitude: 9, duration: 5.4, delay: 1.4, drift: 5, rotate: 2 }}
+      />
+      <Deco
+        src={auriculares}
+        x={356}
+        y={577}
+        w={168}
+        h={169}
+        float={{ amplitude: 12, duration: 3.6, delay: 0.1, rotate: -3 }}
+      />
+
+      {/*
+        Cofre interactivo pedido por el PPT (lám. 29: "al poner el cursor en el
+        cofre puede abrirse y aparecer los premios"). El Figma actual no lo
+        ubica en el INICIO, así que se coloca en el espacio libre al pie del
+        cúmulo de premios. Es puramente visual: los premios que asoman salen de
+        MOCK_CHEST_PREVIEW y no representan ningún sorteo.
+      */}
+      <TreasureChest
+        mode="interactive"
+        style={{ ...box({ x: 395, y: 770, w: 255, h: 255 }), zIndex: 6 }}
+      />
+
+      {/* --- Bloque central --- */}
+      <Deco
+        src={logoCodigos}
+        x={712}
+        y={171}
+        w={495}
+        h={369}
+        glow="0 0 3cqw #09eaff"
+        zIndex={4}
+        float={{ amplitude: 8, duration: 5.2 }}
+      />
+
+      <p
+        className="t-display t-gold abs"
+        style={{ ...centeredText(948, 540, 100), zIndex: 5 }}
+      >
+        Ganá un viaje al Caribe
+      </p>
+
+      <p
+        className="t-display t-white-glow abs"
+        style={{ ...centeredText(960, 662, 50), zIndex: 5 }}
+      >
+        ¡y cientos de premios más!
+      </p>
+
+      <PromoButton
+        id="contenido"
+        className="abs"
+        style={{ ...box({ x: 660, y: 759, w: 573, h: 192 }), zIndex: 7 }}
+        fontSize={60}
+        onClick={goParticipar}
+      >
+        Cargá acá tu código
+      </PromoButton>
+    </Stage>
+  );
+}
+
+function HomeMobile({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="m-stack" id="contenido">
+      <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo" />
+
+      <p className="m-title m-title--lg">Ganá un viaje al Caribe</p>
+      <p className="m-sub">¡y cientos de premios más!</p>
+
+      <PromoButton fontSize={60} onClick={onStart}>
+        Cargá acá tu código
+      </PromoButton>
+
+      <TreasureChest mode="interactive" className="m-chest" style={{ position: 'relative' }} />
+
+      <div className="m-row" aria-hidden="true">
+        <img src={playstation} alt="" className="m-art--sm" style={{ width: 96 }} />
+        <img src={nintendo} alt="" className="m-art--sm" style={{ width: 96 }} />
+        <img src={auriculares} alt="" className="m-art--sm" style={{ width: 66 }} />
+      </div>
+
+      <PurosolShip variant="enter" className="m-art" style={{ position: 'relative', height: 'auto', aspectRatio: '1016 / 696' }} />
+    </div>
+  );
+}

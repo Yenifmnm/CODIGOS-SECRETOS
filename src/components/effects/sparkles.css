@@ -1,0 +1,40 @@
+.sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sparkles__dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--ssize);
+  height: var(--ssize);
+  margin: calc(var(--ssize) / -2);
+  border-radius: 50%;
+  background: var(--scolor);
+  box-shadow: 0 0 12px var(--scolor), 0 0 26px var(--scolor);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: sparkle-drift var(--sdur) var(--sdelay) ease-in-out infinite;
+}
+
+@keyframes sparkle-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--sx), var(--sy)) scale(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkles {
+    display: none;
+  }
+}

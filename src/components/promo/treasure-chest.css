@@ -1,0 +1,99 @@
+.chest {
+  position: absolute;
+  display: block;
+  transform-origin: 50% 88%;
+}
+
+.chest__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  transition: filter var(--dur-glow) var(--ease-soft);
+}
+
+/* Cofre perdedor / estados de error: cerrado pero vivo. */
+.chest--idle .chest__img {
+  animation: chest-breathe 4.6s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes chest-breathe {
+  from {
+    transform: translateY(0) rotate(-1.1deg) scale(1);
+  }
+  to {
+    transform: translateY(-1.2%) rotate(1.1deg) scale(1.015);
+  }
+}
+
+/* Cofre del Home. */
+.chest--interactive {
+  transition: transform 320ms var(--ease-soft);
+}
+
+.chest--interactive:hover,
+.chest--interactive:focus-visible {
+  transform: scale(1.04);
+}
+
+.chest--interactive.chest--is-open .chest__img {
+  filter: drop-shadow(0 0 2cqw var(--c-gold-glow)) drop-shadow(0 0 5cqw rgba(234, 199, 72, 0.7));
+}
+
+.chest__prizes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chest__prize {
+  position: absolute;
+  left: 50%;
+  bottom: 42%;
+  width: 26%;
+  opacity: 0;
+  transform: translate(-50%, 20%) scale(0.5);
+  transition:
+    opacity 340ms var(--ease-soft),
+    transform 520ms var(--ease-soft);
+  filter: drop-shadow(0 0 1.2cqw #fff);
+}
+
+.chest__prize[data-visible='true'] {
+  opacity: 1;
+}
+
+.chest__prize--1[data-visible='true'] {
+  transform: translate(-118%, -34%) scale(1) rotate(-12deg);
+  transition-delay: 60ms;
+}
+
+.chest__prize--2[data-visible='true'] {
+  transform: translate(-50%, -66%) scale(1.12);
+  transition-delay: 140ms;
+}
+
+.chest__prize--3[data-visible='true'] {
+  transform: translate(22%, -30%) scale(1) rotate(13deg);
+  transition-delay: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chest--idle .chest__img {
+    animation: none;
+  }
+  .chest__prize {
+    transition: opacity 200ms linear;
+    transform: none;
+  }
+  .chest__prize--1[data-visible='true'] { transform: translate(-118%, -34%); }
+  .chest__prize--2[data-visible='true'] { transform: translate(-50%, -66%); }
+  .chest__prize--3[data-visible='true'] { transform: translate(22%, -30%); }
+}
+
+@media (max-width: 899px) {
+  .chest--interactive.chest--is-open .chest__img {
+    filter: drop-shadow(0 0 16px var(--c-gold-glow)) drop-shadow(0 0 40px rgba(234, 199, 72, 0.7));
+  }
+}

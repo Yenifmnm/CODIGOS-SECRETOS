@@ -1,0 +1,86 @@
+.promo-btn {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  aspect-ratio: 3 / 1;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  transition:
+    transform var(--dur-glow) var(--ease-soft),
+    filter var(--dur-glow) var(--ease-soft);
+}
+
+.promo-btn__plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.promo-btn__label {
+  position: relative;
+  z-index: 1;
+  padding-inline: 8%;
+  color: var(--c-brown);
+  font-family: var(--font-display);
+  font-size: var(--promo-btn-fs, 2.6cqw);
+  line-height: 1.05;
+  text-align: center;
+}
+
+/* Brillo/destello al interactuar. */
+.promo-btn:hover:not(:disabled),
+.promo-btn:focus-visible:not(:disabled) {
+  transform: scale(1.045);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 1.1cqw #fff)
+    drop-shadow(0 0 2.6cqw var(--c-gold));
+}
+
+.promo-btn:active:not(:disabled) {
+  transform: scale(0.975);
+}
+
+.promo-btn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.35) brightness(0.9);
+}
+
+.promo-btn--loading .promo-btn__label {
+  opacity: 0.45;
+}
+
+.promo-btn__spinner {
+  position: absolute;
+  z-index: 2;
+  width: 1.6cqw;
+  height: 1.6cqw;
+  min-width: 20px;
+  min-height: 20px;
+  border-radius: 50%;
+  border: 3px solid rgba(136, 51, 7, 0.3);
+  border-top-color: var(--c-brown);
+  animation: promo-spin 700ms linear infinite;
+}
+
+@keyframes promo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-btn__spinner {
+    animation: promo-spin 1.4s linear infinite !important;
+  }
+}
+
+@media (max-width: 899px) {
+  .promo-btn {
+    width: min(320px, 84vw);
+    height: auto;
+  }
+  .promo-btn__label {
+    font-size: clamp(18px, 5.4vw, 26px);
+  }
+}

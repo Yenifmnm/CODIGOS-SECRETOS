@@ -1,0 +1,40 @@
+/* -------------------------------------------------------------------------
+   Tokens — valores tomados directamente del Figma (13:48 "vistas web").
+   ------------------------------------------------------------------------- */
+
+/* Activar cuando exista el archivo licenciado en public/fonts/.
+@font-face {
+  font-family: 'DK Prince Frog';
+  src: url('/fonts/DKPrinceFrog.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+:root {
+  /* Tipografía */
+  --font-display: 'DK Prince Frog', 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', system-ui, sans-serif;
+
+  /* Paleta */
+  --c-deep-blue: #212f5c;
+  --c-cyan: #09eaff;
+  --c-cyan-50: rgba(9, 234, 255, 0.5);
+  --c-gold: #fcc102;
+  --c-gold-glow: #eac748;
+  --c-brown: #883307;
+  --c-brown-dark: #581f09;
+  --c-brown-30: rgba(136, 51, 7, 0.3);
+  --c-brown-60: rgba(88, 31, 9, 0.6);
+  --c-orange: #d8831c;
+  --c-white: #ffffff;
+
+  /* Sombras / glows del diseño */
+  --glow-cyan: 0 0 250px #09eaff, 0 0 100px rgba(9, 234, 255, 0.7);
+  --glow-white-text: 0 0 41.4px #fff, 0 0 82.8px #fff, 0 0 250px #fff, 0 4px 4px rgba(0, 0, 0, 0.25);
+  --glow-gold-text: 0 0 6.288px #fff, 0 0 44.016px #fff, 0 4px 10px #212f5c;
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.37, 0, 0.24, 1);
+  --dur-glow: 260ms;
+}

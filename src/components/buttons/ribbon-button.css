@@ -1,0 +1,61 @@
+.ribbon-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    96% 50%,
+    100% 100%,
+    0% 100%,
+    4% 50%
+  );
+  transition:
+    transform var(--dur-glow) var(--ease-soft),
+    filter var(--dur-glow) var(--ease-soft),
+    background-color var(--dur-glow) var(--ease-soft);
+}
+
+.ribbon-btn--gold {
+  background: linear-gradient(180deg, #fcd45a 0%, var(--c-gold) 48%, var(--c-orange) 100%);
+  box-shadow: inset 0 -3px 0 rgba(136, 51, 7, 0.35);
+}
+
+.ribbon-btn--ghost {
+  background: linear-gradient(180deg, #f6e0bd 0%, #e5c391 100%);
+  box-shadow: inset 0 -3px 0 rgba(136, 51, 7, 0.25);
+}
+
+.ribbon-btn__label {
+  color: var(--c-brown-dark);
+  font-family: var(--font-display);
+  font-size: var(--ribbon-fs, 2.083cqw);
+  line-height: 1.1;
+  padding-inline: 10%;
+  white-space: nowrap;
+}
+
+.ribbon-btn:hover:not(:disabled),
+.ribbon-btn:focus-visible:not(:disabled) {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 0.8cqw #fff) drop-shadow(0 0 2cqw var(--c-gold));
+}
+
+.ribbon-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.ribbon-btn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.4) brightness(0.92);
+}
+
+@media (max-width: 899px) {
+  .ribbon-btn {
+    width: min(300px, 80vw) !important;
+    height: 52px !important;
+  }
+  .ribbon-btn__label {
+    font-size: clamp(16px, 4.6vw, 21px);
+  }
+}

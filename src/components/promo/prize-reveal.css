@@ -1,0 +1,85 @@
+/* Reveal del premio ganador — Figma 23:3136 / 23:3137 */
+
+.reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.reveal__glow {
+  object-fit: contain;
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+.reveal__chest-wrap {
+  will-change: transform;
+  transform-origin: 50% 90%;
+}
+
+.reveal__chest {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3cqw var(--c-gold-glow)) drop-shadow(0 2cqw 6cqw rgba(234, 199, 72, 0.55));
+}
+
+.reveal__prize-wrap {
+  will-change: transform, opacity;
+}
+
+.reveal__prize-float {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.reveal__prize {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1.6cqw #fff) drop-shadow(0 0 4cqw var(--c-gold));
+}
+
+/* Barrido holográfico sobre el premio. */
+.reveal__holo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    112deg,
+    rgba(255, 255, 255, 0) 36%,
+    rgba(9, 234, 255, 0.55) 47%,
+    rgba(255, 255, 255, 0.85) 51%,
+    rgba(252, 193, 2, 0.5) 55%,
+    rgba(255, 255, 255, 0) 66%
+  );
+  background-size: 260% 100%;
+  mix-blend-mode: screen;
+  animation: holo-sweep 3.6s ease-in-out 1.4s infinite;
+  opacity: 0.9;
+}
+
+@keyframes holo-sweep {
+  0% {
+    background-position: 160% 0;
+  }
+  55%,
+  100% {
+    background-position: -60% 0;
+  }
+}
+
+.reveal--static .reveal__glow {
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal__holo {
+    animation: none;
+    opacity: 0.25;
+  }
+}
