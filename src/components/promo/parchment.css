@@ -80,23 +80,17 @@
   }
 }
 
-/* ---------- Mobile ---------- */
+/* -------------------------------------------------------------------------
+   Mobile.
+
+   El diseño mobile usa el mismo pergamino ilustrado que el desktop, no una
+   caja con degradado: la hoja se conserva y cada pantalla le da la caja
+   (ver `.terms-m__sheet` en pages/Terms/terms.css). Acá sólo se neutraliza el
+   `position: absolute` de la regla base, porque en mobile el contenedor lo
+   define la composición de la pantalla.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .parchment {
-    position: relative;
     width: 100%;
-  }
-
-  .parchment__sheet {
-    display: none;
-  }
-
-  .parchment__content {
-    position: static;
-    inset: auto;
-    padding: clamp(22px, 7vw, 32px) clamp(18px, 6vw, 26px);
-    border-radius: 22px;
-    background: linear-gradient(180deg, #f6dcb0 0%, #e9c489 100%);
-    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(136, 51, 7, 0.35);
   }
 }

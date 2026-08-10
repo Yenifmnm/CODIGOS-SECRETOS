@@ -35,6 +35,7 @@ export default function CodeHelp() {
     <Stage
       title="¿Dónde encuentro el código secreto?"
       compactMenu
+      mobileBg="profundo"
       mobile={
         /* Figma "donde esta el codigo.png": logo → titular dorado a dos
            renglones → nave a la izquierda del pack → pack con catalejo →
@@ -44,8 +45,11 @@ export default function CodeHelp() {
 
           <img src={logoCodigos} alt="Códigos Secretos 2026" className="codehelp-m__logo" />
 
+          {/* El corte de renglón es el del Figma mobile, no uno automático. */}
           <p className="codehelp-m__title">
-            Buscá el Código Secreto en los stickers de Purosol
+            Buscá el Código Secreto en
+            <br />
+            Los stickers de Purosol
           </p>
 
           <div className="codehelp-m__scene">

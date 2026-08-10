@@ -79,27 +79,27 @@
   .codehelp-m__scene {
     position: relative;
     width: 100%;
-    margin-top: 4.478cqw;
+    margin-top: 2.488cqw;
     display: flex;
     justify-content: center;
   }
 
   .codehelp-m__ship {
     position: absolute;
-    left: -8.955cqw;
-    top: 2.488cqw;
-    width: 37.313cqw;      /* 150 */
+    left: -11.94cqw;
+    top: -2.488cqw;
+    width: 49.751cqw;      /* 200 */
     aspect-ratio: 1016 / 696;
     z-index: 2;
   }
 
   .codehelp-m .telescope {
-    width: 66.418cqw;      /* 267 */
+    width: 64.677cqw;      /* 260 */
   }
 
   .codehelp-m__note {
     width: 82.09cqw;       /* 330 */
-    margin-top: 5.473cqw;
+    margin-top: 3.483cqw;
     padding: 2.985cqw 3.98cqw;
     border-radius: 500px;
     background: var(--c-cyan-50);
@@ -113,5 +113,19 @@
 
   .codehelp-m__note p {
     margin: 0;
+  }
+
+  /* La pista del catalejo no está en el diseño mobile, pero se conserva para
+     lectores de pantalla: en touch el gesto ya es evidente. */
+  .codehelp-m .telescope__hint {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
 }

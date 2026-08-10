@@ -106,6 +106,19 @@
 
 /* ---------- Mobile ---------- */
 /* Composición mobile — Figma "bases y condiciones.png" (402x913). */
+/* -------------------------------------------------------------------------
+   Composición mobile — Figma "bases y condiciones.png" (402x913).
+
+   Medidas del mockup, ya descontada la barra de estado (54 px):
+     pergamino  x 28..374   y 146..666   (346x520)
+     logo montado sobre el borde superior
+     ralph sentado en el planeta B3, arriba a la derecha, fuera del pergamino
+     nene con el catalejo, abajo a la izquierda
+
+   `Parchment` es `position: absolute` por diseño —el desktop le pasa la caja
+   con `box()`—, así que acá la caja la pone `.terms-m__sheet` y el pergamino
+   la llena. El selector lleva dos clases para ganarle a la regla base.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .terms-m {
     width: 100%;
@@ -117,45 +130,81 @@
   .terms-m__logo {
     position: relative;
     z-index: 3;
-    width: 55.721cqw;      /* 224 */
+    width: 55.721cqw;          /* 224 */
     height: auto;
-    margin-top: 5.473cqw;
-    margin-bottom: -8.955cqw;  /* se monta sobre el borde del pergamino */
+    margin-top: 4.478cqw;
+    margin-bottom: -7.463cqw;  /* se monta sobre el pergamino */
     filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
   }
 
   .terms-m__sheet {
     position: relative;
-    width: 86.07cqw;       /* 346 */
-    margin-top: 0;
+    width: 86.07cqw;           /* 346 */
+    aspect-ratio: 346 / 520;
   }
 
+  .terms-m__sheet .terms-m__parchment {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* La hoja y el contenido llenan la caja: se fijan acá con dos clases porque
+     las reglas base de parchment.css no ganan dentro de este contenedor. */
+  .terms-m__sheet .parchment__sheet,
+  .terms-m__sheet .parchment__content {
+    position: absolute;
+    inset: 0;
+  }
+
+  .terms-m__sheet .parchment__img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+
+  /* Ralph queda por encima del borde del pergamino, no sobre el título. */
   .terms-m__ralph {
-    top: -13.5%;
-    right: -16%;
-    width: 33%;
+    top: -27%;
+    right: -7%;
+    width: 30%;
     z-index: 4;
   }
 
   .terms-m__nene {
-    bottom: -11%;
-    left: -22%;
+    bottom: -5%;
+    left: -21%;
     width: 40%;
     z-index: 4;
   }
 
-  .terms-m__parchment {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 346 / 500;
+  /* Contenido dentro del pergamino, en flujo normal. */
+  .terms-m__sheet .parchment__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 13% 12% 9%;
   }
 
-  .terms-m__parchment .terms__inner,
-  .terms-m__parchment .terms__scroll {
-    font-size: 3.234cqw;   /* 13 */
+  .terms-m__sheet .terms__heading {
+    font-size: 5.473cqw;       /* 22 */
+    margin: 0;
   }
 
-  .terms-m__parchment .terms__heading {
-    font-size: 5.473cqw;   /* 22 */
+  /* El texto scrollea dentro del pergamino; el botón queda siempre visible. */
+  .terms-m__sheet .terms__scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    margin-top: 3.483cqw;
+    font-size: 3.234cqw;       /* 13 */
+    line-height: 1.45;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .terms-m__sheet .terms__cta {
+    flex: none;
+    margin-top: 3.483cqw;
+    width: 46.02cqw !important;   /* 185 */
+    height: 8.209cqw !important;  /* 33 */
   }
 }

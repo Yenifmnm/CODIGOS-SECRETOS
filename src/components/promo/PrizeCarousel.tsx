@@ -8,6 +8,18 @@ import './prize-carousel.css';
 interface PrizeCarouselProps {
   prizes: Prize[];
   onActiveChange?: (prize: Prize) => void;
+  /**
+   * Renderiza la tira de miniaturas bajo el carrusel. El Figma mobile la
+   * incluye; el desktop no, así que es opcional y por defecto no se dibuja.
+   * Vive acá dentro porque el índice activo es estado de este componente.
+   */
+  withThumbs?: boolean;
+  /**
+   * Nombre del premio activo, dibujado entre el carrusel y las miniaturas.
+   * El Figma mobile lo ubica ahí; en desktop el nombre lo posiciona la pantalla
+   * con sus propias coordenadas, así que esta prop queda sin usar.
+   */
+  caption?: string;
 }
 
 /**
@@ -42,7 +54,7 @@ const SWIPE_THRESHOLD = 40;
  * Carrusel de premios. Se opera con flechas, teclado (← →, Home, End),
  * click sobre un premio lateral y swipe táctil.
  */
-export function PrizeCarousel({ prizes, onActiveChange }: PrizeCarouselProps) {
+export function PrizeCarousel({ prizes, onActiveChange, withThumbs = false, caption }: PrizeCarouselProps) {
   const [active, setActive] = useState(0);
   const reduced = useReducedMotion();
   const touchStart = useRef<number | null>(null);
@@ -144,6 +156,27 @@ export function PrizeCarousel({ prizes, onActiveChange }: PrizeCarouselProps) {
       <p className="sr-only" aria-live="polite">
         {prizes[active].name}
       </p>
+
+      {caption !== undefined && <p className="carousel__caption">{caption}</p>}
+
+      {/* Tira de miniaturas del Figma mobile: salto directo a cada premio. */}
+      {withThumbs && (
+        <ul className="carousel__thumbs">
+          {prizes.map((p, i) => (
+            <li key={p.id ?? p.name}>
+              <button
+                type="button"
+                className={`carousel__thumb${i === active ? ' carousel__thumb--active' : ''}`}
+                aria-current={i === active || undefined}
+                onClick={() => setActive(i)}
+              >
+                <span className="sr-only">{p.name}</span>
+                <img src={p.image} alt="" aria-hidden="true" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

@@ -33,12 +33,18 @@ export default function Prizes() {
   return (
     <Stage
       title="Premios"
+      mobileBg="halo"
       mobile={
         /* Figma "Premios.png": logo → carrusel con flechas → nombre del premio
            → tira de miniaturas. El carrusel ya trae swipe y flechas. */
         <div className="prizes-m" id="contenido">
           <img src={logoCodigos} alt="Códigos Secretos 2026" className="prizes-m__logo" />
-          {carousel}
+          <PrizeCarousel
+            prizes={prizes}
+            onActiveChange={onActiveChange}
+            withThumbs
+            caption={activeName}
+          />
         </div>
       }
     >

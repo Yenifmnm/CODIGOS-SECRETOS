@@ -85,34 +85,51 @@
 }
 
 /* ---------- Mobile ---------- */
+/* -------------------------------------------------------------------------
+   Mobile — Figma "Premios.png" (lienzo 402).
+   Fila de flechas y premio, luego el nombre y la tira de miniaturas.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .carousel {
     position: relative;
     inset: auto;
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-height: 240px;
+    justify-items: center;
+    row-gap: 6.965cqw;
+    padding-inline: 3.483cqw;
+    min-height: auto;
   }
 
+  .carousel__arrow--prev { grid-column: 1; grid-row: 1; }
+  .carousel__arrow--next { grid-column: 3; grid-row: 1; }
+
   .carousel__track {
+    grid-column: 2;
+    grid-row: 1;
     position: relative;
     left: auto;
     top: auto;
-    width: 190px;
-    height: 200px;
+    width: 100%;
+    height: 62.189cqw;      /* 250 */
     display: grid;
     place-items: center;
   }
 
   .carousel__item {
     position: static;
-    width: 190px;
-    height: 200px;
+    width: 100%;
+    max-width: 84.577cqw;   /* 340 */
+    height: 62.189cqw;
     margin: 0;
     transform: none !important;
+  }
+
+  .carousel__item img {
+    filter: drop-shadow(0 0 6cqw rgba(9, 234, 255, 0.85))
+      drop-shadow(0 0 14cqw rgba(9, 234, 255, 0.45));
   }
 
   /* En mobile sólo se ve el premio activo: los laterales no entran. */
@@ -122,8 +139,72 @@
 
   .carousel__arrow {
     position: static;
-    width: 52px;
-    height: 44px;
+    width: 11.94cqw;        /* 48 */
+    height: 11.94cqw;
+    min-width: 44px;
+    min-height: 44px;
     flex: none;
+  }
+
+  /* Nombre del premio activo. */
+  .carousel__caption {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 7.463cqw;    /* 30 */
+    line-height: 1.1;
+    color: var(--c-white);
+    text-shadow: 0 0 3.5cqw #fff, 0 0 8cqw rgba(255, 255, 255, 0.6),
+      0 2px 4px rgba(0, 0, 0, 0.35);
+    text-align: center;
+  }
+
+  /* Tira de miniaturas. */
+  .carousel__thumbs {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.488cqw;
+    margin: 5.97cqw 0 0;
+    padding: 0;
+    width: 100%;
+    list-style: none;
+  }
+
+  .carousel__thumbs li {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 21.891cqw;   /* 88: tamaño del Figma con cuatro premios */
+    display: flex;
+    justify-content: center;
+  }
+
+  .carousel__thumb {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 50%;
+    transition: transform var(--dur-glow) var(--ease-soft);
+  }
+
+  .carousel__thumb img {
+    width: 86%;
+    height: 86%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 2.4cqw rgba(9, 234, 255, 0.75));
+  }
+
+  .carousel__thumb--active img {
+    filter: drop-shadow(0 0 3.5cqw #fff) drop-shadow(0 0 7cqw var(--c-cyan));
+  }
+
+  .carousel__thumb:active {
+    transform: scale(0.94);
   }
 }
