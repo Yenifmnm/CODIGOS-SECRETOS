@@ -15,10 +15,21 @@ import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
 
 export interface ResultLayoutProps {
   title: string;
-  /** Tamaño del titular en px de diseño (Figma: 160 en GANASTE, 140 en PERDISTE). */
+  /** Tamaño del titular en px de diseño. */
   titleSize?: number;
-  message: ReactNode;
+  /** `gold` = GANASTE; `outline` = relleno dorado con contorno rojo (PERDISTE y errores). */
+  titleTone?: 'gold' | 'outline';
+  /** Centro X e Y del titular en coordenadas de diseño. */
+  titleX?: number;
+  titleY?: number;
+  /**
+   * Una entrada por renglón. El corte de línea del Figma es intencional, así
+   * que se respeta en desktop; en mobile los renglones se unen y fluyen solos.
+   */
+  message: string[];
   messageSize?: number;
+  /** Ancho del bloque de mensaje en px de diseño. */
+  messageWidth?: number;
   /** Y del mensaje en coordenadas de diseño. */
   messageY?: number;
   /** Y del botón "Cargar otro código". */
@@ -47,10 +58,14 @@ const CONTACT_LINES = [
  */
 export function ResultLayout({
   title,
-  titleSize = 160,
+  titleSize = 121,
+  titleTone = 'gold',
+  titleX = 479,
+  titleY = 463,
   message,
-  messageSize = 60,
-  messageY = 616,
+  messageSize = 34,
+  messageWidth = 760,
+  messageY = 613,
   ctaY = 711,
   scene,
   code,
@@ -85,7 +100,7 @@ export function ResultLayout({
         <div className="m-stack" id="contenido">
           <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo m-logo--sm" />
           <p className="m-title m-title--lg">{title}</p>
-          <p className="m-sub">{message}</p>
+          <p className="m-sub">{message.join(' ')}</p>
           {mobileScene}
           <PromoButton fontSize={50} onClick={reload}>
             Cargar otro código
@@ -96,6 +111,12 @@ export function ResultLayout({
         </div>
       }
     >
+      {/* Oscurecimiento de la mitad izquierda: en el Figma la columna de texto
+          se apoya sobre un cielo mucho más oscuro que el de la derecha (hasta
+          66 puntos de luminancia menos sobre el borde izquierdo). Sin esto el
+          titular y el mensaje pierden contraste contra el fondo. */}
+      <div className="result__vignette abs" style={{ zIndex: 0 }} />
+
       {/* --- Universo --- */}
       <Deco src={destello} x={1} y={155} w={415} h={275} opacity={0.5}
         float={{ amplitude: 9, duration: 5.2 }} />
@@ -108,14 +129,20 @@ export function ResultLayout({
       <Deco src={planetaVit2} x={1811} y={146} w={169} h={184} rotate={15.05} blur={5} opacity={0.8}
         float={{ amplitude: 6, duration: 7, delay: 0.9 }} />
 
-      {/* Halo del nodo "Ellipse 1", detrás de la escena. */}
-      <div className="result__halo abs" style={{ ...box({ x: 889, y: 794, w: 951, h: 911 }), zIndex: 1 }} />
+      {/* Superficie del planeta sobre la que se apoya el cofre. Es un círculo
+          plano que asoma por abajo a la derecha; su geometría sale de ajustar
+          una circunferencia al borde medido en los PNG del Figma (error máximo
+          0,7 px sobre 33 muestras). */}
+      <div className="result__planet abs" style={{ ...box({ x: 880, y: 793, w: 969, h: 969 }), zIndex: 1 }} />
 
       <Deco src={logoCodigos} x={299} y={202} w={329} h={245} zIndex={4}
         glow="0 0 2.4cqw #09eaff" float={{ amplitude: 6, duration: 5 }} />
 
       {/* --- Columna de texto --- */}
-      <p className="t-display result__title abs" style={{ ...centeredText(479, 463, titleSize), zIndex: 6 }}>
+      <p
+        className={`t-display result__title result__title--${titleTone} abs`}
+        style={{ ...centeredText(titleX, titleY, titleSize), zIndex: 6 }}
+      >
         {title}
       </p>
 
@@ -125,19 +152,24 @@ export function ResultLayout({
           left: u(480),
           top: u(messageY),
           fontSize: u(messageSize),
-          width: u(700),
+          width: u(messageWidth),
           transform: 'translateX(-50%)',
           zIndex: 6,
         }}
       >
-        {message}
+        {message.map((line, i) => (
+          <span key={line} className="result__message-line">
+            {i > 0 && ' '}
+            {line}
+          </span>
+        ))}
       </p>
 
       <PromoButton
         id="contenido"
         className="abs"
         style={{ ...box({ x: 276, y: ctaY, w: 375, h: 125 }), zIndex: 7 }}
-        fontSize={50}
+        fontSize={42}
         onClick={reload}
       >
         Cargar otro código
@@ -147,14 +179,14 @@ export function ResultLayout({
       {scene}
 
       {/* --- Pie: aviso de stickers y contador --- */}
-      <div className="result__note abs" style={{ ...box({ x: 144, y: 894, w: 640, h: 101 }), zIndex: 7 }}>
+      <div className="result__note abs" style={{ ...box({ x: 150, y: 896, w: 630, h: 97 }), zIndex: 7 }}>
         {note}
       </div>
 
       <CodeCounter
         className="abs"
         count={codeCount}
-        style={{ left: u(1168), top: u(940), zIndex: 7 }}
+        style={{ left: u(1160), top: u(946), zIndex: 7 }}
       />
 
       <CloseButton to="/" style={{ left: u(1737), top: u(34) }} />

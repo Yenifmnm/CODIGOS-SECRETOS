@@ -12,9 +12,13 @@ export default function CodeUsed() {
     <ResultLayout
       pageTitle="Código fuera de órbita"
       title="¡Código fuera de órbita!"
-      titleSize={100}
-      message="Este código secreto ya fue activado. Ingresá uno nuevo para seguir avanzando."
-      messageSize={40}
+      titleSize={86}
+      titleTone="outline"
+      titleX={499}
+      titleY={484}
+      message={['Este código secreto ya fue activado.', 'Ingresá uno nuevo para seguir avanzando.']}
+      messageSize={34}
+      messageWidth={620}
       messageY={616}
       ctaY={730}
       code={lastResult?.code}

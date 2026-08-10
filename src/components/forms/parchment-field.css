@@ -49,11 +49,13 @@
 }
 
 /* ---------- Variante subrayada (registro) ----------
-   El nombre del campo se escribe sobre la línea, a la izquierda, y el usuario
-   escribe a continuación: es exactamente la lectura del pergamino del Figma. */
+   En reposo el nombre del campo se lee sobre la línea, como en el pergamino del
+   Figma. Al enfocar o al haber valor, la etiqueta sube y se achica: si se
+   quedara en la misma línea que el valor, en las cajas de media caña se comería
+   casi todo el ancho —"Fecha de nacimiento" dejaba 58 px de 306 para el
+   selector, y la cédula cargada quedaba recortada fuera de vista—. */
 .pfield--line {
-  align-items: baseline;
-  gap: 0.6cqw;
+  display: block;
   padding-bottom: 0.26cqw;
   border-bottom: 2px solid var(--c-brown);
   transition: border-color var(--dur-glow) var(--ease-soft), box-shadow var(--dur-glow) var(--ease-soft);
@@ -65,7 +67,6 @@
 }
 
 .pfield--line .pfield__label {
-  flex: none;
   color: var(--c-brown-dark);
   display: inline-flex;
   align-items: baseline;
@@ -74,15 +75,69 @@
 }
 
 .pfield--line .pfield__input {
-  flex: 1;
-  min-width: 0;
+  display: block;
+  width: 100%;
   background: none;
   border: 0;
   color: var(--c-brown-dark);
   font-family: inherit;
   font-size: inherit;
+  line-height: 1.1;
   padding: 0;
   outline: none;
+}
+
+/* La etiqueta flotante es sólo del layout de escritorio: en mobile los campos
+   ya apilan etiqueta sobre input y no hay nada que resolver. */
+@media (min-width: 900px) {
+  .pfield--line .pfield__label {
+    position: absolute;
+    left: 0;
+    bottom: 0.3em;
+    transform-origin: left bottom;
+    transition: transform 200ms var(--ease-soft), opacity 200ms var(--ease-soft);
+    /* El input ocupa todo el ancho por debajo: dejar pasar el click hace que
+       tocar la etiqueta enfoque el campo igual. */
+    pointer-events: none;
+  }
+
+  .pfield--line:focus-within .pfield__label,
+  .pfield--line:not(.pfield--empty) .pfield__label {
+    transform: translateY(-0.95em) scale(0.6);
+    opacity: 0.72;
+  }
+
+  /* Hueco reservado arriba para la etiqueta ya flotada. */
+  .pfield--line .pfield__input {
+    padding-top: 0.62em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pfield--line .pfield__label {
+    transition: none;
+  }
+}
+
+/* Campo de fecha vacío: se oculta el `dd/mm/aaaa` nativo hasta que el campo
+   toma el foco. Compite por el ancho con la etiqueta —que en este diseño va en
+   la misma línea— y el Figma muestra sólo el rótulo en reposo. El ícono del
+   calendario queda visible, así que la vía para abrir el datepicker no se
+   pierde. */
+.pfield--empty .pfield__input[type='date']:not(:focus)::-webkit-datetime-edit {
+  opacity: 0;
+}
+
+/* El selector nativo de fecha viene azul de fábrica y rompe la paleta del
+   pergamino: se tiñe de marrón, pero se deja visible y clickeable. */
+.pfield__input[type='date']::-webkit-calendar-picker-indicator {
+  filter: sepia(1) saturate(3) hue-rotate(332deg) brightness(0.45);
+  opacity: 0.65;
+  cursor: pointer;
+}
+
+.pfield__input[type='date']::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
 
 .pfield__icon {
@@ -110,6 +165,8 @@
   position: absolute;
   left: 0;
   top: 100%;
+  /* Cuelga sobre la fila siguiente: no debe robarle el click a lo que tape. */
+  pointer-events: none;
   margin: 0.25cqw 0 0;
   font-size: 0.72em;
   color: #8f1f0a;

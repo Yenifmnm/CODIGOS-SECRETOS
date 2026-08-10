@@ -2,7 +2,11 @@
    Tokens — valores tomados directamente del Figma (13:48 "vistas web").
    ------------------------------------------------------------------------- */
 
-/* Activar cuando exista el archivo licenciado en public/fonts/.
+/* Tipografía del diseño. El archivo NO está en el repo: es comercial y hay que
+   comprarla (Hanoded / "Prince Frog"). Basta con dejar el .woff2 en
+   public/fonts/ y todo el sitio la toma sin tocar una línea más: si el archivo
+   no está, la regla falla en silencio y el navegador sigue al siguiente
+   nombre del stack. Ver public/fonts/README.md. */
 @font-face {
   font-family: 'DK Prince Frog';
   src: url('/fonts/DKPrinceFrog.woff2') format('woff2');
@@ -10,11 +14,11 @@
   font-style: normal;
   font-display: swap;
 }
-*/
 
 :root {
   /* Tipografía */
-  --font-display: 'DK Prince Frog', 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', system-ui, sans-serif;
+  --font-display: 'DK Prince Frog', 'Chewy', 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', system-ui,
+    sans-serif;
 
   /* Paleta */
   --c-deep-blue: #212f5c;
@@ -28,6 +32,13 @@
   --c-brown-60: rgba(88, 31, 9, 0.6);
   --c-orange: #d8831c;
   --c-white: #ffffff;
+
+  /* Cintas del pergamino de REGISTRO (17:2912): la ocre lleva los titulares y
+     los botones, la arena lleva los campos del formulario. */
+  --c-plate-ochre: #c9882a;
+  --c-plate-ochre-hi: #d9982f;
+  --c-plate-sand: #e0b46c;
+  --c-plate-sand-hi: #ebc383;
 
   /* Sombras / glows del diseño */
   --glow-cyan: 0 0 250px #09eaff, 0 0 100px rgba(9, 234, 255, 0.7);

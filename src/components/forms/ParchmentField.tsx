@@ -27,7 +27,13 @@ export const ParchmentField = forwardRef<HTMLInputElement, ParchmentFieldProps>(
 
     return (
       <div
-        className={['pfield', `pfield--${variant}`, error ? 'pfield--invalid' : '', className]
+        className={[
+          'pfield',
+          `pfield--${variant}`,
+          error ? 'pfield--invalid' : '',
+          rest.value ? '' : 'pfield--empty',
+          className,
+        ]
           .filter(Boolean)
           .join(' ')}
         style={{ '--pfield-fs': `${+(fontSize / 19.2).toFixed(4)}cqw` } as React.CSSProperties}

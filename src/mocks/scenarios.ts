@@ -10,13 +10,16 @@ import type { PromoCodeStatus } from '../types/promo';
  *  2. Panel flotante (esquina inferior derecha, sólo en dev)
  *  3. Consola:       window.__PROMO_SCENARIO__ = 'CODE_NOT_FOUND'
  *
- * Con 'AUTO' el mock reparte los estados de forma rotativa para poder recorrer
- * el flujo completo sin configurar nada.
+ * Con 'BASE' —el valor por defecto— el resultado lo decide el código tipeado,
+ * consultando `mocks/codes.ts`: es el comportamiento que tendrá el sitio contra
+ * la tabla real. Con 'AUTO' el mock reparte los estados de forma rotativa, útil
+ * para recorrer las cuatro pantallas sin conocer ningún código.
  */
 
-export type Scenario = PromoCodeStatus | 'AUTO';
+export type Scenario = PromoCodeStatus | 'AUTO' | 'BASE';
 
 export const SCENARIOS: Scenario[] = [
+  'BASE',
   'AUTO',
   'WIN',
   'LOSE',
@@ -26,6 +29,7 @@ export const SCENARIOS: Scenario[] = [
 ];
 
 export const SCENARIO_LABELS: Record<Scenario, string> = {
+  BASE: 'Base de códigos',
   AUTO: 'Automático (rota)',
   WIN: 'Ganaste',
   LOSE: 'Perdiste',
@@ -46,7 +50,7 @@ function isScenario(value: unknown): value is Scenario {
   return typeof value === 'string' && (SCENARIOS as string[]).includes(value);
 }
 
-let current: Scenario = 'AUTO';
+let current: Scenario = 'BASE';
 
 /** El acceso a sessionStorage puede lanzar (origen opaco, modo restringido). */
 function safeSessionRead(key: string): string | null {

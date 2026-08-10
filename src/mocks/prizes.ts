@@ -14,11 +14,11 @@ import auriculares from '../assets/prizes/auriculares.webp';
  * Las imágenes son los assets originales del Figma.
  */
 export const MOCK_PRIZES: Prize[] = [
-  { id: 'nintendo-switch', name: 'Nintendo Switch', image: premio1 },
-  { id: 'playstation-5', name: 'PlayStation 5', image: premio2 },
-  { id: 'viaje-caribe', name: 'Viaje al Caribe', image: premio3 },
-  { id: 'bicicleta', name: 'Bicicleta', image: premio4 },
-  { id: 'auriculares', name: 'Auriculares gamer', image: premio5 },
+  { id: 'nintendo-switch', name: 'Nintendo Switch', image: premio1, article: 'una' },
+  { id: 'playstation-5', name: 'PlayStation 5', image: premio2, article: 'una' },
+  { id: 'viaje-caribe', name: 'Viaje al Caribe', image: premio3, article: 'un' },
+  { id: 'bicicleta', name: 'Bicicleta', image: premio4, article: 'una' },
+  { id: 'auriculares', name: 'Auriculares gamer', image: premio5, article: 'unos' },
 ];
 
 /** Premios que asoman del cofre en el hover del Home (sólo decorativo). */

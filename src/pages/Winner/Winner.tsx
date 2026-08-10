@@ -17,9 +17,12 @@ export default function Winner() {
     <ResultLayout
       pageTitle="¡Felicidades! Ganaste"
       title="¡Felicidades"
-      titleSize={160}
-      message={`te ganaste una ${prize.name}!`}
-      messageSize={60}
+      titleSize={138}
+      titleTone="gold"
+      titleY={457}
+      message={[`te ganaste ${prize.article ?? 'un'} ${prize.name}!`]}
+      messageSize={52}
+      messageWidth={820}
       messageY={616}
       ctaY={711}
       code={lastResult?.code}

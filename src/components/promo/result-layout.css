@@ -1,22 +1,62 @@
 /* Pantallas de resultado — 23:3081 / 23:3159 / 107:297 / 131:131 */
 
-.result__halo {
+/* Sangra hasta los bordes de la ventana. `.stage__inner` mantiene 16:9 y casi
+   siempre queda más angosto que el viewport (el chrome del navegador se come
+   alto), así que un viñeteado limitado a esa caja dibujaba una banda vertical
+   con un corte seco a los costados. Se estira a 100vw y las paradas se corren
+   `--sangria` para que el degradado siga alineado con la composición: las
+   distancias van en `cqw`, que es la unidad del stage, no del viewport. */
+.result__vignette {
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 100vw;
+  height: 100dvh;
+  --sangria: calc((100vw - 100cqw) / 2);
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(1, 8, 58, 0.88) 0,
+      rgba(1, 8, 58, 0.88) var(--sangria),
+      rgba(1, 8, 58, 0.74) calc(var(--sangria) + 14cqw),
+      rgba(1, 9, 60, 0.44) calc(var(--sangria) + 32cqw),
+      rgba(1, 10, 62, 0.12) calc(var(--sangria) + 46cqw),
+      rgba(1, 10, 62, 0) calc(var(--sangria) + 58cqw)
+    ),
+    linear-gradient(0deg, rgba(1, 8, 58, 0.5) 0%, rgba(1, 8, 58, 0) 34%);
+}
+
+/* Superficie del planeta: color plano medido en los PNG del Figma. */
+.result__planet {
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(9, 234, 255, 0.28) 0%,
-    rgba(9, 234, 255, 0.14) 42%,
-    rgba(9, 234, 255, 0) 68%
-  );
+  background: #061c67;
   pointer-events: none;
 }
 
 .result__title {
-  color: var(--c-gold);
-  text-shadow: 0 0 0.33cqw #fff, 0 0 2.3cqw #fff, 0 4px 10px var(--c-deep-blue);
   text-align: center;
   /* Aparición del titular. */
   animation: result-title-in 620ms var(--ease-soft) both;
+}
+
+/* GANASTE: dorado con resplandor blanco. */
+.result__title--gold {
+  color: var(--c-gold);
+  text-shadow: 0 0 0.33cqw #fff, 0 0 2.3cqw #fff, 0 4px 10px var(--c-deep-blue);
+}
+
+/* PERDISTE y errores de código: mismo relleno dorado, con un contorno rojo
+   grueso por fuera. `paint-order` dibuja primero el trazo y encima el relleno,
+   que es lo que evita que el contorno se coma la letra. */
+.result__title--outline {
+  color: var(--c-gold);
+  /* El trazo se centra sobre el contorno del glifo y `paint-order` pinta el
+     relleno encima, así que sólo se ve la mitad: para el grosor del Figma
+     (~9 px) hay que pedir el doble. */
+  -webkit-text-stroke: 0.94cqw #e63505;
+  paint-order: stroke fill;
+  text-shadow: 0 0 0.5cqw rgba(255, 255, 255, 0.7), 0 4px 10px var(--c-deep-blue);
 }
 
 @keyframes result-title-in {
@@ -37,6 +77,11 @@
   animation: result-fade-in 560ms var(--ease-soft) 220ms both;
 }
 
+/* En desktop se respeta el corte de línea del Figma. */
+.result__message-line {
+  display: block;
+}
+
 @keyframes result-fade-in {
   from {
     opacity: 0;
@@ -48,20 +93,25 @@
   }
 }
 
+/* El Figma resuelve cada línea larga en un solo renglón. Con Chewy, más ancha
+   en mayúsculas que "DK Prince Frog", el cuerpo del Figma (25) las parte; 21 es
+   el máximo que entra en un renglón dentro del ancho del panel y deja el bloque
+   del mismo ancho que el diseño. Con la tipografía licenciada se vuelve a 25. */
 .result__note {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.1cqw;
-  padding: 0.6cqw 2.4cqw;
+  padding: 0.6cqw 1cqw;
   border-radius: 200px;
   background: var(--c-cyan-50);
   font-family: var(--font-display);
-  font-size: 1.302cqw; /* 25 */
+  font-size: 1.09375cqw; /* 21 */
   line-height: 1.12;
   color: #fff;
   text-align: center;
+  white-space: nowrap;
 }
 
 .result__note p {
@@ -81,5 +131,9 @@
   .result__note {
     position: static;
     width: 100%;
+    font-size: clamp(11px, 3vw, 14px);
+    padding: 10px 14px;
+    /* En mobile no hay ancho para un renglón único: acá sí puede partir. */
+    white-space: normal;
   }
 }

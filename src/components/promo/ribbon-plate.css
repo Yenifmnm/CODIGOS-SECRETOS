@@ -1,0 +1,48 @@
+/* Cintas del pergamino — REGISTRO 17:2912.
+   Misma silueta de estandarte que `.ribbon-btn`, pero con la muesca en px de
+   diseño en vez de en % para que no crezca con el ancho de la cinta. */
+
+.plate {
+  --plate-notch: 0.9375cqw; /* 18 */
+  display: flex;
+  align-items: center;
+}
+
+.plate__bg {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    calc(100% - var(--plate-notch)) 50%,
+    100% 100%,
+    0 100%,
+    var(--plate-notch) 50%
+  );
+  pointer-events: none;
+}
+
+.plate--ochre .plate__bg {
+  background: linear-gradient(180deg, var(--c-plate-ochre-hi) 0%, var(--c-plate-ochre) 100%);
+}
+
+.plate--sand .plate__bg {
+  background: linear-gradient(180deg, var(--c-plate-sand-hi) 0%, var(--c-plate-sand) 100%);
+}
+
+/* El contenido va por encima del recorte. */
+.plate__content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+/* En mobile las cintas viven en flujo vertical: necesitan ser el ancestro
+   posicionado de su propio fondo. */
+@media (max-width: 899px) {
+  .plate {
+    position: relative;
+  }
+}

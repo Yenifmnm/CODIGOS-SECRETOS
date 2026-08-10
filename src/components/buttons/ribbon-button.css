@@ -26,6 +26,13 @@
   box-shadow: inset 0 -3px 0 rgba(136, 51, 7, 0.25);
 }
 
+/* Ocre del pergamino de REGISTRO: en el Figma "Registrarme" y "Cancelar"
+   comparten cinta, sin jerarquía de color entre sí. */
+.ribbon-btn--ochre {
+  background: linear-gradient(180deg, var(--c-plate-ochre-hi) 0%, var(--c-plate-ochre) 100%);
+  box-shadow: inset 0 -3px 0 rgba(136, 51, 7, 0.3);
+}
+
 .ribbon-btn__label {
   color: var(--c-brown-dark);
   font-family: var(--font-display);

@@ -5,7 +5,7 @@ interface RibbonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fontSize?: number;
   width?: number;
   height?: number;
-  tone?: 'gold' | 'ghost';
+  tone?: 'gold' | 'ghost' | 'ochre';
   style?: CSSProperties;
 }
 

@@ -45,10 +45,21 @@
   filter: drop-shadow(0 0 1.6cqw #fff) drop-shadow(0 0 4cqw var(--c-gold));
 }
 
-/* Barrido holográfico sobre el premio. */
+/* Barrido holográfico sobre el premio.
+   Se recorta con la silueta del propio premio (`--holo-mask`): sin la máscara,
+   el degradado en modo `screen` aclaraba toda la caja y se veía el rectángulo
+   recortado contra el cielo. */
 .reveal__holo {
   position: absolute;
   inset: 0;
+  -webkit-mask-image: var(--holo-mask);
+  mask-image: var(--holo-mask);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
   background: linear-gradient(
     112deg,
     rgba(255, 255, 255, 0) 36%,

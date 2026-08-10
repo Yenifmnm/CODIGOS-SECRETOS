@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Stage } from '../../components/layout/Stage';
 import { Deco } from '../../components/layout/Deco';
 import { RibbonButton } from '../../components/buttons/RibbonButton';
+import { RibbonPlate } from '../../components/promo/RibbonPlate';
 import { ParchmentField } from '../../components/forms/ParchmentField';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
@@ -20,6 +21,39 @@ import nena from '../../assets/characters/nena.webp';
 import pluma from '../../assets/ui/pluma.webp';
 
 type Errors = Partial<Record<keyof RegistrationForm, string>>;
+
+/* --------------------------------------------------------------------------
+   Grilla del pergamino, en px de diseño (lienzo 1920x1080).
+   Las cintas se apoyan en una sola columna: así los campos de ancho completo y
+   los de media caña quedan alineados por los dos bordes.
+   -------------------------------------------------------------------------- */
+const COL_X = 578;
+const COL_W = 764;
+const COL_GAP = 40;
+const HALF_W = (COL_W - COL_GAP) / 2; // 362
+const ROW_H = 62;
+
+const FORM = {
+  titleY: 373,
+  row1: 452,
+  row2: 540,
+  noteY: 636,
+  row3: 681,
+  row4: 767,
+  buttonsY: 863,
+} as const;
+
+/* El mensaje de error cuelga por debajo de su cinta e invade la banda de la
+   fila siguiente. Por eso las filas se apilan al revés que en el DOM —la de
+   más arriba, más alta— y así el error siempre queda por encima de la cinta
+   que le sigue. Las cintas nunca se solapan entre sí, con lo cual invertir el
+   orden no tiene contrapartida. */
+const Z = { row1: 12, row2: 11, row3: 10, row4: 9, buttons: 8, note: 6, title: 5 } as const;
+
+const rowFull = (y: number) => box({ x: COL_X, y, w: COL_W, h: ROW_H });
+const rowLeft = (y: number) => box({ x: COL_X, y, w: HALF_W, h: ROW_H });
+const rowRight = (y: number) =>
+  box({ x: COL_X + HALF_W + COL_GAP, y, w: HALF_W, h: ROW_H });
 
 const EMPTY: RegistrationForm = {
   fullName: '',
@@ -72,8 +106,17 @@ export default function Register() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const set = (key: keyof RegistrationForm) => (e: React.ChangeEvent<HTMLInputElement>) =>
+  const set = (key: keyof RegistrationForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((f) => ({ ...f, [key]: e.target.value }));
+    // El error se borra apenas el usuario retoca el campo; se vuelve a evaluar
+    // al enviar. Si no, queda un cartel rojo contradiciendo lo que ya corrigió.
+    setErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -206,58 +249,76 @@ export default function Register() {
         glow="0 0 2.4cqw #09eaff" float={{ amplitude: 6, duration: 5.2 }} />
 
       <form className="register__form" onSubmit={onSubmit} noValidate id="contenido">
-        <h2
-          className="register__title abs"
-          style={{ ...centeredText(961, 382, 42), zIndex: 5 }}
+        {/* El Figma pide 42px, pero está dibujado con "DK Prince Frog", que es
+            condensada. Con la sustituta Chewy ese cuerpo no entra en la cinta
+            (+15% de ancho), así que se baja a 36 para respetar el ancho de la
+            columna. Cuando se incorpore la tipografía licenciada (ver
+            public/fonts/README.md) se vuelve a 42. */}
+        <RibbonPlate
+          tone="ochre"
+          className="register__title-plate abs"
+          style={{
+            left: u(960),
+            top: u(FORM.titleY),
+            width: u(COL_W),
+            height: u(ROW_H),
+            zIndex: Z.title,
+          }}
         >
-          Registrate para que tu pequeño pueda participar
-        </h2>
+          <h2 className="register__title" style={{ fontSize: u(36) }}>
+            Registrate para que tu pequeño pueda participar
+          </h2>
+        </RibbonPlate>
 
-        <div className="abs register__field" style={{ ...box({ x: 606, y: 471, w: 703, h: 40 }), zIndex: 5 }}>
+        <RibbonPlate className="register__field abs" style={{ ...rowFull(FORM.row1), zIndex: Z.row1 }}>
           {fieldEls[0]}
-        </div>
-        <div className="abs register__field" style={{ ...box({ x: 605, y: 560, w: 313, h: 40 }), zIndex: 5 }}>
+        </RibbonPlate>
+        <RibbonPlate className="register__field abs" style={{ ...rowLeft(FORM.row2), zIndex: Z.row2 }}>
           {fieldEls[1]}
-        </div>
-        <div className="abs register__field" style={{ ...box({ x: 1002, y: 560, w: 313, h: 40 }), zIndex: 5 }}>
+        </RibbonPlate>
+        <RibbonPlate className="register__field abs" style={{ ...rowRight(FORM.row2), zIndex: Z.row2 }}>
           {fieldEls[2]}
-        </div>
+        </RibbonPlate>
 
-        <p className="abs register__note" style={{ ...centeredText(948, 636, 25), zIndex: 5 }}>
+        <p
+          className="abs register__note"
+          style={{ ...centeredText(960, FORM.noteY, 25), zIndex: Z.note }}
+        >
           Este registro debe ser realizado por un tutor mayor de 18 años*
         </p>
 
-        <div className="abs register__field" style={{ ...box({ x: 606, y: 700, w: 703, h: 40 }), zIndex: 5 }}>
+        <RibbonPlate className="register__field abs" style={{ ...rowFull(FORM.row3), zIndex: Z.row3 }}>
           {fieldEls[3]}
-        </div>
-        <div className="abs register__field" style={{ ...box({ x: 605, y: 786, w: 313, h: 40 }), zIndex: 5 }}>
+        </RibbonPlate>
+        <RibbonPlate className="register__field abs" style={{ ...rowLeft(FORM.row4), zIndex: Z.row4 }}>
           {fieldEls[4]}
-        </div>
-        <div className="abs register__field" style={{ ...box({ x: 1002, y: 786, w: 313, h: 40 }), zIndex: 5 }}>
+        </RibbonPlate>
+        <RibbonPlate className="register__field abs" style={{ ...rowRight(FORM.row4), zIndex: Z.row4 }}>
           {fieldEls[5]}
-        </div>
+        </RibbonPlate>
 
         <RibbonButton
           type="submit"
+          tone="ochre"
           className="abs"
           width={296}
           height={58}
           fontSize={40}
           disabled={submitting}
-          style={{ left: u(646), top: u(863), zIndex: 6 }}
+          style={{ left: u(646), top: u(FORM.buttonsY), zIndex: Z.buttons }}
         >
           {submitting ? 'Enviando…' : 'Registrarme'}
         </RibbonButton>
 
         <RibbonButton
           type="button"
-          tone="ghost"
+          tone="ochre"
           className="abs"
           width={296}
           height={58}
           fontSize={40}
           onClick={() => navigate('/participar')}
-          style={{ left: u(955), top: u(863), zIndex: 6 }}
+          style={{ left: u(955), top: u(FORM.buttonsY), zIndex: Z.buttons }}
         >
           Cancelar
         </RibbonButton>
@@ -267,7 +328,7 @@ export default function Register() {
 }
 
 interface RegisterMobileProps {
-  fields: React.ReactNode;
+  fields: React.ReactElement[];
   onSubmit: (e: FormEvent) => void;
   onCancel: () => void;
   submitting: boolean;
@@ -279,16 +340,26 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
       <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo m-logo--sm" />
 
       <form className="register__form register__form--mobile" onSubmit={onSubmit} noValidate>
-        <h2 className="register__title">Registrate para que tu pequeño pueda participar</h2>
-        <div className="register__grid">{fields}</div>
+        <RibbonPlate tone="ochre" className="register__title-plate">
+          <h2 className="register__title">Registrate para que tu pequeño pueda participar</h2>
+        </RibbonPlate>
+
+        <div className="register__grid">
+          {fields.map((field) => (
+            <RibbonPlate key={field.key} className="register__field">
+              {field}
+            </RibbonPlate>
+          ))}
+        </div>
+
         <p className="register__note">
           Este registro debe ser realizado por un tutor mayor de 18 años*
         </p>
         <div className="m-row">
-          <RibbonButton type="submit" fontSize={40} disabled={submitting}>
+          <RibbonButton type="submit" tone="ochre" fontSize={40} disabled={submitting}>
             {submitting ? 'Enviando…' : 'Registrarme'}
           </RibbonButton>
-          <RibbonButton type="button" tone="ghost" fontSize={40} onClick={onCancel}>
+          <RibbonButton type="button" tone="ochre" fontSize={40} onClick={onCancel}>
             Cancelar
           </RibbonButton>
         </div>

@@ -36,6 +36,13 @@ export interface Prize {
   image: string;
   /** Copy corto opcional para el carrusel. */
   caption?: string;
+  /**
+   * Artículo que precede al nombre en "te ganaste ___ {name}!".
+   * Va con el premio porque depende de su género y número —"una Bicicleta",
+   * "un Viaje al Caribe", "unos Auriculares"— y no hay forma confiable de
+   * deducirlo del nombre. Si falta, la pantalla usa "un".
+   */
+  article?: string;
 }
 
 export interface UserCodeCount {

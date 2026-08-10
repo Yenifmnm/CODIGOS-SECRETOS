@@ -34,11 +34,12 @@
 
 .code-counter__label {
   font-family: var(--font-display);
-  font-size: 1.563cqw; /* 30 */
+  font-size: 1.354cqw; /* 26 */
   color: var(--c-gold);
   text-shadow: var(--glow-gold-text);
   line-height: 1.05;
-  max-width: 9.5cqw;
+  /* El Figma lo tiene en un solo renglón; el `max-width` anterior lo partía. */
+  white-space: nowrap;
 }
 
 @media (max-width: 899px) {
@@ -56,5 +57,6 @@
   .code-counter__label {
     font-size: clamp(14px, 4vw, 18px);
     max-width: 110px;
+    white-space: normal;
   }
 }

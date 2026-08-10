@@ -16,7 +16,9 @@ interface PrizeRevealProps {
 
 /* Coordenadas del Figma (23:3136 cofre, 23:3137 premio, 23:3138/9 glows). */
 const CHEST = { x: 1032, y: 330, w: 682, h: 682 };
-const PRIZE = { x: 1253, y: 76, w: 549, h: 564 };
+/* Ajustado midiendo la silueta de la Switch en GANASTE.png: la caja anterior la
+   dejaba un 15% chica y 49 px a la izquierda. */
+const PRIZE = { x: 1270, y: 48, w: 635, h: 653 };
 const T = {
   anticipation: 0.28,
   open: 0.34,
@@ -106,7 +108,11 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
           transition={{ delay: prizeAt + T.prize, duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
         >
           <img src={prize.image} alt={prize.name} className="reveal__prize" />
-          <span className="reveal__holo" aria-hidden="true" />
+          <span
+            className="reveal__holo"
+            aria-hidden="true"
+            style={{ '--holo-mask': `url(${prize.image})` } as React.CSSProperties}
+          />
         </motion.div>
         <Sparkles count={20} spread={52} />
       </motion.div>

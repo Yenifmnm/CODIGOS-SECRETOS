@@ -59,7 +59,13 @@
   inset: 0;
 }
 
-.abs {
+/* Los componentes (`.ribbon-btn`, `.promo-btn`, …) traen su propio
+   `position: relative` y sus hojas se cargan después que ésta, así que con un
+   solo `.abs` empatan en especificidad y ganaban ellos: el elemento quedaba en
+   flujo y `left`/`top` lo corrían desde su posición estática. Repetir la clase
+   sube la especificidad a 0,2,0 sin recurrir a `!important`. */
+.abs,
+.abs.abs {
   position: absolute;
 }
 

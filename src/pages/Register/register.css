@@ -10,20 +10,32 @@
   pointer-events: auto;
 }
 
+/* ---------- Cinta del título ----------
+   Ancho fijo, igual al de la columna de campos, como en el Figma. */
+.register__title-plate {
+  transform: translateX(-50%);
+  padding-inline: 1.25cqw; /* 24 */
+}
+
+.register__title-plate > .plate__content {
+  justify-content: center;
+}
+
 .register__title {
   margin: 0;
   font-family: var(--font-display);
   color: var(--c-brown-dark);
   line-height: 1.05;
   text-align: center;
+  white-space: nowrap;
 }
 
+/* ---------- Cintas de los campos ---------- */
 .register__field {
-  display: flex;
-  align-items: flex-end;
+  padding-inline: 1.4583cqw; /* 28 */
 }
 
-.register__field > .pfield {
+.register__field .pfield {
   width: 100%;
 }
 
@@ -52,14 +64,27 @@
     pointer-events: auto;
   }
 
+  .register__title-plate {
+    width: 100%;
+    transform: none;
+    padding: 10px 16px;
+    --plate-notch: 12px;
+  }
+
   .register__form--mobile .register__title {
     font-size: clamp(19px, 5.4vw, 24px);
+    white-space: normal;
   }
 
   .register__grid {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
+  }
+
+  .register__field {
+    padding: 8px 14px;
+    --plate-notch: 12px;
   }
 
   .register__note {

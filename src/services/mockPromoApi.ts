@@ -12,6 +12,7 @@ import type {
 } from '../types/promo';
 import { MOCK_LATENCY_MS, getScenario } from '../mocks/scenarios';
 import { MOCK_PRIZES } from '../mocks/prizes';
+import { findCode, normalizeCode, seedRedeemed } from '../mocks/codes';
 
 const delay = (ms = MOCK_LATENCY_MS) => new Promise<void>((r) => setTimeout(r, ms));
 
@@ -19,13 +20,21 @@ const delay = (ms = MOCK_LATENCY_MS) => new Promise<void>((r) => setTimeout(r, m
 const AUTO_CYCLE: PromoCodeStatus[] = ['WIN', 'LOSE', 'CODE_ALREADY_USED', 'CODE_NOT_FOUND'];
 
 /**
- * Adapter de desarrollo. No implementa ninguna regla de negocio real:
- * el estado devuelto lo decide `mocks/scenarios.ts`, no el contenido del código.
+ * Adapter de desarrollo.
+ *
+ * Por defecto (escenario `BASE`) consulta la base de códigos de ejemplo, así
+ * que el resultado lo decide el código ingresado. Los demás escenarios fuerzan
+ * un estado sin mirar el código, para poder abrir cualquier pantalla directo.
+ *
+ * En ninguno de los dos casos hay reglas de negocio reales: el sorteo y la
+ * vigencia de los códigos son responsabilidad del backend.
  */
 export class MockPromoApi implements PromoApi {
   private registered = new Set<string>();
   private counts = new Map<string, number>();
   private autoIndex = 0;
+  /** Códigos ya consumidos en esta sesión, más los que vienen así de fábrica. */
+  private redeemed = new Set<string>(seedRedeemed());
 
   async checkParticipant(cedula: string): Promise<ParticipantCheckResult> {
     await delay(400);
@@ -50,21 +59,46 @@ export class MockPromoApi implements PromoApi {
   async submitPromoCode({ cedula, code }: PromoCode): Promise<PromoCodeResult> {
     await delay();
 
-    const scenario = getScenario();
-    const status: PromoCodeStatus =
-      scenario === 'AUTO' ? AUTO_CYCLE[this.autoIndex++ % AUTO_CYCLE.length] : scenario;
+    const { status, prize } = this.resolve(code);
 
     // Sólo los códigos efectivamente consumidos suman al contador.
     const consumed = status === 'WIN' || status === 'LOSE';
     const next = (this.counts.get(cedula) ?? 0) + (consumed ? 1 : 0);
     this.counts.set(cedula, next);
 
+    return { status, code, codeCount: next, prize };
+  }
+
+  /**
+   * Escenario `BASE`: se consulta la base de ejemplo, igual que hará el backend
+   * contra su tabla. Cualquier otro escenario fuerza el estado y no toca la base.
+   */
+  private resolve(code: string): { status: PromoCodeStatus; prize?: Prize } {
+    const scenario = getScenario();
+
+    if (scenario !== 'BASE') {
+      const status: PromoCodeStatus =
+        scenario === 'AUTO' ? AUTO_CYCLE[this.autoIndex++ % AUTO_CYCLE.length] : scenario;
+      return { status, prize: status === 'WIN' ? this.pickPreviewPrize() : undefined };
+    }
+
+    const record = findCode(code);
+    if (!record) return { status: 'CODE_NOT_FOUND' };
+    if (this.redeemed.has(record.code)) return { status: 'CODE_ALREADY_USED' };
+
+    // A partir de acá el código se consume: un segundo intento dará ALREADY_USED.
+    this.redeemed.add(record.code);
+
+    if (record.outcome === 'LOSE') return { status: 'LOSE' };
     return {
-      status,
-      code,
-      codeCount: next,
-      prize: status === 'WIN' ? this.pickPreviewPrize() : undefined,
+      status: 'WIN',
+      prize: MOCK_PRIZES.find((p) => p.id === record.prizeId) ?? MOCK_PRIZES[0],
     };
+  }
+
+  /** Expuesto sólo para la demo: permite listar los códigos de prueba. */
+  isRedeemed(code: string): boolean {
+    return this.redeemed.has(normalizeCode(code));
   }
 
   async getCodeCount(cedula: string): Promise<UserCodeCount> {

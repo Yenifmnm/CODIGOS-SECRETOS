@@ -12,9 +12,12 @@ export default function Loser() {
     <ResultLayout
       pageTitle="Estuviste cerca"
       title="Estuviste cerca"
-      titleSize={140}
-      message="¡Seguí participando, cada código te acerca más al tesoro galáctico!"
-      messageSize={40}
+      titleSize={118}
+      titleTone="outline"
+      titleY={460}
+      message={['¡Seguí participando, cada código', 'te acerca más al tesoro galáctico!']}
+      messageSize={36}
+      messageWidth={520}
       messageY={616}
       ctaY={730}
       code={lastResult?.code}

@@ -1,110 +1,111 @@
 # PuroSol — El Tesoro Galáctico de los Códigos Secretos 2026
 
-Microsite promocional. **Sólo frontend.** No hay backend, base de datos, autenticación, validación real de códigos ni reglas de premio en este repositorio.
+## 🔗 Sitio publicado
 
-## Cómo verlo y cómo compartirlo
+### **https://yenifmnm.github.io/c-digos-secretos/**
 
-### 1. Mirarlo ya, sin instalar nada
+Ese es el link para compartir. Se actualiza solo: cada push a `main` dispara el
+workflow `.github/workflows/deploy.yml`, que compila y publica en GitHub Pages.
 
-`../demo/PuroSol-Tesoro-Galactico.html` — un único archivo de 3,3 MB con todo adentro (código, estilos e imágenes). Doble click y abre en el navegador. Funciona offline y se puede mandar por mail o WhatsApp tal cual.
+## 🗺️ Recorrido del sitio
 
-Se regenera con:
+### **https://yenifmnm.github.io/c-digos-secretos/recorrido.html**
 
-```bash
-npx vite build --config vite.demo.config.ts
-```
+Documento de apoyo para presentar y probar el microsite. Recorre una
+participación completa con datos de ejemplo —una persona cargando cuatro
+códigos distintos— y muestra, con capturas del sitio funcionando:
 
-y luego inlineando el JS/CSS en el HTML (ver `vite.demo.config.ts`).
+- el camino de punta a punta: carga de código, registro y resultado;
+- las cuatro respuestas posibles a un código y qué pantalla abre cada una;
+- cómo se comporta el contador de códigos cargados en cada caso;
+- la lista de códigos de prueba que se pueden tipear en vivo;
+- los caminos secundarios y los casos borde.
 
-### 2. Compartir un link con el cliente
+Sirve para tres cosas: mostrarle el flujo al cliente sin depender de una demo en
+vivo, darle a QA una lista concreta de qué probar, y dejarle al equipo de backend
+el mapa de estados que el sitio espera recibir.
 
-La carpeta `dist/` (2,7 MB) es un sitio estático común. Sirve en cualquier hosting:
+El archivo es `public/recorrido.html`: uno solo, autocontenido, con las imágenes
+adentro. Se puede abrir con doble click o mandar por mail.
 
-- **Netlify Drop** — `app.netlify.com/drop`, arrastrás la carpeta `dist` y te da una URL al toque.
-- **Vercel** — `npx vercel --prod` desde la raíz del proyecto.
-- **Cloudflare Pages / GitHub Pages** — subir `dist` como carpeta de publicación.
+---
 
-Está configurado con `base: './'` y `HashRouter`, así que anda igual en la raíz de un dominio o en un subdirectorio.
+## Qué es este repositorio
 
-### 3. Desarrollar
+Microsite promocional. **Sólo frontend.** No hay backend, base de datos,
+autenticación, validación real de códigos ni reglas de premio acá dentro.
+
+## Correrlo localmente
 
 ```bash
 npm install        # obligatorio antes del primer dev/build
-npm run dev        # http://localhost:5173
-npm run build      # dist/
+npm run dev        # http://localhost:5180
+npm run build      # genera dist/
 npm run typecheck
 ```
 
+El puerto 5180 está fijado en `vite.config.ts` con `strictPort`.
+
 ---
+
+## Stack
+
+React 18 · Vite · TypeScript · React Router (HashRouter) · Framer Motion · CSS
+plano con custom properties.
+
+Sin Tailwind, sin Bootstrap, sin Material UI.
+
+Framer Motion se usa donde aporta (secuencia del ganador, carrusel). El resto del
+movimiento es CSS `transform`/`opacity`, y el catalejo usa `requestAnimationFrame`
+porque sigue al puntero.
 
 ## Fuentes del diseño
 
 | Fuente | Qué aporta |
 | --- | --- |
 | Figma `BYiPd3K1fF5IbvSOhOQA9B` → `13:48 vistas web` | Composición, posiciones, proporciones, tipografía, color, assets |
+| `Mecánica de participación PuroSol 2026.pptx` | Lógica de participación y estados |
 | `_Codigos Secretos 2026 - Web - Cliente.pptx` | Animaciones, microinteracciones, storytelling |
 
-Cuando ambos discrepan manda el Figma. La navegación implementada es la del Figma actual (píldora cian plegable), **no** el menú lateral amarillo del PowerPoint.
+Cuando el Figma y el PowerPoint discrepan, manda el Figma. La navegación
+implementada es la del Figma actual (píldora cian plegable), no el menú lateral
+amarillo del PowerPoint.
 
-Cada pantalla lleva en su cabecera el nodo de Figma del que sale. Ningún fondo es un screenshot: todos los elementos son capas independientes para poder animarlos.
+Cada pantalla lleva en su cabecera el nodo de Figma del que sale. Ningún fondo es
+un screenshot: todos los elementos son capas independientes para poder animarlos.
 
----
+## Tipografía
 
-## Stack
+El diseño usa **DK Prince Frog**, que es comercial y no viene en el repo. El
+`@font-face` ya está declarado en `src/styles/tokens.css` apuntando a
+`public/fonts/DKPrinceFrog.woff2`: basta con dejar ese archivo en la carpeta para
+que todo el sitio la tome, sin tocar una línea más.
 
-React 18 · Vite · TypeScript · React Router (HashRouter) · Framer Motion · CSS plano con custom properties.
-
-Sin Tailwind, sin Bootstrap, sin Material UI.
-
-Framer Motion se usa sólo donde aporta (secuencia del ganador, carrusel). El resto del movimiento es CSS `transform`/`opacity`, y el catalejo usa `requestAnimationFrame` porque sigue al puntero.
+Mientras no esté, el stack cae en **Chewy** (Google Fonts, OFL, uso comercial
+permitido), elegida por medición contra el Figma: mismo peso de trazo, mismo
+redondeo de marcador y línea de base irregular. Detalle completo en
+`public/fonts/README.md`.
 
 ---
 
 ## Sistema de escala
 
-El Figma está sobre un lienzo de 1920×1080. En vez de escalar la página con `transform: scale()`:
+El Figma está sobre un lienzo de 1920×1080. En vez de escalar la página con
+`transform: scale()`:
 
-- `.stage__inner` es un **container query** que mantiene 16:9 y cubre el viewport.
-- `src/app/stage.ts` convierte coordenadas de diseño a `cqw` (`1cqw` = 19.2 px de diseño).
-- Cada elemento usa `box({x, y, w, h})` con los números exactos del Figma.
+- `.stage__inner` es un **container query** que mantiene 16:9 y entra completo en
+  el viewport;
+- `.stage__bg` cubre la ventana, así el fondo llega siempre a los bordes;
+- `src/app/stage.ts` convierte coordenadas de diseño a `cqw` (`1cqw` = 19,2 px de
+  diseño);
+- cada elemento usa `box({x, y, w, h})` con los números exactos del Figma.
 
-Así la composición desktop escala proporcional y sin deformarse entre 1024 y 1920+.
+Así la composición de escritorio escala proporcional y sin deformarse entre 1024
+y 1920+.
 
-**Por debajo de 900 px** (`useIsMobile`) cada pantalla renderiza una composición vertical propia — no es la vista desktop encogida. Prioridad: branding → mensaje → acción principal → contenido → decoración.
-
----
-
-## Frontera con el backend
-
-```
-src/types/promo.ts        Contratos: Participant, RegistrationForm, PromoCode,
-                          PromoCodeResult, Prize, UserCodeCount, SessionState, Terms
-src/services/promoApi.ts  Interfaz PromoApi + export del adapter activo
-src/services/mockPromoApi.ts   Implementación de desarrollo
-src/mocks/scenarios.ts    Interruptor de escenarios
-src/mocks/prizes.ts       Catálogo mock (assets originales del Figma)
-```
-
-Para conectar el backend real basta con **una línea**:
-
-```ts
-// src/services/promoApi.ts
-export const promoApi: PromoApi = new HttpPromoApi(baseUrl); // antes: new MockPromoApi()
-```
-
-Ninguna pantalla toca `fetch`, ninguna decide si un código gana. El flujo (`src/app/useCodeFlow.ts`) sólo enruta según el `status` que devuelve el adapter.
-
-### Probar los estados sin backend
-
-Tres formas equivalentes:
-
-1. Panel flotante abajo a la derecha (sólo en `npm run dev`).
-2. Query string: `?scenario=WIN`
-3. Consola: `window.__PROMO_SCENARIO__ = 'CODE_NOT_FOUND'`
-
-Escenarios: `AUTO` (rota), `WIN`, `LOSE`, `CODE_ALREADY_USED`, `CODE_NOT_FOUND`, `REGISTER_REQUIRED`.
-
-La latencia simulada (`MOCK_LATENCY_MS`, 750 ms) existe para poder ver los estados de carga.
+**Por debajo de 900 px** (`useIsMobile`) cada pantalla renderiza una composición
+vertical propia — no es la vista de escritorio encogida. Prioridad: branding →
+mensaje → acción principal → contenido → decoración.
 
 ---
 
@@ -114,30 +115,110 @@ La latencia simulada (`MOCK_LATENCY_MS`, 750 ms) existe para poder ver los estad
 | --- | --- | --- |
 | `/` | `13:49` INICIO | Nave que entra, cofre interactivo, cúmulo de premios |
 | `/participar` | `70:396` BIENVENIDOS | Cédula + código secreto |
-| `/registro` | `17:2912` REGISTRO | Validación de formato en frontend |
+| `/registro` | `17:2912` REGISTRO | Seis campos, validación de formato en frontend |
 | `/premios` | `57:86` PREMIOS | Carrusel de 5 ranuras |
 | `/donde-esta-el-codigo` | `19:2982` | Catalejo-lupa sobre el pack |
 | `/bases` | `22:3021` | Pergamino que se despliega |
-| `/ganaste` | `23:3081` | Cofre se abre, el premio emerge |
+| `/ganaste` | `23:3081` | El cofre se abre y el premio emerge |
 | `/perdiste` | `23:3159` | Cofre cerrado con balanceo |
-| `/codigo-utilizado` | `107:297` | |
-| `/codigo-inexistente` | `131:131` | |
+| `/codigo-utilizado` | `107:297` | Código ya activado |
+| `/codigo-inexistente` | `131:131` | Código fuera de la base |
 
-El menú plegado (`13:32`) está disponible en toda la navegación; en registro, carga de código y resultados arranca cerrado para no competir con el flujo.
+Cualquier ruta desconocida redirige a `/`. El menú plegado (`13:32`) está
+disponible en toda la navegación; en registro, carga de código y resultados
+arranca cerrado.
 
 ---
 
-## Inventario de animaciones (PPT)
+## Frontera con el backend
+
+```
+src/types/promo.ts             Contratos: Participant, RegistrationForm, PromoCode,
+                               PromoCodeResult, Prize, UserCodeCount, SessionState, Terms
+src/services/promoApi.ts       Interfaz PromoApi + export del adapter activo
+src/services/mockPromoApi.ts   Implementación de desarrollo
+src/mocks/scenarios.ts         Interruptor de escenarios
+src/mocks/prizes.ts            Catálogo mock (assets originales del Figma)
+src/mocks/codes.ts             Base de códigos de ejemplo
+```
+
+Para conectar el backend real se cambia **una línea**:
+
+```ts
+// src/services/promoApi.ts
+export const promoApi: PromoApi = new HttpPromoApi(baseUrl); // antes: new MockPromoApi()
+```
+
+Ninguna pantalla toca `fetch` y ninguna decide si un código gana. El flujo
+(`src/app/useCodeFlow.ts`) enruta según el `status` que devuelve el adapter:
+
+| `status` | Pantalla | Consume el código |
+| --- | --- | --- |
+| `WIN` | `/ganaste` | Sí |
+| `LOSE` | `/perdiste` | Sí |
+| `CODE_ALREADY_USED` | `/codigo-utilizado` | No |
+| `CODE_NOT_FOUND` | `/codigo-inexistente` | No |
+| `REGISTER_REQUIRED` | `/registro` | No |
+
+El contador de códigos cargados sólo avanza con los dos estados que consumen el
+código. Por eso el panel de aviso dice «CANJEASTE EL CÓDIGO» en `WIN` y `LOSE`, y
+«CÓDIGO INGRESADO» en los dos errores.
+
+Al conectar el backend, `src/mocks/codes.ts` se elimina: la consulta pasa a hacerse
+contra la tabla real.
+
+### Probar los estados sin backend
+
+Por defecto el mock corre en modo **`BASE`**: consulta `src/mocks/codes.ts` y el
+resultado lo decide el código ingresado, igual que hará contra la tabla real. Un
+código que no está en esa lista devuelve `CODE_NOT_FOUND`; uno ya cargado,
+`CODE_ALREADY_USED`.
+
+Códigos de ejemplo:
+
+| Código | Resultado |
+| --- | --- |
+| `PSNSW7K2M9X` | Gana — Nintendo Switch |
+| `PSPS5B4T8LQ` | Gana — PlayStation 5 |
+| `PSCAR3J6VN2` | Gana — Viaje al Caribe |
+| `PSBIC9D1RZ5` | Gana — Bicicleta |
+| `PSAUR6H4KW8` | Gana — Auriculares gamer |
+| `QF3B8N6V2W5` y otros nueve | Válido, sin premio |
+| `ABCDG847FR5`, `ZX9Q4L2PT60` | Ya canjeados de fábrica |
+| Cualquier otro | No existe |
+
+El código se normaliza antes de buscarlo (mayúsculas, sin espacios ni guiones):
+`psnsw 7k2-m9x` encuentra `PSNSW7K2M9X`. Un código válido se gasta al usarlo, así
+que cargarlo dos veces devuelve `CODE_ALREADY_USED`.
+
+Para forzar un estado sin importar el código hay tres formas equivalentes:
+
+1. Panel flotante abajo a la derecha, sólo en `npm run dev`.
+2. Query string `?scenario=WIN`, **antes** del `#`:
+   `localhost:5180/?scenario=WIN#/participar`.
+3. Consola: `window.__PROMO_SCENARIO__ = 'CODE_NOT_FOUND'`.
+
+Escenarios disponibles: `BASE` (por defecto), `AUTO` (rota entre los cuatro
+resultados), `WIN`, `LOSE`, `CODE_ALREADY_USED`, `CODE_NOT_FOUND`,
+`REGISTER_REQUIRED`.
+
+El padrón de registrados y los códigos canjeados viven en memoria: recargar la
+página reinicia la demo desde cero. La latencia simulada (`MOCK_LATENCY_MS`,
+750 ms) permite ver los estados de carga.
+
+---
+
+## Inventario de animaciones
 
 | # | Animación | Dónde vive |
 | --- | --- | --- |
 | 1 | Lluvia de estrellas, 3 capas de profundidad | `components/effects/StarField.tsx` — un `<canvas>`, un solo `rAF`, `pointer-events: none` |
 | 2 | Flotación asincrónica (4–12 px, 3–7 s, delays distintos) | `components/effects/FloatingLayer.tsx` |
-| 3 | Nave entra desde la derecha → idle | `components/promo/PurosolShip.tsx` |
-| 4 | Cofre del Home se abre con hover (tap en touch) | `components/promo/TreasureChest.tsx` |
+| 3 | Nave que entra desde la derecha → idle | `components/promo/PurosolShip.tsx` |
+| 4 | Cofre del Home que se abre con hover (tap en touch) | `components/promo/TreasureChest.tsx` |
 | 5 | Glow en iconos y botones (hover / focus / active) | `PromoButton`, `RibbonButton`, `SiteMenu`, `CloseButton` |
 | 6 | Menú que se despliega, con entrada escalonada | `components/navigation/SiteMenu.tsx` |
-| 7 | Catalejo-lupa (mouse, touch y teclado), zoom 2.2× | `components/promo/TelescopeMagnifier.tsx` |
+| 7 | Catalejo-lupa (mouse, touch y teclado), zoom 2,2× | `components/promo/TelescopeMagnifier.tsx` |
 | 8 | Ganador: anticipación → apertura → luz → premio + holograma + partículas | `components/promo/PrizeReveal.tsx` |
 | 9 | Cofre perdedor: respiración y balanceo sutiles | `TreasureChest` modo `idle` |
 | 12 | Pergamino que se despliega + Ralph "leyendo" | `components/promo/Parchment.tsx`, `pages/Terms` |
@@ -149,28 +230,22 @@ El menú plegado (`13:32`) está disponible en toda la navegación; en registro,
 
 ## Accesibilidad y motion
 
-- HTML semántico: todos los botones son `<button>`, los inputs tienen `<label>` asociado.
+- HTML semántico: todos los botones son `<button>` y cada input tiene su `<label>`
+  asociado. En el registro la etiqueta se lee sobre la línea y sube al escribir,
+  así que nunca desaparece.
 - Decoración con `aria-hidden` y `pointer-events: none`.
-- Foco visible en cian, skip-link al contenido.
-- Teclado: TAB, ENTER/SPACE, ESC cierra el menú, flechas mueven el carrusel y el catalejo.
+- Foco visible en cian y skip-link al contenido.
+- Teclado: TAB, ENTER/SPACE, ESC cierra el menú, y las flechas mueven el carrusel
+  y el catalejo.
 - El catalejo no es la única vía: el contenido está descrito en texto.
-- `prefers-reduced-motion: reduce` desactiva parallax, flotaciones y recorridos; las estrellas quedan fijas y el pergamino y el premio aparecen con un fundido. **El sitio sigue siendo completamente usable.**
-
----
+- `prefers-reduced-motion: reduce` desactiva parallax, flotaciones y recorridos;
+  las estrellas quedan fijas, y el pergamino y el premio aparecen con un fundido.
+  El sitio sigue siendo completamente usable.
 
 ## Performance
 
 - Sólo el Home entra en el bundle inicial; el resto es `React.lazy`.
 - Animaciones sobre `transform`/`opacity`; nunca `top`/`left`/`width`/`height`.
-- Un único `rAF` para el starfield y otro para el catalejo, ambos cancelados al desmontar.
+- Un único `rAF` para el starfield y otro para el catalejo, ambos cancelados al
+  desmontar.
 - Sin listeners por elemento decorativo.
-
----
-
-## Pendientes / decisiones que conviene revisar con el cliente
-
-1. **Tipografía `DK Prince Frog`.** No está en el repo por licencia. Ver `public/fonts/README.md`: al dejar el `.woff2` y descomentar el `@font-face` de `src/styles/tokens.css`, todo el sitio la toma. Mientras tanto usa Baloo 2 como fallback vía `--font-display`.
-2. **Cofre en el Home.** El PPT lo pide (lám. 29) pero el Figma actual no lo ubica en INICIO. Está colocado en el espacio libre al pie del cúmulo de premios (`x 395, y 770`). Se mueve cambiando esa sola llamada a `box()` en `pages/Home/Home.tsx`.
-3. **Texto de las bases.** Hoy es provisorio dentro de `mockPromoApi.getTerms()`. El componente ya acepta `termsHtml` o `termsText` desde backend.
-4. **Etiqueta del código en pantallas de error.** En GANASTE y PERDISTE dice "CANJEASTE EL CÓDIGO" como en el Figma. En código utilizado / inexistente dice "CÓDIGO INGRESADO", porque ahí el código no se consumió. Se cambia con la prop `codeRedeemed` de `ResultLayout`.
-5. **Iconos vectoriales menores** (hamburguesa, cruz de cerrar, cinta de los botones, iconos de los campos) están reconstruidos como SVG inline con la geometría y la paleta del Figma, porque no vinieron en la exportación de assets. Si el estudio los entrega, se reemplazan en `SiteMenu`, `CloseButton`, `RibbonButton` y `ParchmentField`.
