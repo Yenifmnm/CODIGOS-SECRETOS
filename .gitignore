@@ -4,3 +4,6 @@ dist
 *.local
 tsconfig.tsbuildinfo
 vite.config.ts.timestamp-*
+
+# Export redundante: sus archivos ya estan sueltos en figma/
+figma/*.zip
