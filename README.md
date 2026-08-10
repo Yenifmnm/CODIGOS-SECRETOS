@@ -2,14 +2,22 @@
 
 ## 🔗 Sitio publicado
 
-### **https://yenifmnm.github.io/c-digos-secretos/**
+### **https://yenifmnm.github.io/CODIGOS-SECRETOS/**
 
-Ese es el link para compartir. Se actualiza solo: cada push a `main` dispara el
-workflow `.github/workflows/deploy.yml`, que compila y publica en GitHub Pages.
+Ese es el link para compartir. Abre en cualquier navegador, sin instalar nada.
+Se actualiza solo: cada push a `main` dispara el workflow
+`.github/workflows/deploy.yml`, que compila y publica en GitHub Pages.
+
+Funciona en desktop y en celular: cada pantalla tiene su propia composición
+mobile tomada del Figma de 402 px, no es la vista de escritorio encogida.
+Probalo achicando la ventana por debajo de 900 px o entrando desde el teléfono.
+
+Abajo a la derecha hay un selector de escenarios para forzar cada resultado
+—ganaste, perdiste, código usado, código inexistente— sin depender del backend.
 
 ## 🗺️ Recorrido del sitio
 
-### **https://yenifmnm.github.io/c-digos-secretos/recorrido.html**
+### **https://yenifmnm.github.io/CODIGOS-SECRETOS/recorrido.html**
 
 Documento de apoyo para presentar y probar el microsite. Recorre una
 participación completa con datos de ejemplo —una persona cargando cuatro
@@ -25,8 +33,27 @@ Sirve para tres cosas: mostrarle el flujo al cliente sin depender de una demo en
 vivo, darle a QA una lista concreta de qué probar, y dejarle al equipo de backend
 el mapa de estados que el sitio espera recibir.
 
-El archivo es `public/recorrido.html`: uno solo, autocontenido, con las imágenes
-adentro. Se puede abrir con doble click o mandar por mail.
+### Cómo usar el demo
+
+Hay dos maneras, según a quién se lo mandes:
+
+**1. Por link.** Pasás la dirección de arriba y listo. No hace falta instalar
+nada ni tener cuenta: se abre en el navegador, igual que el sitio.
+
+**2. Como archivo suelto.** El demo vive en `public/recorrido.html` y es **un
+único archivo autocontenido**, con las imágenes embebidas adentro. Eso significa
+que se puede:
+
+- descargarlo y abrirlo con doble click, sin servidor ni `npm install`;
+- adjuntarlo por mail o mandarlo por chat;
+- verlo sin conexión a internet.
+
+Para bajarlo desde el repo: entrá a `public/recorrido.html`, botón **Download raw
+file**. Pesa unos 650 kB.
+
+Recorriendo el documento vas a encontrar la lista de códigos de prueba que se
+pueden tipear en vivo en el sitio. Cada código dispara un resultado distinto, así
+que sirve para comprobar las cuatro pantallas sin tocar nada de código.
 
 ---
 
