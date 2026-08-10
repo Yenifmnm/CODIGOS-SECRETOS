@@ -1,0 +1,72 @@
+/* -------------------------------------------------------------------------
+   Lienzo de la rama mobile.
+
+   El diseño está hecho sobre 402 px de ancho. El contenedor se estira hasta
+   `--mstage-max` y a partir de ahí queda centrado: por encima de ese ancho la
+   composición dejaría de leerse como una pantalla de celular.
+
+   `container-type: inline-size` es lo que hace funcionar a `mu()`: 1cqw pasa a
+   ser el 1% de este ancho. No se usa `size` porque la altura la decide el
+   contenido, que scrollea.
+   ------------------------------------------------------------------------- */
+
+.mstage__canvas {
+  --mstage-max: 520px;
+
+  container-type: inline-size;
+  container-name: mstage;
+  position: relative;
+  width: 100%;
+  max-width: var(--mstage-max);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Escena de proporción fija: sistema de referencia de las capas ilustradas. */
+.mscene {
+  position: relative;
+  width: 100%;
+  flex: none;
+}
+
+/* Capa absoluta dentro de una escena. Se repite la clase por el mismo motivo
+   que en el stage desktop: los componentes traen su propio `position` y sus
+   hojas se cargan después. */
+.mscene .mabs,
+.mscene .mabs.mabs {
+  position: absolute;
+}
+
+/* Imagen de una capa: llena su caja sin deformarse y nunca captura el puntero. */
+.mlayer-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* -------------------------------------------------------------------------
+   Bloques de contenido.
+
+   El lienzo no lleva padding propio: las escenas ilustradas sangran de borde a
+   borde, tal como en el diseño. El margen lateral lo pone cada bloque de texto
+   o formulario con `.mblock`.
+   ------------------------------------------------------------------------- */
+.mblock {
+  width: 100%;
+  padding-inline: 5.97cqw; /* 24px sobre el lienzo de 402 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5cqw;
+}
+
+/* Separación vertical estándar entre bloques, en proporción al lienzo. */
+.mgap-sm { height: 2.49cqw; }   /* 10px */
+.mgap    { height: 4.98cqw; }   /* 20px */
+.mgap-lg { height: 8.96cqw; }   /* 36px */

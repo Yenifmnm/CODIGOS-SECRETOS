@@ -4,6 +4,7 @@ import { Stage } from '../../components/layout/Stage';
 import { Deco } from '../../components/layout/Deco';
 import { RibbonButton } from '../../components/buttons/RibbonButton';
 import { RibbonPlate } from '../../components/promo/RibbonPlate';
+import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
@@ -334,40 +335,70 @@ interface RegisterMobileProps {
   submitting: boolean;
 }
 
+/* --------------------------------------------------------------------------
+   Composición mobile — Figma "Registro.png" (402x913).
+
+   Medidas del mockup, ya descontada la barra de estado (54 px):
+     pergamino    x 35..368   y 151..661   (333x510)
+     logo         montado sobre el borde superior del pergamino
+     dino         asomando arriba a la derecha
+     nena         asomando abajo a la izquierda
+     filas        nombre (entero) · fecha + cédula · nota · email (entero) ·
+                  ciudad + teléfono · botones
+
+   La nota va ENTRE la fila de cédula y la de email, igual que en el diseño, así
+   que la grilla se parte en dos bloques en vez de recorrer `fields` de corrido.
+   -------------------------------------------------------------------------- */
 function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobileProps) {
+  const [fullName, birthDate, cedula, email, city, phone] = fields;
+
   return (
-    <div className="m-stack" id="contenido">
-      <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo m-logo--sm" />
+    <div className="register-m" id="contenido">
+      <div className="register-m__sheet">
+        <img src={pergamino1} alt="" aria-hidden="true" className="register-m__paper" />
 
-      <form className="register__form register__form--mobile" onSubmit={onSubmit} noValidate>
-        <RibbonPlate tone="ochre" className="register__title-plate">
-          <h2 className="register__title">Registrate para que tu pequeño pueda participar</h2>
-        </RibbonPlate>
+        <FloatingLayer amplitude={5} duration={6.4} delay={0.3}
+          className="register-m__dino" style={{ position: 'absolute' }}>
+          <img src={dino} alt="" aria-hidden="true" className="mlayer-img" />
+        </FloatingLayer>
 
-        <div className="register__grid">
-          {fields.map((field) => (
-            <RibbonPlate key={field.key} className="register__field">
-              {field}
-            </RibbonPlate>
-          ))}
-        </div>
+        <FloatingLayer amplitude={4} duration={7.2} delay={1.1}
+          className="register-m__nena" style={{ position: 'absolute' }}>
+          <img src={nena} alt="" aria-hidden="true" className="mlayer-img" />
+        </FloatingLayer>
 
-        <p className="register__note">
-          Este registro debe ser realizado por un tutor mayor de 18 años*
-        </p>
-        <div className="m-row">
-          <RibbonButton type="submit" tone="ochre" fontSize={40} disabled={submitting}>
-            {submitting ? 'Enviando…' : 'Registrarme'}
-          </RibbonButton>
-          <RibbonButton type="button" tone="ochre" fontSize={40} onClick={onCancel}>
-            Cancelar
-          </RibbonButton>
-        </div>
-      </form>
+        <img src={logoCodigos} alt="Códigos Secretos 2026" className="register-m__logo" />
 
-      <div className="m-row" aria-hidden="true">
-        <img src={nena} alt="" style={{ width: 108 }} />
-        <img src={dino} alt="" style={{ width: 118 }} />
+        <form className="register-m__form" onSubmit={onSubmit} noValidate>
+          <RibbonPlate tone="ochre" className="register-m__title-plate">
+            <h2 className="register-m__title">Registrate para que tu pequeño pueda participar</h2>
+          </RibbonPlate>
+
+          <div className="register-m__grid">
+            <RibbonPlate className="register-m__cell register-m__cell--full">{fullName}</RibbonPlate>
+            <RibbonPlate className="register-m__cell">{birthDate}</RibbonPlate>
+            <RibbonPlate className="register-m__cell">{cedula}</RibbonPlate>
+          </div>
+
+          <p className="register-m__note">
+            Este registro debe ser realizado por un tutor mayor de 18 años*
+          </p>
+
+          <div className="register-m__grid">
+            <RibbonPlate className="register-m__cell register-m__cell--full">{email}</RibbonPlate>
+            <RibbonPlate className="register-m__cell">{city}</RibbonPlate>
+            <RibbonPlate className="register-m__cell">{phone}</RibbonPlate>
+          </div>
+
+          <div className="register-m__actions">
+            <RibbonButton type="submit" tone="ochre" mobileFontSize={15} disabled={submitting}>
+              {submitting ? 'Enviando…' : 'Registrarme'}
+            </RibbonButton>
+            <RibbonButton type="button" tone="ochre" mobileFontSize={15} onClick={onCancel}>
+              Cancelar
+            </RibbonButton>
+          </div>
+        </form>
       </div>
     </div>
   );

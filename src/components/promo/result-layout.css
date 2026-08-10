@@ -127,13 +127,118 @@
   letter-spacing: 0.04em;
 }
 
+/* -------------------------------------------------------------------------
+   Composición mobile de las cuatro pantallas de resultado (lienzo 402x969).
+   Orden: logo → titular → mensaje → botón → píldora del código → cofre →
+   contador. Medidas del Figma, ya descontada la barra de estado (54 px).
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
-  .result__note {
-    position: static;
+  .result-m {
     width: 100%;
-    font-size: clamp(11px, 3vw, 14px);
-    padding: 10px 14px;
-    /* En mobile no hay ancho para un renglón único: acá sí puede partir. */
-    white-space: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 7.463cqw;
+  }
+
+  .result-m__close {
+    position: absolute !important;
+    right: 6.219cqw;
+    top: 6.219cqw;
+    width: 10.945cqw;   /* 44 — área táctil mínima */
+    height: 10.945cqw;
+    z-index: 41;
+  }
+
+  .result-m__logo {
+    width: 53.483cqw;   /* 215 */
+    height: auto;
+    margin-top: 2.985cqw;
+    filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
+  }
+
+  .result-m__title {
+    margin: 2.488cqw 0 0;
+    font-family: var(--font-display);
+    font-size: 13.184cqw;   /* 53 */
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .result-m__title--gold {
+    color: var(--c-gold);
+    text-shadow: var(--glow-gold-text);
+  }
+
+  /* PERDISTE y los dos errores: relleno dorado con contorno rojo. */
+  .result-m__title--outline {
+    font-size: 8.955cqw;    /* 36 */
+    color: var(--c-gold);
+    -webkit-text-stroke: 0.6cqw #c2270f;
+    paint-order: stroke fill;
+    text-shadow: 0 0 4cqw rgba(252, 193, 2, 0.75);
+  }
+
+  .result-m__msg {
+    margin: 2.488cqw 0 0;
+    max-width: 82cqw;
+    font-family: var(--font-display);
+    font-size: 4.975cqw;    /* 20 */
+    line-height: 1.25;
+    color: var(--c-white);
+    text-shadow: 0 0 3cqw #fff, 0 0 7cqw rgba(255, 255, 255, 0.6),
+      0 2px 4px rgba(0, 0, 0, 0.35);
+    text-align: center;
+  }
+
+  .result-m__cta {
+    width: 55.97cqw;        /* 225 */
+    margin-top: 3.483cqw;
+  }
+
+  /* Píldora cian con el código canjeado y el teléfono de contacto. */
+  .result-m__note {
+    width: 73.383cqw;       /* 295 */
+    margin-top: 3.483cqw;
+    padding: 2.488cqw 3.483cqw;
+    border-radius: 500px;
+    background: var(--c-cyan-50);
+    backdrop-filter: blur(2px);
+    font-family: var(--font-display);
+    font-size: 2.736cqw;    /* 11 */
+    line-height: 1.35;
+    color: #fff;
+    text-align: center;
+  }
+
+  .result-m__note p {
+    margin: 0;
+  }
+
+  .result-m__note .result__note-code {
+    color: var(--c-cyan);
+  }
+
+  .result-m__scene {
+    position: relative;
+    width: 100%;
+    margin-top: 4.478cqw;
+  }
+
+  .result-m__counter {
+    margin-top: 4.975cqw;
+    display: flex;
+    align-items: center;
+    gap: 2.985cqw;
+  }
+
+  .result-m__counter .code-counter__plate {
+    width: 24.876cqw;   /* 100 */
+  }
+
+  .result-m__counter .code-counter__label {
+    font-size: 4.478cqw;  /* 18 */
+    color: var(--c-gold);
+    white-space: nowrap;
   }
 }

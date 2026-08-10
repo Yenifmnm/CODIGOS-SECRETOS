@@ -1,0 +1,38 @@
+/* Escena del cofre cerrado en mobile — Figma "perdiste.png" (402x969). */
+
+.mchest {
+  overflow: hidden;
+}
+
+/* Superficie curva del planeta: un círculo muy ancho que asoma por abajo, la
+   misma idea que `.result__planet` del desktop pero con la curvatura del
+   mockup mobile. */
+.mchest__planet {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 190cqw;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(23, 52, 128, 0.95) 0%,
+    rgba(14, 33, 92, 0.98) 60%,
+    #0b1642 100%
+  );
+  box-shadow: 0 -0.6cqw 6cqw rgba(9, 234, 255, 0.28);
+  pointer-events: none;
+}
+
+.mchest__img {
+  z-index: 1;
+  transform-origin: 50% 92%;
+  filter: drop-shadow(0 1.5cqw 3cqw rgba(0, 0, 0, 0.45));
+}
+
+/* Las dos caras del cofre ocupan la misma caja: se cruzan por opacidad. */
+.mchest__stack {
+  position: absolute;
+  inset: 0;
+}

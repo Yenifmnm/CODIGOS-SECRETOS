@@ -96,18 +96,32 @@ export function ResultLayout({
     <Stage
       title={pageTitle}
       compactMenu
+      mobileBg="profundo"
       mobile={
-        <div className="m-stack" id="contenido">
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo m-logo--sm" />
-          <p className="m-title m-title--lg">{title}</p>
-          <p className="m-sub">{message.join(' ')}</p>
-          {mobileScene}
-          <PromoButton fontSize={50} onClick={reload}>
-            Cargar otro código
-          </PromoButton>
-          <CodeCounter count={codeCount} />
-          <div className="m-note">{note}</div>
-          <CloseButton to="/" />
+        /* Composición mobile de las cuatro pantallas de resultado
+           (ganaste / perdiste / codigo utilizado / codigo utilizado-1, 402x969).
+           Orden del Figma: logo → titular → mensaje → botón → píldora con el
+           código → escena del cofre → contador. */
+        <div className="result-m" id="contenido">
+          <CloseButton to="/" className="result-m__close" />
+
+          <img src={logoCodigos} alt="Códigos Secretos 2026" className="result-m__logo" />
+
+          <p className={`result-m__title result-m__title--${titleTone}`}>{title}</p>
+
+          <p className="result-m__msg">{message.join(' ')}</p>
+
+          <div className="result-m__cta">
+            <PromoButton mobileFontSize={22} onClick={reload}>
+              Cargar otro código
+            </PromoButton>
+          </div>
+
+          <div className="result-m__note">{note}</div>
+
+          <div className="result-m__scene">{mobileScene}</div>
+
+          <CodeCounter count={codeCount} className="result-m__counter" />
         </div>
       }
     >

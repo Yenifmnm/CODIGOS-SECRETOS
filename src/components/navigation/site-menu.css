@@ -163,48 +163,167 @@
   filter: drop-shadow(0 0 0.8cqw #fff) drop-shadow(0 0 1.8cqw var(--c-cyan));
 }
 
-/* ---------- Mobile ---------- */
+/* -------------------------------------------------------------------------
+   Mobile — Figma "landing" (plegado) y "vista menu desplegado".
+
+   Medidas leídas del mockup sobre el lienzo de 402: píldora 160x49 en x=25,
+   y=25 (ya descontada la barra de estado del sistema, que no se implementa).
+   Al abrir, la píldora crece HACIA ABAJO hasta un panel de 195x180 con el logo
+   arriba y tres píldoras claras apiladas.
+
+   El panel se superpone al contenido: `.site-menu` conserva en el flujo sólo la
+   altura de la píldora plegada y el panel se posiciona absoluto por encima.
+
+   Diferencias respecto del desktop, todas tomadas del mockup mobile:
+     · no hay divisoria entre el logo y el botón;
+     · el disco del botón es blanco con las barras blancas;
+     · el orden de los ítems cambia (ver ITEMS_MOBILE en SiteMenu.tsx).
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .site-menu {
-    position: sticky;
-    top: 0;
-    left: 0 !important;
+    --m-pill-h: 12.189cqw;  /* 49 */
+    --m-pad: 2.488cqw;      /* 10 */
+
+    position: relative;
+    align-self: flex-start;
+    z-index: 40;
     width: 100%;
-    height: auto !important;
-    padding-block: 10px;
+    height: var(--m-pill-h) !important;
+    left: 0 !important;
+    top: 0 !important;
+    margin-top: 6.219cqw;   /* 25 */
+    padding-left: 6.219cqw; /* 25 */
+    transition: none;
   }
 
   .site-menu__bar {
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 26px;
+    position: absolute;
+    left: 6.219cqw;
+    top: 0;
+    width: 39.801cqw;       /* 160 */
+    height: var(--m-pill-h);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: var(--m-pill-h);
+    align-items: center;
+    gap: 0;
+    padding-inline: 4.478cqw; /* 18 */
+    border-radius: 500px;
+    background: var(--c-cyan-50);
+    backdrop-filter: blur(2px);
+    transition:
+      width 300ms var(--ease-soft),
+      height 320ms var(--ease-soft),
+      border-radius 300ms var(--ease-soft),
+      background-color 300ms var(--ease-soft);
   }
 
+  .site-menu--open .site-menu__bar {
+    width: 48.507cqw;       /* 195 */
+    height: 44.776cqw;      /* 180 */
+    grid-template-rows: var(--m-pill-h) 1fr;
+    align-items: start;
+    padding: 0 var(--m-pad) 3.483cqw;
+    border-radius: 5.224cqw; /* 21 */
+    background: rgba(214, 236, 248, 0.82);
+    box-shadow: 0 0.5cqw 4cqw rgba(11, 22, 66, 0.28);
+  }
+
+  /* El logo mantiene su lugar en la fila superior en los dos estados. */
   .site-menu__brand {
-    width: 116px;
-    height: 52px;
+    width: 18.657cqw;       /* 75 */
+    height: 7.463cqw;       /* 30 */
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
   }
 
+  .site-menu--open .site-menu__brand {
+    margin-left: 1.99cqw;
+  }
+
+  /* El mockup mobile no dibuja la divisoria del desktop. */
   .site-menu__divider {
-    height: 32px;
-  }
-
-  .site-menu__items {
-    order: 3;
-    flex-basis: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .site-menu__link {
-    font-size: clamp(15px, 4.4vw, 20px);
-    padding: 10px 16px;
+    display: none;
   }
 
   .site-menu__toggle {
-    width: 46px;
-    height: 46px;
+    grid-column: 3;
+    grid-row: 1;
+    width: 9.453cqw;        /* 38 */
+    height: 9.453cqw;
+    align-self: center;
+    margin-left: 0;
+  }
+
+  .site-menu__toggle-disc {
+    fill: rgba(255, 255, 255, 0.62);
+  }
+
+  .site-menu__toggle-bars rect,
+  .site-menu__toggle-cross rect {
+    fill: #fff;
+  }
+
+  /* Panel: ocupa las dos columnas de la fila inferior. */
+  .site-menu__items {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1.244cqw;          /* 5 */
+    width: 100%;
+    transition: none;
+  }
+
+  /* Las píldoras ocupan todo el ancho del panel, con el texto a la izquierda. */
+  .site-menu__items li {
+    display: flex;
+  }
+
+  .site-menu__link {
+    width: 100%;
+    justify-content: flex-start;
+    height: 7.960cqw;       /* 32 */
+    padding: 0 3.234cqw;
+    border-radius: 500px;
+    background: rgba(255, 255, 255, 0.82);
+    font-size: 4.229cqw;    /* 17 */
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .site-menu__link:hover,
+  .site-menu__link:focus-visible,
+  .site-menu__link:active {
+    background: #fff;
+    transform: none;
+    box-shadow: 0 0 2.5cqw rgba(9, 234, 255, 0.85);
+  }
+
+  .site-menu__link--active {
+    background: #fff;
+    box-shadow: 0 0 2.5cqw var(--c-cyan);
+  }
+
+  /* Entrada escalonada, adaptada al lienzo chico. */
+  @keyframes menu-item-in-m {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .site-menu__link {
+    animation: menu-item-in-m 300ms var(--ease-soft) both;
+  }
+}
+
+/* Sin movimiento: el panel aparece sin desplazamientos ni cambios de tamaño. */
+@media (prefers-reduced-motion: reduce) {
+  .site-menu,
+  .site-menu__bar,
+  .site-menu__link {
+    transition: none !important;
+    animation: none !important;
   }
 }

@@ -36,14 +36,24 @@ export default function CodeHelp() {
       title="¿Dónde encuentro el código secreto?"
       compactMenu
       mobile={
-        <div className="m-stack" id="contenido">
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo m-logo--sm" />
-          <p className="m-title">
+        /* Figma "donde esta el codigo.png": logo → titular dorado a dos
+           renglones → nave a la izquierda del pack → pack con catalejo →
+           píldora cian de contacto. */
+        <div className="codehelp-m" id="contenido">
+          <CloseButton to="/participar" className="codehelp-m__close" />
+
+          <img src={logoCodigos} alt="Códigos Secretos 2026" className="codehelp-m__logo" />
+
+          <p className="codehelp-m__title">
             Buscá el Código Secreto en los stickers de Purosol
           </p>
-          <TelescopeMagnifier src={jugos} alt={PACK_ALT} description={PACK_ALT} zoom={2.2} />
-          <div className="m-note">{note}</div>
-          <CloseButton to="/participar" />
+
+          <div className="codehelp-m__scene">
+            <PurosolShip className="codehelp-m__ship" />
+            <TelescopeMagnifier src={jugos} alt={PACK_ALT} description={PACK_ALT} zoom={2.2} />
+          </div>
+
+          <div className="codehelp-m__note">{note}</div>
         </div>
       }
     >

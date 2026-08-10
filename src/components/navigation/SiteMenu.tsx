@@ -1,14 +1,26 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { u } from '../../app/stage';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import logoPurosol from '../../assets/logos/purosol.webp';
 import './site-menu.css';
 
-/** Ítems de la barra desplegada, en el orden del Figma (13:51). */
+/** Ítems de la barra desplegada, en el orden del Figma desktop (13:51). */
 const ITEMS = [
   { to: '/participar', label: 'CARGAR CÓDIGO' },
   { to: '/premios', label: 'PREMIOS' },
   { to: '/bases', label: 'BASES Y CONDICIONES' },
+];
+
+/**
+ * El Figma mobile ordena las píldoras distinto que el desktop: BASES va antes
+ * que PREMIOS. Se reordena el arreglo en vez de usar `order` en CSS para que el
+ * orden visual y el del DOM —o sea el de lectura y el de tabulación— coincidan.
+ */
+const ITEMS_MOBILE = [
+  { to: '/participar', label: 'CARGAR CÓDIGO' },
+  { to: '/bases', label: 'BASES Y CONDICIONES' },
+  { to: '/premios', label: 'PREMIOS' },
 ];
 
 interface SiteMenuProps {
@@ -31,6 +43,8 @@ export function SiteMenu({ compact = false }: SiteMenuProps) {
   const rootRef = useRef<HTMLElement>(null);
   const panelId = useId();
   const location = useLocation();
+  const isMobile = useIsMobile();
+  const items = isMobile ? ITEMS_MOBILE : ITEMS;
 
   // Al cambiar de pantalla el menú vuelve a su estado plegado.
   useEffect(() => setOpen(false), [location.pathname]);
@@ -66,7 +80,7 @@ export function SiteMenu({ compact = false }: SiteMenuProps) {
         <span className="site-menu__divider" aria-hidden="true" />
 
         <ul id={panelId} className="site-menu__items" hidden={!open}>
-          {ITEMS.map((item) => (
+          {items.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}

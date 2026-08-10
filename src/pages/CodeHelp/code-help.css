@@ -38,9 +38,80 @@
   margin: 0;
 }
 
+/* Composición mobile — Figma "donde esta el codigo.png" (402x913). */
 @media (max-width: 899px) {
-  .codehelp__note {
-    position: static;
+  .codehelp-m {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 5.97cqw;
+  }
+
+  .codehelp-m__close {
+    position: absolute !important;
+    right: 6.219cqw;
+    top: 6.219cqw;
+    width: 10.945cqw;
+    height: 10.945cqw;
+    z-index: 41;
+  }
+
+  .codehelp-m__logo {
+    width: 58.209cqw;      /* 234 */
+    height: auto;
+    margin-top: 2.985cqw;
+    filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
+  }
+
+  .codehelp-m__title {
+    margin: 3.483cqw 0 0;
+    max-width: 88cqw;
+    font-family: var(--font-display);
+    font-size: 7.463cqw;   /* 30 */
+    line-height: 1.12;
+    color: var(--c-gold);
+    text-shadow: var(--glow-gold-text);
+    text-align: center;
+  }
+
+  /* El pack ocupa el centro; la nave navega a su izquierda, más chica. */
+  .codehelp-m__scene {
+    position: relative;
+    width: 100%;
+    margin-top: 4.478cqw;
+    display: flex;
+    justify-content: center;
+  }
+
+  .codehelp-m__ship {
+    position: absolute;
+    left: -8.955cqw;
+    top: 2.488cqw;
+    width: 37.313cqw;      /* 150 */
+    aspect-ratio: 1016 / 696;
+    z-index: 2;
+  }
+
+  .codehelp-m .telescope {
+    width: 66.418cqw;      /* 267 */
+  }
+
+  .codehelp-m__note {
+    width: 82.09cqw;       /* 330 */
+    margin-top: 5.473cqw;
+    padding: 2.985cqw 3.98cqw;
+    border-radius: 500px;
+    background: var(--c-cyan-50);
+    backdrop-filter: blur(2px);
+    font-family: var(--font-display);
+    font-size: 3.234cqw;   /* 13 */
+    line-height: 1.35;
+    color: #fff;
+    text-align: center;
+  }
+
+  .codehelp-m__note p {
+    margin: 0;
   }
 }

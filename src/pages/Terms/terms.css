@@ -105,36 +105,57 @@
 }
 
 /* ---------- Mobile ---------- */
+/* Composición mobile — Figma "bases y condiciones.png" (402x913). */
 @media (max-width: 899px) {
-  .terms__inner {
-    position: static;
-    inset: auto;
-  }
-
-  .terms__parchment--mobile .terms__heading,
-  .terms__heading {
-    position: static;
-    width: min(280px, 76vw);
-    height: 48px;
-    margin: 0 auto 16px;
-    font-size: clamp(17px, 4.8vw, 22px);
-  }
-
-  .terms__scroll {
-    position: static;
+  .terms-m {
     width: 100%;
-    height: min(46vh, 340px);
-    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .terms__body {
-    font-size: clamp(15px, 4.2vw, 18px);
-    text-align: left;
+  .terms-m__logo {
+    position: relative;
+    z-index: 3;
+    width: 55.721cqw;      /* 224 */
+    height: auto;
+    margin-top: 5.473cqw;
+    margin-bottom: -8.955cqw;  /* se monta sobre el borde del pergamino */
+    filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
   }
 
-  .terms__cta {
-    position: static;
-    margin: 18px auto 0;
-    display: block;
+  .terms-m__sheet {
+    position: relative;
+    width: 86.07cqw;       /* 346 */
+    margin-top: 0;
+  }
+
+  .terms-m__ralph {
+    top: -13.5%;
+    right: -16%;
+    width: 33%;
+    z-index: 4;
+  }
+
+  .terms-m__nene {
+    bottom: -11%;
+    left: -22%;
+    width: 40%;
+    z-index: 4;
+  }
+
+  .terms-m__parchment {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 346 / 500;
+  }
+
+  .terms-m__parchment .terms__inner,
+  .terms-m__parchment .terms__scroll {
+    font-size: 3.234cqw;   /* 13 */
+  }
+
+  .terms-m__parchment .terms__heading {
+    font-size: 5.473cqw;   /* 22 */
   }
 }

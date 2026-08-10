@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { Stage } from '../../components/layout/Stage';
+import { MobileScene } from '../../components/layout/MobileStage';
 import { Deco } from '../../components/layout/Deco';
+import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { PromoButton } from '../../components/buttons/PromoButton';
 import { TreasureChest } from '../../components/promo/TreasureChest';
 import { PurosolShip } from '../../components/promo/PurosolShip';
 import { box, centeredText } from '../../app/stage';
+import { mbox } from '../../app/mobileStage';
+import './home.css';
 
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import planetaPremios from '../../assets/planets/planeta-premios.webp';
@@ -148,27 +152,70 @@ export default function Home() {
   );
 }
 
+/* --------------------------------------------------------------------------
+   Composición mobile — Figma "landing.png" (402x913).
+
+   Las coordenadas Y del mockup llevan descontada la barra de estado del
+   sistema (54 px), que no se implementa: es sólo el marco del mockup.
+
+   La escena inferior es un bloque de proporción fija: el cúmulo de premios y
+   la nave se superponen igual que en el diseño, y cada pieza sigue siendo una
+   capa propia para poder flotar por separado.
+   -------------------------------------------------------------------------- */
+const SCENE_H = 360;
+
 function HomeMobile({ onStart }: { onStart: () => void }) {
   return (
-    <div className="m-stack" id="contenido">
-      <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo" />
+    <div className="home-m" id="contenido">
+      <img src={logoCodigos} alt="Códigos Secretos 2026" className="home-m__logo" />
 
-      <p className="m-title m-title--lg">Ganá un viaje al Caribe</p>
-      <p className="m-sub">¡y cientos de premios más!</p>
-
-      <PromoButton fontSize={60} onClick={onStart}>
-        Cargá acá tu código
-      </PromoButton>
-
-      <TreasureChest mode="interactive" className="m-chest" style={{ position: 'relative' }} />
-
-      <div className="m-row" aria-hidden="true">
-        <img src={playstation} alt="" className="m-art--sm" style={{ width: 96 }} />
-        <img src={nintendo} alt="" className="m-art--sm" style={{ width: 96 }} />
-        <img src={auriculares} alt="" className="m-art--sm" style={{ width: 66 }} />
+      <div className="mblock">
+        <p className="home-m__title">Ganá un viaje al Caribe</p>
+        <p className="home-m__sub">¡y cientos de premios más!</p>
       </div>
 
-      <PurosolShip variant="enter" className="m-art" style={{ position: 'relative', height: 'auto', aspectRatio: '1016 / 696' }} />
+      <div className="home-m__cta">
+        <PromoButton plate="carga" mobileFontSize={25} onClick={onStart}>
+          Cargá acá tu código
+        </PromoButton>
+      </div>
+
+      {/* Cúmulo de premios (izquierda, sangra) + nave pirata (derecha, sangra). */}
+      <MobileScene height={SCENE_H} className="home-m__scene">
+        <img
+          src={glow}
+          alt=""
+          aria-hidden="true"
+          className="mabs mlayer-img home-m__glow"
+          style={mbox({ x: -110, y: 90, w: 360, h: 250, sceneH: SCENE_H })}
+        />
+
+        <FloatingLayer amplitude={6} duration={6.8} delay={0.9} rotate={1.2}
+          className="mabs" style={mbox({ x: -45, y: 40, w: 248, h: 251, sceneH: SCENE_H })}>
+          <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" />
+        </FloatingLayer>
+
+        <FloatingLayer amplitude={9} duration={4.2} delay={0.6} rotate={-2}
+          className="mabs" style={mbox({ x: 55, y: 178, w: 100, h: 97, sceneH: SCENE_H })}>
+          <img src={playstation} alt="" aria-hidden="true" className="mlayer-img" />
+        </FloatingLayer>
+
+        <FloatingLayer amplitude={8} duration={5.4} delay={1.4} drift={4} rotate={2}
+          className="mabs" style={mbox({ x: 113, y: 245, w: 93, h: 120, sceneH: SCENE_H })}>
+          <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" />
+        </FloatingLayer>
+
+        <FloatingLayer amplitude={10} duration={3.6} delay={0.1} rotate={-3}
+          className="mabs" style={mbox({ x: 208, y: 256, w: 52, h: 52, sceneH: SCENE_H })}>
+          <img src={auriculares} alt="" aria-hidden="true" className="mlayer-img" />
+        </FloatingLayer>
+
+        <PurosolShip
+          variant="enter"
+          className="mabs home-m__ship"
+          style={mbox({ x: 225, y: 42, w: 290, h: 199, sceneH: SCENE_H })}
+        />
+      </MobileScene>
     </div>
   );
 }

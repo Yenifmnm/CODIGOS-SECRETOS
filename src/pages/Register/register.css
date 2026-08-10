@@ -49,46 +49,119 @@
 }
 
 /* ---------- Mobile ---------- */
+/* -------------------------------------------------------------------------
+   Composición mobile — Figma "Registro.png". Coordenadas en el comentario de
+   RegisterMobile, todas en cqw del lienzo de 402.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
-  .register__form--mobile {
-    position: static;
-    inset: auto;
+  .register-m {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    padding: clamp(22px, 7vw, 32px) clamp(18px, 6vw, 28px);
-    border-radius: 22px;
-    background: linear-gradient(180deg, #f6dcb0 0%, #e9c489 100%);
-    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35), inset 0 0 0 3px rgba(136, 51, 7, 0.35);
-    pointer-events: auto;
+    align-items: center;
   }
 
-  .register__title-plate {
+  /* Hoja: el pergamino y todo lo que se monta encima o asoma por los bordes. */
+  .register-m__sheet {
+    position: relative;
+    width: 82.836cqw;        /* 333 */
+    aspect-ratio: 333 / 510;
+    margin-top: 11.194cqw;   /* deja aire para el logo montado arriba */
+  }
+
+  .register-m__paper {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    transform: none;
-    padding: 10px 16px;
-    --plate-notch: 12px;
+    height: 100%;
+    object-fit: fill;
+    pointer-events: none;
   }
 
-  .register__form--mobile .register__title {
-    font-size: clamp(19px, 5.4vw, 24px);
-    white-space: normal;
+  /* El logo se monta sobre el borde superior del pergamino. */
+  .register-m__logo {
+    position: absolute;
+    left: 50%;
+    top: -8%;
+    width: 63%;
+    height: auto;
+    transform: translateX(-50%);
+    z-index: 3;
+    filter: drop-shadow(0 0 3cqw rgba(9, 234, 255, 0.6));
   }
 
-  .register__grid {
+  .register-m__dino {
+    top: -15%;
+    right: -30%;
+    width: 50%;
+    z-index: 2;
+  }
+
+  /* Asoma por debajo del pergamino: sólo se ve de la cintura para arriba. */
+  .register-m__nena {
+    bottom: -30%;
+    left: -26%;
+    width: 38%;
+    z-index: 4;
+  }
+
+  /* Formulario en flujo normal dentro del pergamino. */
+  .register-m__form {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    align-items: center;
+    padding: 17.5% 12% 0;
   }
 
-  .register__field {
-    padding: 8px 14px;
-    --plate-notch: 12px;
+  .register-m__title-plate {
+    width: 84%;
   }
 
-  .register__note {
-    font-size: clamp(12px, 3.4vw, 15px);
+  .register-m__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 3.483cqw;     /* 14 */
+    line-height: 1.2;
+    color: var(--c-brown-dark);
     text-align: center;
+  }
+
+  /* Nombre entero arriba; abajo dos medias cañas. */
+  .register-m__grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.239cqw 2.488cqw;
+    margin-top: 2.736cqw;
+  }
+
+  .register-m__cell--full {
+    grid-column: 1 / -1;
+  }
+
+  .register-m__note {
+    margin: 2.488cqw 0 0;
+    font-family: var(--font-display);
+    font-size: 2.239cqw;     /* 9 */
+    line-height: 1.2;
+    color: var(--c-brown-dark);
+    text-align: center;
+    border-bottom: 1px solid var(--c-brown-30);
+    padding-bottom: 1.244cqw;
+    width: 100%;
+  }
+
+  .register-m__actions {
+    display: flex;
+    gap: 2.488cqw;
+    margin-top: 4.478cqw;
+  }
+
+  .register-m__actions .ribbon-btn {
+    width: 27.363cqw !important;   /* 110 */
+    height: 6.219cqw !important;   /* 25 */
   }
 }

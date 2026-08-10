@@ -1,8 +1,8 @@
 import { ResultLayout } from '../../components/promo/ResultLayout';
+import { ClosedChestMobile } from '../../components/promo/ClosedChestMobile';
 import { TreasureChest } from '../../components/promo/TreasureChest';
 import { useSession } from '../../app/SessionContext';
 import { box } from '../../app/stage';
-import cofreCerrado from '../../assets/promo/cofre-cerrado.webp';
 
 /** CÓDIGO UTILIZADO — Figma 107:297. Estado provisto por el mock/backend. */
 export default function CodeUsed() {
@@ -30,7 +30,7 @@ export default function CodeUsed() {
           style={{ ...box({ x: 1161, y: 490, w: 444, h: 444 }), zIndex: 5 }}
         />
       }
-      mobileScene={<img src={cofreCerrado} alt="" aria-hidden="true" className="m-art--sm" />}
+      mobileScene={<ClosedChestMobile />}
     />
   );
 }

@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, CSSProperties } from 'react';
+import { mu } from '../../app/mobileStage';
 import './ribbon-button.css';
 
 interface RibbonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -6,6 +7,10 @@ interface RibbonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   width?: number;
   height?: number;
   tone?: 'gold' | 'ghost' | 'ochre';
+  /** Medidas en px del lienzo mobile (402). Sólo aplican bajo 900px. */
+  mobileFontSize?: number;
+  mobileWidth?: number;
+  mobileHeight?: number;
   style?: CSSProperties;
 }
 
@@ -23,6 +28,9 @@ export function RibbonButton({
   width = 328,
   height = 58,
   tone = 'gold',
+  mobileFontSize,
+  mobileWidth,
+  mobileHeight,
   className,
   style,
   ...rest
@@ -35,6 +43,9 @@ export function RibbonButton({
         width: cq(width),
         height: cq(height),
         '--ribbon-fs': cq(fontSize),
+        ...(mobileFontSize !== undefined ? { '--ribbon-fs-m': mu(mobileFontSize) } : null),
+        ...(mobileWidth !== undefined ? { '--ribbon-w-m': mu(mobileWidth) } : null),
+        ...(mobileHeight !== undefined ? { '--ribbon-h-m': mu(mobileHeight) } : null),
         ...style,
       } as CSSProperties}
       {...rest}

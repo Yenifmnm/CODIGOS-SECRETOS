@@ -1,7 +1,22 @@
 import type { ReactNode } from 'react';
-import { SpaceBackground, fondoInicio } from '../effects/SpaceBackground';
+import { SpaceBackground } from '../effects/SpaceBackground';
+import { StarField } from '../effects/StarField';
 import { SiteMenu } from '../navigation/SiteMenu';
+import { MobileStage } from './MobileStage';
 import { useIsMobile } from '../../hooks/useIsMobile';
+
+import fondoMobile from '../../assets/backgrounds/fondo-mobile.webp';
+import fondoMobileProfundo from '../../assets/backgrounds/fondo-mobile-profundo.webp';
+import fondoMobileHalo from '../../assets/backgrounds/fondo-mobile-halo.webp';
+
+/** Los tres cielos verticales del Figma mobile. */
+const MOBILE_BG = {
+  cielo: fondoMobile,
+  profundo: fondoMobileProfundo,
+  halo: fondoMobileHalo,
+} as const;
+
+export type MobileBg = keyof typeof MOBILE_BG;
 
 interface StageProps {
   /** Composición desktop, en coordenadas de diseño (1920x1080). */
@@ -12,6 +27,8 @@ interface StageProps {
   withMenu?: boolean;
   /** Menú siempre plegado: registro, carga de código y resultados. */
   compactMenu?: boolean;
+  /** Cielo vertical de la rama mobile. No afecta al desktop. */
+  mobileBg?: MobileBg;
   title: string;
 }
 
@@ -23,16 +40,29 @@ interface StageProps {
  * las coordenadas exactas del Figma convertidas a `cqw` (ver app/stage.ts).
  * Mobile (<900px): se descarta esa composición y se renderiza `mobile`.
  */
-export function Stage({ children, mobile, withMenu = true, compactMenu = false, title }: StageProps) {
+export function Stage({
+  children,
+  mobile,
+  withMenu = true,
+  compactMenu = false,
+  mobileBg = 'cielo',
+  title,
+}: StageProps) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
     return (
       <div className="mstage">
-        <img src={fondoInicio} alt="" aria-hidden="true" className="mstage__bg" />
-        {withMenu && <SiteMenu compact={compactMenu} />}
-        <h1 className="sr-only">{title}</h1>
-        {mobile}
+        {/* Cielo vertical fijo: no scrollea con el contenido. */}
+        <div className="mstage__sky" aria-hidden="true">
+          <img src={MOBILE_BG[mobileBg]} alt="" className="mstage__bg" />
+          <StarField />
+        </div>
+        <MobileStage>
+          {withMenu && <SiteMenu compact={compactMenu} />}
+          <h1 className="sr-only">{title}</h1>
+          {mobile}
+        </MobileStage>
       </div>
     );
   }

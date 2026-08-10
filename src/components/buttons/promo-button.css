@@ -75,12 +75,24 @@
   }
 }
 
+/* En mobile el ancho lo decide la composición de cada pantalla; el botón sólo
+   llena la caja que le den y escala la tipografía con el lienzo de 402. */
 @media (max-width: 899px) {
   .promo-btn {
-    width: min(320px, 84vw);
+    width: 100%;
     height: auto;
   }
+
   .promo-btn__label {
-    font-size: clamp(18px, 5.4vw, 26px);
+    font-size: var(--promo-btn-fs-m, 6.965cqw); /* 28 sobre 402 */
+    padding-inline: 6%;
+    white-space: nowrap;
+  }
+
+  /* En touch no hay hover: el destello se dispara al presionar. */
+  .promo-btn:active:not(:disabled) {
+    transform: scale(0.97);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 2.4cqw #fff)
+      drop-shadow(0 0 5cqw var(--c-gold));
   }
 }

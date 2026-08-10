@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Stage } from '../../components/layout/Stage';
 import { Deco } from '../../components/layout/Deco';
 import { Parchment } from '../../components/promo/Parchment';
+import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { RibbonButton } from '../../components/buttons/RibbonButton';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
@@ -67,12 +68,24 @@ export default function Terms() {
       title="Bases y condiciones"
       compactMenu
       mobile={
-        <div className="m-stack" id="contenido">
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="m-logo m-logo--sm" />
-          <Parchment className="terms__parchment--mobile">{content}</Parchment>
-          <div className="m-row" aria-hidden="true">
-            <img src={nene} alt="" style={{ width: 120 }} />
-            <img src={ralph} alt="" style={{ width: 96 }} />
+        /* Figma "bases y condiciones.png": logo montado sobre el pergamino,
+           ralph sentado en el planeta B3 arriba a la derecha y nene con el
+           catalejo abajo a la izquierda. El pergamino se despliega al entrar. */
+        <div className="terms-m" id="contenido">
+          <img src={logoCodigos} alt="Códigos Secretos 2026" className="terms-m__logo" />
+
+          <div className="terms-m__sheet">
+            <FloatingLayer amplitude={5} duration={6.6} delay={0.4}
+              className="terms-m__ralph" style={{ position: 'absolute' }}>
+              <img src={ralph} alt="" aria-hidden="true" className="mlayer-img" />
+            </FloatingLayer>
+
+            <FloatingLayer amplitude={4} duration={7.4} delay={1.2}
+              className="terms-m__nene" style={{ position: 'absolute' }}>
+              <img src={nene} alt="" aria-hidden="true" className="mlayer-img" />
+            </FloatingLayer>
+
+            <Parchment className="terms-m__parchment">{content}</Parchment>
           </div>
         </div>
       }

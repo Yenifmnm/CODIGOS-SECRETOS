@@ -57,12 +57,30 @@
   filter: grayscale(0.4) brightness(0.92);
 }
 
+/* En mobile las medidas llegan en px del lienzo de 402; si la pantalla no las
+   define, valores por defecto proporcionales. */
 @media (max-width: 899px) {
   .ribbon-btn {
-    width: min(300px, 80vw) !important;
-    height: 52px !important;
+    width: var(--ribbon-w-m, 68.657cqw) !important;
+    height: var(--ribbon-h-m, 6.219cqw) !important;
   }
+
   .ribbon-btn__label {
-    font-size: clamp(16px, 4.6vw, 21px);
+    font-size: var(--ribbon-fs-m, 4.478cqw);
+  }
+
+  /* Área táctil mínima sin engordar la cinta. */
+  .ribbon-btn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 44px;
+    transform: translateY(-50%);
+  }
+
+  .ribbon-btn:active {
+    filter: drop-shadow(0 0 2cqw #fff) drop-shadow(0 0 4cqw var(--c-gold));
   }
 }

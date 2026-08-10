@@ -177,27 +177,38 @@
 }
 
 /* ---------- Mobile ---------- */
+/* -------------------------------------------------------------------------
+   Mobile — medidas del Figma sobre el lienzo de 402:
+   cápsula 276x31, ícono a la izquierda dentro de la cápsula, etiqueta 13 px.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .pfield {
-    font-size: clamp(15px, 4.2vw, 18px);
     width: 100%;
+    font-size: 3.234cqw;        /* 13 */
   }
 
   .pfield--pill {
-    height: 54px;
-    padding-inline: 14px;
-    gap: 8px;
+    height: 7.711cqw;           /* 31 */
+    padding-inline: 2.488cqw;
+    gap: 1.99cqw;
+    border-radius: 500px;
   }
 
   .pfield--pill .pfield__label {
     min-width: 0;
-    gap: 6px;
+    gap: 1.493cqw;
+  }
+
+  .pfield__icon {
+    width: 4.975cqw;            /* 20 */
+    height: 4.975cqw;
+    flex: none;
   }
 
   .pfield--line {
     flex-wrap: wrap;
-    gap: 4px;
-    padding-bottom: 6px;
+    gap: 0.25cqw;
+    padding-bottom: 0.746cqw;
   }
 
   .pfield--line .pfield__label {
@@ -208,13 +219,20 @@
 
   .pfield--line .pfield__input {
     flex-basis: 100%;
-    padding: 4px 2px;
+    padding: 0.746cqw 0.5cqw;
   }
 
   .pfield__error {
     position: static;
     white-space: normal;
-    margin-top: 5px;
-    padding: 4px 8px;
+    margin-top: 1.244cqw;
+    padding: 0.746cqw 1.99cqw;
+    font-size: 2.736cqw;
+  }
+
+  /* Área táctil mínima sin agrandar la cápsula: el input la extiende. */
+  .pfield--pill .pfield__input {
+    min-height: 44px;
+    margin-block: -1.5cqw;
   }
 }

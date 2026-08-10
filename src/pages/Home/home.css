@@ -1,0 +1,66 @@
+/* -------------------------------------------------------------------------
+   INICIO — composición mobile (Figma "landing.png", lienzo 402).
+
+   Medidas del mockup, ya descontada la barra de estado del sistema (54 px):
+     logo            x 78..322   y  94..266
+     título dorado   y 281       ~34 px
+     subtítulo       y 331       ~27 px
+     botón CTA       x 78..322   y 378   244x82
+     escena          y 466 en adelante, sangrando por los dos costados
+   ------------------------------------------------------------------------- */
+
+.home-m {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-m__logo {
+  width: 60.697cqw;   /* 244 */
+  height: auto;
+  margin-top: 2.488cqw;
+  filter: drop-shadow(0 0 5cqw rgba(9, 234, 255, 0.75))
+    drop-shadow(0 0 12cqw rgba(9, 234, 255, 0.45));
+}
+
+.home-m__title {
+  margin: 2.488cqw 0 0;
+  font-family: var(--font-display);
+  font-size: 8.458cqw;  /* 34 */
+  line-height: 1.08;
+  color: var(--c-gold);
+  text-shadow: var(--glow-gold-text);
+}
+
+.home-m__sub {
+  margin: 1.99cqw 0 0;
+  font-family: var(--font-display);
+  font-size: 6.716cqw;  /* 27 */
+  line-height: 1.15;
+  color: var(--c-white);
+  text-shadow: 0 0 4cqw #fff, 0 0 9cqw rgba(255, 255, 255, 0.7),
+    0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.home-m__cta {
+  width: 60.697cqw;   /* 244 */
+  margin-top: 4.975cqw;
+}
+
+/* La escena sangra por los dos costados: se sale del ancho del lienzo a
+   propósito, igual que en el diseño. El recorte lo hace `.mstage`. */
+.home-m__scene {
+  margin-top: 3.98cqw;
+}
+
+.home-m__glow {
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+/* La nave entra desde la derecha; su caja se sale del lienzo, como en el
+   mockup, y la punta de la estela queda cortada por el borde. */
+.home-m__ship {
+  z-index: 2;
+}

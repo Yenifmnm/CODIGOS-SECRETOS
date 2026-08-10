@@ -5,9 +5,32 @@
   transition: opacity 220ms var(--ease-soft);
 }
 
+/* Composición mobile — Figma "Premios.png" (402x913). */
 @media (max-width: 899px) {
-  .prizes__name {
-    position: static;
-    transform: none;
+  .prizes-m {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .prizes-m__logo {
+    width: 60.697cqw;      /* 244 */
+    height: auto;
+    margin-top: 2.985cqw;
+    filter: drop-shadow(0 0 5cqw rgba(9, 234, 255, 0.72));
+  }
+
+  .prizes-m .prize-carousel {
+    width: 100%;
+    margin-top: 7.463cqw;
+  }
+
+  /* Flechas: área táctil de 44 px sin agrandar el gráfico. */
+  .prizes-m .prize-carousel__arrow {
+    width: 10.945cqw;
+    height: 10.945cqw;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
