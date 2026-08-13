@@ -27,6 +27,15 @@ export interface RegistrationForm {
 export interface PromoCode {
   cedula: Cedula;
   code: string;
+  /**
+   * Token de reCAPTCHA v3 generado en el momento del envío.
+   *
+   * Va vacío mientras no haya claves cargadas (`VITE_RECAPTCHA_SITE_KEY`). El
+   * backend lo verifica contra Google ANTES de mirar el código: si el token no
+   * es válido o el score es bajo, rechaza la operación y no consume el código.
+   * Es de un solo uso y caduca a los dos minutos.
+   */
+  recaptchaToken?: string;
 }
 
 export interface Prize {

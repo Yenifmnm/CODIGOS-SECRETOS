@@ -103,7 +103,9 @@ export function ResultLayout({
            Orden del Figma: logo → titular → mensaje → botón → píldora con el
            código → escena del cofre → contador. */
         <div className="result-m" id="contenido">
-          <CloseButton to="/" className="result-m__close" />
+          {/* La mecánica (láminas 3 y 6) pide que la X vuelva a la carga de
+              código, igual que el botón: el objetivo es seguir participando. */}
+          <CloseButton to="/participar" className="result-m__close" />
 
           <img src={logoCodigos} alt="Códigos Secretos 2026" className="result-m__logo" />
 
@@ -203,7 +205,7 @@ export function ResultLayout({
         style={{ left: u(1160), top: u(946), zIndex: 7 }}
       />
 
-      <CloseButton to="/" style={{ left: u(1737), top: u(34) }} />
+      <CloseButton to="/participar" style={{ left: u(1737), top: u(34) }} />
     </Stage>
   );
 }

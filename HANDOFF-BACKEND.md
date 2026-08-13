@@ -157,14 +157,16 @@ POST /api/participants
 
 Las claves de `fieldErrors` deben coincidir con los nombres de campo: `fullName`, `birthDate`, `cedula`, `email`, `city`, `phone`.
 
-**Regla de edad — obligatoria del lado del servidor.** Sólo se puede registrar quien tenga **18 años cumplidos** a la fecha del registro. El frontend ya lo valida (`src/app/age.ts`) y además limita el selector de fecha, pero eso es sólo experiencia de usuario: un `POST` armado a mano pasa por encima. Si `birthDate` no llega a los 18 cumplidos, el backend responde:
+**Regla de edad — obligatoria del lado del servidor.** Sólo se registra quien tenga **18 años cumplidos** a la fecha del registro. El frontend lo valida (`src/app/age.ts`) y limita el selector de fecha, pero eso es sólo experiencia de usuario: un `POST` armado a mano pasa por encima. Si la fecha no cumple, el backend responde:
 
 ```json
 {
   "ok": false,
-  "fieldErrors": { "birthDate": "Para registrarte tenés que tener 18 años cumplidos." }
+  "fieldErrors": { "birthDate": "El registro lo hace un tutor de 18 años cumplidos." }
 }
 ```
+
+> ⚠️ **Desviación consciente respecto de la mecánica, a confirmar con el cliente.** La lámina 2 escribe la regla como corte por año: «únicamente personas **nacidas antes de 2008**, ya que deben ser mayores de edad». No son equivalentes: quien nació en 2008 cumple 18 durante la campaña y el corte lo dejaría afuera **siendo adulto**, mientras la propia pantalla le dice «un tutor mayor de 18 años». Se implementó el motivo que el documento da —la mayoría de edad— y no la fórmula. Ambas rechazan menores por igual; ésta no rechaza adultos. Si el cliente prefiere el corte literal, es una línea en `src/app/age.ts`.
 
 Cuidado con la zona horaria al calcular la edad: `new Date("2008-08-13")` se interpreta en UTC y en Paraguay (UTC−3/−4) adelanta el cumpleaños un día. Comparar por año/mes/día, no por timestamp.
 
@@ -181,8 +183,12 @@ POST /api/codes/redeem
 **Body**
 
 ```json
-{ "cedula": "1234567", "code": "ABCDG847FR5" }
+{ "cedula": "1234567", "code": "ABCDG847FR5", "recaptchaToken": "03AFcW..." }
 ```
+
+`recaptchaToken` viaja vacío mientras no haya claves cargadas. **Se verifica contra Google ANTES de mirar el código**: si no es válido, se rechaza sin consumir nada. Detalle en [`docs/LOGICA-BACKEND.md`](docs/LOGICA-BACKEND.md#5-recaptcha).
+
+**Cómo se decide el premio cuando el status es `WIN`** —la pregunta central— está desarrollada en [`docs/LOGICA-BACKEND.md`](docs/LOGICA-BACKEND.md#3-cómo-se-decide-qué-premio-sale): sale del calendario, no del código, y necesita bloqueo por concurrencia.
 
 **Respuesta**
 

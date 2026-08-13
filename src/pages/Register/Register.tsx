@@ -8,7 +8,8 @@ import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
-import { MIN_AGE, completedAge, maxBirthDate } from '../../app/age';
+import { useCodeFlow } from '../../app/useCodeFlow';
+import { MIN_AGE, completedAge, isOfAge, maxBirthDate } from '../../app/age';
 import { box, centeredText, u } from '../../app/stage';
 import type { RegistrationForm } from '../../types/promo';
 import './register.css';
@@ -81,8 +82,8 @@ function validate(form: RegistrationForm): Errors {
     const age = completedAge(form.birthDate);
     if (age === null) errors.birthDate = 'Fecha inválida.';
     else if (age < 0) errors.birthDate = 'La fecha no puede ser futura.';
-    else if (age < MIN_AGE) {
-      errors.birthDate = `Para registrarte tenés que tener ${MIN_AGE} años cumplidos.`;
+    else if (!isOfAge(form.birthDate)) {
+      errors.birthDate = `El registro lo hace un tutor de ${MIN_AGE} años cumplidos.`;
     }
   }
 
@@ -105,6 +106,7 @@ export default function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const { setParticipant } = useSession();
+  const { redeem } = useCodeFlow();
   const prefill = (location.state ?? {}) as { cedula?: string; code?: string };
 
   const [form, setForm] = useState<RegistrationForm>({ ...EMPTY, cedula: prefill.cedula ?? '' });
@@ -139,8 +141,16 @@ export default function Register() {
     }
 
     setParticipant(result.participant ?? { cedula: form.cedula, fullName: form.fullName });
-    // Vuelve a la carga de código conservando el que venía escribiendo.
-    navigate('/participar', { state: { cedula: form.cedula, code: prefill.code } });
+
+    /* La mecánica (lámina 2) va del registro derecho al resultado: el código ya
+       lo escribió en la pantalla anterior y no se le puede pedir que lo cargue
+       de nuevo. Si llegó al registro sin código —entrando por la URL— no hay
+       nada que canjear y se lo manda a cargarlo. */
+    if (prefill.code) {
+      await redeem(form.cedula, prefill.code.trim().toUpperCase());
+      return;
+    }
+    navigate('/participar', { state: { cedula: form.cedula } });
   };
 
   const fieldEls = [

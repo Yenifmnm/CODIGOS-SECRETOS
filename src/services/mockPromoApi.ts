@@ -59,7 +59,7 @@ export class MockPromoApi implements PromoApi {
       return {
         ok: false,
         fieldErrors: {
-          birthDate: `Para registrarte tenés que tener ${MIN_AGE} años cumplidos.`,
+          birthDate: `El registro lo hace un tutor de ${MIN_AGE} años cumplidos.`,
         },
       };
     }

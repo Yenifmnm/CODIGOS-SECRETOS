@@ -13,3 +13,8 @@ figma/*.zip
 # Se trabaja con el archivo en local, pero no se sube. El catalogo derivado
 # —nombres, cantidades e imagenes, sin horarios— vive en docs/PREMIOS-2026.md.
 recursos/premios/*.xlsx
+
+# Variables locales: pueden traer claves. Se versiona solo .env.example
+.env
+.env.*
+!.env.example

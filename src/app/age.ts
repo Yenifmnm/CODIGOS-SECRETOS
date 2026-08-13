@@ -7,7 +7,20 @@
  * tiene que aplicar la misma regla: la validación del front no es seguridad.
  */
 
-/** Edad mínima para registrarse, en años cumplidos. */
+/**
+ * Edad mínima para registrarse, en años cumplidos.
+ *
+ * La mecánica del cliente (lámina 2) escribe la regla como un corte por año:
+ * «permitir registrarse únicamente a personas nacidas antes de 2008, ya que
+ * deben ser mayores de edad». Acá se implementa el motivo que ella misma da
+ * —la mayoría de edad— y no el corte, porque no son equivalentes: quien nació
+ * en 2008 cumple 18 durante la campaña y el corte lo dejaría afuera siendo
+ * adulto. Además la propia pantalla de registro dice «un tutor mayor de 18
+ * años», así que el corte por año contradiría el texto que la persona lee.
+ *
+ * Las dos reglas rechazan menores por igual; ésta no rechaza adultos.
+ * Está anotado en HANDOFF-BACKEND.md para que el cliente lo confirme.
+ */
 export const MIN_AGE = 18;
 
 /**

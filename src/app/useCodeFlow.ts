@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { promoApi } from '../services/promoApi';
+import { getRecaptchaToken } from '../services/recaptcha';
 import { useSession } from './SessionContext';
 import type { PromoCodeStatus } from '../types/promo';
 
@@ -26,22 +27,21 @@ export function useCodeFlow() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const submit = useCallback(
+  /**
+   * Canjea el código y abre la pantalla del `status` recibido, sin volver a
+   * preguntar si la cédula está registrada.
+   *
+   * Lo usa REGISTRO al confirmar: la mecánica (lámina 2) manda del registro
+   * derecho al resultado, no de vuelta al formulario de carga.
+   */
+  const redeem = useCallback(
     async (cedula: string, code: string) => {
       setLoading(true);
       setError(null);
       try {
-        const check = await promoApi.checkParticipant(cedula);
-
-        if (!check.registered) {
-          // Aún no está registrado: el diseño manda a REGISTRO conservando el código.
-          navigate('/registro', { state: { cedula, code } });
-          return;
-        }
-
-        setParticipant(check.participant ?? { cedula, fullName: '' });
-
-        const result = await promoApi.submitPromoCode({ cedula, code });
+        // Se pide recién acá: el token dura dos minutos y es de un solo uso.
+        const recaptchaToken = await getRecaptchaToken('redeem_code');
+        const result = await promoApi.submitPromoCode({ cedula, code, recaptchaToken });
         setLastResult(result);
 
         if (result.status === 'REGISTER_REQUIRED') {
@@ -56,8 +56,32 @@ export function useCodeFlow() {
         setLoading(false);
       }
     },
-    [navigate, setLastResult, setParticipant],
+    [navigate, setLastResult],
   );
 
-  return { submit, loading, error };
+  const submit = useCallback(
+    async (cedula: string, code: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const check = await promoApi.checkParticipant(cedula);
+
+        if (!check.registered) {
+          // Aún no está registrado: el diseño manda a REGISTRO conservando el código.
+          navigate('/registro', { state: { cedula, code } });
+          return;
+        }
+
+        setParticipant(check.participant ?? { cedula, fullName: '' });
+      } catch {
+        setError('No pudimos contactar la nave nodriza. Probá de nuevo en un momento.');
+        setLoading(false);
+        return;
+      }
+      await redeem(cedula, code);
+    },
+    [navigate, redeem, setParticipant],
+  );
+
+  return { submit, redeem, loading, error };
 }
