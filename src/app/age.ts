@@ -19,7 +19,7 @@
  * años», así que el corte por año contradiría el texto que la persona lee.
  *
  * Las dos reglas rechazan menores por igual; ésta no rechaza adultos.
- * Está anotado en HANDOFF-BACKEND.md para que el cliente lo confirme.
+ * Está anotado en docs/GUIA-BACKEND.md para que el cliente lo confirme.
  */
 export const MIN_AGE = 18;
 

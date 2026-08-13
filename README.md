@@ -2,14 +2,15 @@
 
 > ## 👋 ¿Venís a programar el backend? Empezá acá
 >
-> Leelos en este orden; con los dos primeros ya podés arrancar.
+> Todo lo tuyo está en la carpeta **[`docs/`](docs/)**. Leelo en este orden;
+> con los dos primeros ya podés arrancar.
 >
-> 1. **[docs/LOGICA-BACKEND.md](docs/LOGICA-BACKEND.md)** — qué tiene que
+> 1. **[docs/GUIA-BACKEND.md](docs/GUIA-BACKEND.md)** — la guía: qué hay hecho,
+>    con qué stack, y los seis endpoints con request y response de ejemplo.
+> 2. **[docs/LOGICA-BACKEND.md](docs/LOGICA-BACKEND.md)** — qué tiene que
 >    decidir el servidor. Cómo se elige el premio (sale del **calendario**, no
 >    del código), qué API usa cada pantalla, el flujo con reCAPTCHA y los puntos
 >    que faltan confirmar con el cliente.
-> 2. **[HANDOFF-BACKEND.md](HANDOFF-BACKEND.md)** — los seis endpoints con
->    request y response de ejemplo, y qué se cambia en el front para conectar.
 > 3. **[docs/PREMIOS-2026.md](docs/PREMIOS-2026.md)** — los 19 premios con sus
 >    `id`, que son el contrato para devolver el premio ganado.
 >

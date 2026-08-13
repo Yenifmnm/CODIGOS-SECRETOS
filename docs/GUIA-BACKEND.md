@@ -1,7 +1,24 @@
-# Handoff a Backend — PuroSol · El Tesoro Galáctico de los Códigos Secretos 2026
+# Guía para el desarrollador de backend
 
-Documento para el equipo de backend y el líder de proyecto.
-Describe qué se construyó del lado del frontend, con qué tecnología, y **exactamente qué tiene que exponer el backend** para que se conecte sin tocar las pantallas.
+**PuroSol · El Tesoro Galáctico de los Códigos Secretos 2026**
+
+Qué se construyó del lado del frontend, con qué tecnología, y **exactamente qué tiene que exponer el backend** para que se conecte sin tocar las pantallas.
+
+### Por dónde empezar
+
+| Orden | Documento | Para qué |
+| --- | --- | --- |
+| 1 | **Esta guía** | Qué hay hecho, con qué stack, y los seis endpoints con request y response de ejemplo. |
+| 2 | [`LOGICA-BACKEND.md`](LOGICA-BACKEND.md) | Qué tiene que **decidir** el servidor: cómo se elige el premio, qué API usa cada pantalla, reCAPTCHA y lo que falta confirmar con el cliente. |
+| 3 | [`PREMIOS-2026.md`](PREMIOS-2026.md) | Los 19 premios con sus `id`, que son el contrato para devolver el premio ganado. |
+
+Antes de leer nada, conviene abrir el sitio y usarlo:
+**https://yenifmnm.github.io/CODIGOS-SECRETOS/** — funciona de punta a punta
+contra datos de ejemplo, así se ve qué espera recibir cada pantalla.
+
+Lo mínimo que hay que saber: **el frontend no decide nada.** Manda cédula y
+código, y pinta la pantalla del `status` que le devuelvan. Conectar el backend
+real es cambiar **una línea** en `src/services/promoApi.ts`.
 
 ---
 
@@ -186,9 +203,9 @@ POST /api/codes/redeem
 { "cedula": "1234567", "code": "ABCDG847FR5", "recaptchaToken": "03AFcW..." }
 ```
 
-`recaptchaToken` viaja vacío mientras no haya claves cargadas. **Se verifica contra Google ANTES de mirar el código**: si no es válido, se rechaza sin consumir nada. Detalle en [`docs/LOGICA-BACKEND.md`](docs/LOGICA-BACKEND.md#5-recaptcha).
+`recaptchaToken` viaja vacío mientras no haya claves cargadas. **Se verifica contra Google ANTES de mirar el código**: si no es válido, se rechaza sin consumir nada. Detalle en [`LOGICA-BACKEND.md`](LOGICA-BACKEND.md#5-recaptcha).
 
-**Cómo se decide el premio cuando el status es `WIN`** —la pregunta central— está desarrollada en [`docs/LOGICA-BACKEND.md`](docs/LOGICA-BACKEND.md#3-cómo-se-decide-qué-premio-sale): sale del calendario, no del código, y necesita bloqueo por concurrencia.
+**Cómo se decide el premio cuando el status es `WIN`** —la pregunta central— está desarrollada en [`LOGICA-BACKEND.md`](LOGICA-BACKEND.md#3-cómo-se-decide-qué-premio-sale): sale del calendario, no del código, y necesita bloqueo por concurrencia.
 
 **Respuesta**
 
@@ -255,7 +272,7 @@ GET /api/prizes
 
 Alimenta el carrusel de la pantalla PREMIOS.
 
-**Son 19 premios y 89 unidades**, transcritos del `Calendario de Premios 2026.xlsx`. La lista completa —id, nombre visible, artículo, cantidad e imagen de cada uno— está en [`docs/PREMIOS-2026.md`](docs/PREMIOS-2026.md), y hoy la sirve el mock desde `src/mocks/prizes.ts` con las imágenes incluidas en el proyecto. **Los `id` de ese documento son el contrato**: si el backend los respeta, puede devolver sólo el `prizeId` al premiar y dejar que el frontend resuelva nombre e imagen.
+**Son 19 premios y 89 unidades**, transcritos del `Calendario de Premios 2026.xlsx`. La lista completa —id, nombre visible, artículo, cantidad e imagen de cada uno— está en [`PREMIOS-2026.md`](PREMIOS-2026.md), y hoy la sirve el mock desde `src/mocks/prizes.ts` con las imágenes incluidas en el proyecto. **Los `id` de ese documento son el contrato**: si el backend los respeta, puede devolver sólo el `prizeId` al premiar y dejar que el frontend resuelva nombre e imagen.
 
 Tres cosas a tener en cuenta:
 

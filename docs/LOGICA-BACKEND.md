@@ -5,7 +5,7 @@ Documento para el equipo de backend. Responde la pregunta concreta:
 
 Fuentes: «Mecánica de participación PuroSol 2026» (láminas 1 a 6) y
 «Calendario de Premios 2026.xlsx». Los contratos HTTP están en
-[`HANDOFF-BACKEND.md`](../HANDOFF-BACKEND.md); el catálogo de premios en
+[`GUIA-BACKEND.md`](GUIA-BACKEND.md); el catálogo de premios en
 [`PREMIOS-2026.md`](PREMIOS-2026.md).
 
 ---
