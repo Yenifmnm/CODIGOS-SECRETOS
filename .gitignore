@@ -7,3 +7,9 @@ vite.config.ts.timestamp-*
 
 # Export redundante: sus archivos ya estan sueltos en figma/
 figma/*.zip
+
+# El repo es publico: cualquiera lo clona. El calendario de premios trae fecha
+# y hora exactas de las 89 entregas, o sea la mecanica completa de la promo.
+# Se trabaja con el archivo en local, pero no se sube. El catalogo derivado
+# —nombres, cantidades e imagenes, sin horarios— vive en docs/PREMIOS-2026.md.
+recursos/premios/*.xlsx
