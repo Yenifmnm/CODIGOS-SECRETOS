@@ -10,7 +10,8 @@ import type {
   Terms,
   UserCodeCount,
 } from '../types/promo';
-import { MOCK_LATENCY_MS, getScenario } from '../mocks/scenarios';
+import { MIN_AGE, isOfAge } from '../app/age';
+import { MOCK_LATENCY_MS, getForcedPrizeId, getScenario } from '../mocks/scenarios';
 import { MOCK_PRIZES } from '../mocks/prizes';
 import { findCode, normalizeCode, seedRedeemed } from '../mocks/codes';
 
@@ -33,6 +34,8 @@ export class MockPromoApi implements PromoApi {
   private registered = new Set<string>();
   private counts = new Map<string, number>();
   private autoIndex = 0;
+  /** Recorrido del catálogo para los WIN forzados desde el panel de escenarios. */
+  private prizeIndex = 0;
   /** Códigos ya consumidos en esta sesión, más los que vienen así de fábrica. */
   private redeemed = new Set<string>(seedRedeemed());
 
@@ -48,6 +51,19 @@ export class MockPromoApi implements PromoApi {
 
   async registerParticipant(form: RegistrationForm): Promise<RegistrationResult> {
     await delay();
+
+    // Regla de la promo, no de la pantalla: quien se registra tiene que tener la
+    // edad mínima cumplida. Se rechaza acá —y no sólo en el formulario— porque
+    // el backend real tendrá que hacer exactamente esto.
+    if (!isOfAge(form.birthDate)) {
+      return {
+        ok: false,
+        fieldErrors: {
+          birthDate: `Para registrarte tenés que tener ${MIN_AGE} años cumplidos.`,
+        },
+      };
+    }
+
     this.registered.add(form.cedula);
     this.counts.set(form.cedula, this.counts.get(form.cedula) ?? 0);
     return {
@@ -127,7 +143,19 @@ export class MockPromoApi implements PromoApi {
   }
 
   /** Elige un premio del catálogo mock. NO representa una regla de sorteo. */
+  /**
+   * Premio para los escenarios forzados (DEV/QA, nunca la base de códigos).
+   *
+   * Si el panel fijó uno, ése; si no, se recorre el catálogo en orden en vez de
+   * sortearlo al azar: así se pueden revisar los 19 en la pantalla GANASTE sin
+   * que ninguno se repita ni se saltee. Nada de esto es lógica de negocio.
+   */
   private pickPreviewPrize(): Prize {
-    return MOCK_PRIZES[Math.floor(Math.random() * MOCK_PRIZES.length)];
+    const forced = getForcedPrizeId();
+    if (forced) {
+      const match = MOCK_PRIZES.find((p) => p.id === forced);
+      if (match) return match;
+    }
+    return MOCK_PRIZES[this.prizeIndex++ % MOCK_PRIZES.length];
   }
 }

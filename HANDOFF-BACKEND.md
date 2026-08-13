@@ -157,7 +157,18 @@ POST /api/participants
 
 Las claves de `fieldErrors` deben coincidir con los nombres de campo: `fullName`, `birthDate`, `cedula`, `email`, `city`, `phone`.
 
-> **Nota:** el frontend ya valida formato (requerido, email válido, fecha válida, largos). Esa validación es sólo para la experiencia de usuario, **no es seguridad**. El backend tiene que validar todo de nuevo.
+**Regla de edad — obligatoria del lado del servidor.** Sólo se puede registrar quien tenga **18 años cumplidos** a la fecha del registro. El frontend ya lo valida (`src/app/age.ts`) y además limita el selector de fecha, pero eso es sólo experiencia de usuario: un `POST` armado a mano pasa por encima. Si `birthDate` no llega a los 18 cumplidos, el backend responde:
+
+```json
+{
+  "ok": false,
+  "fieldErrors": { "birthDate": "Para registrarte tenés que tener 18 años cumplidos." }
+}
+```
+
+Cuidado con la zona horaria al calcular la edad: `new Date("2008-08-13")` se interpreta en UTC y en Paraguay (UTC−3/−4) adelanta el cumpleaños un día. Comparar por año/mes/día, no por timestamp.
+
+> **Nota:** el frontend ya valida formato (requerido, email válido, fecha válida, edad mínima, largos). Esa validación es sólo para la experiencia de usuario, **no es seguridad**. El backend tiene que validar todo de nuevo.
 
 ---
 
@@ -231,12 +242,24 @@ GET /api/prizes
 
 ```json
 [
-  { "id": "nintendo-switch", "name": "Nintendo Switch", "image": "https://cdn.../switch.webp", "caption": "" },
-  { "id": "playstation-5", "name": "PlayStation 5", "image": "https://cdn.../ps5.webp" }
+  { "id": "playstation-5", "name": "PlayStation 5", "article": "un", "image": "https://cdn.../playstation-5.webp" },
+  { "id": "nintendo-switch-oled", "name": "Nintendo Switch OLED", "article": "una", "image": "https://cdn.../nintendo-switch-oled.webp" }
 ]
 ```
 
-Alimenta el carrusel de la pantalla PREMIOS. Hoy usa las imágenes del Figma incluidas en el proyecto; si el catálogo va a ser dinámico, las URLs las sirve el backend.
+Alimenta el carrusel de la pantalla PREMIOS.
+
+**Son 19 premios y 89 unidades**, transcritos del `Calendario de Premios 2026.xlsx`. La lista completa —id, nombre visible, artículo, cantidad e imagen de cada uno— está en [`docs/PREMIOS-2026.md`](docs/PREMIOS-2026.md), y hoy la sirve el mock desde `src/mocks/prizes.ts` con las imágenes incluidas en el proyecto. **Los `id` de ese documento son el contrato**: si el backend los respeta, puede devolver sólo el `prizeId` al premiar y dejar que el frontend resuelva nombre e imagen.
+
+Tres cosas a tener en cuenta:
+
+1. **`article`** («un», «una», «unos») acompaña al premio porque la pantalla arma la frase «te ganaste ___ {name}!» y el género no se puede deducir del nombre. Si el backend sirve el catálogo, tiene que incluirlo.
+2. **Las imágenes**: si van a servirse desde el backend, tienen que ser URLs absolutas accesibles desde el navegador, PNG/WebP con fondo transparente y el producto centrado ocupando ~70 % de un lienzo cuadrado, que es como están preparadas las actuales.
+3. **La disponibilidad la decide el backend.** El catálogo del frontend lleva las unidades planificadas de cada premio sólo como dato informativo; no descuenta stock ni oculta premios agotados.
+
+### El calendario de adjudicación no va al frontend
+
+El Excel trae fecha y hora exactas de las 89 entregas. Ese calendario **no está en el código del sitio y no debe estarlo**: todo lo que se publica en el bundle se puede leer desde las herramientas de desarrollo del navegador, y publicarlo permitiría saber de antemano a qué hora conviene cargar un código. Cruzar código + calendario + disponibilidad para decidir `WIN`/`LOSE` es responsabilidad exclusiva del backend (sección 4.3).
 
 ---
 

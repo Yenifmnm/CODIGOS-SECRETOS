@@ -32,12 +32,30 @@ export interface PromoCodeRecord {
 }
 
 export const MOCK_CODE_BASE: PromoCodeRecord[] = [
-  // --- Premiados: uno por cada premio del catálogo -------------------------
-  { code: 'PSNSW7K2M9X', outcome: 'WIN', prizeId: 'nintendo-switch' },
+  // --- Premiados: uno por cada uno de los 19 premios del catálogo ----------
+  // Los cinco primeros son los que ya figuran en el README y en el recorrido
+  // del demo, así que conservan su código. `PSCAR3J6VN2` premiaba el "Viaje al
+  // Caribe", que no existe en el catálogo real: ahora entrega el kit de volante.
   { code: 'PSPS5B4T8LQ', outcome: 'WIN', prizeId: 'playstation-5' },
-  { code: 'PSCAR3J6VN2', outcome: 'WIN', prizeId: 'viaje-caribe' },
-  { code: 'PSBIC9D1RZ5', outcome: 'WIN', prizeId: 'bicicleta' },
-  { code: 'PSAUR6H4KW8', outcome: 'WIN', prizeId: 'auriculares' },
+  { code: 'PSNSW7K2M9X', outcome: 'WIN', prizeId: 'nintendo-switch-oled' },
+  { code: 'PSCAR3J6VN2', outcome: 'WIN', prizeId: 'kit-volante-pedales' },
+  { code: 'PSBIC9D1RZ5', outcome: 'WIN', prizeId: 'bicicleta-aro-24' },
+  { code: 'PSAUR6H4KW8', outcome: 'WIN', prizeId: 'auriculares-jbl-520bt' },
+
+  { code: 'PSCOL4M8XT1', outcome: 'WIN', prizeId: 'columpio-jardin' },
+  { code: 'PSCAM7B2QK9', outcome: 'WIN', prizeId: 'cama-elastica' },
+  { code: 'PSSIL2H6NW4', outcome: 'WIN', prizeId: 'silla-gamer' },
+  { code: 'PSTAB9F3RD7', outcome: 'WIN', prizeId: 'tablet-acer' },
+  { code: 'PSARO5K1VZ8', outcome: 'WIN', prizeId: 'aro-basketball' },
+  { code: 'PSPIS3T7MJ2', outcome: 'WIN', prizeId: 'piscina-bestway' },
+  { code: 'PSMON8W4CY6', outcome: 'WIN', prizeId: 'monopatin-globber' },
+  { code: 'PSJBL6D9LP3', outcome: 'WIN', prizeId: 'jbl-flip-7' },
+  { code: 'PSB201G5SX7', outcome: 'WIN', prizeId: 'bicicleta-aro-20' },
+  { code: 'PSGLO4N8HB2', outcome: 'WIN', prizeId: 'mini-globo-loco' },
+  { code: 'PSB167V2QF9', outcome: 'WIN', prizeId: 'bicicleta-aro-16' },
+  { code: 'PSSMA1J6TR4', outcome: 'WIN', prizeId: 'smartfy-game-boy' },
+  { code: 'PSROL9C3KM5', outcome: 'WIN', prizeId: 'rollers-ferrari' },
+  { code: 'PSSKA2Z7DN8', outcome: 'WIN', prizeId: 'skate-mediano' },
 
   // --- Válidos sin premio --------------------------------------------------
   { code: 'QF3B8N6V2W5', outcome: 'LOSE' },

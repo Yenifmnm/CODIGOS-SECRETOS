@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import {
   SCENARIOS,
   SCENARIO_LABELS,
+  getForcedPrizeId,
   getScenario,
+  setForcedPrizeId,
   setScenario,
   subscribeScenario,
   type Scenario,
 } from '../../mocks/scenarios';
+import { MOCK_PRIZES } from '../../mocks/prizes';
 import './scenario-switcher.css';
 
 /**
@@ -15,9 +18,15 @@ import './scenario-switcher.css';
  */
 export function ScenarioSwitcher() {
   const [scenario, setLocal] = useState<Scenario>(getScenario);
+  const [prizeId, setPrizeId] = useState<string>(() => getForcedPrizeId() ?? '');
   const [open, setOpen] = useState(false);
 
   useEffect(() => subscribeScenario(setLocal), []);
+
+  const choosePrize = (id: string) => {
+    setPrizeId(id);
+    setForcedPrizeId(id || null);
+  };
 
   if (!import.meta.env.DEV) return null;
 
@@ -46,8 +55,24 @@ export function ScenarioSwitcher() {
               <span>{SCENARIO_LABELS[s]}</span>
             </label>
           ))}
+          {/* Con WIN forzado se puede elegir cuál de los 19 premios entrega,
+              para revisar la pantalla GANASTE una por una. */}
+          {(scenario === 'WIN' || scenario === 'AUTO') && (
+            <label className="dev-switch__prize">
+              <span>Premio</span>
+              <select value={prizeId} onChange={(e) => choosePrize(e.target.value)}>
+                <option value="">Rotar el catálogo</option>
+                {MOCK_PRIZES.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+
           <p className="dev-switch__hint">
-            También por URL: <code>?scenario=WIN</code>
+            También por URL: <code>?scenario=WIN&amp;prize=skate-mediano</code>
           </p>
         </fieldset>
       )}

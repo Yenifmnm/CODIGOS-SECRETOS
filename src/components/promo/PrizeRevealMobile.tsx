@@ -22,8 +22,12 @@ const lightAt = openAt + T.open * 0.4;
 const prizeAt = lightAt + 0.12;
 
 interface Props {
-  /** Llega por props desde el resultado del backend: acá no se elige nada. */
-  prize: Prize;
+  /**
+   * Llega por props desde el resultado del backend: acá no se elige nada.
+   * Opcional por el mismo motivo que en `PrizeReveal`: si el backend manda WIN
+   * sin premio, el cofre se abre y no emerge ningún producto.
+   */
+  prize?: Prize;
 }
 
 /**
@@ -45,9 +49,11 @@ export function PrizeRevealMobile({ prize }: Props) {
         <img src={cofreAbierto} alt="" aria-hidden="true"
           className="mabs mlayer-img mchest__img"
           style={mbox({ x: 96, y: 112, w: 212, h: 188, sceneH: SCENE_H })} />
-        <img src={prize.image} alt={prize.name}
-          className="mabs mlayer-img reveal__prize"
-          style={mbox({ x: 140, y: 0, w: 216, h: 150, sceneH: SCENE_H })} />
+        {prize && (
+          <img src={prize.image} alt={prize.name}
+            className="mabs mlayer-img reveal__prize"
+            style={mbox({ x: 140, y: 0, w: 216, h: 150, sceneH: SCENE_H })} />
+        )}
       </MobileScene>
     );
   }
@@ -89,6 +95,7 @@ export function PrizeRevealMobile({ prize }: Props) {
       </motion.div>
 
       {/* Premio: emerge desde dentro del cofre. */}
+      {prize && (
       <motion.div
         className="mabs"
         style={mbox({ x: 140, y: 0, w: 216, h: 150, sceneH: SCENE_H })}
@@ -105,6 +112,7 @@ export function PrizeRevealMobile({ prize }: Props) {
         </motion.div>
         <Sparkles count={14} spread={44} />
       </motion.div>
+      )}
     </MobileScene>
   );
 }

@@ -8,6 +8,7 @@ import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
+import { MIN_AGE, completedAge, maxBirthDate } from '../../app/age';
 import { box, centeredText, u } from '../../app/stage';
 import type { RegistrationForm } from '../../types/promo';
 import './register.css';
@@ -77,9 +78,12 @@ function validate(form: RegistrationForm): Errors {
 
   if (!form.birthDate) errors.birthDate = 'Indicá la fecha de nacimiento.';
   else {
-    const d = new Date(form.birthDate);
-    if (Number.isNaN(d.getTime())) errors.birthDate = 'Fecha inválida.';
-    else if (d > new Date()) errors.birthDate = 'La fecha no puede ser futura.';
+    const age = completedAge(form.birthDate);
+    if (age === null) errors.birthDate = 'Fecha inválida.';
+    else if (age < 0) errors.birthDate = 'La fecha no puede ser futura.';
+    else if (age < MIN_AGE) {
+      errors.birthDate = `Para registrarte tenés que tener ${MIN_AGE} años cumplidos.`;
+    }
   }
 
   if (!form.cedula.trim()) errors.cedula = 'Ingresá el número de cédula.';
@@ -160,6 +164,7 @@ export default function Register() {
       name="birthDate"
       type="date"
       autoComplete="bday"
+      max={maxBirthDate()}
       value={form.birthDate}
       onChange={set('birthDate')}
       error={errors.birthDate}

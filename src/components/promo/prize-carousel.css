@@ -160,26 +160,43 @@
     text-align: center;
   }
 
-  /* Tira de miniaturas. */
+  /* Tira de miniaturas.
+     El Figma la dibuja con cuatro premios repartidos a lo ancho. El catálogo
+     real son 19: repartirlos igual daría miniaturas de 15 px, por debajo del
+     área táctil mínima. Se convierte en un carril horizontal que conserva el
+     tamaño de ficha del Figma y desplaza; `PrizeCarousel` centra la activa. */
   .carousel__thumbs {
     grid-column: 1 / -1;
     grid-row: 3;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 2.488cqw;
     margin: 5.97cqw 0 0;
-    padding: 0;
+    padding: 0 3.483cqw;
     width: 100%;
     list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Los extremos se desvanecen: avisa que la tira sigue. */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  .carousel__thumbs::-webkit-scrollbar {
+    display: none;
   }
 
   .carousel__thumbs li {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 21.891cqw;   /* 88: tamaño del Figma con cuatro premios */
+    flex: 0 0 auto;
+    width: 16.418cqw;       /* 66: ficha del Figma ajustada al carril */
     display: flex;
     justify-content: center;
+    scroll-snap-align: center;
   }
 
   .carousel__thumb {

@@ -10,8 +10,12 @@ import cofreCerrado from '../../assets/promo/cofre-cerrado.webp';
 import glow from '../../assets/effects/glow.webp';
 
 interface PrizeRevealProps {
-  /** Llega por props desde el resultado del backend. Acá no se elige nada. */
-  prize: Prize;
+  /**
+   * Llega por props desde el resultado del backend. Acá no se elige nada.
+   * Puede faltar si el backend devuelve WIN sin premio: en ese caso el cofre
+   * se abre igual y no emerge ningún producto, en vez de mostrar uno inventado.
+   */
+  prize?: Prize;
 }
 
 /* Coordenadas del Figma (23:3136 cofre, 23:3137 premio, 23:3138/9 glows). */
@@ -43,7 +47,9 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
         <img src={glow} alt="" aria-hidden="true" className="abs reveal__glow"
           style={box({ x: 1000, y: 240, w: 900, h: 620 })} />
         <img src={cofreAbierto} alt="" aria-hidden="true" className="abs reveal__chest" style={box(CHEST)} />
-        <img src={prize.image} alt={prize.name} className="abs reveal__prize" style={box(PRIZE)} />
+        {prize && (
+          <img src={prize.image} alt={prize.name} className="abs reveal__prize" style={box(PRIZE)} />
+        )}
       </div>
     );
   }
@@ -95,6 +101,7 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
       </motion.div>
 
       {/* Premio: emerge desde dentro del cofre hacia su posición final. */}
+      {prize && (
       <motion.div
         className="abs reveal__prize-wrap"
         style={box(PRIZE)}
@@ -116,6 +123,7 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
         </motion.div>
         <Sparkles count={20} spread={52} />
       </motion.div>
+      )}
     </div>
   );
 }

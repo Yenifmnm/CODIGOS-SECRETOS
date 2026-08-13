@@ -40,6 +40,28 @@
   cursor: pointer;
 }
 
+/* Selector de premio para los WIN forzados. */
+.dev-switch__prize {
+  display: grid;
+  gap: 3px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(9, 234, 255, 0.25);
+}
+
+.dev-switch__prize span {
+  color: var(--c-cyan);
+}
+
+.dev-switch__prize select {
+  font: inherit;
+  padding: 3px 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(9, 234, 255, 0.4);
+  background: rgba(4, 10, 34, 0.9);
+  color: #fff;
+}
+
 .dev-switch__hint {
   margin: 4px 0 0;
   opacity: 0.65;

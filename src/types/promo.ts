@@ -31,18 +31,36 @@ export interface PromoCode {
 
 export interface Prize {
   id: string;
+  /** Nombre comercial visible. Nunca códigos internos ni specs de depósito. */
   name: string;
   /** URL del asset ya resuelto por el adapter. */
   image: string;
+  /**
+   * Versión reducida de `image` para la tira de miniaturas de mobile. Es
+   * opcional: si falta, la tira cae en `image`. Existe porque el catálogo real
+   * son 19 premios y decodificar 19 imágenes grandes a la vez castiga al
+   * teléfono.
+   */
+  thumb?: string;
   /** Copy corto opcional para el carrusel. */
   caption?: string;
   /**
    * Artículo que precede al nombre en "te ganaste ___ {name}!".
    * Va con el premio porque depende de su género y número —"una Bicicleta",
-   * "un Viaje al Caribe", "unos Auriculares"— y no hay forma confiable de
-   * deducirlo del nombre. Si falta, la pantalla usa "un".
+   * "un Skate", "unos Auriculares"— y no hay forma confiable de deducirlo del
+   * nombre. Si falta, la pantalla usa "un".
    */
   article?: string;
+  /**
+   * Unidades planificadas para toda la campaña, sólo informativo.
+   * NO es stock: el frontend nunca descuenta ni decide con este número. La
+   * disponibilidad real la resuelve el backend contra su calendario.
+   */
+  quantity?: number;
+  /** Descripción completa del producto (modelo, medidas). Uso interno/QA. */
+  detail?: string;
+  /** Código interno del proveedor. Nunca se muestra al usuario. */
+  sku?: string;
 }
 
 export interface UserCodeCount {

@@ -103,3 +103,50 @@ export function subscribeScenario(listener: (s: Scenario) => void): () => void {
 
 /** Latencia simulada. Corta a propósito para poder ver las transiciones. */
 export const MOCK_LATENCY_MS = 750;
+
+/* ---------------------------------------------------------------------------
+   Premio forzado — SÓLO DESARROLLO / QA
+   ---------------------------------------------------------------------------
+   Con el escenario 'WIN' el mock entrega un premio distinto cada vez, rotando
+   el catálogo, para poder revisar los 19 en la pantalla GANASTE. Este
+   interruptor fija uno concreto y desactiva la rotación.
+
+   Formas de usarlo:
+     1. Panel flotante (sólo en dev), desplegable "Premio"
+     2. Query string:  ?scenario=WIN&prize=skate-mediano
+     3. Consola:       window.__PROMO_WIN_PRIZE__ = 'piscina-bestway'
+
+   No tiene ningún efecto con el escenario 'BASE': ahí el premio lo decide el
+   código tipeado, igual que lo hará el backend. Nada de esto sobrevive a la
+   conexión real: el premio siempre lo asigna el servidor.
+   --------------------------------------------------------------------------- */
+
+declare global {
+  interface Window {
+    __PROMO_WIN_PRIZE__?: string;
+  }
+}
+
+/** `null` = rotar el catálogo. */
+let forcedPrizeId: string | null = null;
+
+if (typeof window !== 'undefined') {
+  const fromQuery = new URLSearchParams(window.location.search).get('prize');
+  if (fromQuery) {
+    forcedPrizeId = fromQuery;
+    window.__PROMO_WIN_PRIZE__ = fromQuery;
+  }
+}
+
+export function getForcedPrizeId(): string | null {
+  if (typeof window !== 'undefined' && typeof window.__PROMO_WIN_PRIZE__ === 'string') {
+    forcedPrizeId = window.__PROMO_WIN_PRIZE__ || null;
+  }
+  return forcedPrizeId;
+}
+
+export function setForcedPrizeId(id: string | null): void {
+  forcedPrizeId = id;
+  if (typeof window !== 'undefined') window.__PROMO_WIN_PRIZE__ = id ?? undefined;
+  listeners.forEach((l) => l(current));
+}

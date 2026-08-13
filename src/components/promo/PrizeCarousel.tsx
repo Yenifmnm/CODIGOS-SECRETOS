@@ -58,6 +58,7 @@ export function PrizeCarousel({ prizes, onActiveChange, withThumbs = false, capt
   const [active, setActive] = useState(0);
   const reduced = useReducedMotion();
   const touchStart = useRef<number | null>(null);
+  const thumbsRef = useRef<HTMLUListElement>(null);
   const total = prizes.length;
 
   const go = useCallback(
@@ -71,6 +72,18 @@ export function PrizeCarousel({ prizes, onActiveChange, withThumbs = false, capt
   useEffect(() => {
     if (prizes[active]) onActiveChange?.(prizes[active]);
   }, [active, prizes, onActiveChange]);
+
+  /* Con el catálogo completo la tira de miniaturas no entra en el ancho del
+     teléfono y pasa a ser un carril horizontal. Si no la acompañamos, al mover
+     el carrusel la miniatura activa queda fuera de vista. */
+  useEffect(() => {
+    const strip = thumbsRef.current;
+    if (!strip) return;
+    const item = strip.children[active] as HTMLElement | undefined;
+    if (!item) return;
+    const target = item.offsetLeft - (strip.clientWidth - item.offsetWidth) / 2;
+    strip.scrollTo({ left: target, behavior: reduced ? 'auto' : 'smooth' });
+  }, [active, reduced]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowRight') {
@@ -161,7 +174,7 @@ export function PrizeCarousel({ prizes, onActiveChange, withThumbs = false, capt
 
       {/* Tira de miniaturas del Figma mobile: salto directo a cada premio. */}
       {withThumbs && (
-        <ul className="carousel__thumbs">
+        <ul className="carousel__thumbs" ref={thumbsRef}>
           {prizes.map((p, i) => (
             <li key={p.id ?? p.name}>
               <button
@@ -171,7 +184,7 @@ export function PrizeCarousel({ prizes, onActiveChange, withThumbs = false, capt
                 onClick={() => setActive(i)}
               >
                 <span className="sr-only">{p.name}</span>
-                <img src={p.image} alt="" aria-hidden="true" />
+                <img src={p.thumb ?? p.image} alt="" aria-hidden="true" loading="lazy" />
               </button>
             </li>
           ))}

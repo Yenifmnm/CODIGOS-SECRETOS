@@ -93,6 +93,7 @@ porque sigue al puntero.
 | Figma `BYiPd3K1fF5IbvSOhOQA9B` → `13:48 vistas web` | Composición, posiciones, proporciones, tipografía, color, assets |
 | `Mecánica de participación PuroSol 2026.pptx` | Lógica de participación y estados |
 | `_Codigos Secretos 2026 - Web - Cliente.pptx` | Animaciones, microinteracciones, storytelling |
+| `recursos/premios/Calendario de Premios 2026.xlsx` | Catálogo de premios: 19 tipos, 89 unidades. Ver [`docs/PREMIOS-2026.md`](docs/PREMIOS-2026.md) |
 
 Cuando el Figma y el PowerPoint discrepan, manda el Figma. La navegación
 implementada es la del Figma actual (píldora cian plegable), no el menú lateral
@@ -201,18 +202,37 @@ resultado lo decide el código ingresado, igual que hará contra la tabla real. 
 código que no está en esa lista devuelve `CODE_NOT_FOUND`; uno ya cargado,
 `CODE_ALREADY_USED`.
 
-Códigos de ejemplo:
+Códigos de ejemplo. Hay uno por cada uno de los 19 premios reales de la
+campaña; el catálogo completo está en [`docs/PREMIOS-2026.md`](docs/PREMIOS-2026.md).
 
 | Código | Resultado |
 | --- | --- |
-| `PSNSW7K2M9X` | Gana — Nintendo Switch |
 | `PSPS5B4T8LQ` | Gana — PlayStation 5 |
-| `PSCAR3J6VN2` | Gana — Viaje al Caribe |
-| `PSBIC9D1RZ5` | Gana — Bicicleta |
-| `PSAUR6H4KW8` | Gana — Auriculares gamer |
+| `PSNSW7K2M9X` | Gana — Nintendo Switch OLED |
+| `PSCAR3J6VN2` | Gana — Kit volante + pedales |
+| `PSBIC9D1RZ5` | Gana — Bicicleta Milano aro 24 |
+| `PSAUR6H4KW8` | Gana — Auriculares JBL Tune 520BT |
+| `PSCOL4M8XT1` | Gana — Columpio de jardín |
+| `PSCAM7B2QK9` | Gana — Cama elástica |
+| `PSSIL2H6NW4` | Gana — Silla gamer |
+| `PSTAB9F3RD7` | Gana — Tablet Acer |
+| `PSARO5K1VZ8` | Gana — Aro de basketball |
+| `PSPIS3T7MJ2` | Gana — Piscina Bestway |
+| `PSMON8W4CY6` | Gana — Monopatín Globber |
+| `PSJBL6D9LP3` | Gana — Speaker JBL Flip 7 |
+| `PSB201G5SX7` | Gana — Bicicleta Milano aro 20 |
+| `PSGLO4N8HB2` | Gana — Mini Globo Loco Bestway |
+| `PSB167V2QF9` | Gana — Bicicleta Milano aro 16 |
+| `PSSMA1J6TR4` | Gana — Consola Smartfy Game Boy |
+| `PSROL9C3KM5` | Gana — Rollers Ferrari |
+| `PSSKA2Z7DN8` | Gana — Skate mediano |
 | `QF3B8N6V2W5` y otros nueve | Válido, sin premio |
 | `ABCDG847FR5`, `ZX9Q4L2PT60` | Ya canjeados de fábrica |
 | Cualquier otro | No existe |
+
+Para recorrer la pantalla de ganador premio por premio sin tipear códigos, el
+panel de escenarios tiene un desplegable **Premio** cuando está en modo
+«Ganaste». También por URL: `?scenario=WIN&prize=skate-mediano`.
 
 El código se normaliza antes de buscarlo (mayúsculas, sin espacios ni guiones):
 `psnsw 7k2-m9x` encuentra `PSNSW7K2M9X`. Un código válido se gasta al usarlo, así

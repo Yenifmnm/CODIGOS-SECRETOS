@@ -11,7 +11,15 @@ import type { Prize } from '../../types/promo';
  */
 export default function Winner() {
   const { lastResult, codeCount } = useSession();
-  const prize: Prize = lastResult?.prize ?? MOCK_PRIZES[0];
+
+  /* Dos situaciones distintas, y se resuelven distinto:
+     - Sin resultado en sesión: nadie jugó, entraron directo a la URL (así la
+       enlaza el recorrido del demo). Se muestra un premio del catálogo como
+       muestra de la pantalla.
+     - Con resultado pero sin `prize`: el backend devolvió WIN incompleto. Ahí
+       NO se inventa un premio —mostrar el equivocado es peor que no mostrar
+       ninguno—: se felicita sin nombrarlo y el panel ya trae el teléfono. */
+  const prize: Prize | undefined = lastResult ? lastResult.prize : MOCK_PRIZES[0];
 
   return (
     <ResultLayout
@@ -20,7 +28,7 @@ export default function Winner() {
       titleSize={138}
       titleTone="gold"
       titleY={457}
-      message={[`te ganaste ${prize.article ?? 'un'} ${prize.name}!`]}
+      message={[prize ? `te ganaste ${prize.article ?? 'un'} ${prize.name}!` : 'te ganaste un premio!']}
       messageSize={52}
       messageWidth={820}
       messageY={616}
