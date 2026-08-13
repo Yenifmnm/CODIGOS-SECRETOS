@@ -158,6 +158,63 @@ La ruta la elige el frontend con el `status`; no hay ninguna otra lógica.
 | `CODE_NOT_FOUND` | Código fuera de órbita | `/codigo-inexistente` | No | No |
 | `REGISTER_REQUIRED` | Registro | `/registro` | No | No |
 
+### Mapa de llamadas: qué API usa cada pantalla
+
+Verificado contra el código. **De diez pantallas, sólo cuatro hablan con el
+backend.**
+
+| Pantalla | Ruta | Cuándo llama | Endpoint |
+| --- | --- | --- | --- |
+| Inicio | `/` | — | ninguno |
+| Vista principal | `/participar` | al apretar **Participar** | `GET /api/participants/{cedula}` → `POST /api/codes/redeem` |
+| Registro | `/registro` | al apretar **Registrarme** | `POST /api/participants` → `POST /api/codes/redeem` |
+| Premios | `/premios` | al abrir | `GET /api/prizes` |
+| Dónde está el código | `/donde-esta-el-codigo` | — | ninguno |
+| Bases y condiciones | `/bases` | al abrir | `GET /api/terms` |
+| Ganaste | `/ganaste` | — | ninguno |
+| Estuviste cerca | `/perdiste` | — | ninguno |
+| Código ya utilizado | `/codigo-utilizado` | — | ninguno |
+| Código inexistente | `/codigo-inexistente` | — | ninguno |
+
+**Las cuatro pantallas de resultado no llaman a nada.** Dibujan lo que devolvió
+el `redeem` anterior, que quedó guardado en memoria. Si la persona recarga la
+página estando en `/ganaste`, no hay a quién volver a preguntarle: la pantalla
+queda sin datos. Es a propósito —un premio no se vuelve a pedir— pero conviene
+saberlo al probar.
+
+#### Secuencia 1 — participante ya registrado
+
+```
+/participar   [Participar]
+   ↓  GET /api/participants/4582913        → { "registered": true, "participant": {...} }
+   ↓  POST /api/codes/redeem               → { "status": "WIN", "prize": {...}, "codeCount": 4 }
+/ganaste
+```
+
+#### Secuencia 2 — primera participación
+
+```
+/participar   [Participar]
+   ↓  GET /api/participants/4582913        → { "registered": false }
+/registro     (conserva cédula y código en memoria del navegador)
+   ↓  POST /api/participants               → { "ok": true, "participant": {...} }
+   ↓  POST /api/codes/redeem               → { "status": "LOSE", "codeCount": 1 }
+/perdiste
+```
+
+Los dos `redeem` son el mismo endpoint. **El registro no tiene un endpoint
+propio que además canjee**: son dos llamadas seguidas, y si la segunda falla la
+persona queda registrada pero sin su código canjeado. Ese caso hay que
+contemplarlo: lo razonable es que el código siga disponible y pueda cargarlo de
+nuevo.
+
+#### `GET /api/participants/{cedula}/code-count` no lo usa nadie
+
+Está en el contrato pero **ninguna pantalla lo llama**. El contador viaja dentro
+de `codeCount` en cada respuesta de `redeem`, que es lo que las pantallas
+muestran. Queda como endpoint disponible por si más adelante hace falta leer el
+contador sin canjear un código; si no, se puede no implementar.
+
 ### 4.1 Vista principal — `/participar` (lámina 1)
 
 Pide cédula y código. Al enviar, el frontend llama primero a
