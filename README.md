@@ -1,5 +1,28 @@
 # PuroSol — El Tesoro Galáctico de los Códigos Secretos 2026
 
+> ## 👋 ¿Venís a programar el backend? Empezá acá
+>
+> Leelos en este orden; con los dos primeros ya podés arrancar.
+>
+> 1. **[docs/LOGICA-BACKEND.md](docs/LOGICA-BACKEND.md)** — qué tiene que
+>    decidir el servidor. Cómo se elige el premio (sale del **calendario**, no
+>    del código), qué API usa cada pantalla, el flujo con reCAPTCHA y los puntos
+>    que faltan confirmar con el cliente.
+> 2. **[HANDOFF-BACKEND.md](HANDOFF-BACKEND.md)** — los seis endpoints con
+>    request y response de ejemplo, y qué se cambia en el front para conectar.
+> 3. **[docs/PREMIOS-2026.md](docs/PREMIOS-2026.md)** — los 19 premios con sus
+>    `id`, que son el contrato para devolver el premio ganado.
+>
+> Lo mínimo que hay que saber: el frontend **no decide nada**. Manda cédula y
+> código, y pinta la pantalla del `status` que le devuelven —`WIN`, `LOSE`,
+> `CODE_ALREADY_USED`, `CODE_NOT_FOUND`, `REGISTER_REQUIRED`—. Hoy responde un
+> adapter con datos de ejemplo; conectar el backend real es cambiar **una
+> línea** en [`src/services/promoApi.ts`](src/services/promoApi.ts), sin tocar
+> ninguna pantalla.
+>
+> El sitio de arriba ya funciona de punta a punta contra esos datos de ejemplo:
+> sirve para ver qué se espera de cada respuesta antes de escribir nada.
+
 ## 🔗 Sitio publicado
 
 ### **https://yenifmnm.github.io/CODIGOS-SECRETOS/**
