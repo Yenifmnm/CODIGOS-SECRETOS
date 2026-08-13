@@ -30,6 +30,16 @@
   gap: 0.5cqw;
   color: var(--c-brown-60);
   min-width: 9.95cqw; /* 191 */
+  transition: min-width 180ms var(--ease-soft);
+}
+
+/* Con el campo cargado la etiqueta cede su ancho al valor. El ícono se queda:
+   es lo que identifica la cápsula en el Figma y ocupa poco. Sin esto,
+   "Código secreto" se llevaba 266 de los 519 px de la cápsula y el código
+   tipeado se salía del cuadro por la izquierda. */
+.pfield--pill:not(.pfield--empty) .pfield__label {
+  min-width: 0;
+  gap: 0;
 }
 
 .pfield--pill .pfield__input {
@@ -138,6 +148,20 @@
 
 .pfield__input[type='date']::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
+}
+
+/* ---------- Etiqueta que se retira con el campo cargado ----------
+   Se saca de la vista y del flujo, pero no del DOM: el <label> sigue asociado
+   al input por `for`, así que el nombre accesible del campo no cambia. */
+.pfield:not(.pfield--empty) .pfield__label-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .pfield__icon {

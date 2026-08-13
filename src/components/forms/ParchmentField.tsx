@@ -38,13 +38,17 @@ export const ParchmentField = forwardRef<HTMLInputElement, ParchmentFieldProps>(
           .join(' ')}
         style={{ '--pfield-fs': `${+(fontSize / 19.2).toFixed(4)}cqw` } as React.CSSProperties}
       >
+        {/* El nombre del campo se retira apenas hay algo escrito: en la cápsula
+            competía por el ancho con el valor y lo empujaba fuera de vista.
+            Sigue en el DOM y asociado al input, así que el lector de pantalla
+            lo anuncia igual; sólo deja de verse. */}
         <label className="pfield__label" htmlFor={inputId}>
           {icon && (
             <span className="pfield__icon" aria-hidden="true">
               {icon}
             </span>
           )}
-          <span>{label}</span>
+          <span className="pfield__label-text">{label}</span>
         </label>
         <input
           ref={ref}
