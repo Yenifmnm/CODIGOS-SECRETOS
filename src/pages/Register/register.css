@@ -62,10 +62,14 @@
   }
 
   /* Hoja: el pergamino y todo lo que se monta encima o asoma por los bordes. */
+  /* El alto lo decide el formulario, con la proporción del diseño como piso.
+     Antes era fijo (`aspect-ratio`) y el formulario iba absoluto encima: al
+     aparecer un mensaje de error el contenido crecía, el pergamino no, y los
+     botones terminaban fuera del papel. */
   .register-m__sheet {
     position: relative;
     width: 82.836cqw;        /* 333 */
-    aspect-ratio: 333 / 510;
+    min-height: 126.866cqw;  /* 510: la proporción original, como mínimo */
     margin-top: 18.657cqw;   /* deja aire para el logo montado arriba */
   }
 
@@ -82,7 +86,7 @@
   .register-m__logo {
     position: absolute;
     left: 50%;
-    top: -8%;
+    top: -14.5cqw;
     width: 63%;
     height: auto;
     transform: translateX(-50%);
@@ -106,14 +110,14 @@
   }
 
   /* Formulario en flujo normal dentro del pergamino. */
+  /* En flujo normal: es lo que define el alto del pergamino. */
   .register-m__form {
-    position: absolute;
-    inset: 0;
+    position: relative;
     z-index: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 17.5% 12% 0;
+    padding: 33% 12% 9%;
   }
 
   .register-m__title-plate {
