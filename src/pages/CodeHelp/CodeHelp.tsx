@@ -35,11 +35,11 @@ export default function CodeHelp() {
     <Stage
       title="¿Dónde encuentro el código secreto?"
       compactMenu
-      mobileBg="profundo"
       mobile={
-        /* Figma "donde esta el codigo.png": logo → titular dorado a dos
-           renglones → nave a la izquierda del pack → pack con catalejo →
-           píldora cian de contacto. */
+        /* Figma "donde esta el codigo" (402x913): cielo claro con horizonte,
+           logo → titular dorado a dos renglones → nave completa a la izquierda
+           del pack → pack apoyado sobre la superficie del planeta → píldora
+           cian de contacto sobre esa superficie. */
         <div className="codehelp-m" id="contenido">
           <CloseButton to="/participar" className="codehelp-m__close" />
 
@@ -51,6 +51,9 @@ export default function CodeHelp() {
             <br />
             Los stickers de Purosol
           </p>
+
+          {/* Superficie oscura sobre la que se apoyan el pack y la píldora. */}
+          <div className="codehelp-m__planet" aria-hidden="true" />
 
           <div className="codehelp-m__scene">
             <PurosolShip className="codehelp-m__ship" />

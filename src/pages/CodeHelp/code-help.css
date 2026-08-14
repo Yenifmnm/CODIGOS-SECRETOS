@@ -40,12 +40,37 @@
 
 /* Composición mobile — Figma "donde esta el codigo.png" (402x913). */
 @media (max-width: 899px) {
+  /* Sin `position` a propósito: el botón de cerrar se ubica contra el lienzo
+     mobile, alineado con la barra superior. Si esta caja se vuelve el contexto
+     de posicionamiento, la X baja y se monta sobre el logo. */
   .codehelp-m {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-bottom: 5.97cqw;
+  }
+
+  /* Superficie curva del planeta, como en las pantallas de resultado: un
+     círculo muy ancho que asoma por abajo. En el Figma el pack se apoya sobre
+     ella y la píldora de contacto queda encima, no sobre el cielo. */
+  .codehelp-m__planet {
+    position: absolute;
+    left: 50%;
+    top: 77%;
+    width: 210cqw;
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 40%,
+      rgba(20, 46, 118, 0.96) 0%,
+      rgba(13, 31, 88, 0.98) 55%,
+      #0a1440 100%
+    );
+    box-shadow: 0 -0.5cqw 5cqw rgba(9, 234, 255, 0.22);
+    z-index: 0;
+    pointer-events: none;
   }
 
   .codehelp-m__close {
@@ -82,13 +107,16 @@
     margin-top: 2.488cqw;
     display: flex;
     justify-content: center;
+    z-index: 1;
   }
 
+  /* La nave entra completa: en el Figma se ve entera contra el cielo, no
+     sangrando por el borde izquierdo. */
   .codehelp-m__ship {
     position: absolute;
-    left: -11.94cqw;
-    top: -2.488cqw;
-    width: 49.751cqw;      /* 200 */
+    left: 2.985cqw;        /* 12 */
+    top: 8.706cqw;         /* 35: navega a media altura del pack, como el Figma */
+    width: 33.582cqw;      /* 135 */
     aspect-ratio: 1016 / 696;
     z-index: 2;
   }
@@ -98,7 +126,9 @@
   }
 
   .codehelp-m__note {
-    width: 82.09cqw;       /* 330 */
+    position: relative;
+    z-index: 2;
+    width: 78.607cqw;      /* 316: corta tras "GANADORES", como el Figma */
     margin-top: 3.483cqw;
     padding: 2.985cqw 3.98cqw;
     border-radius: 500px;
