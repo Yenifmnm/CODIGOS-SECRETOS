@@ -142,13 +142,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5.721cqw 9.453cqw 0;   /* 23 arriba, 38 a los lados */
+    padding: 4.478cqw 9.453cqw 0;   /* 18 arriba, 38 a los lados */
   }
 
   .welcome-m__form-title {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 4.229cqw;        /* 17 */
+    font-size: 3.731cqw;        /* 15 */
     line-height: 1.1;
     color: var(--c-brown-dark);
     text-align: center;
@@ -166,16 +166,23 @@
     display: flex;
     flex-direction: column;
     gap: 1.493cqw;              /* 6 */
-    margin-top: 3.483cqw;
+    margin-top: 2.239cqw;
   }
 
+  /* El botón del Figma ocupa el 40% del ancho del pergamino; con la medida
+     anterior el bloque crecía y empujaba el enlace sobre el rodillo inferior. */
   .welcome-m__submit {
-    width: 38.806cqw;           /* 156 */
-    margin-top: 2.985cqw;
+    width: 34.826cqw;           /* 140 */
+    margin-top: 2.239cqw;
+  }
+
+  /* El área táctil no baja de 44 px aunque el pergamino se achique. */
+  .welcome-m__submit > * {
+    min-height: 44px;
   }
 
   .welcome-m__help {
-    margin-top: 2.488cqw;
+    margin-top: 1.99cqw;
     font-family: var(--font-display);
     font-size: 2.985cqw;        /* 12 */
     color: var(--c-brown);

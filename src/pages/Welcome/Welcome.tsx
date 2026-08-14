@@ -202,7 +202,7 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
           )}
 
           <div className="welcome-m__submit">
-            <PromoButton type="submit" mobileFontSize={21} loading={loading}>
+            <PromoButton type="submit" mobileFontSize={17} loading={loading}>
               Participar
             </PromoButton>
           </div>
