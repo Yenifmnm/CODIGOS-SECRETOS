@@ -73,6 +73,19 @@
     pointer-events: none;
   }
 
+  /* Portal: asoma por la esquina superior derecha, sangrando por el borde.
+     Va por debajo de la barra y de la X, que se apoyan encima. */
+  .codehelp-m__portal {
+    position: absolute;
+    left: 51.493cqw;       /* 207 */
+    top: -0.498cqw;
+    width: 53.234cqw;      /* 214: se ve el arco y sangra por el borde derecho */
+    height: auto;
+    opacity: 0.95;
+    z-index: 0;
+    pointer-events: none;
+  }
+
   .codehelp-m__close {
     position: absolute !important;
     right: 6.219cqw;
@@ -108,6 +121,19 @@
     display: flex;
     justify-content: center;
     z-index: 1;
+  }
+
+  /* Destello detrás del pack: aporta el halo cálido del diseño sin tapar nada. */
+  .codehelp-m__flare {
+    position: absolute;
+    left: 50%;
+    top: 12.438cqw;        /* 50 */
+    width: 99.502cqw;      /* 400 */
+    height: auto;
+    transform: translateX(-50%);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
   }
 
   /* La nave entra completa: en el Figma se ve entera contra el cielo, no

@@ -41,6 +41,10 @@ export default function CodeHelp() {
            del pack → pack apoyado sobre la superficie del planeta → píldora
            cian de contacto sobre esa superficie. */
         <div className="codehelp-m" id="contenido">
+          {/* Portal asomando por el borde superior derecho, con la X encima.
+              Está en el Figma de esta vista y faltaba en la composición. */}
+          <img src={portal} alt="" aria-hidden="true" className="codehelp-m__portal" />
+
           <CloseButton to="/participar" className="codehelp-m__close" />
 
           <img src={logoCodigos} alt="Códigos Secretos 2026" className="codehelp-m__logo" />
@@ -56,7 +60,11 @@ export default function CodeHelp() {
           <div className="codehelp-m__planet" aria-hidden="true" />
 
           <div className="codehelp-m__scene">
-            <PurosolShip className="codehelp-m__ship" />
+            {/* Destello detrás del pack, como en el Figma. */}
+            <img src={destello} alt="" aria-hidden="true" className="codehelp-m__flare" />
+            {/* `flipped`: el asset viene con la proa a la izquierda y en el
+                diseño navega hacia la derecha, con la llama saliendo por atrás. */}
+            <PurosolShip flipped className="codehelp-m__ship" />
             <TelescopeMagnifier src={jugos} alt={PACK_ALT} description={PACK_ALT} zoom={2.2} />
           </div>
 
