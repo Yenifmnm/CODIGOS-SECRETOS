@@ -11,10 +11,11 @@
 /* Cinta con el título: 799,381 dentro del stage → 452,128 dentro del pergamino. */
 .terms__heading {
   position: absolute;
-  left: 36.868%; /* (799-347)/1226 */
+  left: 50%;
   top: 16.41%; /* (381-253)/780 */
-  width: 26.754%; /* 328/1226 */
+  width: 34%;
   height: 7.436%; /* 58/780 */
+  transform: translateX(-50%);
   margin: 0;
   display: grid;
   place-items: center;
@@ -28,30 +29,60 @@
 }
 
 /* Área de texto: 556,471 → 843x376 dentro del stage. */
-.terms__scroll {
+.terms__viewport {
   position: absolute;
   left: 17.05%; /* (556-347)/1226 */
   top: 27.95%; /* (471-253)/780 */
   width: 68.76%; /* 843/1226 */
   height: 48.2%; /* 376/780 */
+  display: flex;
+  gap: 1.4%;
+}
+
+.terms__scroll {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
   overflow-y: auto;
-  padding-right: 2.2%;
-  scrollbar-width: thin;
-  scrollbar-color: var(--c-brown) rgba(216, 131, 28, 0.5);
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  /* La barra nativa se oculta: la señal visible la da `.terms__bar`, que se
+     comporta igual en todos los navegadores. Safari iOS no dibuja scrollbars
+     salvo mientras se arrastra, así que sin esto no habría ninguna pista de
+     que el texto continúa. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .terms__scroll::-webkit-scrollbar {
-  width: 11px;
+  display: none;
 }
 
-.terms__scroll::-webkit-scrollbar-track {
+/* Carril y pulgar de la barra propia. */
+.terms__bar {
+  position: relative;
+  flex: none;
+  width: 0.573cqw;            /* 11 */
+  min-width: 6px;
+  border-radius: 50px;
   background: rgba(216, 131, 28, 0.5);
-  border-radius: 50px;
+  pointer-events: none;
 }
 
-.terms__scroll::-webkit-scrollbar-thumb {
-  background: var(--c-brown);
+.terms__bar-thumb {
+  position: absolute;
+  left: 0;
+  right: 0;
   border-radius: 50px;
+  background: var(--c-brown);
+  transition: top 90ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terms__bar-thumb {
+    transition: none;
+  }
 }
 
 .terms__body {
@@ -167,13 +198,17 @@
     top: -27%;
     right: -7%;
     width: 30%;
+    height: auto;
+    aspect-ratio: 360 / 658;
     z-index: 4;
   }
 
   .terms-m__nene {
-    bottom: -5%;
+    bottom: -24%;
     left: -21%;
     width: 40%;
+    height: auto;
+    aspect-ratio: 492 / 820;
     z-index: 4;
   }
 
@@ -182,29 +217,72 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 13% 12% 9%;
+    /* Los laterales dejan libre el borde enrollado del pergamino, como en el
+       Figma: la cinta del título llega hasta el papel, no hasta el rollo. */
+    padding: 13% 15.5% 9%;
   }
 
+  /* La cinta del título vuelve al flujo: la regla del desktop la deja absoluta
+     con 26.75% de ancho, que en el lienzo mobile son 93 px y recortaban
+     "Bases y Condiciones" a la mitad. Acá ocupa el ancho útil del pergamino,
+     como en el Figma. */
   .terms-m__sheet .terms__heading {
-    font-size: 5.473cqw;       /* 22 */
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    transform: none;
+    padding: 1.99cqw 1.493cqw;
     margin: 0;
+    font-size: clamp(20px, 5.721cqw, 24px); /* 23 px en 402 */
+    white-space: nowrap;
+  }
+
+  /* El cuerpo también trae el tamaño del lienzo desktop (2.083cqw), que en
+     mobile da 8 px: ilegible. */
+  .terms-m__sheet .terms__body {
+    font-size: clamp(13px, 3.234cqw, 14px); /* 13 px en 402 */
+    line-height: 1.4;
   }
 
   /* El texto scrollea dentro del pergamino; el botón queda siempre visible. */
-  .terms-m__sheet .terms__scroll {
+  /* El texto es largo y el pergamino NO crece: scrollea acá dentro, con la
+     misma barra propia del desktop. */
+  .terms-m__sheet .terms__viewport {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
-    margin-top: 3.483cqw;
-    font-size: 3.234cqw;       /* 13 */
-    line-height: 1.45;
+    margin-top: 2.985cqw;
+    gap: 1.99cqw;
+  }
+
+  .terms-m__sheet .terms__scroll {
     -webkit-overflow-scrolling: touch;
   }
 
+  .terms-m__sheet .terms__bar {
+    width: 1.493cqw;           /* 6 */
+  }
+
+  /* El CTA vuelve al flujo: la regla del desktop lo deja absoluto y se montaba
+     encima del texto, además de no reservarle lugar al área de scroll. */
   .terms-m__sheet .terms__cta {
+    position: relative;
+    left: auto;
+    top: auto;
     flex: none;
     margin-top: 3.483cqw;
-    width: 46.02cqw !important;   /* 185 */
+    width: 36.318cqw !important;  /* 146 */
     height: 8.209cqw !important;  /* 33 */
+  }
+
+  .terms-m__sheet .terms__cta .ribbon-btn__label {
+    padding-inline: 4%;
+    font-size: 3.98cqw;           /* 16 */
   }
 }

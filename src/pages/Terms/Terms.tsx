@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Stage } from '../../components/layout/Stage';
 import { Deco } from '../../components/layout/Deco';
@@ -37,9 +37,43 @@ export default function Terms() {
     navigate('/participar');
   };
 
+  /* Barra de scroll propia: proporción y posición del pulgar, en % del carril. */
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [thumb, setThumb] = useState({ top: 0, size: 100 });
+
+  const medirBarra = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    if (scrollHeight <= clientHeight) {
+      setThumb({ top: 0, size: 100 });
+      return;
+    }
+    // El contenido legal es muy largo: su proporción pura dejaría un pulgar de
+    // pocos píxeles. Conservamos la proporción, con un mínimo visual de 30 px
+    // (aprox. el tamaño de la referencia en mobile y desktop).
+    const minSize = Math.min((30 / clientHeight) * 100, 100);
+    const size = Math.max((clientHeight / scrollHeight) * 100, minSize);
+    const top = (scrollTop / (scrollHeight - clientHeight)) * (100 - size);
+    setThumb({ top, size });
+  }, []);
+
+  const onScroll = medirBarra;
+
+  // El texto llega del adapter, así que la medida se rehace cuando cambia y
+  // cuando la caja cambia de tamaño (rotación, teclado, cambio de viewport).
+  useEffect(() => {
+    medirBarra();
+    const el = scrollRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(medirBarra);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [terms, medirBarra]);
+
   /**
    * El backend podrá enviar `termsHtml` (ya sanitizado) o `termsText`.
-   * Mientras tanto se renderiza el texto provisorio del adapter mock.
+   * Mientras tanto se renderiza la transcripción final del DOCX desde el mock.
    */
   const body = terms?.termsHtml ? (
     <div className="terms__body" dangerouslySetInnerHTML={{ __html: terms.termsHtml }} />
@@ -54,9 +88,27 @@ export default function Terms() {
   const content = (
     <>
       <p className="terms__heading">Bases y Condiciones</p>
-      <div className="terms__scroll" tabIndex={0} role="region" aria-label="Texto de bases y condiciones">
-        {body}
+
+      {/* El pergamino no crece: el texto —que es largo— scrollea acá dentro.
+          La barra es propia y no la nativa porque Safari iOS no dibuja
+          scrollbars: sólo las muestra mientras se arrastra, así que no habría
+          ninguna señal de que el texto sigue. */}
+      <div className="terms__viewport">
+        <div
+          className="terms__scroll"
+          ref={scrollRef}
+          onScroll={onScroll}
+          tabIndex={0}
+          role="region"
+          aria-label="Texto de bases y condiciones"
+        >
+          {body}
+        </div>
+        <div className="terms__bar" aria-hidden="true">
+          <span className="terms__bar-thumb" style={{ top: `${thumb.top}%`, height: `${thumb.size}%` }} />
+        </div>
       </div>
+
       <RibbonButton className="terms__cta" width={328} height={58} fontSize={40} onClick={accept}>
         Acepto la misión
       </RibbonButton>

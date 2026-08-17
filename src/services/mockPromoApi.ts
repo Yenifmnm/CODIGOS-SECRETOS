@@ -14,6 +14,7 @@ import { MIN_AGE, isOfAge } from '../app/age';
 import { MOCK_LATENCY_MS, getForcedPrizeId, getScenario } from '../mocks/scenarios';
 import { MOCK_PRIZES } from '../mocks/prizes';
 import { findCode, normalizeCode, seedRedeemed } from '../mocks/codes';
+import { getTermsText } from '../mocks/terms';
 
 const delay = (ms = MOCK_LATENCY_MS) => new Promise<void>((r) => setTimeout(r, ms));
 
@@ -129,17 +130,7 @@ export class MockPromoApi implements PromoApi {
 
   async getTerms(): Promise<Terms> {
     await delay(200);
-    return {
-      termsText: [
-        'Promoción “El Tesoro Galáctico de los Códigos Secretos 2026” válida en todo el territorio nacional.',
-        'Participan los productos PuroSol identificados con sticker promocional. Cada sticker contiene un código secreto de un único uso.',
-        'El registro debe ser realizado por un tutor mayor de 18 años, quien será responsable de la participación del menor.',
-        'Los códigos ganadores deberán conservarse físicamente: el sticker original es el comprobante para el canje del premio.',
-        'Para retirar el premio, comunicarse al +595 984 324 335 dentro de los plazos establecidos por la organización.',
-        'La participación implica la aceptación total de estas bases y condiciones.',
-        // TEXTO PROVISORIO — el backend enviará `termsHtml` / `termsText` definitivo.
-      ].join('\n\n'),
-    };
+    return { termsText: getTermsText() };
   }
 
   /** Elige un premio del catálogo mock. NO representa una regla de sorteo. */
