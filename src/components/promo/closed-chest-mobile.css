@@ -4,10 +4,15 @@
   overflow: hidden;
 }
 
-/* Superficie curva del planeta: un círculo muy ancho que asoma por abajo, la
-   misma idea que `.result__planet` del desktop pero con la curvatura del
-   mockup mobile. */
+/* La superficie del planeta pasó a `.result-m__planet`, a nivel de pantalla:
+   acá quedaba recortada por el `overflow: hidden` de la escena y dejaba una
+   franja de cielo entre el cofre y el contador. Se conserva el nodo por si
+   alguna escena se usa fuera del layout de resultado, pero no se dibuja. */
 .mchest__planet {
+  display: none;
+}
+
+.mchest__planet--legacy {
   position: absolute;
   left: 50%;
   top: 52%;

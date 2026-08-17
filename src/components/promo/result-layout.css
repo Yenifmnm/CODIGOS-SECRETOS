@@ -150,15 +150,19 @@
     z-index: 41;
   }
 
+  /* Medidas del Figma "perdiste.png" (lienzo 402x969): logo y 145..255,
+     titular 280..320, mensaje 360..405, botón 437..497, píldora 528..580,
+     cofre 627..810, contador 850..895. Los márgenes de abajo reproducen esos
+     huecos, que antes estaban todos comprimidos. */
   .result-m__logo {
-    width: 53.483cqw;   /* 215 */
+    width: 44.776cqw;   /* 180 */
     height: auto;
-    margin-top: 2.985cqw;
+    margin-top: 17.662cqw;  /* el logo arranca en y=145 */
     filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
   }
 
   .result-m__title {
-    margin: 2.488cqw 0 0;
+    margin: 0.249cqw 0 0;
     font-family: var(--font-display);
     font-size: 13.184cqw;   /* 53 */
     line-height: 1.05;
@@ -180,7 +184,7 @@
   }
 
   .result-m__msg {
-    margin: 2.488cqw 0 0;
+    margin: 10.448cqw 0 0;  /* mensaje en y=360 */
     max-width: 82cqw;
     font-family: var(--font-display);
     font-size: 4.975cqw;    /* 20 */
@@ -192,14 +196,14 @@
   }
 
   .result-m__cta {
-    width: 55.97cqw;        /* 225 */
-    margin-top: 3.483cqw;
+    width: 54.726cqw;       /* 220 */
+    margin-top: 6.716cqw;   /* botón en y=437 */
   }
 
   /* Píldora cian con el código canjeado y el teléfono de contacto. */
   .result-m__note {
-    width: 73.383cqw;       /* 295 */
-    margin-top: 3.483cqw;
+    width: 75.871cqw;       /* 305 */
+    margin-top: 3.980cqw;   /* píldora en y=528 */
     padding: 2.488cqw 3.483cqw;
     border-radius: 500px;
     background: var(--c-cyan-50);
@@ -219,14 +223,50 @@
     color: var(--c-cyan);
   }
 
+  /* Superficie del planeta: círculo muy ancho cuyo borde superior cae en
+     y=750 del diseño (lienzo 402x969) y que sigue hacia abajo hasta pasar el
+     borde de la pantalla, para que no reaparezca el cielo debajo del cofre. */
+  .result-m__planet {
+    position: absolute;
+    left: 50%;
+    top: 186.567cqw;        /* 750 */
+    width: 190cqw;
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 42%,
+      rgba(23, 52, 128, 0.95) 0%,
+      rgba(14, 33, 92, 0.98) 60%,
+      #0b1642 100%
+    );
+    box-shadow: 0 -0.6cqw 6cqw rgba(9, 234, 255, 0.28);
+    z-index: 0;
+    pointer-events: none;
+  }
+
   .result-m__scene {
     position: relative;
+    z-index: 1;
     width: 100%;
-    margin-top: 4.478cqw;
+    margin-top: 6.716cqw;   /* el cofre arranca en y=627 */
+  }
+
+  /* GANASTE es más compacta que PERDISTE en el Figma (ganaste.png): el
+     titular arranca en y=265 contra 280, y el mensaje en 350 contra 360. Con
+     los mismos márgenes la escena del premio no entraba y aparecía scroll. */
+  .result-m--gold .result-m__title {
+    margin-top: -3.483cqw;
+  }
+
+  .result-m--gold .result-m__msg {
+    margin-top: 5.970cqw;
   }
 
   .result-m__counter {
-    margin-top: 4.975cqw;
+    position: relative;
+    z-index: 1;
+    margin-top: 9.951cqw;   /* hueco de 40 */
     display: flex;
     align-items: center;
     gap: 2.985cqw;

@@ -102,7 +102,13 @@ export function ResultLayout({
            (ganaste / perdiste / codigo utilizado / codigo utilizado-1, 402x969).
            Orden del Figma: logo → titular → mensaje → botón → píldora con el
            código → escena del cofre → contador. */
-        <div className="result-m" id="contenido">
+        <div className={`result-m result-m--${titleTone}`} id="contenido">
+          {/* Superficie del planeta a nivel de pantalla: en el Figma llega hasta
+              el borde inferior y el contador se apoya encima. Dentro de la
+              escena del cofre quedaba recortada y aparecía una franja de cielo
+              entre el cofre y el contador. */}
+          <div className="result-m__planet" aria-hidden="true" />
+
           {/* La mecánica (láminas 3 y 6) pide que la X vuelva a la carga de
               código, igual que el botón: el objetivo es seguir participando. */}
           <CloseButton to="/participar" className="result-m__close" />

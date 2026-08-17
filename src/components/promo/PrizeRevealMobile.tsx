@@ -12,7 +12,7 @@ import cofreCerrado from '../../assets/promo/cofre-cerrado.webp';
 import glow from '../../assets/effects/glow.webp';
 
 /** Alto de la escena en px del lienzo mobile. */
-const SCENE_H = 300;
+const SCENE_H = 262;
 
 /* Misma coreografía que la versión desktop (`PrizeReveal`), con las cajas del
    Figma mobile: anticipación → apertura → estallido de luz → el premio emerge. */

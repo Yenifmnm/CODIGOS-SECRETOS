@@ -7,7 +7,7 @@ import './closed-chest-mobile.css';
 import cofreCerrado from '../../assets/promo/cofre-cerrado.webp';
 
 /** Alto de la escena en px del lienzo mobile. */
-const SCENE_H = 268;
+const SCENE_H = 203;
 
 /**
  * Cofre cerrado de PERDISTE y de las dos pantallas de error, en mobile
@@ -30,7 +30,7 @@ export function ClosedChestMobile() {
         alt=""
         aria-hidden="true"
         className="mabs mlayer-img mchest__img"
-        style={mbox({ x: 96, y: 20, w: 210, h: 200, sceneH: SCENE_H })}
+        style={mbox({ x: 102, y: 20, w: 198, h: 183, sceneH: SCENE_H })}
         animate={reduced ? undefined : { rotate: [-0.9, 0.9, -0.9], scale: [1, 1.015, 1] }}
         transition={{ duration: 6.4, repeat: Infinity, ease: 'easeInOut' }}
       />
