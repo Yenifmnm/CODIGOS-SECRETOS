@@ -16,6 +16,34 @@
 }
 
 :root {
+  /* -------------------------------------------------------------------------
+     Áreas seguras del dispositivo.
+     Sólo tienen valor distinto de cero con `viewport-fit=cover` en el meta
+     viewport (ya está en index.html). Cubren la Dynamic Island y el notch
+     arriba, la barra de gestos abajo, y los bordes redondeados en horizontal.
+     Se declaran como tokens para no repetir `env()` en cada hoja.
+     ------------------------------------------------------------------------- */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* -------------------------------------------------------------------------
+     Medidas fluidas de la rama mobile.
+     Con `clamp()` para que crezcan con el ancho del teléfono pero dentro de un
+     rango: ni se pegan al borde en pantallas chicas ni se desparraman en las
+     grandes.
+     ------------------------------------------------------------------------- */
+  --mobile-page-padding: clamp(10px, 3.5vw, 20px);
+  --mobile-gap: clamp(8px, 2.5vw, 18px);
+  /* Ancho máximo de la columna de contenido mobile. */
+  --mobile-content-max: 520px;
+  /* Área táctil mínima recomendada. */
+  --tap-min: 44px;
+  /* Cuerpo mínimo de un input: por debajo de 16px Safari iOS hace zoom al
+     enfocar el campo y descoloca toda la composición. */
+  --input-min-fs: 16px;
+
   /* Tipografía */
   --font-display: 'DK Prince Frog', 'Chewy', 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', system-ui,
     sans-serif;

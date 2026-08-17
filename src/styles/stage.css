@@ -89,11 +89,23 @@
    que en el diseño) y el contenido vive en `.mstage__canvas`, que es el
    contenedor de consulta del que dependen las unidades `cqw` de mobileStage.ts.
    ------------------------------------------------------------------------- */
+/* La página mobile respeta las áreas seguras del teléfono en los cuatro lados:
+   arriba la Dynamic Island o el notch, abajo la barra de gestos o la barra del
+   navegador, y a los costados los bordes redondeados en horizontal. Sin esto el
+   contenido queda pegado al borde y el pie puede quedar tapado.
+
+   `min-height: 100svh` y no `100dvh`: el alto chico es el que tiene el
+   navegador con sus barras desplegadas, así que la página nunca queda más
+   corta que el viewport real y no aparece un salto cuando Safari esconde su
+   barra al scrollear. */
 .mstage {
   position: relative;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow-x: hidden;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
   background: #0b1642;
 }
 

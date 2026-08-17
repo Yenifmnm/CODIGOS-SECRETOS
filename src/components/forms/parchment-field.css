@@ -211,6 +211,19 @@
     font-size: 3.234cqw;        /* 13 */
   }
 
+  /* El INPUT nunca baja de 16px: por debajo de esa medida Safari iOS hace zoom
+     al enfocarlo y descoloca toda la composición —era lo que se veía como "el
+     formulario se comprime al escribir"—. El rótulo, en cambio, conserva el
+     cuerpo del diseño: el zoom lo dispara el campo enfocado, no la etiqueta, y
+     subirla a 16px recortaba "Fecha de nacimiento" en las medias cañas.
+
+     `scroll-margin-block` deja aire cuando Safari desplaza el campo al abrirse
+     el teclado, para que no quede pegado al borde. */
+  .pfield .pfield__input {
+    font-size: max(var(--input-min-fs), 3.234cqw);
+    scroll-margin-block: 96px 120px;
+  }
+
   .pfield--pill {
     height: 7.711cqw;           /* 31 */
     padding-inline: 2.488cqw;

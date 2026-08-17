@@ -51,3 +51,14 @@
     transform: scale(1.06);
   }
 }
+
+/* El aro conserva su medida de diseño; el área táctil nunca baja del mínimo. */
+.close-btn::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, var(--tap-min));
+  height: max(100%, var(--tap-min));
+  transform: translate(-50%, -50%);
+}

@@ -254,6 +254,24 @@
     height: 9.453cqw;
     align-self: center;
     margin-left: 0;
+    position: relative;
+  }
+
+  /* El dibujo mantiene la medida del Figma; el área que responde al dedo se
+     amplía con un pseudo-elemento invisible hasta el mínimo recomendado. */
+  .site-menu__toggle::after,
+  .site-menu__brand::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(100%, var(--tap-min));
+    height: max(100%, var(--tap-min));
+    transform: translate(-50%, -50%);
+  }
+
+  .site-menu__brand {
+    position: relative;
   }
 
   .site-menu__toggle-disc {

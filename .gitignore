@@ -18,3 +18,4 @@ recursos/premios/*.xlsx
 .env
 .env.*
 !.env.example
+audit-shots/

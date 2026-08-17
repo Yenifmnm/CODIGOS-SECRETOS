@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
-    "audit:premios": "python scripts/audit-premios.py"
+    "audit:premios": "python scripts/audit-premios.py",
+    "audit:responsive": "node scripts/audit-responsive.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",

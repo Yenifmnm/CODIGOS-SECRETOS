@@ -181,12 +181,23 @@
     min-height: 44px;
   }
 
+  /* El enlace conserva su cuerpo de diseño; el área táctil se amplía con un
+     pseudo-elemento que crece sobre todo hacia abajo, donde queda pergamino
+     libre, para no robarle el toque al botón que tiene encima. */
   .welcome-m__help {
+    position: relative;
+    display: inline-block;
     margin-top: 1.99cqw;
     font-family: var(--font-display);
     font-size: 2.985cqw;        /* 12 */
     color: var(--c-brown);
     text-decoration: underline;
+  }
+
+  .welcome-m__help::after {
+    content: '';
+    position: absolute;
+    inset: -7px -10px -24px;
   }
 
   .welcome-m__scene {
