@@ -107,7 +107,9 @@ export function ResultLayout({
               el borde inferior y el contador se apoya encima. Dentro de la
               escena del cofre quedaba recortada y aparecía una franja de cielo
               entre el cofre y el contador. */}
-          <div className="result-m__planet" aria-hidden="true" />
+          <div className="result-m__planet" aria-hidden="true">
+            <span className="result-m__planet-disc" />
+          </div>
 
           {/* La mecánica (láminas 3 y 6) pide que la X vuelva a la carga de
               código, igual que el botón: el objetivo es seguir participando. */}

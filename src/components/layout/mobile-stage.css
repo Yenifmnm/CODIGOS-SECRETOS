@@ -23,6 +23,11 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  /* Llena el alto del teléfono aunque el contenido sea más corto: así lo que
+     se apoya en el pie —como la superficie del planeta— llega al borde y no
+     reaparece el cielo debajo. Se descuenta el área segura para no generar
+     scroll en los teléfonos con notch. */
+  min-height: calc(100dvh - env(safe-area-inset-bottom, 0px));
 }
 
 /* Escena de proporción fija: sistema de referencia de las capas ilustradas. */

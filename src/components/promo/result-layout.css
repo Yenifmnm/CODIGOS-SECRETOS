@@ -223,13 +223,26 @@
     color: var(--c-cyan);
   }
 
-  /* Superficie del planeta: círculo muy ancho cuyo borde superior cae en
-     y=750 del diseño (lienzo 402x969) y que sigue hacia abajo hasta pasar el
-     borde de la pantalla, para que no reaparezca el cielo debajo del cofre. */
+  /* Superficie del planeta.
+     La caja está ACOTADA —de y=750 del diseño hasta el pie de la pantalla— y
+     recorta al disco. Sin ese recorte el círculo, que mide 190cqw de diámetro,
+     se extendía cientos de píxeles por debajo del contenido y alargaba la
+     página con un vacío azul enorme. */
   .result-m__planet {
     position: absolute;
-    left: 50%;
+    left: 0;
+    right: 0;
     top: 186.567cqw;        /* 750 */
+    bottom: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .result-m__planet-disc {
+    position: absolute;
+    left: 50%;
+    top: 0;
     width: 190cqw;
     aspect-ratio: 1;
     transform: translateX(-50%);
@@ -241,8 +254,6 @@
       #0b1642 100%
     );
     box-shadow: 0 -0.6cqw 6cqw rgba(9, 234, 255, 0.28);
-    z-index: 0;
-    pointer-events: none;
   }
 
   .result-m__scene {
