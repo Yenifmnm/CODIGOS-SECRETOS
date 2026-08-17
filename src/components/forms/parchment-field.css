@@ -229,29 +229,48 @@
     flex: none;
   }
 
+  /* Campo del registro: el Figma lo dibuja en UNA sola línea —el rótulo a la
+     izquierda sobre la cinta y el subrayado debajo—, no rótulo arriba y valor
+     abajo. El rótulo se superpone al input y desaparece al escribir, que es lo
+     que ya hace `.pfield:not(.pfield--empty) .pfield__label-text`. */
   .pfield--line {
-    flex-wrap: wrap;
-    gap: 0.25cqw;
-    padding-bottom: 0.746cqw;
+    position: relative;
+    display: block;
+    height: 100%;
+    padding-bottom: 0;
+    text-align: left;
   }
 
   .pfield--line .pfield__label {
-    flex-basis: 100%;
-    font-size: 0.86em;
-    opacity: 0.85;
+    position: absolute;
+    left: 1.5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    opacity: 0.75;
+    pointer-events: none;
   }
 
   .pfield--line .pfield__input {
-    flex-basis: 100%;
-    padding: 0.746cqw 0.5cqw;
+    width: 100%;
+    height: 100%;
+    padding: 0 1.5%;
+    text-align: left;
   }
 
+  /* El error cuelga por debajo del campo sin ocupar lugar: si empujara el
+     contenido, el formulario crecería y se saldría del pergamino, que tiene
+     proporción fija. Igual que en desktop. */
   .pfield__error {
-    position: static;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 5;
     white-space: normal;
-    margin-top: 1.244cqw;
-    padding: 0.746cqw 1.99cqw;
-    font-size: 2.736cqw;
+    margin-top: 0.5cqw;
+    padding: 0.5cqw 1.493cqw;
+    font-size: 2.239cqw;
+    line-height: 1.15;
   }
 
   /* Área táctil mínima sin agrandar la cápsula: el input la extiende. */

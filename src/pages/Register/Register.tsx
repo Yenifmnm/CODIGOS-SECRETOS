@@ -389,21 +389,19 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
             <h2 className="register-m__title">Registrate para que tu pequeño pueda participar</h2>
           </RibbonPlate>
 
-          <div className="register-m__grid">
-            <RibbonPlate className="register-m__cell register-m__cell--full">{fullName}</RibbonPlate>
-            <RibbonPlate className="register-m__cell">{birthDate}</RibbonPlate>
-            <RibbonPlate className="register-m__cell">{cedula}</RibbonPlate>
-          </div>
+          {/* Cada fila en su coordenada del Figma; el orden del DOM es el de
+              lectura, que es también el orden de tabulación. */}
+          <RibbonPlate className="register-m__cell register-m__cell--fullname">{fullName}</RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--birth">{birthDate}</RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--cedula">{cedula}</RibbonPlate>
 
           <p className="register-m__note">
             Este registro debe ser realizado por un tutor mayor de 18 años*
           </p>
 
-          <div className="register-m__grid">
-            <RibbonPlate className="register-m__cell register-m__cell--full">{email}</RibbonPlate>
-            <RibbonPlate className="register-m__cell">{city}</RibbonPlate>
-            <RibbonPlate className="register-m__cell">{phone}</RibbonPlate>
-          </div>
+          <RibbonPlate className="register-m__cell register-m__cell--email">{email}</RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--city">{city}</RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--phone">{phone}</RibbonPlate>
 
           <div className="register-m__actions">
             <RibbonButton type="submit" tone="ochre" mobileFontSize={15} disabled={submitting}>

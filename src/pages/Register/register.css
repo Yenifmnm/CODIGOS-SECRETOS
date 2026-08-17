@@ -54,23 +54,23 @@
    RegisterMobile, todas en cqw del lienzo de 402.
    ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
+  /* -----------------------------------------------------------------------
+     Composición mobile — Figma `recursos/mobile/pantallas/Registro.png`
+     (lienzo 402x913). Todo se posiciona contra el pergamino, cuya caja de
+     diseño es x 38..354, y 205..740 → 316x535. Los porcentajes de abajo son
+     de esa caja, así que la composición escala entera con el ancho del
+     teléfono sin perder las proporciones del diseño.
+     ----------------------------------------------------------------------- */
   .register-m {
+    position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  /* Hoja: el pergamino y todo lo que se monta encima o asoma por los bordes. */
-  /* El alto lo decide el formulario, con la proporción del diseño como piso.
-     Antes era fijo (`aspect-ratio`) y el formulario iba absoluto encima: al
-     aparecer un mensaje de error el contenido crecía, el pergamino no, y los
-     botones terminaban fuera del papel. */
   .register-m__sheet {
     position: relative;
-    width: 82.836cqw;        /* 333 */
-    min-height: 126.866cqw;  /* 510: la proporción original, como mínimo */
-    margin-top: 18.657cqw;   /* deja aire para el logo montado arriba */
+    width: 78.607cqw;          /* 316 */
+    aspect-ratio: 316 / 535;
+    margin: 32.587cqw 0 0 9.453cqw;  /* caja de diseño: x 38, y 205 */
   }
 
   .register-m__paper {
@@ -82,90 +82,104 @@
     pointer-events: none;
   }
 
-  /* El logo se monta sobre el borde superior del pergamino. */
+  /* El logo se apoya sobre el borde superior del pergamino. */
   .register-m__logo {
     position: absolute;
-    left: 50%;
-    top: -14.5cqw;
-    width: 63%;
+    left: 22.8%;
+    top: -1.9%;
+    width: 58.5%;
     height: auto;
-    transform: translateX(-50%);
     z-index: 3;
     filter: drop-shadow(0 0 3cqw rgba(9, 234, 255, 0.6));
   }
 
-  .register-m__dino {
-    top: -19%;
-    right: -26%;
-    width: 46%;
+  /* Dino asomando arriba a la derecha, sangrando por el borde de la pantalla. */
+  /* `.floating` trae height:100%, que gana sobre aspect-ratio y estiraba la
+     caja hasta el alto del pergamino: el dino terminaba tapando los campos. */
+  .register-m__sheet .register-m__dino {
+    left: 67.1%;
+    top: -19.6%;
+    width: 48.1%;              /* 152 px del diseño */
+    height: auto;
+    aspect-ratio: 631 / 1003;
     z-index: 2;
   }
 
-  /* Asoma por debajo del pergamino: sólo se ve de la cintura para arriba. */
-  .register-m__nena {
-    bottom: -34%;
-    left: -24%;
-    width: 36%;
+  /* Nena abajo a la izquierda: sólo la cabeza y los hombros, cortada por los
+     dos bordes. */
+  .register-m__sheet .register-m__nena {
+    left: -12%;
+    top: 82.4%;
+    width: 54%;                /* 171 px del diseño */
+    height: auto;
+    aspect-ratio: 428 / 945;
     z-index: 4;
   }
 
-  /* Formulario en flujo normal dentro del pergamino. */
-  /* En flujo normal: es lo que define el alto del pergamino. */
+  /* El formulario ocupa el pergamino y cada fila va en su coordenada. */
   .register-m__form {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 33% 12% 9%;
   }
 
   .register-m__title-plate {
-    width: 84%;
+    position: absolute;
+    left: 16.5%;
+    top: 28%;
+    width: 68%;
+    height: 8.4%;
   }
 
   .register-m__title {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 3.483cqw;     /* 14 */
-    line-height: 1.2;
+    font-size: 3.234cqw;       /* 13 */
+    line-height: 1.15;
     color: var(--c-brown-dark);
     text-align: center;
   }
 
-  /* Nombre entero arriba; abajo dos medias cañas. */
-  .register-m__grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3.98cqw 2.488cqw;
-    margin-top: 4.478cqw;
+  /* Filas del formulario. Alturas y anchos leídos del Figma. */
+  .register-m__cell {
+    position: absolute;
+    height: 5.4%;
   }
 
-  .register-m__cell--full {
-    grid-column: 1 / -1;
-  }
+  .register-m__cell--fullname { left: 9.5%;  top: 41.7%; width: 81.3%; }
+  .register-m__cell--birth    { left: 9.5%;  top: 48.2%; width: 39.2%; }
+  .register-m__cell--cedula   { left: 52.2%; top: 48.2%; width: 38.6%; }
+  .register-m__cell--email    { left: 9.5%;  top: 61.3%; width: 81.3%; }
+  .register-m__cell--city     { left: 9.5%;  top: 67.9%; width: 39.2%; }
+  .register-m__cell--phone    { left: 52.2%; top: 67.9%; width: 38.6%; }
 
   .register-m__note {
-    margin: 3.483cqw 0 0;
+    position: absolute;
+    left: 9.5%;
+    top: 55.1%;
+    width: 81.3%;
+    margin: 0;
+    padding-bottom: 0.8%;
     font-family: var(--font-display);
-    font-size: 2.239cqw;     /* 9 */
+    font-size: 2.239cqw;       /* 9 */
     line-height: 1.2;
     color: var(--c-brown-dark);
     text-align: center;
     border-bottom: 1px solid var(--c-brown-30);
-    padding-bottom: 1.244cqw;
-    width: 100%;
   }
 
   .register-m__actions {
+    position: absolute;
+    left: 15.8%;
+    top: 76.3%;
+    width: 66.5%;
     display: flex;
-    gap: 2.488cqw;
-    margin-top: 6.965cqw;
+    justify-content: space-between;
   }
 
   .register-m__actions .ribbon-btn {
-    width: 27.363cqw !important;   /* 110 */
+    width: 47% !important;
     height: 6.219cqw !important;   /* 25 */
+    min-height: 0 !important;
   }
 }
