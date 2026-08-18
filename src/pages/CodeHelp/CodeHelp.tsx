@@ -91,7 +91,8 @@ export default function CodeHelp() {
       <div className="codehelp__halo abs" style={{ ...box({ x: 686, y: 731, w: 1496, h: 1277 }), zIndex: 1 }} />
 
       <p className="t-display t-gold codehelp__title abs" style={{ left: u(1410), top: u(176), fontSize: u(60), width: u(558), zIndex: 6 }}>
-        Buscá el Código Secreto en los stickers de Purosol
+        <span>Buscá el Código Secreto en</span>
+        <span>Los stickers de Purosol</span>
       </p>
 
       <TelescopeMagnifier

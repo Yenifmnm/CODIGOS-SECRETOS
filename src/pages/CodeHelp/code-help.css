@@ -1,5 +1,13 @@
 /* DÓNDE ESTÁ EL CÓDIGO — Figma 19:2982 */
 
+@font-face {
+  font-family: 'DK Prince Frog Code Help';
+  src: url('/fonts/DKPrinceFrog.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .codehelp__halo {
   border-radius: 50%;
   background: radial-gradient(
@@ -13,10 +21,16 @@
 
 .codehelp__title {
   margin: 0;
+  font-family: 'DK Prince Frog Code Help', var(--font-display);
   text-align: center;
   line-height: 1.08;
   transform: translateX(-50%);
   white-space: normal;
+}
+
+.codehelp__title span {
+  display: block;
+  white-space: nowrap;
 }
 
 .codehelp__note {
@@ -26,8 +40,8 @@
   align-items: center;
   padding: 0.5cqw 2.4cqw;
   border-radius: 200px;
-  background: var(--c-cyan-50);
-  font-family: var(--font-display);
+  background: #0783b3;
+  font-family: 'DK Prince Frog Code Help', var(--font-display);
   font-size: 1.302cqw; /* 25 */
   line-height: 1.12;
   color: #fff;
