@@ -53,6 +53,10 @@
   --c-cyan: #09eaff;
   --c-cyan-50: rgba(9, 234, 255, 0.5);
   --c-gold: #fcc102;
+  /* Titular de PERDISTE y de los errores de código: relleno rojo con contorno
+     dorado. Muestreados del Figma, no elegidos a ojo. */
+  --c-title-red: #e84115;
+  --c-title-outline: #fcc411;
   --c-gold-glow: #eac748;
   --c-brown: #883307;
   --c-brown-dark: #581f09;

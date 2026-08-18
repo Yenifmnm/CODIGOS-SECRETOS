@@ -46,15 +46,18 @@
   text-shadow: 0 0 0.33cqw #fff, 0 0 2.3cqw #fff, 0 4px 10px var(--c-deep-blue);
 }
 
-/* PERDISTE y errores de código: mismo relleno dorado, con un contorno rojo
-   grueso por fuera. `paint-order` dibuja primero el trazo y encima el relleno,
-   que es lo que evita que el contorno se coma la letra. */
+/* PERDISTE y errores de código: relleno ROJO con contorno DORADO por fuera.
+   Los colores salen de muestrear el titular del Figma
+   (`recursos/correcciones/perdiste.png`): relleno #e84115, contorno #fcc411.
+   Estaban invertidos —dorado adentro y rojo afuera—, que es lo que se veía
+   distinto del diseño. `paint-order` dibuja primero el trazo y encima el
+   relleno, que es lo que evita que el contorno se coma la letra. */
 .result__title--outline {
-  color: var(--c-gold);
+  color: var(--c-title-red);
   /* El trazo se centra sobre el contorno del glifo y `paint-order` pinta el
      relleno encima, así que sólo se ve la mitad: para el grosor del Figma
      (~9 px) hay que pedir el doble. */
-  -webkit-text-stroke: 0.94cqw #e63505;
+  -webkit-text-stroke: 0.94cqw var(--c-title-outline);
   paint-order: stroke fill;
   text-shadow: 0 0 0.5cqw rgba(255, 255, 255, 0.7), 0 4px 10px var(--c-deep-blue);
 }
@@ -177,8 +180,8 @@
   /* PERDISTE y los dos errores: relleno dorado con contorno rojo. */
   .result-m__title--outline {
     font-size: 8.955cqw;    /* 36 */
-    color: var(--c-gold);
-    -webkit-text-stroke: 0.6cqw #c2270f;
+    color: var(--c-title-red);
+    -webkit-text-stroke: 0.6cqw var(--c-title-outline);
     paint-order: stroke fill;
     text-shadow: 0 0 4cqw rgba(252, 193, 2, 0.75);
   }

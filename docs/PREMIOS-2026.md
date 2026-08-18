@@ -21,7 +21,7 @@ el frontend no descuenta ni decide nada con ese número (ver sección 5).
 
 | # | Nombre visible | Art. | Cant. | ID | Imagen | Origen |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | PlayStation 5 | un | 4 | `playstation-5` | `playstation-5.webp` | asset del Figma ⚠️ |
+| 1 | PlayStation 5 | un | 4 | `playstation-5` | `playstation-5.webp` | `PLAYSTATION.png` |
 | 2 | Nintendo Switch OLED | una | 4 | `nintendo-switch-oled` | `nintendo-switch-oled.webp` | `Copia de NINTENDO S.png` |
 | 3 | Kit volante + pedales | un | 2 | `kit-volante-pedales` | `kit-volante-pedales.webp` | `Copia de VOLANTE.png` |
 | 4 | Columpio de jardín | un | 3 | `columpio-jardin` | `columpio-jardin.webp` | `Copia de PARQUE.png` |
@@ -151,7 +151,7 @@ Ninguna cambia el producto.
 
 ## 4. Imágenes
 
-18 de los 19 premios tienen foto original en `recursos/premios`. Todas son PNG
+Los 19 premios tienen foto original en `recursos/premios`. Son PNG
 con fondo transparente y un halo cian ya incorporado, coherente con el resto de
 los assets del Figma; el producto ocupa alrededor del 70 % de un lienzo
 cuadrado en todas, así que los 19 pesan visualmente parecido en el carrusel.
@@ -161,13 +161,14 @@ Proceso aplicado: sin recortes ni reencuadres, sólo reducción a 900 px de lado
 
 ### Faltantes
 
-- **PlayStation 5 — no hay foto en `recursos/premios`.** Se usa el asset del
-  Figma (`playstation.webp`, 325 px), que es el producto correcto —PS5 con
-  lectora y DualSense— pero de menor resolución que el resto: en la pantalla
-  GANASTE se muestra a ~445 px y se nota algo blando. **Conviene pedir el
-  original en alta.**
 - **Aro de basketball**: la foto entregada es de 493 px, menor que las demás
-  (4167 px). Se ve correcta, pero es la segunda más baja del set.
+  (4167 px). Se ve correcta, pero es la más baja del set.
+
+> ⚠️ **PlayStation — a confirmar con el cliente.** La foto entregada
+> (`recursos/premios/PLAYSTATION.png`) es la **edición Digital**: el frente no
+> tiene ranura de disco. Las hojas `PREMIOS` y `CALENDARIO` del Excel describen
+> el premio como «PS5 **C/ DISCO**», y las bases finales como «PS5 Slim 1TB
+> **con lector**». La imagen y la descripción no coinciden.
 
 ### Duplicadas
 
