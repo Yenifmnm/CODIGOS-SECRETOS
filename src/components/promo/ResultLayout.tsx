@@ -153,11 +153,13 @@ export function ResultLayout({
       <Deco src={planetaVit2} x={1811} y={146} w={169} h={184} rotate={15.05} blur={5} opacity={0.8}
         float={{ amplitude: 6, duration: 7, delay: 0.9 }} />
 
-      {/* Superficie del planeta sobre la que se apoya el cofre. Es un círculo
-          plano que asoma por abajo a la derecha; su geometría sale de ajustar
-          una circunferencia al borde medido en los PNG del Figma (error máximo
-          0,7 px sobre 33 muestras). */}
-      <div className="result__planet abs" style={{ ...box({ x: 880, y: 793, w: 969, h: 969 }), zIndex: 1 }} />
+      {/* Superficie del planeta sobre la que se apoya el cofre.
+          Geometría exacta de la elipse del Figma: nodo 23:3092 en GANASTE y
+          23:3161 en PERDISTE, los dos [889, 794, 951, 911]. Antes era una
+          circunferencia de 969 ajustada por medición sobre los PNG, 58 px más
+          alta y 18 más ancha que el diseño; el PDF lo marca en las páginas 10
+          y 11 ("replicar el planeta y el tamaño como en la propuesta"). */}
+      <div className="result__planet abs" style={{ ...box({ x: 889, y: 794, w: 951, h: 911 }), zIndex: 1 }} />
 
       <Deco src={logoCodigos} x={299} y={202} w={329} h={245} zIndex={4}
         glow="0 0 2.4cqw #09eaff" float={{ amplitude: 6, duration: 5 }} />
@@ -210,7 +212,8 @@ export function ResultLayout({
       <CodeCounter
         className="abs"
         count={codeCount}
-        style={{ left: u(1160), top: u(946), zIndex: 7 }}
+        /* Nodo 64:111 / 64:117: la placa arranca en (1168, 940). */
+        style={{ left: u(1168), top: u(940), zIndex: 7 }}
       />
 
       <CloseButton to="/participar" style={{ left: u(1737), top: u(34) }} />
