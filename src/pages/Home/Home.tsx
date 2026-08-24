@@ -161,6 +161,11 @@ const SCENE_H = 360;
 function HomeMobile({ onStart }: { onStart: () => void }) {
   return (
     <div className="home-m" id="contenido">
+      {/* B3 asomando por la esquina superior derecha, desenfocado y tangente al
+          borde. Caja medida sobre `recursos/mobile/pantallas/landing.png`:
+          [313, 13, 91, 91] en el lienzo de 402. */}
+      <img src={planetaVit2} alt="" aria-hidden="true" className="home-m__b3" />
+
       <img src={logoCodigos} alt="Códigos Secretos 2026" className="home-m__logo" />
 
       <div className="mblock">

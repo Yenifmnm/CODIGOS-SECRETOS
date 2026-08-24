@@ -54,6 +54,22 @@
    RegisterMobile, todas en cqw del lienzo de 402.
    ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
+  /* B3 de `recursos/mobile/pantallas/Registro.png`: [315, 14, 87, 87].
+     Coordenadas propias de esta pantalla, no las del Home. */
+  .register-m__b3 {
+    position: absolute;
+    left: 78.358cqw;   /* 315 */
+    /* .register-m es contexto de posicionamiento y arranca bajo la barra
+       superior, asi que el 14 del lienzo se compensa con ese desplazamiento. */
+    top: -14.925cqw;   /* 14 - 60 */
+    width: 21.642cqw;  /* 87 */
+    height: auto;
+    filter: blur(1.244cqw);
+    opacity: 0.85;
+    z-index: 0;
+    pointer-events: none;
+  }
+
   /* -----------------------------------------------------------------------
      Composición mobile — Figma `recursos/mobile/pantallas/Registro.png`
      (lienzo 402x913). Todo se posiciona contra el pergamino, cuya caja de

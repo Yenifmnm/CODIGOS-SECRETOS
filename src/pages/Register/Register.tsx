@@ -369,6 +369,11 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
 
   return (
     <div className="register-m" id="contenido">
+      {/* B3 en la esquina superior derecha. Caja medida sobre
+          `recursos/mobile/pantallas/Registro.png`: [315, 14, 87, 87]. No se
+          copian las coordenadas del Home: cada pantalla usa su propio export. */}
+      <img src={planetaVit2} alt="" aria-hidden="true" className="register-m__b3" />
+
       <div className="register-m__sheet">
         <img src={pergamino1} alt="" aria-hidden="true" className="register-m__paper" />
 

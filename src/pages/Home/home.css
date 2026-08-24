@@ -16,6 +16,21 @@
   align-items: center;
 }
 
+/* B3: esquina superior derecha, tangente al borde y desenfocado, como en
+   `recursos/mobile/pantallas/landing.png` ([313, 13, 91, 91] sobre el lienzo de
+   402). Va al fondo: no debe tapar la barra ni el logo. */
+.home-m__b3 {
+  position: absolute;
+  left: 77.861cqw;   /* 313 */
+  top: 3.234cqw;     /* 13 */
+  width: 22.637cqw;  /* 91 */
+  height: auto;
+  filter: blur(1.244cqw);
+  opacity: 0.85;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .home-m__logo {
   width: 60.697cqw;   /* 244 */
   height: auto;
