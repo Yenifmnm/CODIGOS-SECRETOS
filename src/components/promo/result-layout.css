@@ -60,6 +60,10 @@
   /* El trazo se centra sobre el contorno del glifo y `paint-order` pinta el
      relleno encima, así que sólo se ve la mitad: para el grosor del Figma
      (~9 px) hay que pedir el doble. */
+  /* PENDIENTE 23:3163 — stroke visual pendiente de confirmación: la definición
+     estructurada del nodo expone fill y sombras, pero no un stroke. El contorno
+     se ve en el render del Figma, así que se conserva el actual sin tocarlo
+     hasta poder compararlo contra el screenshot del nodo. */
   -webkit-text-stroke: 0.94cqw var(--c-title-outline);
   paint-order: stroke fill;
   /* Mismas sombras que el nodo 23:3084, que el 23:3163 repite. */
