@@ -8,6 +8,20 @@
   font-display: swap;
 }
 
+/* Planeta oscuro del fondo: un círculo enorme del que sólo se ve el casquete
+   superior. Mismo recurso que `.result__planet` de las pantallas de resultado. */
+.codehelp__planet {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 8%,
+    rgba(17, 44, 120, 0.97) 0%,
+    rgba(8, 26, 88, 0.99) 12%,
+    #061c67 30%
+  );
+  box-shadow: 0 -0.4cqw 4cqw rgba(9, 234, 255, 0.22);
+  pointer-events: none;
+}
+
 .codehelp__halo {
   border-radius: 50%;
   background: radial-gradient(

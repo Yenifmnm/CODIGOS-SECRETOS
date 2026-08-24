@@ -88,7 +88,14 @@ export default function CodeHelp() {
       <Deco src={logoCodigos} x={129} y={312} w={669} h={499} zIndex={4}
         glow="0 0 3cqw #09eaff" float={{ amplitude: 8, duration: 5.4 }} />
 
-      <div className="codehelp__halo abs" style={{ ...box({ x: 686, y: 731, w: 1496, h: 1277 }), zIndex: 1 }} />
+      {/* Superficie oscura del planeta sobre la que se apoya el pack.
+          Está en la propuesta y faltaba en la web: el documento de ajustes lo
+          marca como "planeta oscurecido no se ve ahora en la web" (pág. 8).
+          La geometría sale de medir la curva sobre la captura de la propuesta:
+          el ápice cae en (1440, 786) del lienzo de diseño. */}
+      <div className="codehelp__planet abs" style={{ ...box({ x: -728, y: 786, w: 4336, h: 4336 }), zIndex: 1 }} />
+
+      <div className="codehelp__halo abs" style={{ ...box({ x: 686, y: 731, w: 1496, h: 1277 }), zIndex: 2 }} />
 
       <p className="t-display t-gold codehelp__title abs" style={{ left: u(1410), top: u(176), fontSize: u(60), width: u(558), zIndex: 6 }}>
         <span>Buscá el Código Secreto en</span>

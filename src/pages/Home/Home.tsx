@@ -4,7 +4,6 @@ import { MobileScene } from '../../components/layout/MobileStage';
 import { Deco } from '../../components/layout/Deco';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { PromoButton } from '../../components/buttons/PromoButton';
-import { TreasureChest } from '../../components/promo/TreasureChest';
 import { PurosolShip } from '../../components/promo/PurosolShip';
 import { box, centeredText } from '../../app/stage';
 import { mbox } from '../../app/mobileStage';
@@ -102,16 +101,11 @@ export default function Home() {
       />
 
       {/*
-        Cofre interactivo pedido por el PPT (lám. 29: "al poner el cursor en el
-        cofre puede abrirse y aparecer los premios"). El Figma actual no lo
-        ubica en el INICIO, así que se coloca en el espacio libre al pie del
-        cúmulo de premios. Es puramente visual: los premios que asoman salen de
-        MOCK_CHEST_PREVIEW y no representan ningún sorteo.
+        SIN COFRE. Lo pedía el PPT (lám. 29), pero el documento de ajustes del
+        cliente lo saca: "se ve el cofre en la pag de inicio, pero en la
+        propuesta de diseño no estaba incluido" (pág. 5). El componente
+        `TreasureChest` sigue en el proyecto: lo usan /ganaste y /perdiste.
       */}
-      <TreasureChest
-        mode="interactive"
-        style={{ ...box({ x: 395, y: 770, w: 255, h: 255 }), zIndex: 6 }}
-      />
 
       {/* --- Bloque central --- */}
       <Deco
