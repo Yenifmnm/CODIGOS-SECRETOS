@@ -43,7 +43,10 @@
 /* GANASTE: dorado con resplandor blanco. */
 .result__title--gold {
   color: var(--c-gold);
-  text-shadow: 0 0 0.33cqw #fff, 0 0 2.3cqw #fff, 0 4px 10px var(--c-deep-blue);
+  /* Nodo 23:3084: 0 0 6.288px, 0 0 44.016px y 0 4px 10px #212F5C, pasados a
+     cqw sobre el lienzo de 1920 (1cqw = 19.2 px). */
+  text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
+    0 0.208cqw 0.521cqw var(--c-deep-blue);
 }
 
 /* PERDISTE y errores de código: relleno ROJO con contorno DORADO por fuera.
@@ -59,7 +62,9 @@
      (~9 px) hay que pedir el doble. */
   -webkit-text-stroke: 0.94cqw var(--c-title-outline);
   paint-order: stroke fill;
-  text-shadow: 0 0 0.5cqw rgba(255, 255, 255, 0.7), 0 4px 10px var(--c-deep-blue);
+  /* Mismas sombras que el nodo 23:3084, que el 23:3163 repite. */
+  text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
+    0 0.208cqw 0.521cqw var(--c-deep-blue);
 }
 
 @keyframes result-title-in {

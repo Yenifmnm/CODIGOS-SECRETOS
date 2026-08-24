@@ -24,6 +24,25 @@
   padding: 2.969cqw 6.1cqw 0;
 }
 
+/* Titulares del nodo 70:403 y 70:402. Fill, cuerpo y sombras exactos del
+   Figma; 1cqw = 19.2 px del lienzo de 1920, así que las sombras escalan con la
+   composición en vez de quedar fijas en px. */
+.welcome__hi {
+  color: #ffffff;
+  text-shadow: 0 0 2.156cqw #ffffff, 0 0 4.313cqw #ffffff, 0 0 13.021cqw #ffffff,
+    0 0 13.021cqw #ffffff, 0 0.208cqw 0.208cqw rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.welcome__pirates {
+  color: #fcc102;
+  text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
+    0 0.208cqw 0.208cqw rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  text-align: center;
+}
+
 .welcome__title {
   margin: 0;
   font-family: var(--font-display);
@@ -42,11 +61,22 @@
 }
 
 .welcome__fields {
-  width: 75.9%; /* 697 / 918 */
+  /* Nodos 72:447 y 72:449: 697 px de ancho. El 75.9% anterior era relativo a
+     la caja de contenido del formulario —918 menos el padding— y daba 519. */
+  width: 36.302cqw; /* 697 */
   display: flex;
   flex-direction: column;
   gap: 0.677cqw; /* 687-599-75 = 13px */
-  margin-top: 1.77cqw;
+  margin-top: 1.302cqw; /* la cápsula arranca en y=599 */
+}
+
+/* Los dos íconos del formulario NO miden lo mismo en el Figma: la cédula
+   (72:455) es 52x35 y el código secreto (72:451) es 30x40 —más angosto y más
+   alto—. El contenedor compartido de `.pfield__icon` los igualaba en 56x42,
+   que es lo que el PDF marca como "ícono de código secreto ajustar". */
+.welcome__fields .pfield:nth-child(2) .pfield__icon {
+  width: 1.563cqw;  /* 30 */
+  height: 2.083cqw; /* 40 */
 }
 
 .welcome__error {
@@ -208,7 +238,16 @@
     z-index: 2;
   }
 
-  .welcome__error {
+  /* Los dos íconos del formulario NO miden lo mismo en el Figma: la cédula
+   (72:455) es 52x35 y el código secreto (72:451) es 30x40 —más angosto y más
+   alto—. El contenedor compartido de `.pfield__icon` los igualaba en 56x42,
+   que es lo que el PDF marca como "ícono de código secreto ajustar". */
+.welcome__fields .pfield:nth-child(2) .pfield__icon {
+  width: 1.563cqw;  /* 30 */
+  height: 2.083cqw; /* 40 */
+}
+
+.welcome__error {
     margin: 1.244cqw 0 0;
     font-size: 3.234cqw;
   }

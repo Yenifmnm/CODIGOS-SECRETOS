@@ -114,10 +114,10 @@ export default function Welcome() {
         float={{ amplitude: 6, duration: 5 }} />
 
       {/* --- Titulares --- */}
-      <p className="t-display t-white-glow abs" style={{ ...centeredText(947, 201, 60), zIndex: 5 }}>
+      <p className="t-display welcome__hi abs" style={{ ...centeredText(947, 201, 60), zIndex: 5 }}>
         ¡Bienvenidos a bordo
       </p>
-      <p className="t-display t-gold abs" style={{ ...centeredText(948, 282, 100), zIndex: 5 }}>
+      <p className="t-display welcome__pirates abs" style={{ ...centeredText(948, 282, 100), zIndex: 5 }}>
         Pequeños piratas!
       </p>
 

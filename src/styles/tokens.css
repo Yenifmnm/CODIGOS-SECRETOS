@@ -53,9 +53,10 @@
   --c-cyan: #09eaff;
   --c-cyan-50: rgba(9, 234, 255, 0.5);
   --c-gold: #fcc102;
-  /* Titular de PERDISTE y de los errores de código: relleno rojo con contorno
-     dorado. Muestreados del Figma, no elegidos a ojo. */
-  --c-title-red: #e84115;
+  /* Titular de PERDISTE y de los errores de código. El fill sale del nodo
+     23:3163 del Figma: #e63303. Antes estaba en #e84115, muestreado de la
+     captura del PDF, que trae la compresión encima. */
+  --c-title-red: #e63303;
   --c-title-outline: #fcc411;
   --c-gold-glow: #eac748;
   --c-brown: #883307;
