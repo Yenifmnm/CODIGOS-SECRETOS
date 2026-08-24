@@ -69,7 +69,12 @@ export function SiteMenu({ compact = false }: SiteMenuProps) {
     <nav
       ref={rootRef}
       className={`site-menu${open ? ' site-menu--open' : ''}${compact ? ' site-menu--compact' : ''}`}
-      style={{ left: u(90), top: u(34), height: u(83) }}
+      /* Sólo el origen va inline; el tamaño lo resuelve el CSS, que distingue
+         los dos nodos del Figma: plegada 361x83 en (90,34) — nodo 82:129 — y
+         desplegada 1684x109 en (105,34) — nodo 13:51 —. Con el alto inline la
+         barra se quedaba en 83 px también abierta y los botones quedaban más
+         chicos que en la propuesta. */
+      style={{ left: u(90), top: u(34) }}
       aria-label="Navegación principal"
     >
       <div className="site-menu__bar">

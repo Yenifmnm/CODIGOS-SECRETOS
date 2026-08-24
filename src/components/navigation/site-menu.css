@@ -2,12 +2,20 @@
 .site-menu {
   position: absolute;
   z-index: 40;
-  width: 18.802cqw; /* 361 / 19.2 */
-  transition: width 420ms var(--ease-soft);
+  width: 18.802cqw;  /* 361 / 19.2 */
+  height: 4.323cqw;  /* 83 */
+  transition: width 420ms var(--ease-soft), height 420ms var(--ease-soft),
+    margin-left 420ms var(--ease-soft);
 }
 
+/* Desplegada el Figma la dibuja más alta y 15 px más a la derecha
+   (nodo 13:51: 1684x109 en 105,34 contra 361x83 en 90,34 del nodo 82:129).
+   El alto nunca se había implementado: la barra tomaba los 83 px del logo y
+   por eso los botones se veían más chicos que en la propuesta. */
 .site-menu--open {
-  width: 87.708cqw; /* 1684 / 19.2 */
+  width: 87.708cqw;    /* 1684 / 19.2 */
+  height: 5.677cqw;    /* 109 */
+  margin-left: 0.781cqw; /* 15 */
 }
 
 .site-menu__bar {
