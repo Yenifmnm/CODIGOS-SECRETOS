@@ -71,9 +71,12 @@
   }
 
   /* -----------------------------------------------------------------------
-     Composición mobile — Figma `recursos/mobile/pantallas/Registro.png`
-     (lienzo 402x913). Todo se posiciona contra el pergamino, cuya caja de
-     diseño es x 38..354, y 205..740 → 316x535. Los porcentajes de abajo son
+     Composición mobile — export `recursos/mobile/pantallas/Registro.png`.
+     El PNG mide 402x913 pero sus primeros 62 px son la barra de estado de
+     iOS. La caja del pergamino se habia tomado sobre el PNG completo
+     —y 205..740— asi que la composicion entera caia 62 px mas abajo de lo que
+     manda el diseno. Contra el area util el papel visible mide 328x517 y
+     arranca en (31,163), de donde sale la caja de abajo. Los porcentajes de abajo son
      de esa caja, así que la composición escala entera con el ancho del
      teléfono sin perder las proporciones del diseño.
      ----------------------------------------------------------------------- */
@@ -84,13 +87,9 @@
 
   .register-m__sheet {
     position: relative;
-    width: 78.607cqw;          /* 316 */
+    width: 82.338cqw;          /* 331: el papel visible mide 328 en el export */
     aspect-ratio: 316 / 535;
-    margin: 32.587cqw 0 0 9.453cqw;  /* caja de diseño: x 38, y 205 */
-    /* Contexto de apilado propio: sin esto el dino con z-index negativo se
-       iría por detrás del fondo de la página en vez de quedar detrás del
-       papel. */
-    isolation: isolate;
+    margin: 16.915cqw 0 0 7.463cqw;  /* caja de diseño: x 30, y 142 */
   }
 
   .register-m__paper {
@@ -116,22 +115,18 @@
   /* Dino asomando arriba a la derecha, sangrando por el borde de la pantalla. */
   /* `.floating` trae height:100%, que gana sobre aspect-ratio y estiraba la
      caja hasta el alto del pergamino: el dino terminaba tapando los campos. */
-  /* El dino asoma POR DETRÁS del pergamino: en Registro.png sólo se le ven la
-     cabeza y el cuello por encima del borde superior, y un poco de lomo por
-     fuera del borde derecho. El resto del cuerpo queda tapado por el papel.
-     Antes iba con z-index 2, o sea por delante, y se veía el personaje entero
-     parado sobre el pergamino. */
+  /* El dino va POR DELANTE del pergamino: en Registro.png se le ve la chaqueta
+     y una manito apoyadas sobre el papel.
+     Escala y posicion medidas por el ancho del sombrero, que es negro y no se
+     confunde con nada: en el export mide [254,40,101,95] y aca medía
+     [267,52,76,39], o sea un 25% mas chico, 13 px a la derecha y 12 mas abajo. */
   .register-m__sheet .register-m__dino {
-    /* Medido contra Registro.png con una plantilla de la cabeza, que es la
-       parte que el pergamino no tapa: en el export cae en [266,40,133,63] y
-       acá caía en [254,110,145,69]. O sea 70 px más abajo, 12 a la izquierda
-       y un 8% más grande. */
-    left: 70.98%;
-    top: -32.56%;
-    width: 44.11%;             /* 139 px del diseño */
+    left: 65.56%;
+    top: -23.21%;
+    width: 55.89%;             /* 185 px del diseño */
     height: auto;
     aspect-ratio: 631 / 1003;
-    z-index: -1;
+    z-index: 2;
   }
 
   /* Nena abajo a la izquierda: sólo la cabeza y los hombros, cortada por los
