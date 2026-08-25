@@ -66,7 +66,23 @@
   margin: 0;
 }
 
-/* Composición mobile — Figma "donde esta el codigo.png" (402x913). */
+/* -------------------------------------------------------------------------
+   Composición mobile — export "donde esta el codigo.png" (402x913).
+
+   Las cotas de abajo NO se comparan contra los 913 px del PNG: sus primeros
+   64 px son la barra de estado de iOS dibujada dentro del mock. El área útil
+   es (0,64)-(402,913), 849 px de alto, y contra eso está medido todo. De ahí
+   salen además los topes `svh`: se habían calibrado sobre 913, pero en un
+   teléfono `svh` ya excluye esa barra, así que achicaban logo, título y nota
+   un 7,5% de más.
+
+   Desviación deliberada: en el export la columna centrada (logo, título, pack)
+   está 11-16 px a la derecha del centro del marco, mientras que todo lo
+   anclado a un borde —portal, nave, X— cae en su lugar. Es un corrimiento del
+   grupo de contenido en el archivo de diseño, no una intención: replicarlo
+   obligaría a desplazar cada elemento centrado y rompería el centrado en
+   cualquier otro ancho. Se mantiene el centrado real.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   /* Sin `position` a propósito: el botón de cerrar se ubica contra el lienzo
      mobile, alineado con la barra superior. Si esta caja se vuelve el contexto
@@ -106,37 +122,40 @@
   .codehelp-m__portal {
     position: absolute;
     left: 51.493cqw;       /* 207 */
-    top: -0.498cqw;
-    width: 53.234cqw;      /* 214: se ve el arco y sangra por el borde derecho */
+    top: 10.945cqw;        /* 44: en el export el arco arranca a 82 del area util */
+    width: 62.9cqw;        /* 253: se ve el arco y sangra por el borde derecho */
     height: auto;
     opacity: 0.95;
     z-index: 0;
     pointer-events: none;
   }
 
+  /* 10.945cqw son los 44 px del lienzo de 402, pero por debajo de ese ancho la
+     medida cae bajo el mínimo táctil (41 px en un iPhone de 375). El `max()`
+     conserva la proporción del diseño donde alcanza y planta el piso donde no. */
   .codehelp-m__close {
     position: absolute !important;
     right: 6.219cqw;
     top: 6.219cqw;
-    width: 10.945cqw;
-    height: 10.945cqw;
+    width: max(var(--tap-min), 10.945cqw);
+    height: max(var(--tap-min), 10.945cqw);
     z-index: 41;
   }
 
   /* Igual que el pack: la medida del Figma mientras haya alto, y proporcional
      al alto real cuando el teléfono es más bajo que el lienzo de 913. */
   .codehelp-m__logo {
-    width: min(58.209cqw, 25.6svh);   /* 234 en el lienzo del Figma */
+    width: min(63.93cqw, 30.27svh);   /* 257 en el area util del Figma */
     height: auto;
     margin-top: 2.985cqw;
     filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
   }
 
   .codehelp-m__title {
-    margin: 2.488cqw 0 0;
+    margin: -5.721cqw 0 0;
     max-width: 88cqw;
     font-family: var(--font-display);
-    font-size: min(7.463cqw, 3.285svh);   /* 30 en el lienzo del Figma */
+    font-size: min(7.87cqw, 3.72svh);     /* 31.6 en el area util del Figma */
     line-height: 1.12;
     color: var(--c-gold);
     text-shadow: var(--glow-gold-text);
@@ -144,10 +163,14 @@
   }
 
   /* El pack ocupa el centro; la nave navega a su izquierda, más chica. */
+  /* Margen negativo a propósito: el pack (jugos.webp) trae un 25,6% de alto
+     transparente arriba, así que su caja llega mucho más alto que el producto
+     visible. El export apoya el producto a 385 del área útil; sin este tirón
+     hacia arriba la caja lo dejaría 40 px más abajo. */
   .codehelp-m__scene {
     position: relative;
     width: 100%;
-    margin-top: 1.244cqw;
+    margin-top: -13.433cqw;
     display: flex;
     justify-content: center;
     z-index: 1;
@@ -166,13 +189,16 @@
     pointer-events: none;
   }
 
-  /* La nave entra completa: en el Figma se ve entera contra el cielo, no
-     sangrando por el borde izquierdo. */
+  /* La nave SÍ sangra por el borde izquierdo: en el export mobile el casco
+     entra cortado y sólo se ve la proa con la estela. Medido sobre el área
+     útil del export, su contenido visible es 95x63 en (-46, 416); las cotas de
+     abajo son esa caja convertida a la del elemento con el relleno
+     transparente de barco.webp (85,2% de ancho útil, 4,7% de margen). */
   .codehelp-m__ship {
     position: absolute;
-    left: 2.985cqw;        /* 12 */
-    top: 8.706cqw;         /* 35: navega a media altura del pack, como el Figma */
-    width: 33.582cqw;      /* 135 */
+    left: -12.74cqw;       /* la nave sangra por el borde izquierdo */
+    top: 34.98cqw;
+    width: 27.612cqw;      /* 111 */
     aspect-ratio: 1016 / 696;
     z-index: 2;
   }
@@ -184,20 +210,20 @@
      alto suficiente y la achica cuando no. `svh` y no `dvh` a propósito: así no
      cambia de tamaño cuando el navegador esconde su barra al scrollear. */
   .codehelp-m .telescope {
-    width: min(64.677cqw, 28.5svh);   /* 260 en el lienzo del Figma */
+    width: min(67.4cqw, 31.9svh);     /* 271 en el area util del Figma */
   }
 
   .codehelp-m__note {
     position: relative;
     z-index: 2;
-    width: 78.607cqw;      /* 316: corta tras "GANADORES", como el Figma */
+    width: 85.075cqw;      /* 342: corta tras "GANADORES", como el export */
     margin-top: 3.483cqw;
-    padding: 2.985cqw 3.98cqw;
+    padding: 1.741cqw 3.98cqw;
     border-radius: 500px;
     background: var(--c-cyan-50);
     backdrop-filter: blur(2px);
     font-family: var(--font-display);
-    font-size: min(3.234cqw, 1.424svh);   /* 13 en el lienzo del Figma */
+    font-size: min(3.483cqw, 1.649svh);   /* 14 en el area util del Figma */
     line-height: 1.35;
     color: #fff;
     text-align: center;

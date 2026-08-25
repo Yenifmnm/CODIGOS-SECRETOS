@@ -167,15 +167,24 @@ interface WelcomeMobileProps {
 /* --------------------------------------------------------------------------
    Composición mobile — Figma "CI.png" (402x913).
 
-   Medidas del mockup, ya descontada la barra de estado (54 px):
-     logo         x  88..312   y 101..246
-     "¡Bienvenidos a bordo"    y 284   28 px, blanco
-     "Pequeños piratas!"       y 318   38 px, dorado
-     pergamino    x  30..372   y 371   342x230  (misma proporción que el desktop)
+   Medidas del export, descontada la barra de estado de iOS. Esa barra ocupa
+   los primeros 64 px del PNG —no 54, como se había asumido en la primera
+   pasada—, así que el área útil es (0,64)-(402,913) y todo lo de abajo está
+   medido contra esos 849 px de alto:
+     logo         246x172 de contenido visible, arriba en y 87
+     "¡Bienvenidos a bordo"    271x28 en y 272, blanco
+     "Pequeños piratas!"       312x47 en y 307, dorado
+     pergamino    cuerpo de 328x265 arrancando en (36, 322)
+     nave         312x206 de contenido visible en (218, 602), sangra a la derecha
+     portal       arco de 142x199 desde (0, 650), sangra por el borde izquierdo
      campos       ancho 276, alto 31, cápsula con ícono a la izquierda
-     escena final portal a la izquierda y nave a la derecha, ambos sangrando
+
+   PENDIENTE: el export trae además una nebulosa magenta arriba a la izquierda,
+   un sol amarillo arriba a la derecha y un cometa verde a media altura. No hay
+   assets para eso en el repo (src/assets/effects/ sólo tiene destello y glow),
+   así que el fondo mobile queda sin esa capa.
    -------------------------------------------------------------------------- */
-const WELCOME_SCENE_H = 205;
+const WELCOME_SCENE_H = 230;
 
 function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
   return (
@@ -215,13 +224,13 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
 
       <MobileScene height={WELCOME_SCENE_H} className="welcome-m__scene">
         <FloatingLayer amplitude={7} duration={6.2} delay={1.2} rotate={1}
-          className="mabs" style={mbox({ x: -30, y: 28, w: 168, h: 137, sceneH: WELCOME_SCENE_H })}>
+          className="mabs" style={mbox({ x: -95, y: 17, w: 296, h: 242, sceneH: WELCOME_SCENE_H })}>
           <img src={portal} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <PurosolShip
           className="mabs welcome-m__ship"
-          style={mbox({ x: 206, y: 0, w: 262, h: 179, sceneH: WELCOME_SCENE_H })}
+          style={mbox({ x: 201, y: -31, w: 366, h: 250, sceneH: WELCOME_SCENE_H })}
         />
       </MobileScene>
     </div>

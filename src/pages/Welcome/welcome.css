@@ -122,16 +122,18 @@
   }
 
   .welcome-m__logo {
-    width: 55.72cqw;            /* 224 */
+    width: min(63.93cqw, 30.27svh);  /* 257 en el area util del export */
     height: auto;
     margin-top: 2.488cqw;
     filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
   }
 
+  /* Negativo a propósito: codigos-secretos.webp deja ~21 px transparentes bajo
+     el logo, así que su caja termina mucho más abajo que el dibujo. */
   .welcome-m__hi {
-    margin: 2.985cqw 0 0;
+    margin: -1.493cqw 0 0;
     font-family: var(--font-display);
-    font-size: 6.965cqw;        /* 28 */
+    font-size: min(8.458cqw, 4.005svh);   /* 34 */
     line-height: 1.1;
     color: var(--c-white);
     text-shadow: 0 0 3.5cqw #fff, 0 0 8cqw rgba(255, 255, 255, 0.65),
@@ -139,20 +141,28 @@
   }
 
   .welcome-m__title {
-    margin: 0.995cqw 0 0;
+    margin: -0.995cqw 0 0;
     font-family: var(--font-display);
-    font-size: 9.453cqw;        /* 38 */
+    font-size: min(11.343cqw, 5.371svh);  /* 45.6 */
     line-height: 1.05;
     color: var(--c-gold);
     text-shadow: var(--glow-gold-text);
   }
 
-  /* El pergamino conserva la proporción del desktop (918x616 ≈ 342x230). */
+  /* El pergamino conserva la proporción del desktop (918x616 ≈ 342x230).
+     Los `min(...svh)` de este bloque están calibrados contra los 849 px del
+     área útil del export —no contra los 913 del PNG, que incluyen la barra de
+     estado de iOS—. Sin ellos la pantalla obliga a scrollear en teléfonos más
+     bajos que el lienzo de diseño. */
   .welcome-m__scroll {
     position: relative;
-    width: 85.075cqw;           /* 342 */
+    /* Sin tope svh a propósito: el pergamino es una imagen de proporción fija
+       con el formulario en HTML encima. Si la imagen se achica por alto pero la
+       tipografía sigue atada al ancho, el enlace de ayuda se sale por el
+       rodillo inferior. Escala sólo con el ancho. */
+    width: 91.542cqw;                     /* 368 */
     aspect-ratio: 342 / 230;
-    margin-top: 5.224cqw;
+    margin-top: 1.741cqw;
   }
 
   .welcome-m__scroll-img {
