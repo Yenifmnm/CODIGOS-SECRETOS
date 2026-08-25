@@ -13,6 +13,8 @@ export default function CodeUsed() {
       pageTitle="Código fuera de órbita"
       title="¡Código fuera de órbita!"
       titleSize={86}
+      mobileTitleSize={34}
+      mobileTitleShift={15}
       titleTone="outline"
       titleX={499}
       titleY={484}

@@ -181,9 +181,11 @@
   }
 
   .result-m__title {
+    position: relative;
+    top: var(--result-m-title-shift, 0);
     margin: -1.493cqw 0 0;
     font-family: var(--font-display);
-    font-size: 17.164cqw;   /* 69 */
+    font-size: var(--result-m-title, 17.164cqw);   /* 69 por defecto */
     line-height: 1.05;
     text-align: center;
   }
@@ -195,7 +197,7 @@
 
   /* PERDISTE y los dos errores: relleno dorado con contorno rojo. */
   .result-m__title--outline {
-    font-size: 12.629cqw;   /* 50.8 */
+    font-size: var(--result-m-title, 12.629cqw);   /* 50.8 por defecto */
     color: var(--c-title-red);
     -webkit-text-stroke: 0.6cqw var(--c-title-outline);
     paint-order: stroke fill;
@@ -207,11 +209,15 @@
     max-width: 82cqw;
     font-family: var(--font-display);
     font-size: 5.303cqw;    /* 21.3 */
-    line-height: 1.25;
+    line-height: 1.18;
     color: var(--c-white);
     text-shadow: 0 0 3cqw #fff, 0 0 7cqw rgba(255, 255, 255, 0.6),
       0 2px 4px rgba(0, 0, 0, 0.35);
     text-align: center;
+  }
+
+  .result-m__msg-line {
+    display: block;
   }
 
   .result-m__cta {
@@ -258,6 +264,17 @@
     pointer-events: none;
   }
 
+  /* Sobre el color del planeta en GANASTE.
+     Medido en los exports: en perdiste.png la superficie da RGB [6,28,103] y
+     en ganaste.png [68,75,94] —el nuestro esta en [15,36,99]—. La diferencia
+     NO es otro planeta: un asset distinto habria cambiado el tono, y aca lo
+     que pasa es que suben el rojo (+62) y el verde (+47) mientras el azul baja
+     apenas (-9). Esa firma es la de una luz calida cayendo sobre la misma
+     superficie: el cofre abierto, que en GANASTE ilumina toda la zona.
+     No se cambia el color del disco, que seria corregir el sintoma. El derrame
+     del cofre ya existe en la escena (effects/glow.webp); ampliarlo hasta que
+     tina el planeta requiere una cota que la propuesta no da, asi que queda
+     como esta y documentado. */
   .result-m__planet-disc {
     position: absolute;
     left: 50%;

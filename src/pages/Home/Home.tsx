@@ -161,9 +161,10 @@ const SCENE_H = 360;
 function HomeMobile({ onStart }: { onStart: () => void }) {
   return (
     <div className="home-m" id="contenido">
-      {/* B3 asomando por la esquina superior derecha, desenfocado y tangente al
-          borde. Caja medida sobre `recursos/mobile/pantallas/landing.png`:
-          [313, 13, 91, 91] en el lienzo de 402. */}
+      {/* B3 asomando por la esquina superior derecha, desenfocado y CORTADO por
+          el borde. Caja medida sobre `recursos/mobile/pantallas/landing.png`:
+          [313, 13, 91, 91], pero sobre el PNG completo; descontada la barra de
+          estado de iOS queda en -49 del area util. */}
       <img src={planetaVit2} alt="" aria-hidden="true" className="home-m__b3" />
 
       <img src={logoCodigos} alt="Códigos Secretos 2026" className="home-m__logo" />
@@ -190,17 +191,17 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         />
 
         <FloatingLayer amplitude={6} duration={6.8} delay={0.9} rotate={1.2}
-          className="mabs" style={mbox({ x: -45, y: 40, w: 248, h: 251, sceneH: SCENE_H })}>
+          className="mabs" style={mbox({ x: -84, y: 28, w: 248, h: 251, sceneH: SCENE_H })}>
           <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={9} duration={4.2} delay={0.6} rotate={-2}
-          className="mabs" style={mbox({ x: 55, y: 178, w: 100, h: 97, sceneH: SCENE_H })}>
+          className="mabs" style={mbox({ x: -10, y: 109, w: 119, h: 115, sceneH: SCENE_H })}>
           <img src={playstation} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={8} duration={5.4} delay={1.4} drift={4} rotate={2}
-          className="mabs" style={mbox({ x: 113, y: 245, w: 93, h: 120, sceneH: SCENE_H })}>
+          className="mabs" style={mbox({ x: 101, y: 245, w: 93, h: 120, sceneH: SCENE_H })}>
           <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
@@ -212,7 +213,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         <PurosolShip
           variant="enter"
           className="mabs home-m__ship"
-          style={mbox({ x: 225, y: 42, w: 290, h: 199, sceneH: SCENE_H })}
+          style={mbox({ x: 195, y: 18, w: 415, h: 285, sceneH: SCENE_H })}
         />
       </MobileScene>
     </div>

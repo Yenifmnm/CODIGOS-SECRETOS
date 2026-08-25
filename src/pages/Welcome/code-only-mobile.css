@@ -1,0 +1,210 @@
+/* -------------------------------------------------------------------------
+   CARGA DE CÓDIGO CON EL PARTICIPANTE YA IDENTIFICADO
+   Columna central de la página 15 del PDF de ajustes.
+
+   Referencia: esa columna, aislada del PDF a 600 dpi y normalizada. Su
+   relación de aspecto (0,4685) equivale a 402x858, es decir el área útil sin
+   la barra de estado de iOS, así que sus cotas son coordenadas web directas:
+
+     menú (hamburguesa)   [126,  43,  26,  25]
+     logo                 [ 97, 136, 208, 146]
+     título               [ 57, 308, 297,  48]
+     cápsula de código    [ 45, 369, 312,  74]
+     botón                [ 95, 462, 221,  36]
+     enlace de ayuda      [177, 523, 193,  40]
+     contador (placa)     [ 87, 620, 231, 100]
+     «Códigos cargados»   [ 94, 743, 211,  32]
+     nave sup. der.       [300,   0, 102, 130]
+     Nintendo izq.        [  0, 231,  49,  38]
+     auriculares der.     [363, 446,  26,  59]
+     PlayStation izq.     [ 13, 581,  43,  64]
+     planeta inf. izq.    [  0, 778,  71,  80]
+   ------------------------------------------------------------------------- */
+
+.codeonly-m {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 4.975cqw;
+}
+
+.codeonly-m__logo {
+  width: 54.478cqw;      /* 219: 208 de logo visible */
+  height: auto;
+  margin-top: 15.423cqw; /* el logo arranca en y=136 */
+  filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
+}
+
+.codeonly-m__title {
+  margin: 1.244cqw 0 0;
+  font-family: var(--font-display);
+  font-size: 10.945cqw;  /* 44 */
+  line-height: 1.1;
+  font-weight: 400;
+  color: var(--c-gold);
+  text-shadow: var(--glow-gold-text);
+  text-align: center;
+}
+
+.codeonly-m__form {
+  width: 77.612cqw;      /* 312: el ancho de la cápsula */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.985cqw;
+}
+
+.codeonly-m__field {
+  position: relative;
+  width: 100%;
+  height: 18.408cqw;     /* 74 */
+}
+
+.codeonly-m__field-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.codeonly-m__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 8cqw;
+  background: none;
+  border: 0;
+  font-family: var(--font-display);
+  /* Nunca por debajo de 16 px: Safari iOS hace zoom al enfocar y descoloca
+     toda la composición. */
+  font-size: max(var(--input-min-fs), 6.965cqw);   /* 28 */
+  color: var(--c-brown-dark);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.codeonly-m__input::placeholder {
+  color: rgba(88, 31, 9, 0.42);
+}
+
+.codeonly-m__input:focus-visible {
+  outline: 0.5cqw solid var(--c-cyan);
+  outline-offset: 0.5cqw;
+  border-radius: 2cqw;
+}
+
+.codeonly-m__error {
+  margin: 1.244cqw 0 0;
+  font-family: var(--font-display);
+  font-size: 3.234cqw;
+  color: #ffd7cd;
+  text-align: center;
+}
+
+/* La cinta del PDF es mucho mas chata que la altura natural de la placa. Se
+   la achata hasta 44 px, que es el piso tactil: por debajo de eso no baja
+   aunque el diseno dibuje 38. */
+.codeonly-m__cta {
+  width: 54.975cqw;      /* 221 */
+  height: var(--tap-min);
+  margin-top: 4.478cqw;
+}
+
+.codeonly-m__cta > * {
+  width: 100%;
+  height: 100%;
+  min-height: var(--tap-min);
+}
+
+.codeonly-m__help {
+  position: relative;
+  display: inline-block;
+  margin-top: 3.483cqw;
+  font-family: var(--font-display);
+  font-size: 3.483cqw;   /* 14 */
+  color: #b9c6ff;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+/* El área táctil del enlace no baja de 44 px sin agrandar el texto. */
+.codeonly-m__help::after {
+  content: '';
+  position: absolute;
+  inset: -14px -12px;
+}
+
+/* El contador de esta pantalla es VERTICAL: la placa arriba y el rótulo
+   debajo, al contrario que en las pantallas de resultado. */
+.codeonly-m__counter {
+  flex-direction: column;
+  align-items: center;
+  gap: 5.721cqw;         /* 743 - 720 = 23 */
+  margin-top: 21.891cqw; /* la placa arranca en y=620 */
+}
+
+.codeonly-m__counter .code-counter__plate {
+  width: 57.463cqw;      /* 231 */
+  height: 24.876cqw;     /* 100 */
+}
+
+.codeonly-m__counter .code-counter__value {
+  font-size: 11.443cqw;  /* 46 */
+  gap: 1.99cqw;
+}
+
+.codeonly-m__counter .code-counter__label {
+  max-width: none;
+  margin-top: 0;
+  font-size: 7.463cqw;   /* 30: el rótulo mide 211x32 */
+  color: var(--c-gold);
+  white-space: nowrap;
+}
+
+/* --- Decoraciones. Todas sangran por su borde, como en la referencia. --- */
+.codeonly-m__ship,
+.codeonly-m__nintendo,
+.codeonly-m__auris,
+.codeonly-m__ps,
+.codeonly-m__planeta {
+  position: absolute;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.codeonly-m__ship {
+  left: 74.627cqw;       /* 300 */
+  top: -8.955cqw;
+  width: 30.348cqw;      /* 122: sangra por arriba y por la derecha */
+  transform: scaleX(-1);
+}
+
+.codeonly-m__nintendo {
+  left: -3.483cqw;
+  top: 57.463cqw;        /* 231 */
+  width: 15.174cqw;      /* 61 */
+}
+
+.codeonly-m__auris {
+  left: 89.303cqw;       /* 359 */
+  top: 110.945cqw;       /* 446 */
+  width: 11.94cqw;       /* 48 */
+}
+
+.codeonly-m__ps {
+  left: 2.488cqw;        /* 10 */
+  top: 144.527cqw;       /* 581 */
+  width: 13.184cqw;      /* 53 */
+}
+
+.codeonly-m__planeta {
+  left: -7.463cqw;
+  top: 193.532cqw;       /* 778 */
+  width: 22.388cqw;      /* 90 */
+  opacity: 0.9;
+}

@@ -22,7 +22,11 @@
 .home-m__b3 {
   position: absolute;
   left: 77.861cqw;   /* 313 */
-  top: 3.234cqw;     /* 13 */
+  /* La caja [313, 13] se habia medido sobre landing.png completo, y sus
+     primeros 62 px son la barra de estado de iOS. Contra el area util el
+     planeta arranca en -49: en el export asoma CORTADO por el borde superior,
+     no entero por debajo de el. */
+  top: -12.189cqw;   /* -49 */
   width: 22.637cqw;  /* 91 */
   height: auto;
   filter: blur(1.244cqw);

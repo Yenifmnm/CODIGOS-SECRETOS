@@ -6,6 +6,8 @@ import { PromoButton } from '../../components/buttons/PromoButton';
 import { PurosolShip } from '../../components/promo/PurosolShip';
 import { IconCode, IconId, ParchmentField } from '../../components/forms/ParchmentField';
 import { useCodeFlow } from '../../app/useCodeFlow';
+import { useSession } from '../../app/SessionContext';
+import { CodeOnlyMobile } from './CodeOnlyMobile';
 import { MobileScene } from '../../components/layout/MobileStage';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { box, centeredText, u } from '../../app/stage';
@@ -38,6 +40,11 @@ function validate(cedula: string, code: string): FieldErrors {
 /** BIENVENIDOS / carga de código — Figma 70:396. */
 export default function Welcome() {
   const location = useLocation();
+  /* Si la persona ya está identificada —se registró recién o su cédula ya fue
+     reconocida— la composición mobile pasa al estado de la página 15 del PDF:
+     sólo el Código Secreto, más el contador de códigos cargados. El flujo de
+     primera vez, que pide cédula y código, no cambia. */
+  const { participant } = useSession();
   // Al volver de REGISTRO se conserva el código que el usuario venía cargando.
   const prefill = (location.state ?? {}) as { cedula?: string; code?: string };
 
@@ -48,10 +55,13 @@ export default function Welcome() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const next = validate(cedula, code);
+    /* En el estado posterior a la identificación no hay campo de cédula en
+       pantalla: la que vale es la de la sesión. */
+    const ci = participant?.cedula ?? cedula;
+    const next = validate(ci, code);
     setErrors(next);
     if (Object.keys(next).length > 0) return;
-    void submit(cedula.trim(), code.trim().toUpperCase());
+    void submit(ci.trim(), code.trim().toUpperCase());
   };
 
   const form = (
@@ -86,12 +96,23 @@ export default function Welcome() {
       title="Bienvenidos a bordo, pequeños piratas"
       compactMenu
       mobile={
-        <WelcomeMobile
-          form={form}
-          onSubmit={onSubmit}
-          loading={loading}
-          error={error}
-        />
+        participant ? (
+          <CodeOnlyMobile
+            cedula={participant.cedula}
+            code={code}
+            onCodeChange={setCode}
+            onSubmit={onSubmit}
+            loading={loading}
+            error={error ?? errors.code ?? null}
+          />
+        ) : (
+          <WelcomeMobile
+            form={form}
+            onSubmit={onSubmit}
+            loading={loading}
+            error={error}
+          />
+        )
       }
     >
       {/* --- Universo --- */}

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Stage } from '../layout/Stage';
 import { Deco } from '../layout/Deco';
@@ -17,6 +17,19 @@ export interface ResultLayoutProps {
   title: string;
   /** Tamaño del titular en px de diseño. */
   titleSize?: number;
+  /**
+   * Cuerpo del titular en px del lienzo mobile de 402. Sólo hace falta cuando
+   * el texto es más largo que el de la pantalla para la que se calibró el tono
+   * y necesita entrar igual en un renglón: «¡Código fuera de órbita!» contra
+   * «Estuviste cerca».
+   */
+  mobileTitleSize?: number;
+  /**
+   * Corrimiento vertical del titular en mobile, en px del lienzo de 402. Va
+   * por `position: relative`, no por margen, para que reubicar el titular no
+   * arrastre al resto de la columna.
+   */
+  mobileTitleShift?: number;
   /** `gold` = GANASTE; `outline` = relleno dorado con contorno rojo (PERDISTE y errores). */
   titleTone?: 'gold' | 'outline';
   /** Centro X e Y del titular en coordenadas de diseño. */
@@ -59,6 +72,8 @@ const CONTACT_LINES = [
 export function ResultLayout({
   title,
   titleSize = 121,
+  mobileTitleSize,
+  mobileTitleShift,
   titleTone = 'gold',
   titleX = 479,
   titleY = 463,
@@ -102,7 +117,20 @@ export function ResultLayout({
            (ganaste / perdiste / codigo utilizado / codigo utilizado-1, 402x969).
            Orden del Figma: logo → titular → mensaje → botón → píldora con el
            código → escena del cofre → contador. */
-        <div className={`result-m result-m--${titleTone}`} id="contenido">
+        <div
+          className={`result-m result-m--${titleTone}`}
+          id="contenido"
+          style={
+            {
+              ...(mobileTitleSize
+                ? { '--result-m-title': `${(mobileTitleSize / 4.02).toFixed(3)}cqw` }
+                : {}),
+              ...(mobileTitleShift
+                ? { '--result-m-title-shift': `${(mobileTitleShift / 4.02).toFixed(3)}cqw` }
+                : {}),
+            } as CSSProperties
+          }
+        >
           {/* Superficie del planeta a nivel de pantalla: en el Figma llega hasta
               el borde inferior y el contador se apoya encima. Dentro de la
               escena del cofre quedaba recortada y aparecía una franja de cielo
@@ -119,7 +147,16 @@ export function ResultLayout({
 
           <p className={`result-m__title result-m__title--${titleTone}`}>{title}</p>
 
-          <p className="result-m__msg">{message.join(' ')}</p>
+          {/* Cada entrada es un renglón del diseño y se respeta también en
+              mobile: los exports cortan justo ahí. Siguen siendo bloques que
+              fluyen, así que en un teléfono angosto cada uno se parte solo. */}
+          <p className="result-m__msg">
+            {message.map((line) => (
+              <span key={line} className="result-m__msg-line">
+                {line}
+              </span>
+            ))}
+          </p>
 
           <div className="result-m__cta">
             <PromoButton mobileFontSize={22} onClick={reload}>

@@ -75,11 +75,20 @@ export default function Terms() {
    * El backend podrá enviar `termsHtml` (ya sanitizado) o `termsText`.
    * Mientras tanto se renderiza la transcripción final del DOCX desde el mock.
    */
+  /* El documento legal arranca con su propio encabezado «BASES Y CONDICIONES»,
+     que es exactamente lo que ya dice la cinta del pergamino. Al renderlo tal
+     cual el titulo aparecia dos veces, una pegada debajo de la otra: es lo que
+     el PDF de ajustes marca en la pagina 17. Se descarta ese primer parrafo
+     cuando repite el rotulo; el texto de origen no se toca. */
+  const parrafos = (terms?.termsText ?? '')
+    .split('\n\n')
+    .filter((t, k) => !(k === 0 && t.trim().toUpperCase() === 'BASES Y CONDICIONES'));
+
   const body = terms?.termsHtml ? (
     <div className="terms__body" dangerouslySetInnerHTML={{ __html: terms.termsHtml }} />
   ) : (
     <div className="terms__body">
-      {(terms?.termsText ?? '').split('\n\n').map((p, i) => (
+      {parrafos.map((p, i) => (
         <p key={i}>{p}</p>
       ))}
     </div>
