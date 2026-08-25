@@ -98,7 +98,7 @@
     grid-template-columns: auto 1fr auto;
     align-items: center;
     justify-items: center;
-    row-gap: 6.965cqw;
+    row-gap: 0;   /* cada fila lleva su propio margen, medido del export */
     padding-inline: 3.483cqw;
     min-height: auto;
   }
@@ -137,10 +137,14 @@
     display: none;
   }
 
+  /* En el export las flechas miden 47x40 de gráfico visible y se apoyan algo
+     por debajo del centro del premio, no centradas en la fila. */
   .carousel__arrow {
     position: static;
-    width: 11.94cqw;        /* 48 */
-    height: 11.94cqw;
+    align-self: start;
+    margin-top: 30.1cqw;    /* 121 */
+    width: 14.43cqw;        /* 58 */
+    height: 14.43cqw;
     min-width: 44px;
     min-height: 44px;
     flex: none;
@@ -150,7 +154,9 @@
   .carousel__caption {
     grid-column: 1 / -1;
     grid-row: 2;
-    margin: 0;
+    /* Negativo: en el export el rótulo empieza 4 px por encima del borde
+       inferior de la caja del premio, que abajo es transparente. */
+    margin: -0.995cqw 0 0;
     font-family: var(--font-display);
     font-size: 7.463cqw;    /* 30 */
     line-height: 1.1;
@@ -172,7 +178,7 @@
     justify-content: flex-start;
     align-items: center;
     gap: 2.488cqw;
-    margin: 5.97cqw 0 0;
+    margin: 14.925cqw 0 0;   /* 60 */
     padding: 0 3.483cqw;
     width: 100%;
     list-style: none;
@@ -193,7 +199,7 @@
 
   .carousel__thumbs li {
     flex: 0 0 auto;
-    width: 16.418cqw;       /* 66: ficha del Figma ajustada al carril */
+    width: 23.88cqw;        /* 96: ficha del export (55 px de producto visible) */
     display: flex;
     justify-content: center;
     scroll-snap-align: center;

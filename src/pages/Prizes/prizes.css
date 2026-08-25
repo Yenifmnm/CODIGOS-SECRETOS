@@ -15,22 +15,13 @@
   }
 
   .prizes-m__logo {
-    width: 60.697cqw;      /* 244 */
+    width: 63.93cqw;       /* 257: mismo cuerpo que en 14A, 14B y el export */
     height: auto;
     margin-top: 2.985cqw;
     filter: drop-shadow(0 0 5cqw rgba(9, 234, 255, 0.72));
   }
 
-  .prizes-m .prize-carousel {
-    width: 100%;
-    margin-top: 11.94cqw;
-  }
-
-  /* Flechas: área táctil de 44 px sin agrandar el gráfico. */
-  .prizes-m .prize-carousel__arrow {
-    width: 10.945cqw;
-    height: 10.945cqw;
-    min-width: 44px;
-    min-height: 44px;
-  }
+  /* Nada que ajustar acá: el carrusel usa la clase `.carousel`, no
+     `.prize-carousel`. Las dos reglas que había con ese prefijo nunca llegaron
+     a aplicarse; la geometría mobile vive toda en prize-carousel.css. */
 }
