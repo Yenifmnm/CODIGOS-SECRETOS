@@ -31,6 +31,13 @@
   will-change: transform, opacity;
 }
 
+/* El cofre mobile lleva `z-index: 1`, así que sin capa propia el premio queda
+   pintado por detrás de la tapa aunque venga después en el DOM. En el export
+   se ve claramente por delante, emergiendo del cofre. */
+.reveal__prize-layer {
+  z-index: 2;
+}
+
 .reveal__prize-float {
   position: relative;
   width: 100%;

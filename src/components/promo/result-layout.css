@@ -153,30 +153,37 @@
     padding-bottom: 7.463cqw;
   }
 
+  /* 10.945cqw son los 44 px del lienzo de 402, pero por debajo de ese ancho la
+     medida cae bajo el mínimo táctil (41 px en un iPhone de 375). El max()
+     conserva la proporción del diseño donde alcanza y planta el piso donde no. */
   .result-m__close {
     position: absolute !important;
     right: 6.219cqw;
     top: 6.219cqw;
-    width: 10.945cqw;   /* 44 — área táctil mínima */
-    height: 10.945cqw;
+    width: max(var(--tap-min), 10.945cqw);
+    height: max(var(--tap-min), 10.945cqw);
     z-index: 41;
   }
 
-  /* Medidas del Figma "perdiste.png" (lienzo 402x969): logo y 145..255,
-     titular 280..320, mensaje 360..405, botón 437..497, píldora 528..580,
-     cofre 627..810, contador 850..895. Los márgenes de abajo reproducen esos
-     huecos, que antes estaban todos comprimidos. */
+  /* Medidas del export "perdiste.png", que mide 402x969 pero cuyos primeros
+     62 px son la barra de estado de iOS. El AREA UTIL es (0,62)-(402,969), o
+     sea 907 px, y contra eso esta medido todo lo de abajo:
+       logo 87, titular 214, mensaje 297, boton 376, pildora 465, cofre 561,
+       borde del planeta 723, contador 797.
+     La tanda anterior habia tomado esas mismas cotas sobre el PNG completo, y
+     por eso la columna entera caia unos 60 px mas abajo de lo que manda el
+     diseno y la pantalla terminaba con scroll. */
   .result-m__logo {
-    width: 44.776cqw;   /* 180 */
+    width: 42.413cqw;   /* 171: 161 de logo visible */
     height: auto;
-    margin-top: 17.662cqw;  /* el logo arranca en y=145 */
+    margin-top: 3.234cqw;   /* el logo arranca en y=87 del area util */
     filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
   }
 
   .result-m__title {
-    margin: 0.249cqw 0 0;
+    margin: -1.493cqw 0 0;
     font-family: var(--font-display);
-    font-size: 13.184cqw;   /* 53 */
+    font-size: 17.164cqw;   /* 69 */
     line-height: 1.05;
     text-align: center;
   }
@@ -188,7 +195,7 @@
 
   /* PERDISTE y los dos errores: relleno dorado con contorno rojo. */
   .result-m__title--outline {
-    font-size: 8.955cqw;    /* 36 */
+    font-size: 12.629cqw;   /* 50.8 */
     color: var(--c-title-red);
     -webkit-text-stroke: 0.6cqw var(--c-title-outline);
     paint-order: stroke fill;
@@ -196,10 +203,10 @@
   }
 
   .result-m__msg {
-    margin: 10.448cqw 0 0;  /* mensaje en y=360 */
+    margin: 7.711cqw 0 0;   /* mensaje en y=297 */
     max-width: 82cqw;
     font-family: var(--font-display);
-    font-size: 4.975cqw;    /* 20 */
+    font-size: 5.303cqw;    /* 21.3 */
     line-height: 1.25;
     color: var(--c-white);
     text-shadow: 0 0 3cqw #fff, 0 0 7cqw rgba(255, 255, 255, 0.6),
@@ -208,15 +215,15 @@
   }
 
   .result-m__cta {
-    width: 54.726cqw;       /* 220 */
-    margin-top: 6.716cqw;   /* botón en y=437 */
+    width: 56.716cqw;       /* 228 */
+    margin-top: 5.473cqw;   /* botón en y=376 */
   }
 
   /* Píldora cian con el código canjeado y el teléfono de contacto. */
   .result-m__note {
     width: 75.871cqw;       /* 305 */
-    margin-top: 3.980cqw;   /* píldora en y=528 */
-    padding: 2.488cqw 3.483cqw;
+    margin-top: 5.224cqw;   /* píldora en y=465 */
+    padding: 1.244cqw 3.483cqw;   /* 55 de alto, como el export */
     border-radius: 500px;
     background: var(--c-cyan-50);
     backdrop-filter: blur(2px);
@@ -244,7 +251,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    top: 186.567cqw;        /* 750 */
+    top: 169.154cqw;        /* 680: el arco asoma en y=723 */
     bottom: 0;
     overflow: hidden;
     z-index: 0;
@@ -272,35 +279,60 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    margin-top: 6.716cqw;   /* el cofre arranca en y=627 */
+    margin-top: 4.975cqw;   /* el cofre arranca en y=561 */
   }
 
-  /* GANASTE es más compacta que PERDISTE en el Figma (ganaste.png): el
-     titular arranca en y=265 contra 280, y el mensaje en 350 contra 360. Con
-     los mismos márgenes la escena del premio no entraba y aparecía scroll. */
+  /* GANASTE tiene su propio ritmo en el export "ganaste.png". Medido sobre el
+     área útil de 907 px: titular en y=215 y con un cuerpo mayor que el de
+     PERDISTE, mensaje en 291, botón en 331, píldora en 425, cofre en 558 y
+     contador en 797 —el mismo que PERDISTE—.
+     La escena lleva margen negativo porque su caja arranca muy por encima del
+     cofre: tiene que dejar sitio al resplandor y al premio, que emergen desde
+     arriba y son casi todo aire transparente. */
   .result-m--gold .result-m__title {
-    margin-top: -3.483cqw;
+    margin-top: -0.995cqw;
   }
 
   .result-m--gold .result-m__msg {
-    margin-top: 5.970cqw;
+    margin-top: 0.746cqw;
+    font-size: 6.418cqw;   /* 25.8 */
+  }
+
+  .result-m--gold .result-m__cta {
+    margin-top: 0.995cqw;
+  }
+
+  .result-m--gold .result-m__note {
+    margin-top: 6.468cqw;
+  }
+
+  .result-m--gold .result-m__scene {
+    margin-top: -19.900cqw;
+  }
+
+  .result-m--gold .result-m__counter {
+    margin-top: -2.239cqw;
   }
 
   .result-m__counter {
     position: relative;
     z-index: 1;
-    margin-top: 9.951cqw;   /* hueco de 40 */
+    margin-top: 7.960cqw;   /* contador en y=797 */
     display: flex;
     align-items: center;
-    gap: 2.985cqw;
+    gap: 3.408cqw;
   }
 
   .result-m__counter .code-counter__plate {
-    width: 24.876cqw;   /* 100 */
+    width: 28.358cqw;   /* 114 */
   }
 
   .result-m__counter .code-counter__label {
-    font-size: 4.478cqw;  /* 18 */
+    /* `max-width: 110px` viene del contador mobile generico y aca sobra: con
+       `nowrap` el texto desbordaba su caja, el flex media 110 en vez de los
+       146 reales y el bloque entero quedaba descentrado a la derecha. */
+    max-width: none;
+    font-size: 4.988cqw;  /* 20 */
     color: var(--c-gold);
     white-space: nowrap;
   }
