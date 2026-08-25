@@ -17,6 +17,9 @@ import glow from '../../assets/effects/glow.webp';
 import destello from '../../assets/effects/destello.webp';
 import auriculares from '../../assets/prizes/auriculares.webp';
 import playstation from '../../assets/prizes/playstation.webp';
+/* En mobile el cúmulo lleva la consola SOLA: landing.png no dibuja el joystick,
+   que sí trae `playstation.webp` y es el que usa la composición de desktop. */
+import playstationConsola from '../../assets/prizes/playstation-consola.webp';
 import nintendo from '../../assets/prizes/nintendo.webp';
 
 /**
@@ -180,7 +183,14 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         </PromoButton>
       </div>
 
-      {/* Cúmulo de premios (izquierda, sangra) + nave pirata (derecha, sangra). */}
+      {/* Cúmulo de premios (izquierda, sangra) + nave pirata (derecha, sangra).
+          Las cajas de los tres productos salen de medir su silueta en
+          landing.png: son objetos claros y desaturados sobre el planeta, así
+          que se aislan por componentes conexas y no por plantilla —el matching
+          se enganchaba a detalles sueltos y daba cualquier cosa—.
+          En el diseño miden PS5 49x90 en (72,637), Switch 53x43 en (112,745) y
+          auriculares 47x46 en (211,712). Estaban entre un 31% y un 36% más
+          chicos, y por eso el cúmulo se leía corrido hacia los bordes. */}
       <MobileScene height={SCENE_H} className="home-m__scene">
         <img
           src={glow}
@@ -196,17 +206,17 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         </FloatingLayer>
 
         <FloatingLayer amplitude={9} duration={4.2} delay={0.6} rotate={-2}
-          className="mabs" style={mbox({ x: -10, y: 109, w: 119, h: 115, sceneH: SCENE_H })}>
-          <img src={playstation} alt="" aria-hidden="true" className="mlayer-img" />
+          className="mabs" style={mbox({ x: 34, y: 132, w: 133, h: 133, sceneH: SCENE_H })}>
+          <img src={playstationConsola} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={8} duration={5.4} delay={1.4} drift={4} rotate={2}
-          className="mabs" style={mbox({ x: 101, y: 245, w: 93, h: 120, sceneH: SCENE_H })}>
+          className="mabs" style={mbox({ x: 82, y: 198, w: 135, h: 174, sceneH: SCENE_H })}>
           <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={10} duration={3.6} delay={0.1} rotate={-3}
-          className="mabs" style={mbox({ x: 208, y: 256, w: 52, h: 52, sceneH: SCENE_H })}>
+          className="mabs" style={mbox({ x: 197, y: 218, w: 81, h: 81, sceneH: SCENE_H })}>
           <img src={auriculares} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
