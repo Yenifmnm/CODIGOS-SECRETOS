@@ -14,6 +14,32 @@
     align-items: center;
   }
 
+  /* Estela detrás del premio activo — effects/glow.webp, el mismo arco que usa
+     el reveal de GANASTE. Medido sobre el área útil del export (402x849): el
+     dibujo visible cae en [56, 333, 308, 190], que con el relleno
+     transparente del asset da esta caja. */
+  .prizes-m__arc {
+    position: absolute;
+    left: 12.042cqw;    /* 48 */
+    top: 82.589cqw;     /* 332 */
+    width: 83.186cqw;   /* 334 */
+    height: auto;
+    /* Espejado: en el export la media luna abre hacia la derecha. Comparadas
+       las cuatro orientaciones del asset contra el export, el espejo
+       horizontal es el que mejor correlaciona (0,895 contra 0,862 del
+       original, 0,869 y 0,867 de las otras dos). */
+    transform: scaleX(-1);
+    /* Por encima del carrusel: el premio activo lleva un drop-shadow cian muy
+       abierto que lava toda esa zona, y por debajo la estela desaparecía. */
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .prizes-m .carousel {
+    position: relative;
+    z-index: 1;
+  }
+
   .prizes-m__logo {
     width: 63.93cqw;       /* 257: mismo cuerpo que en 14A, 14B y el export */
     height: auto;
