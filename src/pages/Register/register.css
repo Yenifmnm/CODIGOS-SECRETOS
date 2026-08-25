@@ -87,6 +87,10 @@
     width: 78.607cqw;          /* 316 */
     aspect-ratio: 316 / 535;
     margin: 32.587cqw 0 0 9.453cqw;  /* caja de diseño: x 38, y 205 */
+    /* Contexto de apilado propio: sin esto el dino con z-index negativo se
+       iría por detrás del fondo de la página en vez de quedar detrás del
+       papel. */
+    isolation: isolate;
   }
 
   .register-m__paper {
@@ -112,13 +116,22 @@
   /* Dino asomando arriba a la derecha, sangrando por el borde de la pantalla. */
   /* `.floating` trae height:100%, que gana sobre aspect-ratio y estiraba la
      caja hasta el alto del pergamino: el dino terminaba tapando los campos. */
+  /* El dino asoma POR DETRÁS del pergamino: en Registro.png sólo se le ven la
+     cabeza y el cuello por encima del borde superior, y un poco de lomo por
+     fuera del borde derecho. El resto del cuerpo queda tapado por el papel.
+     Antes iba con z-index 2, o sea por delante, y se veía el personaje entero
+     parado sobre el pergamino. */
   .register-m__sheet .register-m__dino {
-    left: 67.1%;
-    top: -19.6%;
-    width: 48.1%;              /* 152 px del diseño */
+    /* Medido contra Registro.png con una plantilla de la cabeza, que es la
+       parte que el pergamino no tapa: en el export cae en [266,40,133,63] y
+       acá caía en [254,110,145,69]. O sea 70 px más abajo, 12 a la izquierda
+       y un 8% más grande. */
+    left: 70.98%;
+    top: -32.56%;
+    width: 44.11%;             /* 139 px del diseño */
     height: auto;
     aspect-ratio: 631 / 1003;
-    z-index: 2;
+    z-index: -1;
   }
 
   /* Nena abajo a la izquierda: sólo la cabeza y los hombros, cortada por los
