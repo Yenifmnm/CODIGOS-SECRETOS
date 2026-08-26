@@ -219,7 +219,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
       <div className="home-m__cta">
         <PromoButton
           plate="carga"
-          mobileFontSize={30}
+          mobileFontSize={26.2}
           onClick={onStart}
           data-figma="70:202"
           data-figma-label="70:197"

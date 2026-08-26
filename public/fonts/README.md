@@ -1,38 +1,32 @@
 # Tipografía
 
-El diseño usa **DK Prince Frog**, de Hanoded (David Kerkhoff).
+El sitio usa **Chewy** (Google Fonts, OFL, uso comercial permitido). La carga
+`index.html` y `--font-display` la nombra primero; en esta carpeta no va ningún
+archivo de fuente.
 
-## Por qué no está en el repo
+## Por qué no es la del Figma
 
-La versión que circula gratis en dafont / 1001freefonts es una **demo recortada,
-free for personal use ONLY**, sin derechos de embebido. Este sitio es una promo
-comercial, así que esa versión no sirve: hay que comprar la licencia completa.
+El diseño está dibujado con **DK Prince Frog**, de Hanoded. Es comercial y su
+licencia no habilita el uso web, así que **no se usa y no se va a comprar**: la
+decisión está tomada y la sustitución es definitiva. No hay nada que reponer,
+descomentar ni pedir.
 
-- Comprar: <https://www.myfonts.com/collections/prince-frog-font-hanoded> —
-  desde USD 15, una sola variante. También en fontspring.com y hanodedfonts.com.
-- Al comprar hay que pedir/incluir la **licencia webfont**, no sólo la desktop:
-  la desktop no habilita a servir la fuente desde el sitio.
+Chewy se eligió midiendo contra la original: mismo peso de trazo, mismo redondeo
+de marcador y línea de base irregular. Es la más cercana de las libres.
 
-## Estado: activa
+## Lo que hay que tener presente
 
-`DKPrinceFrog.woff2` y `DKPrinceFrog.woff` ya están en esta carpeta, con la
-licencia webfont comprada. El `@font-face` de `src/styles/tokens.css` los sirve
-y `--font-display` la busca primero, así que el sitio la usa y `Chewy` quedó
-sólo como red de seguridad.
+Chewy es un 4-5 % más ancha que DK Prince Frog al mismo cuerpo. Donde el diseño
+declara un tamaño, el texto ocupa un poco más de lo que muestra el mockup, y en
+las cajas justas eso obliga a decidir: bajar el cuerpo, o aceptar que el texto
+se parta en un renglón más. Las dos decisiones están anotadas en el CSS de cada
+pantalla, con el número que las motivó.
 
-Si alguna vez hay que reponerlos, van con ese nombre exacto y nada más.
+La sustitución está declarada en `figma/nodes.json`:
 
-Si el archivo no está, la regla falla en silencio y el navegador pasa al
-siguiente nombre del stack. No hay nada que comentar ni descomentar.
+```json
+"tipografias": { "DK Prince Frog": "Chewy" }
+```
 
-## Mientras tanto
-
-El stack cae en **Chewy** (Google Fonts, OFL, uso comercial permitido), elegida
-por medición contra el Figma: mismo peso de trazo, mismo redondeo de marcador y
-línea de base irregular. Es la más cercana de las libres.
-
-Queda una diferencia que conviene tener presente: DK Prince Frog es más
-condensada. El mismo texto a 42 px mide ~710 px con la original y ~819 px con
-Chewy (+15 %). Por eso el título de REGISTRO está a 36 px en vez de los 42 del
-Figma — ver el comentario en `src/pages/Register/Register.tsx`. Al incorporar la
-tipografía licenciada conviene volver a 42.
+`figma:check` acepta cualquiera de las dos donde el spec pide la del diseño, y
+sigue avisando si un texto cae en una tercera fuente, que es el error real.

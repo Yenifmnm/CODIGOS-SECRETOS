@@ -202,7 +202,10 @@
 
   /* PERDISTE y los dos errores: relleno dorado con contorno rojo. */
   .result-m__title--outline {
-    font-size: var(--result-m-title, 14.925cqw);   /* 60, el de `Estuviste cerca` */
+    /* El nodo dice 60 px; a ese cuerpo Chewy mide 356.5 contra los 305 de la
+       caja. 51.3 px dan los 305 exactos y el interlineado conserva los 62. */
+    font-size: var(--result-m-title, 12.769cqw);   /* 51.3 (el nodo dice 60) */
+    line-height: 1.209;                            /* 62 de alto */
     color: var(--c-title-red);          /* #E63303 */
     -webkit-text-stroke: 0.498cqw var(--c-title-outline);   /* borde 2px #FCC102 */
     paint-order: stroke fill;
@@ -214,8 +217,12 @@
     margin: 5.97cqw 0 0;    /* y 358 */
     max-width: 73.383cqw;   /* 295 */
     font-family: var(--font-display);
-    font-size: 6.219cqw;    /* 25 */
-    line-height: 1.04;      /* 26 */
+    /* 25 px de Chewy no entran en el ancho de 295 y cada renglón se parte por
+       la mitad, corriendo 52 px todo lo de abajo. El que manda es el segundo
+       —«te acerca más al tesoro galáctico!»—, que a 23.4 mide 307.8: a 22.4
+       mide 294.7 y los dos entran. */
+    font-size: 5.572cqw;    /* 22.4 (el nodo dice 25) */
+    line-height: 1.161;     /* 52 de alto en dos renglones */
     color: var(--c-white);
     /* Los cuatro DROP_SHADOW del nodo: 82.8, 250 y 250 blancos, mas el 0/4/4. */
     text-shadow: 0 0 20.597cqw #FFFFFF, 0 0 62.19cqw #FFFFFF,
@@ -228,6 +235,11 @@
   }
 
   /* Tampoco va centrado: el nodo arranca en x 91 y el centro daria 87. */
+  /* El rótulo del botón: 30 px de Chewy miden 224.5 contra los 190 del nodo. */
+  .result-m__cta .promo-btn__label {
+    line-height: 1.22;      /* 31 de alto a 25.4 px */
+  }
+
   .result-m__cta {
     align-self: flex-start;
     margin-left: 22.637cqw; /* 91 */
@@ -250,7 +262,8 @@
     background: rgba(33, 47, 92, 0.5);   /* #212F5C80 */
     backdrop-filter: blur(2px);
     font-family: var(--font-display);
-    font-size: 2.985cqw;    /* 12 */
+    /* 12 px de Chewy miden 299.3 contra los 257 del nodo. */
+    font-size: 2.562cqw;    /* 10.3 (el nodo dice 12) */
     line-height: 1.0417;    /* 12.5 */
     color: #fff;
     text-align: center;
@@ -385,8 +398,9 @@
        146 reales y el bloque entero quedaba descentrado a la derecha. */
     max-width: none;
     margin-top: 5.224cqw;   /* 21: el rotulo cae mas abajo que la placa */
-    font-size: 6.219cqw;    /* 25 */
-    line-height: 1.04;
+    /* 25 px de Chewy miden 167.9 contra los 148 del nodo; a 22 miden 147.8. */
+    font-size: 5.473cqw;    /* 22 (el nodo dice 25) */
+    line-height: 1.182;     /* 26 de alto */
     color: var(--c-gold);   /* #FCC102 */
     -webkit-text-stroke: 0.249cqw #FFFFFF;   /* borde 1px */
     paint-order: stroke fill;

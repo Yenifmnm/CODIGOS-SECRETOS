@@ -18,6 +18,18 @@
     "913 de alto las pantallas de flujo, 969 las de resultado."
   ],
 
+  "_tipografias": [
+    "El diseno usa DK Prince Frog, que es comercial y su licencia NO permite",
+    "uso web. El sitio usa Chewy (Google Fonts, OFL), elegida midiendo contra la",
+    "original: mismo peso de trazo y mismo redondeo. Esta sustitucion es",
+    "definitiva, no un provisorio.",
+    "",
+    "figma-check acepta cualquiera de las dos donde el spec pide la del diseno.",
+    "Sigue avisando si un texto cae en una TERCERA fuente, que es el error real."
+  ],
+  "tipografias": {
+    "DK Prince Frog": "Chewy"
+  },
   "fileKey": "MYKVqv9sfUeVc6L3EFs94a",
 
   "pantallas": {

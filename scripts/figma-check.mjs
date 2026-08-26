@@ -50,6 +50,13 @@ const pedidos = args.filter((a) => !a.startsWith('--'));
 if (!fs.existsSync(MAPA)) salir(`No existe ${path.relative(RAIZ, MAPA)}.`);
 const mapa = JSON.parse(fs.readFileSync(MAPA, 'utf8'));
 
+// Tipografías que el sitio reemplaza a propósito. El spec dice la del diseño;
+// si acá figura una sustituta, el control acepta cualquiera de las dos. Sirve
+// para cuando la licenciada no se puede usar en la web: sin esto, cada texto de
+// cada pantalla saldría en rojo para siempre y el control se vuelve ruido. Con
+// esto sigue detectando que un texto caiga en una TERCERA fuente.
+const SUSTITUCIONES = mapa.tipografias ?? {};
+
 const pantallas = Object.entries(mapa.pantallas ?? {})
   .map(([slug, v]) => ({ slug, ...(typeof v === 'string' ? { node: v } : v) }))
   .filter((p) => p.ruta != null);
@@ -611,7 +618,17 @@ function compararPintura(esperado, e, escala) {
   if (tg) {
     if (tg.familia) {
       const real = String(e.fuente ?? '').toLowerCase().replace(/["']/g, '');
-      anotar('tipografía', tg.familia, e.fuente, real.includes(tg.familia.toLowerCase()));
+      const sustituta = SUSTITUCIONES[tg.familia];
+      const ok =
+        real.includes(tg.familia.toLowerCase()) ||
+        Boolean(sustituta && real.includes(String(sustituta).toLowerCase()));
+      anotar(
+        'tipografía',
+        sustituta ? `${tg.familia} → ${sustituta}` : tg.familia,
+        e.fuente,
+        ok,
+        'tipografia',
+      );
     }
     if (tg.tamano) {
       const esp = tg.tamano * escala;

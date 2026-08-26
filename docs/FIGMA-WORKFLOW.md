@@ -176,7 +176,7 @@ contra el spec:
 | | |
 | --- | --- |
 | **color** | del texto, o el relleno sólido de una caja |
-| **tipografía** | que la familia del diseño esté realmente aplicada |
+| **tipografía** | que la familia del diseño esté realmente aplicada, o su sustituta declarada |
 | **cuerpo, interlineado, espaciado** | en px de diseño, escalados al lienzo |
 | **transformación y alineación** | `uppercase`, `center`, etc. |
 | **opacidad y radios** | |
@@ -196,6 +196,20 @@ Cuando el color no lo pinta el elemento marcado sino un hijo, se lo saca del
 control con `data-figma-omitir="pintura"`. También acepta claves sueltas —
 `data-figma-omitir="fondo,sombras"`— para omitir una sola propiedad en vez de
 todas.
+
+**Tipografías sustituidas.** El diseño usa DK Prince Frog, cuya licencia no
+permite uso web, así que el sitio usa **Chewy** — elegida midiendo contra la
+original: mismo peso de trazo, mismo redondeo. La sustitución está declarada en
+`figma/nodes.json`:
+
+```json
+"tipografias": { "DK Prince Frog": "Chewy" }
+```
+
+El control acepta cualquiera de las dos donde el spec pide la del diseño, y
+sigue avisando si un texto cae en una **tercera** fuente, que es el error real.
+Sin esa declaración, cada texto de cada pantalla saldría en rojo para siempre y
+el control se volvería ruido.
 
 **El orden de pintado del trazo.** CSS por defecto dibuja el relleno y **encima**
 el trazo, así que un trazo centrado de 2 px se come 1 px de letra por todo el

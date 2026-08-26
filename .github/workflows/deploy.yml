@@ -6,9 +6,12 @@
 
 name: Publicar microsite
 
+# DESACTIVADO: el disparo por push está comentado mientras se calibran las
+# pantallas mobile contra el Figma. Se publica a mano desde la pestaña Actions
+# («Run workflow») y se vuelve a activar descomentando estas dos líneas.
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 permissions:

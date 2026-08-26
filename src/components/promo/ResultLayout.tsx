@@ -196,7 +196,7 @@ export function ResultLayout({
 
           <div className="result-m__cta">
             <PromoButton
-              mobileFontSize={30}
+              mobileFontSize={25.4}
               onClick={reload}
               data-figma="74:1034 74:1001 105:267 131:339"
               data-figma-label="74:1035 74:1003 105:268 131:340"
