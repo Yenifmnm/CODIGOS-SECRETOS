@@ -59,7 +59,7 @@
      23:3163 del Figma: #e63303. Antes estaba en #e84115, muestreado de la
      captura del PDF, que trae la compresión encima. */
   --c-title-red: #e63303;
-  --c-title-outline: #fcc411;
+  --c-title-outline: #fcc102;  /* el trazo del titular, `Estuviste cerca` (74:1107) */
   --c-gold-glow: #eac748;
   --c-brown: #883307;
   --c-brown-dark: #581f09;

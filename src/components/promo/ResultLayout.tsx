@@ -125,12 +125,20 @@ export function ResultLayout({
 
            `figma:check` usa el que exista en el spec de la pantalla que está
            midiendo y marca los otros «pertenece a otro frame», sin contarlos
-           como falla. */
+           como falla.
+
+           La geometría se calibró contra `perdiste`, que comparte caja con
+           codigo-utilizado y codigo-inexistente. `ganaste` se aparta —su
+           titular es más alto y corre el botón y la píldora— y por eso sus
+           corrimientos NO viven acá: van en su propia clase. */
         <div
           className={`result-m result-m--${titleTone}`}
           id="contenido"
-          data-figma="TODO TODO TODO TODO"
+          data-figma="74:1025 73:858 105:260 131:332"
           data-figma-ejes="x,w"
+          /* El relleno del frame va debajo de la foto, que lo tapa entera;
+             este div no pinta nada. Igual que en landing y registro. */
+          data-figma-omitir="pintura"
           style={
             {
               ...(mobileTitleSize
@@ -146,29 +154,39 @@ export function ResultLayout({
               el borde inferior y el contador se apoya encima. Dentro de la
               escena del cofre quedaba recortada y aparecía una franja de cielo
               entre el cofre y el contador. */}
-          <div className="result-m__planet" aria-hidden="true" data-figma="TODO TODO TODO TODO">
-            <span className="result-m__planet-disc" />
+          <div className="result-m__planet-clip" aria-hidden="true">
+            <div
+              className="result-m__planet"
+              data-figma="74:1030 73:866 105:265 131:337"
+            />
           </div>
 
           {/* La mecánica (láminas 3 y 6) pide que la X vuelva a la carga de
               código, igual que el botón: el objetivo es seguir participando. */}
-          <CloseButton to="/participar" className="result-m__close" data-figma="TODO TODO TODO TODO" />
+          <CloseButton
+            to="/participar"
+            className="result-m__close"
+            data-figma="107:174 107:164 107:182 131:352"
+          />
 
           <img
             src={logoCodigos}
             alt="Códigos Secretos 2026"
             className="result-m__logo"
-            data-figma="TODO TODO TODO TODO"
+            data-figma="74:1027 73:860 105:262 131:334"
           />
 
-          <p className={`result-m__title result-m__title--${titleTone}`} data-figma="TODO TODO TODO TODO">
+          <p
+            className={`result-m__title result-m__title--${titleTone}`}
+            data-figma="74:1107 74:987 105:278 131:350"
+          >
             {title}
           </p>
 
           {/* Cada entrada es un renglón del diseño y se respeta también en
               mobile: los exports cortan justo ahí. Siguen siendo bloques que
               fluyen, así que en un teléfono angosto cada uno se parte solo. */}
-          <p className="result-m__msg" data-figma="TODO TODO TODO TODO">
+          <p className="result-m__msg" data-figma="74:1109 74:988 105:279 131:351">
             {message.map((line) => (
               <span key={line} className="result-m__msg-line">
                 {line}
@@ -177,16 +195,48 @@ export function ResultLayout({
           </p>
 
           <div className="result-m__cta">
-            <PromoButton mobileFontSize={22} onClick={reload} data-figma="TODO TODO TODO TODO">
+            <PromoButton
+              mobileFontSize={30}
+              onClick={reload}
+              data-figma="74:1034 74:1001 105:267 131:339"
+              data-figma-label="74:1035 74:1003 105:268 131:340"
+            >
               Cargar otro código
             </PromoButton>
           </div>
 
-          <div className="result-m__note" data-figma="TODO TODO TODO TODO">{note}</div>
+          {/* En el diseño la píldora son dos capas: `Rectangle 1`, la superficie
+              con su radio, y el texto adentro. Acá también, para que las dos se
+              puedan medir.
 
-          <div className="result-m__scene" data-figma="TODO TODO TODO TODO">{mobileScene}</div>
+              DESVÍO CONOCIDO — el texto da Δh -11 contra el nodo, y no es de
+              CSS: el mockup dibuja TRES renglones porque incluye la línea
+              «CANJEASTE EL CÓDIGO: …», y esa línea sólo existe cuando hay un
+              código en la sesión. Abriendo la ruta directamente —que es como
+              mide `figma:check`— no lo hay y quedan dos. Con el recorrido real
+              son tres y la caja cierra. */}
+          <div
+            className="result-m__note"
+            data-figma="74:1041 74:991 105:270 131:342"
+          >
+            <div
+              className="result-m__note-text"
+              data-figma="74:1042 74:992 105:271 131:343"
+            >
+              {note}
+            </div>
+          </div>
 
-          <CodeCounter count={codeCount} className="result-m__counter" data-figma="TODO TODO TODO TODO" />
+          {/* La escena es un contenedor del código: en el Figma el cofre y el
+              premio cuelgan del frame, sin un grupo que los envuelva. */}
+          <div className="result-m__scene">{mobileScene}</div>
+
+          <CodeCounter
+            count={codeCount}
+            className="result-m__counter"
+            data-figma="74:1044 74:1022 105:273 131:345"
+            data-figma-label="74:1047 74:1018 105:276 131:348"
+          />
         </div>
       }
     >

@@ -84,6 +84,12 @@ for (const pantalla of objetivo) {
   const pagina = await navegador.newPage({
     viewport: { width: Math.round(ancho), height: Math.round(alto) },
     deviceScaleFactor: 1,
+    // `animation: none` apaga las animaciones CSS, pero no las de Framer
+    // Motion, que escribe `transform` inline desde JS: el cofre de PERDISTE se
+    // medía 199.5x199.5 en vez de 197x197 porque la captura lo agarraba a
+    // mitad del balanceo. Los componentes ya respetan `useReducedMotion`, así
+    // que pedir el modo reducido los deja quietos en su reposo.
+    reducedMotion: 'reduce',
   });
 
   const errores = [];

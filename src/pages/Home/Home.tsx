@@ -290,8 +290,9 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
              elemento —que se anima— costaba 40 ms por cuadro. El control de
              pintura mira este elemento, así que hay que sacarlo de ahí. Si
              alguna vez se borra esa capa, el halo desaparece sin que el check
-             avise: van juntas. */
-          data-figma-omitir="pintura"
+             avise: van juntas. Se omiten SÓLO las sombras: el resto de la
+             pintura de esta capa se sigue controlando. */
+          data-figma-omitir="sombras"
         />
       </MobileScene>
     </div>

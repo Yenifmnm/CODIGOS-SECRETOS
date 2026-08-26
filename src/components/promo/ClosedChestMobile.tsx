@@ -25,17 +25,17 @@ export function ClosedChestMobile() {
   const reduced = useReducedMotion();
 
   return (
-    <MobileScene height={SCENE_H} className="mchest" data-figma="TODO TODO TODO">
+    <MobileScene height={SCENE_H} className="mchest">
       {/* Superficie del planeta: asoma por abajo y sostiene al cofre. */}
-      <div className="mchest__planet" aria-hidden="true" data-figma="TODO TODO TODO" />
+      <div className="mchest__planet" aria-hidden="true" />
 
       <motion.img
         src={cofreCerrado}
         alt=""
         aria-hidden="true"
         className="mabs mlayer-img mchest__img"
-        style={mbox({ x: 106, y: 21, w: 210, h: 194, sceneH: SCENE_H })}
-        data-figma="TODO TODO TODO"
+        style={mbox({ x: 110, y: 21, w: 197, h: 197, sceneH: SCENE_H })}
+        data-figma="74:1105 105:277 131:349"
         animate={reduced ? undefined : { rotate: [-0.9, 0.9, -0.9], scale: [1, 1.015, 1] }}
         transition={{ duration: 6.4, repeat: Infinity, ease: 'easeInOut' }}
       />
