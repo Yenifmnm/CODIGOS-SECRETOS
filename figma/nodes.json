@@ -1,0 +1,90 @@
+{
+  "_": [
+    "Mapa de pantalla → frame de Figma. Lo usan scripts/figma-pull.mjs (baja el",
+    "spec exacto) y scripts/figma-check.mjs (compara el render contra el diseño).",
+    "",
+    "  node        id del frame en Figma. Se saca del link: ?node-id=73-551 → 73:551.",
+    "  ruta        cómo se abre esa pantalla en el sitio (HashRouter).",
+    "  referencia  PNG del diseño para el diff visual, relativo a la raíz del repo.",
+    "  viewport    [ancho, alto] del navegador. Si falta, sale del frame del spec.",
+    "",
+    "OJO con el fileKey: es el de la copia que vive en el equipo Metis Redes",
+    "(plan Pro). El archivo viejo BYiPd3K1fF5IbvSOhOQA9B quedó en Borradores del",
+    "equipo Starter y ahí la API aplica un tope de 20 llamadas por mes. Los node",
+    "id son los mismos en los dos, porque duplicar un archivo los conserva: si",
+    "alguien vuelve a apuntar al viejo, todo parece andar hasta que corta.",
+    "",
+    "La página mobile es el nodo 65:122. Todos sus frames miden 402 de ancho:",
+    "913 de alto las pantallas de flujo, 969 las de resultado."
+  ],
+
+  "fileKey": "MYKVqv9sfUeVc6L3EFs94a",
+
+  "pantallas": {
+    "inicio-mobile": {
+      "node": "65:123",
+      "ruta": "#/",
+      "referencia": "recursos/mobile/pantallas/landing.png"
+    },
+    "participar-mobile": {
+      "node": "70:343",
+      "ruta": "#/participar",
+      "referencia": "recursos/mobile/pantallas/CI.png"
+    },
+    "registro-mobile": {
+      "node": "73:551",
+      "ruta": "#/registro",
+      "referencia": "recursos/mobile/pantallas/Registro.png"
+    },
+    "premios-mobile": {
+      "node": "73:671",
+      "ruta": "#/premios",
+      "referencia": "recursos/mobile/pantallas/Premios.png"
+    },
+    "codigo-mobile": {
+      "node": "73:781",
+      "ruta": "#/donde-esta-el-codigo",
+      "referencia": "recursos/mobile/pantallas/donde esta el codigo.png"
+    },
+    "bases-mobile": {
+      "node": "73:891",
+      "ruta": "#/bases",
+      "referencia": "recursos/mobile/pantallas/bases y condiciones.png"
+    },
+    "ganaste-mobile": {
+      "node": "73:858",
+      "ruta": "?scenario=WIN#/ganaste",
+      "referencia": "recursos/mobile/pantallas/ganaste.png"
+    },
+    "perdiste-mobile": {
+      "node": "74:1025",
+      "ruta": "?scenario=LOSE#/perdiste",
+      "referencia": "recursos/mobile/pantallas/perdiste.png"
+    },
+    "codigo-utilizado-mobile": {
+      "node": "105:260",
+      "ruta": "?scenario=CODE_ALREADY_USED#/codigo-utilizado",
+      "referencia": "recursos/mobile/pantallas/codigo utilizado.png"
+    },
+    "codigo-inexistente-mobile": {
+      "node": "131:332",
+      "ruta": "?scenario=CODE_NOT_FOUND#/codigo-inexistente",
+      "referencia": "recursos/mobile/pantallas/codigo utilizado-1.png"
+    },
+    "menu-mobile": {
+      "node": "79:1111",
+      "referencia": "recursos/mobile/pantallas/vista menu desplegado.png"
+    },
+
+    "inicio": { "node": "13:49", "ruta": "#/", "viewport": [1920, 1080] },
+    "participar": { "node": "70:396", "ruta": "#/participar", "viewport": [1920, 1080] },
+    "registro": { "node": "17:2912", "ruta": "#/registro", "viewport": [1920, 1080] },
+    "premios": { "node": "57:86", "ruta": "#/premios", "viewport": [1920, 1080] },
+    "codigo": { "node": "19:2982", "ruta": "#/donde-esta-el-codigo", "viewport": [1920, 1080] },
+    "bases": { "node": "22:3021", "ruta": "#/bases", "viewport": [1920, 1080] },
+    "ganaste": { "node": "23:3081", "ruta": "?scenario=WIN#/ganaste", "viewport": [1920, 1080] },
+    "perdiste": { "node": "23:3159", "ruta": "?scenario=LOSE#/perdiste", "viewport": [1920, 1080] },
+    "codigo-utilizado": { "node": "107:297", "ruta": "?scenario=CODE_ALREADY_USED#/codigo-utilizado", "viewport": [1920, 1080] },
+    "codigo-inexistente": { "node": "131:131", "ruta": "?scenario=CODE_NOT_FOUND#/codigo-inexistente", "viewport": [1920, 1080] }
+  }
+}

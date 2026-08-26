@@ -21,6 +21,7 @@ import playstation from '../../assets/prizes/playstation.webp';
    que sí trae `playstation.webp` y es el que usa la composición de desktop. */
 import playstationConsola from '../../assets/prizes/playstation-consola.webp';
 import nintendo from '../../assets/prizes/nintendo.webp';
+import barco from '../../assets/promo/barco.webp';
 
 /**
  * INICIO — Figma 13:49.
@@ -33,7 +34,15 @@ export default function Home() {
   const goParticipar = () => navigate('/participar');
 
   return (
-    <Stage title="El Tesoro Galáctico de los Códigos Secretos 2026" mobile={<HomeMobile onStart={goParticipar} />}>
+    <Stage
+      title="El Tesoro Galáctico de los Códigos Secretos 2026"
+      /* `CODIGO 1` (70:168): el encuadre de la foto, que no es el que da
+         `object-fit: cover` sobre el viewport. */
+      mobileCielo={{ nodo: '70:168', x: -46, y: -38, w: 493, h: 1070 }}
+      /* `Rectangle 6` (117:293): el velo que el frame apoya sobre la foto. */
+      mobileVelo={<div className="home-m__velo" data-figma="117:293" />}
+      mobile={<HomeMobile onStart={goParticipar} />}
+    >
       {/* --- Universo lejano --- */}
       <Deco
         src={planetaVit2}
@@ -159,71 +168,130 @@ export default function Home() {
    la nave se superponen igual que en el diseño, y cada pieza sigue siendo una
    capa propia para poder flotar por separado.
    -------------------------------------------------------------------------- */
-const SCENE_H = 360;
+/* Alto de la escena: del borde de arriba del barco (562) al de abajo del glow
+   (933), que son la primera y la última capa del cúmulo en el frame. */
+const SCENE_H = 371;
 
 function HomeMobile({ onStart }: { onStart: () => void }) {
   return (
-    <div className="home-m" id="contenido">
-      {/* B3 asomando por la esquina superior derecha, desenfocado y CORTADO por
-          el borde. Caja medida sobre `recursos/mobile/pantallas/landing.png`:
-          [313, 13, 91, 91], pero sobre el PNG completo; descontada la barra de
-          estado de iOS queda en -49 del area util. */}
-      <img src={planetaVit2} alt="" aria-hidden="true" className="home-m__b3" />
+    <div
+      className="home-m"
+      id="contenido"
+      data-figma="65:123"
+      data-figma-ejes="x,w"
+      /* El relleno del frame (#212F5C) es el color base debajo de la foto, que
+         lo tapa entera; este div no pinta nada. */
+      data-figma-omitir="pintura"
+    >
+      {/* B3 asomando por la esquina superior derecha, desenfocado y cortado por
+          el borde. Está rotado 15.1° en el Figma, así que `figma:check` lo
+          compara centro contra centro. */}
+      <img
+        src={planetaVit2}
+        alt=""
+        aria-hidden="true"
+        className="home-m__b3"
+        data-figma="70:180"
+      />
 
-      <img src={logoCodigos} alt="Códigos Secretos 2026" className="home-m__logo" />
+      <img
+        src={logoCodigos}
+        alt="Códigos Secretos 2026"
+        className="home-m__logo"
+        data-figma="70:169"
+      />
 
       <div className="mblock">
-        <p className="home-m__title">Ganá un viaje al Caribe</p>
-        <p className="home-m__sub">¡y cientos de premios más!</p>
+        <p className="home-m__title" data-figma="70:194">Ganá un viaje al Caribe</p>
+        <p className="home-m__sub" data-figma="70:193">¡y cientos de premios más!</p>
       </div>
 
+      {/* Destello detrás del tablón. En el Figma va encima de los dos textos y
+          debajo del botón, así que el CTA lleva su propio apilado. */}
+      <img
+        src={destello}
+        alt=""
+        aria-hidden="true"
+        className="home-m__flare"
+        data-figma="70:204"
+      />
+
       <div className="home-m__cta">
-        <PromoButton plate="carga" mobileFontSize={25} onClick={onStart}>
+        <PromoButton
+          plate="carga"
+          mobileFontSize={30}
+          onClick={onStart}
+          data-figma="70:202"
+          data-figma-label="70:197"
+        >
           Cargá acá tu código
         </PromoButton>
       </div>
 
       {/* Cúmulo de premios (izquierda, sangra) + nave pirata (derecha, sangra).
-          Las cajas de los tres productos salen de medir su silueta en
-          landing.png: son objetos claros y desaturados sobre el planeta, así
-          que se aislan por componentes conexas y no por plantilla —el matching
-          se enganchaba a detalles sueltos y daba cualquier cosa—.
-          En el diseño miden PS5 49x90 en (72,637), Switch 53x43 en (112,745) y
-          auriculares 47x46 en (211,712). Estaban entre un 31% y un 36% más
-          chicos, y por eso el cúmulo se leía corrido hacia los bordes. */}
+          Las seis cajas salen de `figma/spec/inicio-mobile.md`, con la y del
+          frame menos los 562 en que arranca la escena. */}
       <MobileScene height={SCENE_H} className="home-m__scene">
+        {/* El orden es el del frame: planeta premios → glow → auriculares →
+            playstation → nintendo → barco. El glow va ENCIMA del planeta y los
+            auriculares DEBAJO de la consola. */}
+        <FloatingLayer amplitude={6} duration={6.8} delay={0.9} rotate={1.2}
+          className="mabs" style={mbox({ x: -83, y: 8, w: 282, h: 286, sceneH: SCENE_H })}
+          data-figma="70:171">
+          <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" />
+        </FloatingLayer>
+
         <img
           src={glow}
           alt=""
           aria-hidden="true"
           className="mabs mlayer-img home-m__glow"
-          style={mbox({ x: -110, y: 90, w: 360, h: 250, sceneH: SCENE_H })}
+          style={mbox({ x: -65, y: 110, w: 411, h: 261, sceneH: SCENE_H })}
+          data-figma="70:173"
         />
 
-        <FloatingLayer amplitude={6} duration={6.8} delay={0.9} rotate={1.2}
-          className="mabs" style={mbox({ x: -84, y: 28, w: 248, h: 251, sceneH: SCENE_H })}>
-          <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" />
+        <FloatingLayer amplitude={10} duration={3.6} delay={0.1} rotate={-3}
+          className="mabs" style={mbox({ x: 199, y: 197, w: 78, h: 78, sceneH: SCENE_H })}
+          data-figma="70:174">
+          <img src={auriculares} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={9} duration={4.2} delay={0.6} rotate={-2}
-          className="mabs" style={mbox({ x: 34, y: 132, w: 133, h: 133, sceneH: SCENE_H })}>
+          className="mabs" style={mbox({ x: 36, y: 115, w: 130, h: 130, sceneH: SCENE_H })}
+          data-figma="70:175">
           <img src={playstationConsola} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={8} duration={5.4} delay={1.4} drift={4} rotate={2}
-          className="mabs" style={mbox({ x: 82, y: 198, w: 135, h: 174, sceneH: SCENE_H })}>
+          className="mabs" style={mbox({ x: 83, y: 198, w: 129, h: 130, sceneH: SCENE_H })}
+          data-figma="70:176">
           <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
-        <FloatingLayer amplitude={10} duration={3.6} delay={0.1} rotate={-3}
-          className="mabs" style={mbox({ x: 197, y: 218, w: 81, h: 81, sceneH: SCENE_H })}>
-          <img src={auriculares} alt="" aria-hidden="true" className="mlayer-img" />
-        </FloatingLayer>
+        {/* El halo del barco va en su propia capa, quieta. El `drop-shadow` de
+            250 px sobre el barco —que entra navegando y después flota— costaba
+            tres de cada cuatro cuadros; acá se rasteriza una vez. No lleva
+            marca: el nodo `barco 1` es el barco, que va encima. */}
+        <img
+          src={barco}
+          alt=""
+          aria-hidden="true"
+          className="mabs home-m__ship-halo"
+          style={mbox({ x: 199, y: 0, w: 401, h: 275, sceneH: SCENE_H })}
+        />
 
         <PurosolShip
           variant="enter"
           className="mabs home-m__ship"
-          style={mbox({ x: 195, y: 18, w: 415, h: 285, sceneH: SCENE_H })}
+          style={mbox({ x: 199, y: 0, w: 401, h: 275, sceneH: SCENE_H })}
+          data-figma="70:178"
+          /* El resplandor del nodo existe y está con su valor exacto, pero vive
+             en `.home-m__ship-halo`, la capa quieta de acá arriba: sobre este
+             elemento —que se anima— costaba 40 ms por cuadro. El control de
+             pintura mira este elemento, así que hay que sacarlo de ahí. Si
+             alguna vez se borra esa capa, el halo desaparece sin que el check
+             avise: van juntas. */
+          data-figma-omitir="pintura"
         />
       </MobileScene>
     </div>

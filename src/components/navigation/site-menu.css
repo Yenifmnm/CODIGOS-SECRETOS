@@ -204,11 +204,17 @@
     transition: none;
   }
 
+  /* La píldora va donde la pone el Figma: (24, 79) y 162x49. El `<nav>` que la
+     envuelve NO se mueve: ocupa en flujo desde 25 hasta 74 y ese hueco es el
+     que sostiene el arranque de cada composición mobile —los márgenes de las
+     once pantallas están calculados contra ese 74—. Por eso la píldora se
+     posiciona dentro de él, con 54 px de `top`, que son los 79 del nodo menos
+     los 25 en que arranca el `<nav>`. */
   .site-menu__bar {
     position: absolute;
-    left: 6.219cqw;
-    top: 0;
-    width: 39.801cqw;       /* 160 */
+    left: 5.97cqw;          /* 24 */
+    top: 13.433cqw;         /* 79 - 25 */
+    width: 40.299cqw;       /* 162 */
     height: var(--m-pill-h);
     display: grid;
     grid-template-columns: auto 1fr auto;

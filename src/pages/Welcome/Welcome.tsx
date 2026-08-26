@@ -209,21 +209,30 @@ const WELCOME_SCENE_H = 230;
 
 function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
   return (
-    <div className="welcome-m" id="contenido">
-      <img src={logoCodigos} alt="Códigos Secretos 2026" className="welcome-m__logo" />
+    <div className="welcome-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
+      <img
+        src={logoCodigos}
+        alt="Códigos Secretos 2026"
+        className="welcome-m__logo"
+        data-figma="TODO"
+      />
 
-      <p className="welcome-m__hi">¡Bienvenidos a bordo</p>
-      <p className="welcome-m__title">Pequeños piratas!</p>
+      <p className="welcome-m__hi" data-figma="TODO">¡Bienvenidos a bordo</p>
+      <p className="welcome-m__title" data-figma="TODO">Pequeños piratas!</p>
 
       {/* Pergamino real del Figma; el formulario va encima como HTML accesible. */}
-      <div className="welcome-m__scroll">
+      <div className="welcome-m__scroll" data-figma="TODO">
         <img src={pergamino2} alt="" aria-hidden="true" className="welcome-m__scroll-img" />
 
         <form className="welcome-m__form" onSubmit={onSubmit} noValidate>
-          <h2 className="welcome-m__form-title">Ingresá tus datos para participar</h2>
+          <h2 className="welcome-m__form-title" data-figma="TODO">
+            Ingresá tus datos para participar
+          </h2>
           <span className="welcome-m__rule" aria-hidden="true" />
 
-          <div className="welcome-m__fields">{form}</div>
+          <div className="welcome-m__fields" data-figma="TODO">
+            {form}
+          </div>
 
           {error && (
             <p className="welcome__error" role="alert">
@@ -232,26 +241,28 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
           )}
 
           <div className="welcome-m__submit">
-            <PromoButton type="submit" mobileFontSize={17} loading={loading}>
+            <PromoButton type="submit" mobileFontSize={17} loading={loading} data-figma="TODO">
               Participar
             </PromoButton>
           </div>
 
-          <Link className="welcome-m__help" to="/donde-esta-el-codigo">
+          <Link className="welcome-m__help" to="/donde-esta-el-codigo" data-figma="TODO">
             ¿Dónde encuentro el código secreto?
           </Link>
         </form>
       </div>
 
-      <MobileScene height={WELCOME_SCENE_H} className="welcome-m__scene">
+      <MobileScene height={WELCOME_SCENE_H} className="welcome-m__scene" data-figma="TODO">
         <FloatingLayer amplitude={7} duration={6.2} delay={1.2} rotate={1}
-          className="mabs" style={mbox({ x: -95, y: 17, w: 296, h: 242, sceneH: WELCOME_SCENE_H })}>
+          className="mabs" style={mbox({ x: -95, y: 17, w: 296, h: 242, sceneH: WELCOME_SCENE_H })}
+          data-figma="TODO">
           <img src={portal} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <PurosolShip
           className="mabs welcome-m__ship"
           style={mbox({ x: 201, y: -31, w: 366, h: 250, sceneH: WELCOME_SCENE_H })}
+          data-figma="TODO"
         />
       </MobileScene>
     </div>

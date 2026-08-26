@@ -10,6 +10,13 @@ interface ParchmentFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   /** `pill` = cápsula del formulario de participación (72:447).
    *  `line` = campo subrayado del pergamino de registro (18:2951). */
   variant?: 'pill' | 'line';
+  /**
+   * Nodo del Figma del RÓTULO, no del campo entero: la caja del campo ya la
+   * mide la cinta que lo envuelve. Ver `docs/FIGMA-WORKFLOW.md`.
+   */
+  'data-figma'?: string;
+  /** Ejes que decide `figma:check` para ese nodo. */
+  'data-figma-ejes'?: string;
 }
 
 /**
@@ -18,7 +25,18 @@ interface ParchmentFieldProps extends InputHTMLAttributes<HTMLInputElement> {
  */
 export const ParchmentField = forwardRef<HTMLInputElement, ParchmentFieldProps>(
   function ParchmentField(
-    { label, icon, error, fontSize = 35, variant = 'pill', className, id, ...rest },
+    {
+      label,
+      icon,
+      error,
+      fontSize = 35,
+      variant = 'pill',
+      className,
+      id,
+      'data-figma': figma,
+      'data-figma-ejes': figmaEjes,
+      ...rest
+    },
     ref,
   ) {
     const autoId = useId();
@@ -42,7 +60,12 @@ export const ParchmentField = forwardRef<HTMLInputElement, ParchmentFieldProps>(
             competía por el ancho con el valor y lo empujaba fuera de vista.
             Sigue en el DOM y asociado al input, así que el lector de pantalla
             lo anuncia igual; sólo deja de verse. */}
-        <label className="pfield__label" htmlFor={inputId}>
+        <label
+          className="pfield__label"
+          htmlFor={inputId}
+          data-figma={figma}
+          data-figma-ejes={figmaEjes}
+        >
           {icon && (
             <span className="pfield__icon" aria-hidden="true">
               {icon}

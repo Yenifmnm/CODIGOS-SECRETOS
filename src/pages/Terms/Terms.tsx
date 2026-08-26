@@ -132,21 +132,28 @@ export default function Terms() {
         /* Figma "bases y condiciones.png": logo montado sobre el pergamino,
            ralph sentado en el planeta B3 arriba a la derecha y nene con el
            catalejo abajo a la izquierda. El pergamino se despliega al entrar. */
-        <div className="terms-m" id="contenido">
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="terms-m__logo" />
+        <div className="terms-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
+          <img
+            src={logoCodigos}
+            alt="Códigos Secretos 2026"
+            className="terms-m__logo"
+            data-figma="TODO"
+          />
 
-          <div className="terms-m__sheet">
+          <div className="terms-m__sheet" data-figma="TODO">
             <FloatingLayer amplitude={5} duration={6.6} delay={0.4}
-              className="terms-m__ralph" style={{ position: 'absolute' }}>
+              className="terms-m__ralph" style={{ position: 'absolute' }} data-figma="TODO">
               <img src={ralph} alt="" aria-hidden="true" className="mlayer-img" />
             </FloatingLayer>
 
             <FloatingLayer amplitude={4} duration={7.4} delay={1.2}
-              className="terms-m__nene" style={{ position: 'absolute' }}>
+              className="terms-m__nene" style={{ position: 'absolute' }} data-figma="TODO">
               <img src={nene} alt="" aria-hidden="true" className="mlayer-img" />
             </FloatingLayer>
 
-            <Parchment className="terms-m__parchment">{content}</Parchment>
+            <Parchment className="terms-m__parchment" data-figma="TODO">
+              {content}
+            </Parchment>
           </div>
         </div>
       }

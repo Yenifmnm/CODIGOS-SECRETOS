@@ -77,7 +77,22 @@ export function SiteMenu({ compact = false }: SiteMenuProps) {
       style={{ left: u(90), top: u(34) }}
       aria-label="Navegación principal"
     >
-      <div className="site-menu__bar">
+      {/*
+        La barra es la píldora del Figma mobile: 162x49 en (24, 79), igual en
+        los once frames. Van los once nodos separados por espacio y gana el de
+        la pantalla que se esté midiendo, en este orden: landing, registro, CI,
+        premios, dónde está el código, bases, ganaste, perdiste, código
+        utilizado, código inexistente, menú desplegado.
+      */}
+      <div
+        className="site-menu__bar"
+        data-figma="70:192 73:560 70:352 73:674 73:798 73:896 73:863 74:1028 105:263 131:335 79:1128"
+        /* El nodo marcado es la instancia, que es transparente: el cian lo
+           pinta su hijo `Rectangle 1` con #09EAFF80, que es exactamente lo que
+           vale `--c-cyan-50`. Acá es un solo elemento, así que el control de
+           pintura no aplica. */
+        data-figma-omitir="pintura"
+      >
         <NavLink to="/" className="site-menu__brand" aria-label="PuroSol — Inicio">
           <img src={logoPurosol} alt="PuroSol" />
         </NavLink>

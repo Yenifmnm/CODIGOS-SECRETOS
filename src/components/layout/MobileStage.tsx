@@ -28,6 +28,8 @@ interface MobileSceneProps {
   width?: number;
   className?: string;
   style?: CSSProperties;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
 }
 
 /**
@@ -42,11 +44,19 @@ interface MobileSceneProps {
  *
  * Para texto y formularios NO se usa esto: va todo en flujo normal.
  */
-export function MobileScene({ children, height, width, className, style }: MobileSceneProps) {
+export function MobileScene({
+  children,
+  height,
+  width,
+  className,
+  style,
+  'data-figma': figma,
+}: MobileSceneProps) {
   return (
     <div
       className={`mscene${className ? ` ${className}` : ''}`}
       style={{ aspectRatio: mratio(height, width), ...style }}
+      data-figma={figma}
     >
       {children}
     </div>

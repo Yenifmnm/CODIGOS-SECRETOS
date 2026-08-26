@@ -10,6 +10,8 @@ interface RibbonPlateProps {
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
 }
 
 /**
@@ -25,13 +27,17 @@ export function RibbonPlate({
   className,
   style,
   children,
+  'data-figma': figma,
 }: RibbonPlateProps) {
   return (
     <div
       className={['plate', `plate--${tone}`, className].filter(Boolean).join(' ')}
       style={{ '--plate-notch': u(notch), ...style } as CSSProperties}
     >
-      <span className="plate__bg" aria-hidden="true" />
+      {/* La marca va en la capa que pinta, no en el contenedor: `.plate__bg`
+          tiene la misma caja —`inset: 0`— y es la que lleva el color, así que
+          el control de pintura puede verificarlo. */}
+      <span className="plate__bg" aria-hidden="true" data-figma={figma} />
       <span className="plate__content">{children}</span>
     </div>
   );

@@ -116,10 +116,21 @@ export function ResultLayout({
         /* Composición mobile de las cuatro pantallas de resultado
            (ganaste / perdiste / codigo utilizado / codigo utilizado-1, 402x969).
            Orden del Figma: logo → titular → mensaje → botón → píldora con el
-           código → escena del cofre → contador. */
+           código → escena del cofre → contador.
+
+           Cada `data-figma` de acá abajo lista los CUATRO nodos del mismo
+           elemento, uno por frame, siempre en este orden:
+
+             perdiste · ganaste · codigo-utilizado · codigo-inexistente
+
+           `figma:check` usa el que exista en el spec de la pantalla que está
+           midiendo y marca los otros «pertenece a otro frame», sin contarlos
+           como falla. */
         <div
           className={`result-m result-m--${titleTone}`}
           id="contenido"
+          data-figma="TODO TODO TODO TODO"
+          data-figma-ejes="x,w"
           style={
             {
               ...(mobileTitleSize
@@ -135,22 +146,29 @@ export function ResultLayout({
               el borde inferior y el contador se apoya encima. Dentro de la
               escena del cofre quedaba recortada y aparecía una franja de cielo
               entre el cofre y el contador. */}
-          <div className="result-m__planet" aria-hidden="true">
+          <div className="result-m__planet" aria-hidden="true" data-figma="TODO TODO TODO TODO">
             <span className="result-m__planet-disc" />
           </div>
 
           {/* La mecánica (láminas 3 y 6) pide que la X vuelva a la carga de
               código, igual que el botón: el objetivo es seguir participando. */}
-          <CloseButton to="/participar" className="result-m__close" />
+          <CloseButton to="/participar" className="result-m__close" data-figma="TODO TODO TODO TODO" />
 
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="result-m__logo" />
+          <img
+            src={logoCodigos}
+            alt="Códigos Secretos 2026"
+            className="result-m__logo"
+            data-figma="TODO TODO TODO TODO"
+          />
 
-          <p className={`result-m__title result-m__title--${titleTone}`}>{title}</p>
+          <p className={`result-m__title result-m__title--${titleTone}`} data-figma="TODO TODO TODO TODO">
+            {title}
+          </p>
 
           {/* Cada entrada es un renglón del diseño y se respeta también en
               mobile: los exports cortan justo ahí. Siguen siendo bloques que
               fluyen, así que en un teléfono angosto cada uno se parte solo. */}
-          <p className="result-m__msg">
+          <p className="result-m__msg" data-figma="TODO TODO TODO TODO">
             {message.map((line) => (
               <span key={line} className="result-m__msg-line">
                 {line}
@@ -159,16 +177,16 @@ export function ResultLayout({
           </p>
 
           <div className="result-m__cta">
-            <PromoButton mobileFontSize={22} onClick={reload}>
+            <PromoButton mobileFontSize={22} onClick={reload} data-figma="TODO TODO TODO TODO">
               Cargar otro código
             </PromoButton>
           </div>
 
-          <div className="result-m__note">{note}</div>
+          <div className="result-m__note" data-figma="TODO TODO TODO TODO">{note}</div>
 
-          <div className="result-m__scene">{mobileScene}</div>
+          <div className="result-m__scene" data-figma="TODO TODO TODO TODO">{mobileScene}</div>
 
-          <CodeCounter count={codeCount} className="result-m__counter" />
+          <CodeCounter count={codeCount} className="result-m__counter" data-figma="TODO TODO TODO TODO" />
         </div>
       }
     >

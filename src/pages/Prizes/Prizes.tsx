@@ -38,17 +38,23 @@ export default function Prizes() {
       mobile={
         /* Figma "Premios.png": logo → carrusel con flechas → nombre del premio
            → tira de miniaturas. El carrusel ya trae swipe y flechas. */
-        <div className="prizes-m" id="contenido">
+        <div className="prizes-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
           {/* Estela que barre por detrás del premio activo. Es el mismo asset
               que usa el reveal de GANASTE, no una aproximación en CSS. */}
-          <img src={glow} alt="" aria-hidden="true" className="prizes-m__arc" />
+          <img src={glow} alt="" aria-hidden="true" className="prizes-m__arc" data-figma="TODO" />
 
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="prizes-m__logo" />
+          <img
+            src={logoCodigos}
+            alt="Códigos Secretos 2026"
+            className="prizes-m__logo"
+            data-figma="TODO"
+          />
           <PrizeCarousel
             prizes={prizes}
             onActiveChange={onActiveChange}
             withThumbs
             caption={activeName}
+            data-figma="TODO"
           />
         </div>
       }

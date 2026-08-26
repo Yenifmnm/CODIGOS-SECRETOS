@@ -43,26 +43,29 @@ export function PrizeRevealMobile({ prize }: Props) {
 
   if (reduced) {
     return (
-      <MobileScene height={SCENE_H} className="mchest">
-        <div className="mchest__planet" aria-hidden="true" />
+      <MobileScene height={SCENE_H} className="mchest" data-figma="TODO">
+        <div className="mchest__planet" aria-hidden="true" data-figma="TODO" />
         <img src={glow} alt="" aria-hidden="true"
           className="mabs mlayer-img reveal__glow"
-          style={mbox({ x: 3, y: -1, w: 384, h: 288, sceneH: SCENE_H })} />
+          style={mbox({ x: 3, y: -1, w: 384, h: 288, sceneH: SCENE_H })}
+          data-figma="TODO" />
         <img src={cofreAbierto} alt="" aria-hidden="true"
           className="mabs mlayer-img mchest__img"
-          style={mbox({ x: 49, y: 133, w: 291, h: 258, sceneH: SCENE_H })} />
+          style={mbox({ x: 49, y: 133, w: 291, h: 258, sceneH: SCENE_H })}
+          data-figma="TODO" />
         {prize && (
           <img src={prize.image} alt={prize.name}
             className="mabs mlayer-img reveal__prize reveal__prize-layer"
-            style={mbox({ x: 140, y: 73, w: 216, h: 150, sceneH: SCENE_H })} />
+            style={mbox({ x: 140, y: 73, w: 216, h: 150, sceneH: SCENE_H })}
+            data-figma="TODO" />
         )}
       </MobileScene>
     );
   }
 
   return (
-    <MobileScene height={SCENE_H} className="mchest">
-      <div className="mchest__planet" aria-hidden="true" />
+    <MobileScene height={SCENE_H} className="mchest" data-figma="TODO">
+      <div className="mchest__planet" aria-hidden="true" data-figma="TODO" />
 
       {/* Resplandor que sale del cofre al abrirse. */}
       <motion.img
@@ -71,6 +74,7 @@ export function PrizeRevealMobile({ prize }: Props) {
         aria-hidden="true"
         className="mabs mlayer-img reveal__glow"
         style={mbox({ x: 3, y: -1, w: 384, h: 288, sceneH: SCENE_H })}
+        data-figma="TODO"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: [0, 1, 0.75], scale: [0.5, 1.16, 1] }}
         transition={{ delay: lightAt, duration: 1.1, times: [0, 0.45, 1], ease: 'easeOut' }}
@@ -80,6 +84,7 @@ export function PrizeRevealMobile({ prize }: Props) {
       <motion.div
         className="mabs mchest__img"
         style={mbox({ x: 49, y: 133, w: 291, h: 258, sceneH: SCENE_H })}
+        data-figma="TODO"
         initial={{ scale: 0.86, y: '4%', opacity: 0 }}
         animate={{ scale: [0.86, 0.94, 1.06, 1], y: ['4%', '2%', '-1%', '0%'], opacity: 1 }}
         transition={{ duration: T.anticipation + T.open + 0.3, ease: 'easeOut', times: [0, 0.35, 0.72, 1] }}
@@ -101,6 +106,7 @@ export function PrizeRevealMobile({ prize }: Props) {
       <motion.div
         className="mabs reveal__prize-layer"
         style={mbox({ x: 140, y: 73, w: 216, h: 150, sceneH: SCENE_H })}
+        data-figma="TODO"
         initial={{ opacity: 0, y: '78%', scale: 0.45 }}
         animate={{ opacity: 1, y: '0%', scale: 1 }}
         transition={{ delay: prizeAt, duration: T.prize, ease: [0.16, 0.9, 0.28, 1] }}

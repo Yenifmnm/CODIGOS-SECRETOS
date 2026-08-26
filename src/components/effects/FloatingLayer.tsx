@@ -14,6 +14,8 @@ interface FloatingLayerProps {
   rotate?: number;
   className?: string;
   style?: CSSProperties;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
 }
 
 /**
@@ -32,6 +34,7 @@ export function FloatingLayer({
   rotate = 0,
   className,
   style,
+  'data-figma': figma,
 }: FloatingLayerProps) {
   const reduced = useReducedMotion();
 
@@ -51,6 +54,7 @@ export function FloatingLayer({
     <div
       className={['floating', reduced ? 'floating--still' : '', className].filter(Boolean).join(' ')}
       style={{ ...vars, ...style }}
+      data-figma={figma}
     >
       {children}
     </div>

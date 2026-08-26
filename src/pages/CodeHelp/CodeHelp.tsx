@@ -40,35 +40,58 @@ export default function CodeHelp() {
            logo → titular dorado a dos renglones → nave completa a la izquierda
            del pack → pack apoyado sobre la superficie del planeta → píldora
            cian de contacto sobre esa superficie. */
-        <div className="codehelp-m" id="contenido">
+        <div className="codehelp-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
           {/* Portal asomando por el borde superior derecho, con la X encima.
               Está en el Figma de esta vista y faltaba en la composición. */}
-          <img src={portal} alt="" aria-hidden="true" className="codehelp-m__portal" />
+          <img
+            src={portal}
+            alt=""
+            aria-hidden="true"
+            className="codehelp-m__portal"
+            data-figma="TODO"
+          />
 
-          <CloseButton to="/participar" className="codehelp-m__close" />
+          <CloseButton to="/participar" className="codehelp-m__close" data-figma="TODO" />
 
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="codehelp-m__logo" />
+          <img
+            src={logoCodigos}
+            alt="Códigos Secretos 2026"
+            className="codehelp-m__logo"
+            data-figma="TODO"
+          />
 
           {/* El corte de renglón es el del Figma mobile, no uno automático. */}
-          <p className="codehelp-m__title">
+          <p className="codehelp-m__title" data-figma="TODO">
             Buscá el Código Secreto en
             <br />
             Los stickers de Purosol
           </p>
 
           {/* Superficie oscura sobre la que se apoyan el pack y la píldora. */}
-          <div className="codehelp-m__planet" aria-hidden="true" />
+          <div className="codehelp-m__planet" aria-hidden="true" data-figma="TODO" />
 
-          <div className="codehelp-m__scene">
+          <div className="codehelp-m__scene" data-figma="TODO">
             {/* Destello detrás del pack, como en el Figma. */}
-            <img src={destello} alt="" aria-hidden="true" className="codehelp-m__flare" />
+            <img
+              src={destello}
+              alt=""
+              aria-hidden="true"
+              className="codehelp-m__flare"
+              data-figma="TODO"
+            />
             {/* `flipped`: el asset viene con la proa a la izquierda y en el
                 diseño navega hacia la derecha, con la llama saliendo por atrás. */}
-            <PurosolShip flipped className="codehelp-m__ship" />
-            <TelescopeMagnifier src={jugos} alt={PACK_ALT} description={PACK_ALT} zoom={2.2} />
+            <PurosolShip flipped className="codehelp-m__ship" data-figma="TODO" />
+            <TelescopeMagnifier
+              src={jugos}
+              alt={PACK_ALT}
+              description={PACK_ALT}
+              zoom={2.2}
+              data-figma="TODO"
+            />
           </div>
 
-          <div className="codehelp-m__note">{note}</div>
+          <div className="codehelp-m__note" data-figma="TODO">{note}</div>
         </div>
       }
     >

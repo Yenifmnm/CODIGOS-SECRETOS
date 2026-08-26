@@ -159,6 +159,7 @@ export default function Register() {
       variant="line"
       fontSize={30}
       label="Nombre y Apellido"
+      data-figma="73:626" data-figma-ejes="x,y"
       name="fullName"
       autoComplete="name"
       value={form.fullName}
@@ -171,6 +172,7 @@ export default function Register() {
       variant="line"
       fontSize={30}
       label="Fecha de nacimiento"
+      data-figma="73:627" data-figma-ejes="x,y"
       name="birthDate"
       type="date"
       autoComplete="bday"
@@ -185,6 +187,7 @@ export default function Register() {
       variant="line"
       fontSize={30}
       label="Número de cédula"
+      data-figma="73:634" data-figma-ejes="x,y"
       name="cedula"
       inputMode="numeric"
       value={form.cedula}
@@ -197,6 +200,7 @@ export default function Register() {
       variant="line"
       fontSize={30}
       label="Email"
+      data-figma="73:630" data-figma-ejes="x,y"
       name="email"
       type="email"
       autoComplete="email"
@@ -210,6 +214,7 @@ export default function Register() {
       variant="line"
       fontSize={30}
       label="Ciudad"
+      data-figma="73:637" data-figma-ejes="x,y"
       name="city"
       autoComplete="address-level2"
       value={form.city}
@@ -222,6 +227,7 @@ export default function Register() {
       variant="line"
       fontSize={30}
       label="Teléfono"
+      data-figma="73:640" data-figma-ejes="x,y"
       name="phone"
       type="tel"
       autoComplete="tel"
@@ -236,6 +242,8 @@ export default function Register() {
     <Stage
       title="Registro"
       compactMenu
+      /* `CODIGO 1` (73:552): mismo encuadre que el landing. */
+      mobileCielo={{ nodo: '73:552', x: -46, y: -38, w: 493, h: 1070 }}
       mobile={
         <RegisterMobile
           fields={fieldEls}
@@ -368,51 +376,142 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
   const [fullName, birthDate, cedula, email, city, phone] = fields;
 
   return (
-    <div className="register-m" id="contenido">
+    <div
+      className="register-m"
+      id="contenido"
+      data-figma="73:551"
+      data-figma-ejes="x,w"
+      /* Igual que en el landing: el relleno del frame va debajo de la foto. */
+      data-figma-omitir="pintura"
+    >
       {/* B3 en la esquina superior derecha. Caja medida sobre
           `recursos/mobile/pantallas/Registro.png`: [315, 14, 87, 87]. No se
           copian las coordenadas del Home: cada pantalla usa su propio export. */}
-      <img src={planetaVit2} alt="" aria-hidden="true" className="register-m__b3" />
+      <img
+        src={planetaVit2}
+        alt=""
+        aria-hidden="true"
+        className="register-m__b3"
+        data-figma="73:604"
+      />
 
+      {/* Decoración de fondo del frame que faltaba en la composición: el
+          destello contra el borde izquierdo y el planeta chico, desenfocado,
+          abajo a la derecha. */}
+      <img
+        src={destello}
+        alt=""
+        aria-hidden="true"
+        className="register-m__flare"
+        data-figma="73:559"
+      />
+      <img
+        src={planetaVit1}
+        alt=""
+        aria-hidden="true"
+        className="register-m__planeta"
+        data-figma="73:561"
+      />
+
+      {/* `.register-m__sheet` es la caja de referencia del formulario —todo lo
+          de adentro va en porcentaje de ella— y no puede girar. La capa del
+          Figma es el papel, así que la marca va en la imagen: ahí el giro lo
+          hace el CSS y `figma:check` puede comparar las cuatro medidas. */}
       <div className="register-m__sheet">
-        <img src={pergamino1} alt="" aria-hidden="true" className="register-m__paper" />
+        <img
+          src={pergamino1}
+          alt=""
+          aria-hidden="true"
+          className="register-m__paper"
+          data-figma="73:606"
+        />
 
         <FloatingLayer amplitude={5} duration={6.4} delay={0.3}
-          className="register-m__dino" style={{ position: 'absolute' }}>
+          className="register-m__dino" style={{ position: 'absolute' }} data-figma="73:608">
           <img src={dino} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={4} duration={7.2} delay={1.1}
-          className="register-m__nena" style={{ position: 'absolute' }}>
+          className="register-m__nena" style={{ position: 'absolute' }} data-figma="73:610">
           <img src={nena} alt="" aria-hidden="true" className="mlayer-img" />
         </FloatingLayer>
 
-        <img src={logoCodigos} alt="Códigos Secretos 2026" className="register-m__logo" />
+        <img
+          src={logoCodigos}
+          alt="Códigos Secretos 2026"
+          className="register-m__logo"
+          data-figma="73:553"
+        />
 
         <form className="register-m__form" onSubmit={onSubmit} noValidate>
+          {/* La cinta son dos vectores sueltos en el Figma —73:614 y 73:643,
+              un renglón cada uno— y acá es un solo `.plate__bg` recortado con
+              clip-path, así que no hay un par de cajas que comparar. La marca
+              va en el título, que sí es un nodo.
+
+              `data-figma-ejes="x,y"` acá y en los seis rótulos: en este frame
+              las capas de texto son cajas dibujadas a mano y no la medida del
+              texto. La de este título mide 240 de ancho, más que la cinta de
+              221 que lo contiene, y declara 15 de alto con un salto de línea
+              adentro. El ancho y el alto se siguen midiendo y se ven en el
+              reporte, pero no deciden.
+
+              Y su Δx queda en +11, que NO es un error a corregir: un solo
+              elemento sirve acá a dos nodos cuyas cajas no coinciden en el
+              Figma —el texto 73:616 en x 79 con 240 de ancho, la cinta
+              73:614+73:643 en x 90 con 221—. La cinta va a su nodo porque es
+              lo que se ve; el texto hereda esa caja y arrastra la diferencia.
+              Cerrar ese +11 significaría dibujar la cinta 19 px más ancha de
+              lo que dice el diseño. */}
           <RibbonPlate tone="ochre" className="register-m__title-plate">
-            <h2 className="register-m__title">Registrate para que tu pequeño pueda participar</h2>
+            <h2 className="register-m__title" data-figma="73:616" data-figma-ejes="x,y">
+              Registrate para que tu pequeño pueda participar
+            </h2>
           </RibbonPlate>
 
           {/* Cada fila en su coordenada del Figma; el orden del DOM es el de
               lectura, que es también el orden de tabulación. */}
-          <RibbonPlate className="register-m__cell register-m__cell--fullname">{fullName}</RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--birth">{birthDate}</RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--cedula">{cedula}</RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--fullname" data-figma="73:613">
+            {fullName}
+          </RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--birth" data-figma="73:612">
+            {birthDate}
+          </RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--cedula" data-figma="73:633">
+            {cedula}
+          </RibbonPlate>
 
-          <p className="register-m__note">
+          <p className="register-m__note" data-figma="73:617">
             Este registro debe ser realizado por un tutor mayor de 18 años*
           </p>
 
-          <RibbonPlate className="register-m__cell register-m__cell--email">{email}</RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--city">{city}</RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--phone">{phone}</RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--email" data-figma="73:629">
+            {email}
+          </RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--city" data-figma="73:636">
+            {city}
+          </RibbonPlate>
+          <RibbonPlate className="register-m__cell register-m__cell--phone" data-figma="73:639">
+            {phone}
+          </RibbonPlate>
 
           <div className="register-m__actions">
-            <RibbonButton type="submit" tone="ochre" mobileFontSize={15} disabled={submitting}>
+            <RibbonButton
+              type="submit"
+              tone="ochre"
+              mobileFontSize={14}
+              disabled={submitting}
+              data-figma="73:620"
+            >
               {submitting ? 'Enviando…' : 'Registrarme'}
             </RibbonButton>
-            <RibbonButton type="button" tone="ochre" mobileFontSize={15} onClick={onCancel}>
+            <RibbonButton
+              type="button"
+              tone="ochre"
+              mobileFontSize={14}
+              onClick={onCancel}
+              data-figma="73:623"
+            >
               Cancelar
             </RibbonButton>
           </div>

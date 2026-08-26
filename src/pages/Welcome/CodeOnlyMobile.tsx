@@ -58,22 +58,45 @@ export function CodeOnlyMobile({ cedula, code, onCodeChange, onSubmit, loading, 
   }, [cedula]);
 
   return (
-    <div className="codeonly-m" id="contenido">
-      <img src={barco} alt="" aria-hidden="true" className="codeonly-m__ship" />
-      <img src={nintendo} alt="" aria-hidden="true" className="codeonly-m__nintendo" />
-      <img src={auriculares} alt="" aria-hidden="true" className="codeonly-m__auris" />
-      <img src={playstation} alt="" aria-hidden="true" className="codeonly-m__ps" />
-      <img src={planetaPremios} alt="" aria-hidden="true" className="codeonly-m__planeta" />
+    <div className="codeonly-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
+      <img src={barco} alt="" aria-hidden="true" className="codeonly-m__ship" data-figma="TODO" />
+      <img
+        src={nintendo}
+        alt=""
+        aria-hidden="true"
+        className="codeonly-m__nintendo"
+        data-figma="TODO"
+      />
+      <img
+        src={auriculares}
+        alt=""
+        aria-hidden="true"
+        className="codeonly-m__auris"
+        data-figma="TODO"
+      />
+      <img src={playstation} alt="" aria-hidden="true" className="codeonly-m__ps" data-figma="TODO" />
+      <img
+        src={planetaPremios}
+        alt=""
+        aria-hidden="true"
+        className="codeonly-m__planeta"
+        data-figma="TODO"
+      />
 
-      <img src={logoCodigos} alt="Códigos Secretos 2026" className="codeonly-m__logo" />
+      <img
+        src={logoCodigos}
+        alt="Códigos Secretos 2026"
+        className="codeonly-m__logo"
+        data-figma="TODO"
+      />
 
-      <h1 className="codeonly-m__title">Ingresá tu código</h1>
+      <h1 className="codeonly-m__title" data-figma="TODO">Ingresá tu código</h1>
 
       <form className="codeonly-m__form" onSubmit={onSubmit} noValidate>
         {/* La cápsula del PDF es la placa de pergamino, sin rótulo a la vista:
             el único texto dentro es el propio código. El nombre del campo va
             en `aria-label` para que los lectores de pantalla lo anuncien. */}
-        <div className="codeonly-m__field">
+        <div className="codeonly-m__field" data-figma="TODO">
           <img src={botonCarga} alt="" aria-hidden="true" className="codeonly-m__field-plate" />
           <input
             className="codeonly-m__input"
@@ -95,18 +118,18 @@ export function CodeOnlyMobile({ cedula, code, onCodeChange, onSubmit, loading, 
         )}
 
         <div className="codeonly-m__cta">
-          <PromoButton type="submit" mobileFontSize={17} loading={loading}>
+          <PromoButton type="submit" mobileFontSize={17} loading={loading} data-figma="TODO">
             Cargar código
           </PromoButton>
         </div>
 
-        <Link className="codeonly-m__help" to="/donde-esta-el-codigo">
+        <Link className="codeonly-m__help" to="/donde-esta-el-codigo" data-figma="TODO">
           ¿Dónde encuentro mi Código Secreto?
         </Link>
       </form>
 
       {count !== null && (
-        <CodeCounter count={count} className="codeonly-m__counter" />
+        <CodeCounter count={count} className="codeonly-m__counter" data-figma="TODO" />
       )}
     </div>
   );

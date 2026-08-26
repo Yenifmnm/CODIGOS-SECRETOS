@@ -17,14 +17,17 @@ const SCENE_H = 215;
  * El cofre se apoya sobre la superficie curva del planeta y sólo respira: un
  * balanceo mínimo y un cambio de escala apenas perceptible. Nada de apertura,
  * que es lo que distingue a estas pantallas de GANASTE.
+ *
+ * Cada `data-figma` lista los tres nodos del mismo elemento, uno por frame, en
+ * este orden: perdiste · codigo-utilizado · codigo-inexistente.
  */
 export function ClosedChestMobile() {
   const reduced = useReducedMotion();
 
   return (
-    <MobileScene height={SCENE_H} className="mchest">
+    <MobileScene height={SCENE_H} className="mchest" data-figma="TODO TODO TODO">
       {/* Superficie del planeta: asoma por abajo y sostiene al cofre. */}
-      <div className="mchest__planet" aria-hidden="true" />
+      <div className="mchest__planet" aria-hidden="true" data-figma="TODO TODO TODO" />
 
       <motion.img
         src={cofreCerrado}
@@ -32,6 +35,7 @@ export function ClosedChestMobile() {
         aria-hidden="true"
         className="mabs mlayer-img mchest__img"
         style={mbox({ x: 106, y: 21, w: 210, h: 194, sceneH: SCENE_H })}
+        data-figma="TODO TODO TODO"
         animate={reduced ? undefined : { rotate: [-0.9, 0.9, -0.9], scale: [1, 1.015, 1] }}
         transition={{ duration: 6.4, repeat: Infinity, ease: 'easeInOut' }}
       />

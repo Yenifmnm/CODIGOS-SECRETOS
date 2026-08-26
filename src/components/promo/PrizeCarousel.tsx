@@ -20,6 +20,8 @@ interface PrizeCarouselProps {
    * con sus propias coordenadas, así que esta prop queda sin usar.
    */
   caption?: string;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
 }
 
 /**
@@ -54,7 +56,13 @@ const SWIPE_THRESHOLD = 40;
  * Carrusel de premios. Se opera con flechas, teclado (← →, Home, End),
  * click sobre un premio lateral y swipe táctil.
  */
-export function PrizeCarousel({ prizes, onActiveChange, withThumbs = false, caption }: PrizeCarouselProps) {
+export function PrizeCarousel({
+  prizes,
+  onActiveChange,
+  withThumbs = false,
+  caption,
+  'data-figma': figma,
+}: PrizeCarouselProps) {
   const [active, setActive] = useState(0);
   const reduced = useReducedMotion();
   const touchStart = useRef<number | null>(null);
@@ -124,6 +132,7 @@ export function PrizeCarousel({ prizes, onActiveChange, withThumbs = false, capt
       onKeyDown={onKeyDown}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
+      data-figma={figma}
     >
       <button type="button" className="carousel__arrow carousel__arrow--prev" onClick={() => go(-1)}>
         <span className="sr-only">Premio anterior</span>

@@ -83,9 +83,14 @@
     height: auto;
   }
 
+  /* `padding-inline: 0` explícito, que si no gana el 8% de la regla base. El
+     rótulo va centrado por el grid del botón, así que el relleno no movía el
+     texto: sólo ensanchaba su caja y la separaba de la del nodo del Figma, que
+     es la del texto. El aire contra los bordes del tablón sale de la
+     proporción del diseño: 205 de texto en 255 de superficie. */
   .promo-btn__label {
     font-size: var(--promo-btn-fs-m, 6.965cqw); /* 28 sobre 402 */
-    padding-inline: 6%;
+    padding-inline: 0;
     white-space: nowrap;
   }
 

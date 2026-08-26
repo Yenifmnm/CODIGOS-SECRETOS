@@ -14,6 +14,12 @@ figma/*.zip
 # —nombres, cantidades e imagenes, sin horarios— vive en docs/PREMIOS-2026.md.
 recursos/premios/*.xlsx
 
+# Tipografia licenciada de Hanoded. El repo es publico y la licencia webfont
+# habilita a servirla desde el sitio, no a repartir el archivo: quien clone el
+# repo no la tiene y el sitio le sale con la sustituta Chewy. Para trabajar en
+# local hay que pedirla y dejarla en public/fonts/ con ese nombre exacto.
+public/fonts/DKPrinceFrog.*
+
 # Variables locales: pueden traer claves. Se versiona solo .env.example
 .env
 .env.*
@@ -22,3 +28,6 @@ audit-shots/
 
 # capturas de auditoria visual (se generan en el scratchpad)
 actual/
+
+# comparaciones generadas por scripts/figma-check.mjs
+figma/check/

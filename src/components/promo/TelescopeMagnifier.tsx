@@ -12,6 +12,8 @@ interface TelescopeMagnifierProps {
   style?: React.CSSProperties;
   /** Texto alternativo del contenido ampliado, para quien no use el catalejo. */
   description?: string;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
 }
 
 const KEY_STEP = 0.06; // 6% del contenedor por pulsación
@@ -35,6 +37,7 @@ export function TelescopeMagnifier({
   className,
   style,
   description,
+  'data-figma': figma,
 }: TelescopeMagnifierProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const lensRef = useRef<HTMLDivElement>(null);
@@ -131,7 +134,11 @@ export function TelescopeMagnifier({
   };
 
   return (
-    <div className={['telescope', className].filter(Boolean).join(' ')} style={style}>
+    <div
+      className={['telescope', className].filter(Boolean).join(' ')}
+      style={style}
+      data-figma={figma}
+    >
       <div
         ref={containerRef}
         className={`telescope__viewport${visible ? ' telescope__viewport--active' : ''}`}

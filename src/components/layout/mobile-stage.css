@@ -45,6 +45,18 @@
   position: absolute;
 }
 
+/* `global.css` le pone `max-width: 100%` a toda imagen. Varias capas del diseño
+   son más anchas que su contenedor a propósito —el glow del landing mide 411
+   sobre un lienzo de 402, el papel de REGISTRO 534 dentro de un pergamino de
+   340, la foto de fondo 493 sobre la pantalla— y esa regla las recortaba en
+   silencio: el elemento quedaba con la medida del contenedor en vez de la del
+   nodo, y el reporte lo mostraba como un Δw que no venía de ninguna regla.
+   `.mabs` es la clase de toda capa que sangra a propósito, así que la excepción
+   vive acá, una sola vez. Las que no son `.mabs` la declaran por su cuenta. */
+.mabs {
+  max-width: none;
+}
+
 /* Imagen de una capa: llena su caja sin deformarse y nunca captura el puntero. */
 .mlayer-img {
   display: block;

@@ -13,11 +13,14 @@ comercial, así que esa versión no sirve: hay que comprar la licencia completa.
 - Al comprar hay que pedir/incluir la **licencia webfont**, no sólo la desktop:
   la desktop no habilita a servir la fuente desde el sitio.
 
-## Cómo activarla
+## Estado: activa
 
-1. Copiar `DKPrinceFrog.woff2` en esta carpeta (ese nombre exacto).
-2. Listo. El `@font-face` ya está declarado en `src/styles/tokens.css` y
-   `--font-display` la busca primero.
+`DKPrinceFrog.woff2` y `DKPrinceFrog.woff` ya están en esta carpeta, con la
+licencia webfont comprada. El `@font-face` de `src/styles/tokens.css` los sirve
+y `--font-display` la busca primero, así que el sitio la usa y `Chewy` quedó
+sólo como red de seguridad.
+
+Si alguna vez hay que reponerlos, van con ese nombre exacto y nada más.
 
 Si el archivo no está, la regla falla en silencio y el navegador pasa al
 siguiente nombre del stack. No hay nada que comentar ni descomentar.

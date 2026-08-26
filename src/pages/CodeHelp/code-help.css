@@ -1,12 +1,10 @@
 /* DÓNDE ESTÁ EL CÓDIGO — Figma 19:2982 */
 
-@font-face {
-  font-family: 'DK Prince Frog Code Help';
-  src: url('/fonts/DKPrinceFrog.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+/* Acá vivía un segundo `@font-face` que cargaba `DKPrinceFrog.otf` bajo otro
+   nombre de familia. Era de cuando la licenciada no estaba y sólo existía ese
+   .otf suelto: hoy `tokens.css` declara 'DK Prince Frog' con el woff2 y el
+   woff, y `--font-display` la busca primero, así que estas reglas usan la
+   misma tipografía —el mismo archivo— por la vía normal. */
 
 /* Planeta oscuro del fondo: un círculo enorme del que sólo se ve el casquete
    superior. Mismo recurso que `.result__planet` de las pantallas de resultado. */
@@ -35,7 +33,7 @@
 
 .codehelp__title {
   margin: 0;
-  font-family: 'DK Prince Frog Code Help', var(--font-display);
+  font-family: var(--font-display);
   text-align: center;
   line-height: 1.08;
   transform: translateX(-50%);
@@ -55,7 +53,7 @@
   padding: 0.5cqw 2.4cqw;
   border-radius: 200px;
   background: #0783b3;
-  font-family: 'DK Prince Frog Code Help', var(--font-display);
+  font-family: var(--font-display);
   font-size: 1.302cqw; /* 25 */
   line-height: 1.12;
   color: #fff;

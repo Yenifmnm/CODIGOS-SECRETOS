@@ -118,9 +118,17 @@
   pointer-events: none;
 }
 
+/* `position: absolute` para que la pantalla pueda darle su encuadre con
+   `mobileCielo`. Sin encuadre, `inset` queda en auto y el resultado es el
+   mismo de antes: la foto llenando el cielo. */
 .mstage__bg {
+  position: absolute;
   width: 100%;
   height: 100%;
+  /* El encuadre del Figma es más ancho que la pantalla —493 sobre un lienzo de
+     402— y el `max-width: 100%` que `global.css` le pone a toda imagen lo
+     recortaba justo a los 402. */
+  max-width: none;
   object-fit: cover;
   object-position: center top;
   display: block;

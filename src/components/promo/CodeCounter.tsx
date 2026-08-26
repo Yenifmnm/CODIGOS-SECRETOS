@@ -9,6 +9,8 @@ interface CodeCounterProps {
   label?: string;
   style?: CSSProperties;
   className?: string;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
 }
 
 /**
@@ -22,11 +24,16 @@ export function CodeCounter({
   label = 'Códigos cargados',
   style,
   className,
+  'data-figma': figma,
 }: CodeCounterProps) {
   const padded = String(Math.max(0, Math.trunc(count))).padStart(digits, '0').slice(-digits);
 
   return (
-    <div className={['code-counter', className].filter(Boolean).join(' ')} style={style}>
+    <div
+      className={['code-counter', className].filter(Boolean).join(' ')}
+      style={style}
+      data-figma={figma}
+    >
       <div className="code-counter__plate">
         <img src={contadorPlate} alt="" aria-hidden="true" />
         <output className="code-counter__value" aria-label={`${count} ${label}`}>
