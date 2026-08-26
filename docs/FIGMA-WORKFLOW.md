@@ -168,6 +168,55 @@ diseñador al exportarlo, que no es un dato de diseño.
 
 ---
 
+### La pintura: lo que no mueve la caja
+
+`figma:check` no compara sólo geometría. Por cada capa marcada también verifica
+contra el spec:
+
+| | |
+| --- | --- |
+| **color** | del texto, o el relleno sólido de una caja |
+| **tipografía** | que la familia del diseño esté realmente aplicada |
+| **cuerpo, interlineado, espaciado** | en px de diseño, escalados al lienzo |
+| **transformación y alineación** | `uppercase`, `center`, etc. |
+| **opacidad y radios** | |
+| **trazo** | ancho, color y **orden de pintado** |
+| **sombras** | busca en `text-shadow`, `box-shadow` y `filter` a la vez |
+
+Esto existe porque la tabla de capas puede dar **todo en cero y la pantalla
+verse distinta igual**: un título con el resplandor del color equivocado, una
+etiqueta en otro tono, o —el más silencioso— un texto que cayó en la tipografía
+sustituta porque la licenciada no cargó. Ninguna de esas tres mueve un píxel de
+la caja.
+
+Sale en su propia sección del reporte, con el valor del diseño y el del sitio
+lado a lado.
+
+Cuando el color no lo pinta el elemento marcado sino un hijo, se lo saca del
+control con `data-figma-omitir="pintura"`. También acepta claves sueltas —
+`data-figma-omitir="fondo,sombras"`— para omitir una sola propiedad en vez de
+todas.
+
+**El orden de pintado del trazo.** CSS por defecto dibuja el relleno y **encima**
+el trazo, así que un trazo centrado de 2 px se come 1 px de letra por todo el
+contorno: el texto queda pálido y hueco, y el borde se lee como un contorno duro
+en vez de un filo. Figma lo muestra al revés. Por eso, si el nodo declara trazo
+sobre un texto, el control exige `paint-order: stroke fill`.
+
+**Dos conversiones que conviene no equivocar:**
+
+- Una sombra de Figma (`DROP_SHADOW`) va **1:1** al radio de CSS. El `÷2` es
+  para el desenfoque de capa (`LAYER_BLUR`) contra `filter: blur()`, que es
+  otra cosa.
+- Sobre texto va con `text-shadow`, que sigue la forma de las letras. Sobre una
+  imagen con transparencia, con `filter: drop-shadow()`, que sigue el alfa.
+  `box-shadow` dibujaría el rectángulo de la caja.
+
+El spec ya trae cada efecto con su CSS armado en el campo `css`: usá ese valor
+en vez de recalcularlo.
+
+---
+
 ## Ojo con el alto del frame
 
 Los exports mobile no miden todos igual: `landing`, `Registro`, `Premios`,
