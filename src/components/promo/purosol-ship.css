@@ -8,6 +8,15 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  /* Este reborde de 24 px NO está en el spec —el nodo `barco 1` declara una
+     sola sombra, de 250— y sin embargo se queda, con el número que lo sostiene:
+     sacarlo sube el diff del landing de 32,48% a 37,14%. Medido también que no
+     se arregla apilando la del diseño: encadenar dos o tres sombras de 250 da
+     37,11% y 37,12%, o sea nada. Lo que falta no es densidad sino un filo
+     cercano a la silueta, que un desenfoque de 250 px no puede dar y Figma sí
+     dibuja. Cuesta cero cuadros: el caro era el de 250 sobre el elemento
+     animado, que vive aparte en `.home-m__ship-halo`. */
+  filter: drop-shadow(0 0 6cqw rgba(255, 255, 255, 0.55));
 }
 
 /* Entrada desde la derecha → posición final → flotación permanente. */

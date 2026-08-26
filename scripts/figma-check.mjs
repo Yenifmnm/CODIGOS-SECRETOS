@@ -91,11 +91,12 @@ for (const pantalla of objetivo) {
   const pagina = await navegador.newPage({
     viewport: { width: Math.round(ancho), height: Math.round(alto) },
     deviceScaleFactor: 1,
-    // `animation: none` apaga las animaciones CSS, pero no las de Framer
-    // Motion, que escribe `transform` inline desde JS: el cofre de PERDISTE se
-    // medía 199.5x199.5 en vez de 197x197 porque la captura lo agarraba a
-    // mitad del balanceo. Los componentes ya respetan `useReducedMotion`, así
-    // que pedir el modo reducido los deja quietos en su reposo.
+    // Sin esto se mide a mitad de una animación. El `animation: none` que se
+    // inyecta más abajo apaga las de CSS, pero Framer Motion escribe el
+    // `transform` inline desde JS y sigue corriendo igual: el cofre de perdiste
+    // se medía 199,5×199,5 en vez de 197×197 porque la captura lo agarraba
+    // balanceándose. Los componentes respetan `useReducedMotion`, así que con
+    // esto quedan quietos en reposo. NO SACAR.
     reducedMotion: 'reduce',
   });
 
@@ -566,6 +567,21 @@ function reporte(pantalla, spec, viewport, desvios, pixeles, errores, referencia
     l.push('opacidad, radios y sombras. Nada de esto mueve la caja, así que la tabla');
     l.push('de capas puede dar todo en cero y la pantalla verse distinta igual.');
     l.push('');
+    const ajustes = pintura.filter((x) => x.ajuste);
+    if (ajustes.length) {
+      l.push(`Además, **${ajustes.length} cuerpo(s) ajustados** por la tipografía sustituta:`);
+      l.push('');
+      l.push('| Capa | Nodo | Diseño | Sitio |');
+      l.push('| --- | --- | --- | --- |');
+      for (const x of ajustes) {
+        l.push(`| ${x.capa} | \`${x.id}\` | ${escapar(x.esperado)} | ${escapar(x.real)} |`);
+      }
+      l.push('');
+      l.push('No cuentan como desvío: la sustituta es más ancha y a igual cuerpo el');
+      l.push('texto se parte y corre la pantalla. Se iguala la caja del nodo, no su');
+      l.push('número de px. Se toleran hasta un 20% y sólo hacia abajo.');
+      l.push('');
+    }
     if (mal.length) {
       l.push('| Capa | Nodo | Propiedad | Diseño | Sitio |');
       l.push('| --- | --- | --- | --- | --- |');
@@ -632,7 +648,26 @@ function compararPintura(esperado, e, escala) {
     }
     if (tg.tamano) {
       const esp = tg.tamano * escala;
-      anotar('cuerpo', `${red(esp)}px`, `${red(e.cuerpo)}px`, Math.abs(e.cuerpo - esp) <= 0.5);
+      const exacto = Math.abs(e.cuerpo - esp) <= 0.5;
+
+      // Con una tipografía sustituida el cuerpo casi nunca puede ser el del
+      // diseño: la sustituta es más ancha y a igual cuerpo el texto se parte y
+      // corre la pantalla entera. El criterio del proyecto es igualar la CAJA
+      // del nodo, no su número de px, así que se achica el cuerpo. Eso se
+      // tolera —hasta un 20% y sólo hacia abajo— y se muestra igual, marcado
+      // como ajuste. Más allá de ese margen vuelve a ser un error: una
+      // sustitución no es un permiso para cualquier tamaño.
+      const haySustituta = Boolean(tg.familia && SUSTITUCIONES[tg.familia]);
+      const ajustado = haySustituta && !exacto && e.cuerpo < esp && e.cuerpo >= esp * 0.8;
+
+      anotar(
+        'cuerpo',
+        `${red(esp)}px`,
+        ajustado ? `${red(e.cuerpo)}px (ajustado por la sustituta)` : `${red(e.cuerpo)}px`,
+        exacto || ajustado,
+        'cuerpo',
+      );
+      if (ajustado) out[out.length - 1].ajuste = true;
     }
     if (tg.interlineado) {
       const esp = tg.interlineado * escala;

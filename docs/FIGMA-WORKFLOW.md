@@ -208,6 +208,13 @@ original: mismo peso de trazo, mismo redondeo. La sustitución está declarada e
 
 El control acepta cualquiera de las dos donde el spec pide la del diseño, y
 sigue avisando si un texto cae en una **tercera** fuente, que es el error real.
+
+Chewy no es uniformemente más ancha: va de **4% a 18% según la cadena**. Por eso
+el criterio es igualar la **caja del nodo**, no su número de px — a igual cuerpo
+el texto se parte en un renglón de más y corre la pantalla entera. Donde la caja
+es justa se achica el cuerpo, y el control lo tolera **hasta un 20% y sólo hacia
+abajo**, listándolo aparte como «cuerpo ajustado». Más allá de ese margen vuelve
+a ser un error: una sustitución no es un permiso para cualquier tamaño.
 Sin esa declaración, cada texto de cada pantalla saldría en rojo para siempre y
 el control se volvería ruido.
 

@@ -264,7 +264,9 @@
     font-family: var(--font-display);
     /* 12 px de Chewy miden 299.3 contra los 257 del nodo. */
     font-size: 2.562cqw;    /* 10.3 (el nodo dice 12) */
-    line-height: 1.0417;    /* 12.5 */
+    /* La interlínea del nodo son 12.5 px ABSOLUTOS: al bajar el cuerpo por la
+       sustituta, un factor relativo se los llevaba a 10.7. */
+    line-height: 1.2136;    /* 12.5 */
     color: #fff;
     text-align: center;
   }
@@ -376,6 +378,41 @@
   /* `contador` (74:1044) en (71, 853) 107x60, y `Codigos cargados` (74:1047)
      en (191, 874) 148x26: el rotulo va 13 px a la derecha de la placa y 21 px
      mas abajo que su borde de arriba. */
+  /* ------------------------------------------------------------------
+     `codigo-utilizado` (105:260) e `codigo-inexistente` (131:332). Entre sí
+     son idénticas —sólo cambia el texto del mensaje— y se apartan de PERDISTE
+     en cuatro cosas, todas del spec:
+       logo      119 en vez de 126        X         323 en vez de 335
+       titular   38,286  341x42           mensaje   32,340  340x78
+     El titular y el mensaje además arrancan más abajo, así que el ritmo de la
+     columna cambia hasta el botón.
+     ------------------------------------------------------------------ */
+  .result-m--orbita .result-m__logo {
+    margin-left: 29.602cqw;   /* 119 */
+  }
+
+  .result-m--orbita .result-m__close {
+    left: 80.348cqw;          /* 323 */
+  }
+
+  .result-m--orbita .result-m__title {
+    align-self: flex-start;
+    margin-left: 9.453cqw;    /* 38 */
+    margin-top: 2.239cqw;     /* y 286 */
+    line-height: 1.16;        /* 42 de alto */
+  }
+
+  .result-m--orbita .result-m__msg {
+    align-self: flex-start;
+    margin-left: 7.96cqw;     /* 32 */
+    margin-top: 2.985cqw;     /* y 340 */
+    max-width: 84.577cqw;     /* 340: acá el mensaje es más ancho que en perdiste */
+  }
+
+  .result-m--orbita .result-m__cta {
+    margin-top: 2.985cqw;     /* y 430, con el mensaje de tres renglones */
+  }
+
   .result-m__counter {
     align-self: flex-start;
     margin-left: 17.662cqw; /* 71 */

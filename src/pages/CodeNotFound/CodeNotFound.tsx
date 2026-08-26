@@ -13,8 +13,11 @@ export default function CodeNotFound() {
       pageTitle="Código fuera de órbita"
       title="¡Código fuera de órbita!"
       titleSize={86}
-      mobileTitleSize={34}
-      mobileTitleShift={15}
+      /* El nodo dice 40 px; a ese cuerpo Chewy mide 376.3 contra los 341 de la
+         caja. 36.2 dan los 341 exactos. El corrimiento vertical ahora sale del
+         margen de la variante, no de un `top` relativo. */
+      mobileTitleSize={36.2}
+      mobileVariante="orbita"
       titleTone="outline"
       titleX={499}
       titleY={484}

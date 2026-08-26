@@ -55,6 +55,13 @@ export interface ResultLayoutProps {
   codeCount: number;
   /** Versión mobile de la escena. */
   mobileScene: ReactNode;
+  /**
+   * Sufijo de clase para las pantallas que se apartan de la caja de PERDISTE,
+   * que es contra la que está calibrada la composición. `codigo-utilizado` y
+   * `codigo-inexistente` comparten una caja propia: el logo y la X corridos a
+   * la izquierda, y el titular y el mensaje con su propia geometría.
+   */
+  mobileVariante?: string;
   pageTitle: string;
 }
 
@@ -87,6 +94,7 @@ export function ResultLayout({
   codeRedeemed = true,
   codeCount,
   mobileScene,
+  mobileVariante,
   pageTitle,
 }: ResultLayoutProps) {
   const navigate = useNavigate();
@@ -132,7 +140,9 @@ export function ResultLayout({
            titular es más alto y corre el botón y la píldora— y por eso sus
            corrimientos NO viven acá: van en su propia clase. */
         <div
-          className={`result-m result-m--${titleTone}`}
+          className={`result-m result-m--${titleTone}${
+            mobileVariante ? ` result-m--${mobileVariante}` : ''
+          }`}
           id="contenido"
           data-figma="74:1025 73:858 105:260 131:332"
           data-figma-ejes="x,w"
