@@ -370,6 +370,32 @@ trazo es relleno y qué proporción es contorno, en el render y en el export de
 Figma, con los colores del propio nodo. Al ser un COCIENTE se puede comparar el
 render a 3× contra un export de 1×, cosa que los conteos absolutos no permiten.
 
+## Efectos inventados
+
+Mismo caso, otra propiedad. El logo de REGISTRO tenía
+`filter: drop-shadow(0 0 3cqw rgba(9,234,255,.6))` y su nodo, el 73:553,
+declara `efectos: null`. El resplandor estaba copiado del logo del LANDING
+(70:169, que sí lleva dos de `0 0 250px #09EAFF`). La clienta lo describió como
+«un brillo raro verde detrás de códigos secretos».
+
+`figma:check` no lo veía y no podía: compara la caja, el relleno y el trazo, y
+un `filter` no mueve la caja ni cambia el `color`. Sacarlo bajó el diff de
+píxeles de la pantalla de 6,49% a 5,22%, que es la medida de cuánto ensuciaba.
+
+`npm run audit:efectos` (`scripts/medir-efectos.mjs`) recorre las once
+pantallas y, por cada capa que pinta `filter`, `box-shadow`, `text-shadow` o
+`backdrop-filter`, pregunta si el nodo declara un efecto equivalente. Dos cosas
+que el script sabe y conviene no volver a descubrir:
+
+- **`text-shadow` se hereda.** Un hijo devuelve el del padre sin declararlo.
+  Sólo cuenta el elemento donde el valor CAMBIA.
+- **Una sombra declarada no siempre pinta.** `rgba(9,234,255,0) 0 0 0 0` está en
+  varias reglas como estado de partida de una transición: alfa 0 y todo en cero.
+
+Y una que es la frontera del control: **lo que no está marcado no se puede
+comprobar.** El script lista aparte las capas que pintan un efecto sin
+`data-figma`; esa lista es hasta dónde llega, no «no hay más».
+
 ## Problema abierto: el checker es ciego al estado, al movimiento y al gesto
 
 `figma:check` abre una ruta, espera a que cargue y mide **una sola foto quieta,

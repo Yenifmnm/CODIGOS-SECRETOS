@@ -160,7 +160,11 @@
     width: 62.06%;             /* 211 */
     height: auto;
     z-index: 3;
-    filter: drop-shadow(0 0 3cqw rgba(9, 234, 255, 0.6));
+    /* SIN resplandor. El nodo 73:553 declara `efectos: null`: el diseño no le
+       pone ninguno. El `drop-shadow` cian que había acá estaba copiado del logo
+       del LANDING (70:169, que sí lleva dos de `0 0 250px #09EAFF`) y se veía
+       como un brillo verde detrás del papel. Si alguna vez parece que le falta
+       algo, el nodo que hay que mirar es el suyo, no el de la otra pantalla. */
   }
 
   /* Dino asomando arriba a la derecha, sangrando por el borde de la pantalla. */
