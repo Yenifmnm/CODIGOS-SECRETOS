@@ -2,11 +2,19 @@
 
 .logo-cs {
   display: block;
-  /* La PRIMERA de las dos `0 0 250px #09EAFF` del nodo. La segunda va en la
-     imagen de adentro. No se encadenan en un mismo `filter`: ése es el patrón
-     que WebKit dibuja de más en las versiones nuevas y no dibuja en las
-     viejas. `--logo-glow` es UNA sombra, no las dos. */
-  filter: var(--logo-glow);
+  /* SIN `filter`. Acá hubo una de las dos sombras del nodo y la otra en la
+     imagen, y eso DIBUJABA UN HALO CUADRADO en iPhone 17 Pro.
+
+     Anidar no es repartir. La sombra de afuera se aplica sobre el resultado ya
+     desenfocado de la de adentro, y esa segunda pasada se recorta en la región
+     del filtro: el borde recto del recorte es el cuadrado que se veía. Dos
+     sombras en dos elementos, uno dentro del otro, son dos pasadas igual que
+     encadenarlas en un mismo `filter`.
+
+     Ahora va UNA SOLA, en la imagen. Una pasada, sin segunda región que
+     recortar. Es lo que la tabla del cofre ya decía: «una sola de 500 → 1,00,
+     anda; dos de 250 encadenadas → 0,12, falla». El problema nunca fue el
+     radio, fue tener dos. */
 }
 
 .logo-cs > img {

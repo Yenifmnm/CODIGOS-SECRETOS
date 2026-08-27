@@ -23,11 +23,31 @@ interface LogoCodigosProps {
  *     contra 4.975 en Chromium. El doble. Y en un iPhone 14 el logo
  *     directamente NO SE DIBUJA: 57,1 de luminancia contra 123,4 en un 17.
  *
- * Así que las dos sombras van en DOS elementos, una cada uno, igual que en el
- * cofre. El contenedor lleva la clase que posiciona —todas las reglas de las
- * cinco pantallas siguen aplicando sobre él, sin tocarlas— y la imagen lo
- * llena. El `height: 100%` de la imagen se resuelve como `auto` cuando el
- * contenedor no tiene alto definido, que es el caso de dos de las cinco.
+ * PRIMER INTENTO, Y POR QUÉ NO ALCANZÓ. Se pusieron las dos sombras en dos
+ * elementos, una en este contenedor y otra en la imagen. Eso DIBUJÓ UN HALO
+ * CUADRADO en iPhone 17 Pro: anidar no es repartir. La sombra del contenedor se
+ * aplica sobre el resultado ya desenfocado de la de adentro, y esa segunda
+ * pasada se recorta en la región del filtro; el borde recto del recorte es el
+ * cuadrado. Dos elementos, uno dentro del otro, son dos pasadas igual que
+ * encadenarlas en un mismo `filter`.
+ *
+ * OJO: el arreglo del cofre en `result-layout.css` tiene la misma forma
+ * —`.mchest__stack` es hija de `.mchest__img`, no su hermana— y Playwright no
+ * lo delata. Está sin reportar, pero es el mismo constructo.
+ *
+ * AHORA VA UNA SOLA SOMBRA, en la imagen. Una pasada, sin segunda región que
+ * recortar. Cuesta densidad y está medido: contra el export del landing, la
+ * caja del logo queda a 12,5 de luminancia con una sombra, contra 2,3 con las
+ * dos anidadas. No es afinable —dos sombras apiladas componen densidad y el
+ * alfa no puede pasar de 1: barriendo radio 125..250 y alfa 1 y 0,8, la mejor
+ * combinación sigue a 12,5—. Si hace falta recuperar esa densidad, la vía
+ * medida es un `::before` con la misma imagen y su propia sombra: HERMANO del
+ * `<img>` y no su padre, que da 5,9 y tampoco filtra sobre otro filtro.
+ *
+ * El contenedor lleva la clase que posiciona —todas las reglas de las cinco
+ * pantallas siguen aplicando sobre él, sin tocarlas— y la imagen lo llena. El
+ * `height: 100%` de la imagen se resuelve como `auto` cuando el contenedor no
+ * tiene alto definido, que es el caso de dos de las cinco.
  *
  * Cinco pantallas lo usan: inicio, participar, premios, código y las cuatro de
  * resultado. Se cambia acá una vez, no en cinco lugares.
