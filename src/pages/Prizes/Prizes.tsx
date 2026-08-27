@@ -35,26 +35,42 @@ export default function Prizes() {
     <Stage
       title="Premios"
       mobileBg="halo"
+      mobileCielo={{ nodo: '73:672', x: -46, y: -38, w: 493, h: 1070 }}
       mobile={
         /* Figma "Premios.png": logo → carrusel con flechas → nombre del premio
            → tira de miniaturas. El carrusel ya trae swipe y flechas. */
-        <div className="prizes-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
+        <div
+          className="prizes-m"
+          id="contenido"
+          data-figma="73:671"
+          data-figma-ejes="x,w"
+          data-figma-omitir="pintura"
+        >
           {/* Estela que barre por detrás del premio activo. Es el mismo asset
               que usa el reveal de GANASTE, no una aproximación en CSS. */}
-          <img src={glow} alt="" aria-hidden="true" className="prizes-m__arc" data-figma="TODO" />
+          <img src={glow} alt="" aria-hidden="true" className="prizes-m__arc" data-figma="73:744" />
 
           <img
             src={logoCodigos}
             alt="Códigos Secretos 2026"
             className="prizes-m__logo"
-            data-figma="TODO"
+            data-figma="73:732"
           />
           <PrizeCarousel
             prizes={prizes}
             onActiveChange={onActiveChange}
             withThumbs
             caption={activeName}
-            data-figma="TODO"
+            nodos={{
+              flechaIzq: '73:739',
+              flechaDer: '73:741',
+              premio: '73:743',
+              nombre: '73:745',
+              miniActiva: '73:752',
+              miniIzq2: '73:747',
+              miniIzq1: '73:748',
+              miniDer1: '73:750',
+            }}
           />
         </div>
       }

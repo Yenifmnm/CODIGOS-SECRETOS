@@ -5,49 +5,70 @@
   transition: opacity 220ms var(--ease-soft);
 }
 
-/* Composición mobile — Figma "Premios.png" (402x913). */
+/* -------------------------------------------------------------------------
+   Composición mobile — frame `Premios` 73:671 (402x913).
+
+   Todo va en coordenadas del frame, absolutas contra este bloque, que arranca
+   en 74 —donde arranca toda composición mobile, detrás del `<nav>` del menú—.
+   De ahí que cada `top` sea la y del spec menos 74; la x va tal cual, porque el
+   bloque ocupa el ancho completo. El alto llega hasta el pie de las
+   miniaturas, en 789.
+
+   El recorte horizontal es el del propio frame: la estela mide 431.8 de
+   envolvente sobre un lienzo de 402 y se sale 30 px por la derecha a
+   propósito. Sin esto, esos 30 px le daban scroll horizontal a `.mstage`
+   —que lo tiene en `hidden`, o sea invisible pero desplazable— y al enfocar
+   una flecha el navegador corría la pantalla entera 30 px. En vertical no se
+   recorta: el resplandor de la ficha activa se apoya en el borde de abajo.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .prizes-m {
+    position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    height: 177.861cqw;   /* 715 = de 74 a 789 */
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
-  /* Estela detrás del premio activo — effects/glow.webp, el mismo arco que usa
-     el reveal de GANASTE. Medido sobre el área útil del export (402x849): el
-     dibujo visible cae en [56, 333, 308, 190], que con el relleno
-     transparente del asset da esta caja. */
+  /* `glow-Photoroom 3` (73:744) — la estela detrás del premio. Es el mismo
+     asset que los dos resplandores de GANASTE: el nodo lo confirma, comparten
+     el `imageRef a9948b12…`, y la proporción natural del archivo (1013x644 =
+     1.5731) es la del `tamano` sin girar (399.4x253.9 = 1.5731).
+
+     El giro va por CSS con el ángulo del nodo, y además VOLTEADA EN VERTICAL.
+     El volteo no está en el spec: `figma:pull` guarda `rotation` pero no el
+     signo de la escala del nodo, así que un espejo se pierde y la caja
+     envolvente no lo delata —espejar no la cambia—. Se resolvió comparando el
+     render del propio nodo contra el asset girado de las ocho maneras: con
+     `rotate(171.7deg) scaleY(-1)` la correlación da 0.998 y con el giro solo,
+     0.021. Eso es lo que el `scaleX(-1)` de antes trataba de aproximar.
+
+     La caja es la del asset SIN girar, centrada donde el nodo pone la
+     envolvente rotada: (0, 333.8) 431.8x308.7, centro (215.9, 488.15). */
   .prizes-m__arc {
     position: absolute;
-    left: 12.042cqw;    /* 48 */
-    top: 82.589cqw;     /* 332 */
-    width: 83.186cqw;   /* 334 */
-    height: auto;
-    /* Espejado: en el export la media luna abre hacia la derecha. Comparadas
-       las cuatro orientaciones del asset contra el export, el espejo
-       horizontal es el que mejor correlaciona (0,895 contra 0,862 del
-       original, 0,869 y 0,867 de las otras dos). */
-    transform: scaleX(-1);
-    /* Por encima del carrusel: el premio activo lleva un drop-shadow cian muy
-       abierto que lava toda esa zona, y por debajo la estela desaparecía. */
+    left: 4.03cqw;        /* 16.2 */
+    top: 71.443cqw;       /* 361.2 - 74 */
+    width: 99.353cqw;     /* 399.4 */
+    height: 63.159cqw;    /* 253.9 */
+    max-width: none;
+    transform: rotate(171.7deg) scaleY(-1);
+    /* En el frame la estela va por encima del premio y de la ficha activa, y
+       por debajo del nombre y de las tres fichas chicas. */
     z-index: 2;
     pointer-events: none;
   }
 
-  .prizes-m .carousel {
-    position: relative;
-    z-index: 1;
-  }
-
+  /* `codigos secretos logo 1` (73:732): 257x191 en (71, 151). */
   .prizes-m__logo {
-    width: 63.93cqw;       /* 257: mismo cuerpo que en 14A, 14B y el export */
-    height: auto;
-    margin-top: 2.985cqw;
-    filter: drop-shadow(0 0 5cqw rgba(9, 234, 255, 0.72));
+    position: absolute;
+    left: 17.662cqw;      /* 71 */
+    top: 19.154cqw;       /* 151 - 74 */
+    width: 63.93cqw;      /* 257 */
+    height: 47.512cqw;    /* 191 */
+    max-width: none;
+    object-fit: contain;
+    /* Los dos `0 0 250px #09EAFF` del nodo. */
+    filter: drop-shadow(0 0 62.19cqw #09eaff) drop-shadow(0 0 62.19cqw #09eaff);
   }
-
-  /* Nada que ajustar acá: el carrusel usa la clase `.carousel`, no
-     `.prize-carousel`. Las dos reglas que había con ese prefijo nunca llegaron
-     a aplicarse; la geometría mobile vive toda en prize-carousel.css. */
 }

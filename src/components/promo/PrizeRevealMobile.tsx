@@ -25,8 +25,15 @@ const T = { anticipation: 0.28, open: 0.34, prize: 0.62 };
 
 /* Los dos resplandores son el MISMO asset girado distinto: `glow-Photoroom 3`
    (74:1012) a -53.7° y `glow-Photoroom 2` (74:1014) a -76.5°. Los dos miden
-   383.6x243.9 sin rotar, que es lo que declara `tamano` en el spec. */
-const GIRO_3 = 'rotate(-53.7deg)';
+   383.6x243.9 sin rotar, que es lo que declara `tamano` en el spec.
+
+   El 3 va ademas VOLTEADO EN VERTICAL. El volteo no esta en el spec —el pull
+   guarda `rotation` pero no el signo de la escala— y la caja envolvente no lo
+   delata, porque espejar no la cambia. Se resolvio comparando el render del
+   nodo contra el asset girado de las ocho maneras: `rotate(-53.7deg)
+   scaleY(-1)` da 0.998 de correlacion y el giro solo, 0.024. El 2 no lleva
+   volteo: asi da 0.998. */
+const GIRO_3 = 'rotate(-53.7deg) scaleY(-1)';
 const GIRO_2 = 'rotate(-76.5deg)';
 const openAt = T.anticipation;
 const lightAt = openAt + T.open * 0.4;

@@ -166,6 +166,30 @@ aparecen como «rotada -37.3°, centro», y por defecto sólo deciden por posici
 el ancho de un asset rotado depende de cuánto margen transparente le dejó el
 diseñador al exportarlo, que no es un dato de diseño.
 
+**El espejo no está en el spec, y el control no puede verlo.** `figma:pull`
+guarda `rotation`, pero no el signo de la escala del nodo: si el diseñador
+volteó la capa, esa información se pierde. Y `figma:check` tampoco la delata,
+porque **espejar no cambia la caja envolvente**: la capa da ✓ en las cuatro
+medidas y se ve al revés.
+
+Pasó con el mismo asset en dos pantallas: `glow-Photoroom` sale girado −53,7° en
+GANASTE y 171,7° en PREMIOS, y en los dos casos además **volteado en vertical**;
+sólo el tercero, a −76,5°, va sin voltear. La forma de resolverlo es comparar el
+render del propio nodo contra el asset transformado de las ocho maneras
+—`rotate(±θ)` por `scaleX(-1)`, `scaleY(-1)` y sin espejo— y quedarse con la que
+correlaciona:
+
+```
+premios 73:744   spec 171.7°   rotate(171.7deg) scaleY(-1)   0.998   (solo el giro: 0.021)
+ganaste 74:1012  spec -53.7°   rotate(-53.7deg) scaleY(-1)   0.998   (solo el giro: 0.024)
+ganaste 74:1014  spec -76.5°   rotate(-76.5deg)              0.998
+```
+
+El render del nodo se baja con la misma API del pull:
+`GET /v1/images/<fileKey>?ids=<nodo>&format=png&scale=2`. Si una capa rotada
+mide bien y igual «no se parece», esto es lo primero a descartar — antes de
+tocar el ángulo, y antes de aproximarlo a ojo con un `scaleX(-1)`.
+
 ---
 
 ### La pintura: lo que no mueve la caja
