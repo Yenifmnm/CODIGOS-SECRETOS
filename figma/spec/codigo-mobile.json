@@ -114,6 +114,7 @@
         "id": "73:789",
         "nombre": "barco 1",
         "tipo": "RECTANGLE",
+        "espejo": true,
         "rotacion": 180,
         "rect": {
           "x": -107,

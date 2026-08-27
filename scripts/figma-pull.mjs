@@ -172,6 +172,19 @@ function normalizar(nodo, raiz, nivel) {
   };
 
   if (nodo.visible === false) out.oculto = true;
+
+  // El espejo. Figma no lo guarda como una propiedad: lo mete en la matriz
+  // `relativeTransform` como una escala negativa, y muchas veces lo acompaña de
+  // una rotación de 180° que por sí sola dejaría la pieza cabeza abajo. Un
+  // determinante negativo es la señal inequívoca.
+  //
+  // Importa porque la caja envolvente es IDÉNTICA con espejo o sin él: sin este
+  // dato, una nave dada vuelta pasa el control con las cuatro medidas en cero.
+  const m = nodo.relativeTransform;
+  if (m && m.length === 2) {
+    const det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
+    if (det < 0) out.espejo = true;
+  }
   if (typeof nodo.opacity === 'number' && nodo.opacity !== 1) out.opacidad = redondear(nodo.opacity, 2);
   if (nodo.rotation) out.rotacion = redondear((nodo.rotation * 180) / Math.PI, 1);
 

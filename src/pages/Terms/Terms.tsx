@@ -96,13 +96,21 @@ export default function Terms() {
 
   const content = (
     <>
-      <p className="terms__heading">Bases y Condiciones</p>
+      {/* La cinta y su texto son dos capas del frame: `Vector 1` (73:934) es
+          la silueta y `Bases y Condiciones` (73:935) el rótulo de adentro. */}
+      <p className="terms__heading" data-figma="73:934">
+        <span className="terms__heading-text" data-figma="73:935">
+          Bases y Condiciones
+        </span>
+      </p>
 
       {/* El pergamino no crece: el texto —que es largo— scrollea acá dentro.
           La barra es propia y no la nativa porque Safari iOS no dibuja
           scrollbars: sólo las muestra mientras se arrastra, así que no habría
           ninguna señal de que el texto sigue. */}
-      <div className="terms__viewport">
+      {/* `73:939` es el bloque de texto de relleno del diseño, no el alto del
+          legal real, que scrollea: sólo deciden la x y el ancho. */}
+      <div className="terms__viewport" data-figma="73:939" data-figma-ejes="x,w">
         <div
           className="terms__scroll"
           ref={scrollRef}
@@ -113,12 +121,28 @@ export default function Terms() {
         >
           {body}
         </div>
-        <div className="terms__bar" aria-hidden="true">
-          <span className="terms__bar-thumb" style={{ top: `${thumb.top}%`, height: `${thumb.size}%` }} />
+        <div className="terms__bar" aria-hidden="true" data-figma="73:942">
+          <span
+            className="terms__bar-thumb"
+            data-figma="73:943"
+            data-figma-ejes="x,w"
+            style={{ top: `${thumb.top}%`, height: `${thumb.size}%` }}
+          />
         </div>
       </div>
 
-      <RibbonButton className="terms__cta" width={328} height={58} fontSize={40} onClick={accept}>
+      <RibbonButton
+        className="terms__cta"
+        width={328}
+        height={58}
+        fontSize={40}
+        /* `Vector 1` (73:937): 147x39 en el lienzo mobile. */
+        mobileWidth={147}
+        mobileHeight={39}
+        onClick={accept}
+        data-figma="73:937"
+        data-figma-label="73:938"
+      >
         Acepto la misión
       </RibbonButton>
     </>
@@ -128,30 +152,57 @@ export default function Terms() {
     <Stage
       title="Bases y condiciones"
       compactMenu
+      mobileCielo={{ nodo: '73:892', x: -22, y: -38, w: 445, h: 965 }}
       mobile={
         /* Figma "bases y condiciones.png": logo montado sobre el pergamino,
            ralph sentado en el planeta B3 arriba a la derecha y nene con el
            catalejo abajo a la izquierda. El pergamino se despliega al entrar. */
-        <div className="terms-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
+        <div
+          className="terms-m"
+          id="contenido"
+          data-figma="73:891"
+          data-figma-ejes="x,w"
+          data-figma-omitir="pintura"
+        >
           <img
             src={logoCodigos}
             alt="Códigos Secretos 2026"
             className="terms-m__logo"
-            data-figma="TODO"
+            data-figma="73:925"
           />
 
-          <div className="terms-m__sheet" data-figma="TODO">
+          <img
+            src={destello}
+            alt=""
+            aria-hidden="true"
+            className="terms-m__destello"
+            data-figma="73:895"
+          />
+          <img
+            src={planetaVit1}
+            alt=""
+            aria-hidden="true"
+            className="terms-m__planeta"
+            data-figma="73:929"
+          />
+
+          {/* Sin nodo: en el frame el pergamino, el nene y el personaje de
+              arriba cuelgan sueltos. */}
+          <div className="terms-m__sheet">
             <FloatingLayer amplitude={5} duration={6.6} delay={0.4}
-              className="terms-m__ralph" style={{ position: 'absolute' }} data-figma="TODO">
+              className="terms-m__ralph" style={{ position: 'absolute' }} data-figma="73:931">
               <img src={ralph} alt="" aria-hidden="true" className="mlayer-img" />
             </FloatingLayer>
 
             <FloatingLayer amplitude={4} duration={7.4} delay={1.2}
-              className="terms-m__nene" style={{ position: 'absolute' }} data-figma="TODO">
+              className="terms-m__nene" style={{ position: 'absolute' }} data-figma="73:927">
               <img src={nene} alt="" aria-hidden="true" className="mlayer-img" />
             </FloatingLayer>
 
-            <Parchment className="terms-m__parchment" data-figma="TODO">
+            {/* La marca del pergamino va en la IMAGEN, no acá: el nodo está
+                girado -90° y el control sólo puede verificar el ancho y el alto
+                si el giro lo aplica el CSS sobre el elemento marcado. */}
+            <Parchment className="terms-m__parchment" imgFigma="73:924">
               {content}
             </Parchment>
           </div>

@@ -786,6 +786,7 @@
         "id": "73:744",
         "nombre": "glow-Photoroom 3",
         "tipo": "RECTANGLE",
+        "espejo": true,
         "rotacion": 171.7,
         "rect": {
           "x": 0,

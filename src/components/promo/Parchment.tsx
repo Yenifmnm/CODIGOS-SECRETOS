@@ -12,6 +12,12 @@ interface ParchmentProps {
   onOpened?: () => void;
   /** Nodo del Figma de esta capa, para `npm run figma:check`. */
   'data-figma'?: string;
+  /**
+   * Nodo del Figma de la IMAGEN del pergamino. Va aparte porque en mobile el
+   * papel está girado -90° y el giro tiene que vivir en el elemento marcado
+   * para que el control verifique también el ancho y el alto.
+   */
+  imgFigma?: string;
 }
 
 /**
@@ -27,6 +33,7 @@ export function Parchment({
   className,
   onOpened,
   'data-figma': figma,
+  imgFigma,
 }: ParchmentProps) {
   const reduced = useReducedMotion();
   const [phase, setPhase] = useState<'rolled' | 'unfurling' | 'open'>(
@@ -63,7 +70,13 @@ export function Parchment({
       data-figma={figma}
     >
       <div className="parchment__sheet">
-        <img src={pergamino1} alt="" aria-hidden="true" className="parchment__img" />
+        <img
+          src={pergamino1}
+          alt=""
+          aria-hidden="true"
+          className="parchment__img"
+          data-figma={imgFigma}
+        />
       </div>
       <div className="parchment__content">{children}</div>
     </div>

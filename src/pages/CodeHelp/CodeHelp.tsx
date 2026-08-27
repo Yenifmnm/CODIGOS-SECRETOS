@@ -96,10 +96,16 @@ export default function CodeHelp() {
               flipped
               className="codehelp-m__ship"
               data-figma="73:789"
-              /* El resplandor del nodo vive en `.codehelp-m__ship-halo`, la
-                 capa quieta de acá arriba: sobre la nave, que flota, un
-                 desenfoque de 250 px cuesta cuadros. Van juntas. */
-              data-figma-omitir="sombras"
+              /* Dos controles que este elemento no puede pasar, los dos por
+                 lo mismo: `.ship` lleva la animación de flotación, que escribe
+                 `transform`.
+
+                 · sombras — el `0 0 250px #FFFFFF` del nodo vive en
+                   `.codehelp-m__ship-halo`, la capa quieta de acá arriba: un
+                   desenfoque de 250 px sobre algo que se mueve cuesta cuadros.
+                 · espejo — el nodo está espejado y el volteo va en la imagen de
+                   adentro (`flipped`), porque acá lo pisaría la animación. */
+              data-figma-omitir="sombras,espejo"
             />
             <TelescopeMagnifier
               src={jugos}

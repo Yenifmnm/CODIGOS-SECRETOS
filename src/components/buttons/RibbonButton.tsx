@@ -12,6 +12,11 @@ interface RibbonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   mobileWidth?: number;
   mobileHeight?: number;
   style?: CSSProperties;
+  /**
+   * Nodo del Figma del RÓTULO. La cinta y su texto son dos capas distintas en
+   * el diseño; el nodo de la cinta va en `data-figma`, que viaja en `...rest`.
+   */
+  'data-figma-label'?: string;
 }
 
 const U = 19.2;
@@ -33,6 +38,7 @@ export function RibbonButton({
   mobileHeight,
   className,
   style,
+  'data-figma-label': figmaLabel,
   ...rest
 }: RibbonButtonProps) {
   return (
@@ -50,7 +56,9 @@ export function RibbonButton({
       } as CSSProperties}
       {...rest}
     >
-      <span className="ribbon-btn__label">{children}</span>
+      <span className="ribbon-btn__label" data-figma={figmaLabel}>
+        {children}
+      </span>
     </button>
   );
 }

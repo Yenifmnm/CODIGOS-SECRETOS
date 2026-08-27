@@ -146,7 +146,12 @@ for (const pantalla of objetivo) {
         omitir: (n.getAttribute('data-figma-omitir') ?? '').split(/[\s,]+/).filter(Boolean),
         estilo: (() => {
           const c = getComputedStyle(n);
+          const t = c.transform;
+          const mt = t && t !== 'none' ? t.match(/matrix\(([^)]+)\)/) : null;
+          const [ta, tb, tc, td] = mt ? mt[1].split(',').map(Number) : [1, 0, 0, 1];
           return {
+            // Determinante negativo = la capa está espejada por CSS.
+            espejoCss: ta * td - tb * tc < 0,
             color: c.color,
             fondo: c.backgroundColor,
             fuente: c.fontFamily,
@@ -702,6 +707,20 @@ function compararPintura(esperado, e, escala) {
   // dibuja el relleno y ENCIMA el trazo, así que un trazo centrado de 2px se
   // come 1px de letra por todo el contorno y el texto queda pálido y hueco.
   // Figma lo muestra al revés. `paint-order: stroke fill` lo corrige.
+  // El espejo no mueve la caja: sin este control, una pieza dada vuelta pasa
+  // con las cuatro medidas en cero. Si el espejo vive en un hijo —porque el
+  // elemento marcado lleva una animación que le pisaría el transform— se saca
+  // con data-figma-omitir="espejo", anotando por qué.
+  if (esperado.espejo || e.espejoCss) {
+    anotar(
+      'espejo',
+      esperado.espejo ? 'espejado' : 'sin espejo',
+      e.espejoCss ? 'espejado' : 'sin espejo',
+      Boolean(esperado.espejo) === Boolean(e.espejoCss),
+      'espejo',
+    );
+  }
+
   const trazo = esperado.trazo?.[0];
   if (trazo) {
     const espAncho = (esperado.trazoAncho ?? 0) * escala;

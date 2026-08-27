@@ -1,0 +1,951 @@
+{
+  "slug": "codigo",
+  "ruta": "#/donde-esta-el-codigo",
+  "fileKey": "MYKVqv9sfUeVc6L3EFs94a",
+  "node": "19:2982",
+  "nombre": "DONDE ESTÁ EL CÓDIGO",
+  "frame": {
+    "w": 1920,
+    "h": 1080
+  },
+  "generado": "figma-pull.mjs",
+  "arbol": {
+    "id": "19:2982",
+    "nombre": "DONDE ESTÁ EL CÓDIGO",
+    "tipo": "FRAME",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 1920,
+      "h": 1080
+    },
+    "tamano": {
+      "w": 1920,
+      "h": 1080
+    },
+    "pct": {
+      "x": 0,
+      "w": 100
+    },
+    "relleno": [
+      {
+        "tipo": "solido",
+        "color": "#FFFFFF"
+      }
+    ],
+    "anclaje": "LEFT/TOP",
+    "recorta": true,
+    "hijos": [
+      {
+        "id": "19:2983",
+        "nombre": "fondo inicio 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1920,
+          "h": 1080
+        },
+        "tamano": {
+          "w": 1920,
+          "h": 1080
+        },
+        "pct": {
+          "x": 0,
+          "w": 100
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "5b75ea54f9a4157dd658e9f8d182a988dd28f10c"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:2985",
+        "nombre": "codigos secretos logo 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 129,
+          "y": 312,
+          "w": 669,
+          "h": 499
+        },
+        "tamano": {
+          "w": 669,
+          "h": 499
+        },
+        "pct": {
+          "x": 6.72,
+          "w": 34.84
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "d03f7a4cbd92ba5c46d657dfd1cb1d09500603fb"
+          }
+        ],
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 100,
+            "spread": 0,
+            "color": "#09EAFFB2",
+            "css": "0px 0px 100px 0px #09EAFFB2"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 250,
+            "spread": 0,
+            "color": "#09EAFF",
+            "css": "0px 0px 250px 0px #09EAFF"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:2988",
+        "nombre": "Buscá el Código Secreto en los stickers de Purosol",
+        "tipo": "TEXT",
+        "rect": {
+          "x": 1131,
+          "y": 176,
+          "w": 558,
+          "h": 124
+        },
+        "tamano": {
+          "w": 558,
+          "h": 124
+        },
+        "pct": {
+          "x": 58.91,
+          "w": 29.06
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FCC102"
+          }
+        ],
+        "trazo": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF"
+          }
+        ],
+        "trazoAncho": 2,
+        "trazoAlineacion": "CENTER",
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 6.288000106811523,
+            "spread": 0,
+            "color": "#FFFFFF",
+            "css": "0px 0px 6.288000106811523px 0px #FFFFFF"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 44.01599884033203,
+            "spread": 0,
+            "color": "#FFFFFF",
+            "css": "0px 0px 44.01599884033203px 0px #FFFFFF"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 4,
+            "blur": 10,
+            "spread": 0,
+            "color": "#212F5C",
+            "css": "0px 4px 10px 0px #212F5C"
+          }
+        ],
+        "texto": "Buscá el Código Secreto en\nlos stickers de Purosol",
+        "tipografia": {
+          "familia": "DK Prince Frog",
+          "postScript": "DKPrinceFrog",
+          "peso": 400,
+          "tamano": 60,
+          "interlineado": 62.5,
+          "alineacion": "CENTER",
+          "alineacionV": "TOP"
+        },
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:2991",
+        "nombre": "barra menu plegado",
+        "tipo": "INSTANCE",
+        "rect": {
+          "x": 90,
+          "y": 34,
+          "w": 361,
+          "h": 83
+        },
+        "tamano": {
+          "w": 361,
+          "h": 83
+        },
+        "pct": {
+          "x": 4.69,
+          "w": 18.8
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF00",
+            "opacidad": 0
+          }
+        ],
+        "anclaje": "LEFT/TOP",
+        "recorta": true,
+        "hijos": [
+          {
+            "id": "I19:2991;13:19",
+            "nombre": "Rectangle 1",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 90,
+              "y": 34,
+              "w": 359,
+              "h": 83
+            },
+            "tamano": {
+              "w": 359,
+              "h": 83
+            },
+            "pct": {
+              "x": 4.69,
+              "w": 18.7
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#09EAFF80",
+                "opacidad": 0.5
+              }
+            ],
+            "radio": 500,
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "I19:2991;13:109",
+            "nombre": "logo purosolAsset 1 1",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 114,
+              "y": 34,
+              "w": 189,
+              "h": 83
+            },
+            "tamano": {
+              "w": 189,
+              "h": 83
+            },
+            "pct": {
+              "x": 5.94,
+              "w": 9.84
+            },
+            "relleno": [
+              {
+                "tipo": "imagen",
+                "ajuste": "FILL",
+                "ref": "d0a52dbc3a17011f68c77bed8b392215f3724074"
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "I19:2991;13:22",
+            "nombre": "Vector 1",
+            "tipo": "VECTOR",
+            "rotacion": 0,
+            "rect": {
+              "x": 335,
+              "y": 47,
+              "w": 0,
+              "h": 57
+            },
+            "tamano": {
+              "w": 0,
+              "h": 57
+            },
+            "pct": {
+              "x": 17.45,
+              "w": 0
+            },
+            "trazo": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF"
+              }
+            ],
+            "trazoAncho": 1,
+            "trazoAlineacion": "CENTER",
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "I19:2991;13:111",
+            "nombre": "Group 5",
+            "tipo": "GROUP",
+            "rect": {
+              "x": 372,
+              "y": 41,
+              "w": 68,
+              "h": 68
+            },
+            "tamano": {
+              "w": 68,
+              "h": 68
+            },
+            "pct": {
+              "x": 19.38,
+              "w": 3.54
+            },
+            "anclaje": "LEFT/TOP",
+            "hijos": [
+              {
+                "id": "I19:2991;13:26",
+                "nombre": "Ellipse 1",
+                "tipo": "ELLIPSE",
+                "rect": {
+                  "x": 372,
+                  "y": 41,
+                  "w": 68,
+                  "h": 68
+                },
+                "tamano": {
+                  "w": 68,
+                  "h": 68
+                },
+                "pct": {
+                  "x": 19.38,
+                  "w": 3.54
+                },
+                "relleno": [
+                  {
+                    "tipo": "solido",
+                    "color": "#FFFFFF80",
+                    "opacidad": 0.5
+                  }
+                ],
+                "anclaje": "LEFT/TOP"
+              },
+              {
+                "id": "I19:2991;13:31",
+                "nombre": "Group 4",
+                "tipo": "GROUP",
+                "rect": {
+                  "x": 387.3,
+                  "y": 61.8,
+                  "w": 37.4,
+                  "h": 27.7
+                },
+                "tamano": {
+                  "w": 37.4,
+                  "h": 27.7
+                },
+                "pct": {
+                  "x": 20.17,
+                  "w": 1.95
+                },
+                "anclaje": "LEFT/TOP",
+                "hijos": [
+                  {
+                    "id": "I19:2991;13:24",
+                    "nombre": "Vector 2",
+                    "tipo": "VECTOR",
+                    "rotacion": 90,
+                    "rect": {
+                      "x": 387.3,
+                      "y": 61.8,
+                      "w": 37.4,
+                      "h": 0
+                    },
+                    "tamano": {
+                      "w": 0,
+                      "h": 37.4
+                    },
+                    "pct": {
+                      "x": 20.17,
+                      "w": 1.95
+                    },
+                    "trazo": [
+                      {
+                        "tipo": "solido",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "trazoAncho": 4,
+                    "trazoAlineacion": "CENTER",
+                    "anclaje": "LEFT/TOP"
+                  },
+                  {
+                    "id": "I19:2991;13:27",
+                    "nombre": "Vector 3",
+                    "tipo": "VECTOR",
+                    "rotacion": 90,
+                    "rect": {
+                      "x": 387.3,
+                      "y": 75.7,
+                      "w": 37.4,
+                      "h": 0
+                    },
+                    "tamano": {
+                      "w": 0,
+                      "h": 37.4
+                    },
+                    "pct": {
+                      "x": 20.17,
+                      "w": 1.95
+                    },
+                    "trazo": [
+                      {
+                        "tipo": "solido",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "trazoAncho": 4,
+                    "trazoAlineacion": "CENTER",
+                    "anclaje": "LEFT/TOP"
+                  },
+                  {
+                    "id": "I19:2991;13:29",
+                    "nombre": "Vector 4",
+                    "tipo": "VECTOR",
+                    "rotacion": 90,
+                    "rect": {
+                      "x": 387.3,
+                      "y": 89.5,
+                      "w": 37.4,
+                      "h": 0
+                    },
+                    "tamano": {
+                      "w": 0,
+                      "h": 37.4
+                    },
+                    "pct": {
+                      "x": 20.17,
+                      "w": 1.95
+                    },
+                    "trazo": [
+                      {
+                        "tipo": "solido",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "trazoAncho": 4,
+                    "trazoAlineacion": "CENTER",
+                    "anclaje": "LEFT/TOP"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "19:2992",
+        "nombre": "portal 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 521,
+          "y": 733,
+          "w": 330,
+          "h": 269
+        },
+        "tamano": {
+          "w": 330,
+          "h": 269
+        },
+        "pct": {
+          "x": 27.14,
+          "w": 17.19
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "d4d2fcf0ed02c16264428b8729e563e82fd85c7c"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:2995",
+        "nombre": "destello-Photoroom-Photoroom 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": -117,
+          "y": 540,
+          "w": 415,
+          "h": 275
+        },
+        "tamano": {
+          "w": 415,
+          "h": 275
+        },
+        "pct": {
+          "x": -6.09,
+          "w": 21.61
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "8ed74c5f1804bb5a886e6ffc6944f1a02a6f05fc"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:3014",
+        "nombre": "destello-Photoroom-Photoroom 2",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 1603,
+          "y": 287,
+          "w": 415,
+          "h": 275
+        },
+        "tamano": {
+          "w": 415,
+          "h": 275
+        },
+        "pct": {
+          "x": 83.49,
+          "w": 21.61
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "8ed74c5f1804bb5a886e6ffc6944f1a02a6f05fc"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:2997",
+        "nombre": "planeta vit 1 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 1073,
+          "y": -57,
+          "w": 339,
+          "h": 166
+        },
+        "tamano": {
+          "w": 339,
+          "h": 166
+        },
+        "pct": {
+          "x": 55.89,
+          "w": 17.66
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "3f3ceaabae466739254f77abf332d8778c783aeb"
+          }
+        ],
+        "efectos": [
+          {
+            "tipo": "LAYER_BLUR",
+            "blur": 10
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:2998",
+        "nombre": "planeta vit 2 1",
+        "tipo": "RECTANGLE",
+        "rotacion": 15.1,
+        "rect": {
+          "x": 1811,
+          "y": 146,
+          "w": 169.2,
+          "h": 183.7
+        },
+        "tamano": {
+          "w": 133.7,
+          "h": 154.3
+        },
+        "pct": {
+          "x": 94.32,
+          "w": 8.81
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "4848121bbfd46bf99b69e01436d47524bdb9ea91"
+          }
+        ],
+        "efectos": [
+          {
+            "tipo": "LAYER_BLUR",
+            "blur": 10
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:3012",
+        "nombre": "barco 1",
+        "tipo": "RECTANGLE",
+        "espejo": true,
+        "rotacion": 180,
+        "rect": {
+          "x": -258,
+          "y": 731,
+          "w": 664,
+          "h": 455
+        },
+        "tamano": {
+          "w": 664,
+          "h": 455
+        },
+        "pct": {
+          "x": -13.44,
+          "w": 34.58
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "2e6a73e9653aff2be7cd885ecba30717eeea02db"
+          }
+        ],
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 250,
+            "spread": 0,
+            "color": "#FFFFFF",
+            "css": "0px 0px 250px 0px #FFFFFF"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:3016",
+        "nombre": "Ellipse 1",
+        "tipo": "ELLIPSE",
+        "rect": {
+          "x": 686,
+          "y": 731,
+          "w": 1496,
+          "h": 1277
+        },
+        "tamano": {
+          "w": 1496,
+          "h": 1277
+        },
+        "pct": {
+          "x": 35.73,
+          "w": 77.92
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#061C67"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "19:3019",
+        "nombre": "Group 3",
+        "tipo": "GROUP",
+        "rect": {
+          "x": 1095,
+          "y": 935,
+          "w": 640,
+          "h": 82
+        },
+        "tamano": {
+          "w": 640,
+          "h": 82
+        },
+        "pct": {
+          "x": 57.03,
+          "w": 33.33
+        },
+        "radio": 200,
+        "anclaje": "LEFT/TOP",
+        "hijos": [
+          {
+            "id": "19:3017",
+            "nombre": "Rectangle 1",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 1095,
+              "y": 935,
+              "w": 640,
+              "h": 82
+            },
+            "tamano": {
+              "w": 640,
+              "h": 82
+            },
+            "pct": {
+              "x": 57.03,
+              "w": 33.33
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#09EAFF80",
+                "opacidad": 0.5
+              }
+            ],
+            "radio": 200,
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "19:3018",
+            "nombre": "*GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO* ¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!",
+            "tipo": "TEXT",
+            "rect": {
+              "x": 1141,
+              "y": 950,
+              "w": 548,
+              "h": 52
+            },
+            "tamano": {
+              "w": 548,
+              "h": 52
+            },
+            "pct": {
+              "x": 59.43,
+              "w": 28.54
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF"
+              }
+            ],
+            "texto": "*GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO*\n¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!",
+            "tipografia": {
+              "familia": "DK Prince Frog",
+              "postScript": "DKPrinceFrog",
+              "peso": 400,
+              "tamano": 25,
+              "interlineado": 26,
+              "alineacion": "CENTER",
+              "alineacionV": "TOP"
+            },
+            "anclaje": "LEFT/TOP"
+          }
+        ]
+      },
+      {
+        "id": "19:3020",
+        "nombre": "jugos 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 1200,
+          "y": 157,
+          "w": 467,
+          "h": 765
+        },
+        "tamano": {
+          "w": 467,
+          "h": 765
+        },
+        "pct": {
+          "x": 62.5,
+          "w": 24.32
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "bbedb9497b9cf612e955aa2bbeab399b1e163687"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "107:343",
+        "nombre": "boton cerrar",
+        "tipo": "INSTANCE",
+        "rect": {
+          "x": 1758,
+          "y": 41,
+          "w": 105,
+          "h": 105
+        },
+        "tamano": {
+          "w": 105,
+          "h": 105
+        },
+        "pct": {
+          "x": 91.56,
+          "w": 5.47
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF00",
+            "opacidad": 0
+          }
+        ],
+        "anclaje": "LEFT/TOP",
+        "recorta": true,
+        "hijos": [
+          {
+            "id": "I107:343;23:3142",
+            "nombre": "Ellipse 2",
+            "tipo": "ELLIPSE",
+            "rect": {
+              "x": 1771,
+              "y": 54,
+              "w": 122,
+              "h": 122
+            },
+            "tamano": {
+              "w": 122,
+              "h": 122
+            },
+            "pct": {
+              "x": 92.24,
+              "w": 6.35
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF00",
+                "opacidad": 0
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "I107:343;23:3146",
+            "nombre": "Group 6",
+            "tipo": "GROUP",
+            "rect": {
+              "x": 1788,
+              "y": 69,
+              "w": 47,
+              "h": 47
+            },
+            "tamano": {
+              "w": 47,
+              "h": 47
+            },
+            "pct": {
+              "x": 93.13,
+              "w": 2.45
+            },
+            "anclaje": "LEFT/TOP",
+            "hijos": [
+              {
+                "id": "I107:343;23:3143",
+                "nombre": "Vector 5",
+                "tipo": "VECTOR",
+                "rect": {
+                  "x": 1788,
+                  "y": 69,
+                  "w": 47,
+                  "h": 47
+                },
+                "tamano": {
+                  "w": 47,
+                  "h": 47
+                },
+                "pct": {
+                  "x": 93.13,
+                  "w": 2.45
+                },
+                "trazo": [
+                  {
+                    "tipo": "solido",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "trazoAncho": 9,
+                "trazoAlineacion": "CENTER",
+                "anclaje": "LEFT/TOP"
+              },
+              {
+                "id": "I107:343;23:3144",
+                "nombre": "Vector 6",
+                "tipo": "VECTOR",
+                "rotacion": 90,
+                "rect": {
+                  "x": 1788,
+                  "y": 69,
+                  "w": 47,
+                  "h": 47
+                },
+                "tamano": {
+                  "w": 47,
+                  "h": 47
+                },
+                "pct": {
+                  "x": 93.12,
+                  "w": 2.45
+                },
+                "trazo": [
+                  {
+                    "tipo": "solido",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "trazoAncho": 9,
+                "trazoAlineacion": "CENTER",
+                "anclaje": "LEFT/TOP"
+              }
+            ]
+          },
+          {
+            "id": "I107:343;23:3155",
+            "nombre": "Ellipse 3",
+            "tipo": "ELLIPSE",
+            "rect": {
+              "x": 1766,
+              "y": 47,
+              "w": 92,
+              "h": 92
+            },
+            "tamano": {
+              "w": 92,
+              "h": 92
+            },
+            "pct": {
+              "x": 91.98,
+              "w": 4.79
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF80",
+                "opacidad": 0.5
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          }
+        ]
+      }
+    ]
+  }
+}

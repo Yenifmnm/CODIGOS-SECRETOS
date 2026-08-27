@@ -150,147 +150,244 @@
    con `box()`—, así que acá la caja la pone `.terms-m__sheet` y el pergamino
    la llena. El selector lleva dos clases para ganarle a la regla base.
    ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------
+   Composición mobile — frame `bases y condiciones` 73:891 (402x913).
+
+   Como en `donde esta el codigo`, el bloque se tira 74 px hacia arriba —el
+   hueco que deja en flujo el `<nav>` del menú— para arrancar en el borde de la
+   pantalla: cada `top` es la y del spec tal cual, y el recorte del frame sale
+   solo (el nene llega a 924 sobre un lienzo de 913).
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .terms-m {
+    position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-top: -18.408cqw;   /* -74 */
+    height: 227.114cqw;       /* 913 */
+    overflow: clip;
   }
 
-  /* Encabezado medido contra `bases y condiciones.png`, ya descontada la barra
-     de estado de iOS. El logo visible cae en [98, 130, 199, 139]: estaba 36 px
-     más arriba y un 4,5% más grande, y por eso chocaba con el personaje.
-     Los dos márgenes se compensan entre sí para que corregir el logo no
-     arrastre al pergamino, que ya está en su sitio. */
+  /* `codigos secretos logo 1` (73:925): 211x157 en (91, 191). */
   .terms-m__logo {
-    position: relative;
+    position: absolute;
+    left: 22.637cqw;      /* 91 */
+    top: 47.512cqw;       /* 191 */
+    width: 52.488cqw;     /* 211 */
+    height: 39.055cqw;    /* 157 */
+    max-width: none;
+    object-fit: contain;
+    margin: 0;
     z-index: 3;
-    width: 53.234cqw;          /* 214 */
-    height: auto;
-    margin-top: 13.433cqw;     /* el logo arranca en y=130 */
-    margin-bottom: -14.677cqw; /* se monta sobre el pergamino */
-    filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
   }
 
+  /* `destello-Photoroom` (73:895): 186x123 en (298, 343). */
+  .terms-m__destello {
+    position: absolute;
+    left: 74.129cqw;      /* 298 */
+    top: 85.323cqw;       /* 343 */
+    width: 46.269cqw;     /* 186 */
+    height: 30.597cqw;    /* 123 */
+    z-index: 0;
+  }
+
+  /* `planeta vit 1 1` (73:929): 182x89 en (278, 810), con LAYER_BLUR 10, que
+     en CSS va a la mitad. */
+  .terms-m__planeta {
+    position: absolute;
+    left: 69.154cqw;      /* 278 */
+    top: 201.493cqw;      /* 810 */
+    width: 45.274cqw;     /* 182 */
+    height: 22.139cqw;    /* 89 */
+    filter: blur(5px);
+    z-index: 0;
+  }
+
+  /* Sin nodo: en el frame el pergamino y los dos personajes cuelgan sueltos.
+     Queda como bloque estático y sin alto para que sus hijos se posicionen
+     contra `.terms-m`. */
   .terms-m__sheet {
-    position: relative;
-    width: 86.07cqw;           /* 346 */
-    aspect-ratio: 346 / 520;
+    position: static;
+    display: block;
+    width: 100%;
+    height: 0;
+    margin: 0;
   }
 
+  /* `NENE-Photoroom 1` (73:931): 94x172 en (294, 85). Es el personaje de
+     arriba a la derecha, sentado en el planeta B3. */
+  .terms-m__ralph {
+    left: 73.134cqw;      /* 294 */
+    top: 21.144cqw;       /* 85 */
+    width: 23.383cqw;     /* 94 */
+    height: 42.786cqw;    /* 172 */
+    z-index: 4;
+  }
+
+  /* `nene 1` (73:927): 158x264 en (-34, 660). Sangra por el borde izquierdo y
+     por el de abajo: el frame lo recorta en 913 y acá también. */
+  .terms-m__nene {
+    left: -8.458cqw;      /* -34 */
+    top: 164.179cqw;      /* 660 */
+    width: 39.303cqw;     /* 158 */
+    height: 65.672cqw;    /* 264 */
+    z-index: 4;
+  }
+
+  /* `pergamino 1` (73:924): envolvente 335x527 en (39, 270), y 527x335 sin
+     girar, a -90°. El asset ES apaisado —1094x696, la misma proporción que el
+     `tamano` del nodo— y el diseño lo gira para que los rodillos queden arriba
+     y abajo. Antes se estiraba con `object-fit: fill` dentro de una caja
+     vertical, o sea deformado. */
   .terms-m__sheet .terms-m__parchment {
     position: absolute;
-    inset: 0;
+    left: 9.701cqw;       /* 39 */
+    top: 67.164cqw;       /* 270 */
+    width: 83.333cqw;     /* 335 */
+    height: 131.095cqw;   /* 527 */
+    margin: 0;
+    z-index: 2;
   }
 
-  /* La hoja y el contenido llenan la caja: se fijan acá con dos clases porque
-     las reglas base de parchment.css no ganan dentro de este contenedor. */
   .terms-m__sheet .parchment__sheet,
   .terms-m__sheet .parchment__content {
     position: absolute;
     inset: 0;
   }
 
+  /* La caja del asset SIN girar, centrada donde el nodo pone la envolvente. El
+     giro va acá y no en `.parchment__sheet`, que lleva la animación de
+     despliegue y le pisaría el `transform`. */
   .terms-m__sheet .parchment__img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
+    position: absolute;
+    left: -23.881cqw;     /* -96 */
+    top: 23.881cqw;       /* 96 */
+    width: 131.095cqw;    /* 527 */
+    height: 83.333cqw;    /* 335 */
+    max-width: none;
+    object-fit: contain;
+    transform: rotate(-90deg);
   }
 
-  /* Ralph queda por encima del borde del pergamino, no sobre el título. */
-  /* El personaje sobre la bola B3 va ARRIBA del logo, no a su lado: en el
-     export su dibujo cae en [302, 32, 79, 158] y acá caía en [304, 96, 88, 178],
-     o sea 64 px más abajo y un 10% más grande, encimado al logo. */
-  .terms-m__ralph {
-    top: -39.04%;
-    right: -3.47%;
-    width: 26.88%;
-    height: auto;
-    aspect-ratio: 360 / 658;
-    z-index: 4;
-  }
-
-  .terms-m__nene {
-    bottom: -24%;
-    left: -21%;
-    width: 40%;
-    height: auto;
-    aspect-ratio: 492 / 820;
-    z-index: 4;
-  }
-
-  /* Contenido dentro del pergamino, en flujo normal. */
   .terms-m__sheet .parchment__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* Los laterales dejan libre el borde enrollado del pergamino, como en el
-       Figma: la cinta del título llega hasta el papel, no hasta el rollo. */
-    padding: 13% 15.5% 9%;
+    padding: 0;
   }
 
-  /* La cinta del título vuelve al flujo: la regla del desktop la deja absoluta
-     con 26.75% de ancho, que en el lienzo mobile son 93 px y recortaban
-     "Bases y Condiciones" a la mitad. Acá ocupa el ancho útil del pergamino,
-     como en el Figma. */
+  /* `Vector 1` (73:934): la cinta del titular, 240x42.9 en (85, 343), o sea
+     46 y 73 adentro del pergamino. */
   .terms-m__sheet .terms__heading {
-    position: relative;
-    left: auto;
-    top: auto;
-    width: 100%;
-    height: auto;
+    position: absolute;
+    left: 11.443cqw;      /* 46 */
+    top: 18.159cqw;       /* 73 */
+    width: 59.701cqw;     /* 240 */
+    height: 10.672cqw;    /* 42.9 */
     transform: none;
-    padding: 1.99cqw 1.493cqw;
     margin: 0;
-    font-size: clamp(20px, 5.721cqw, 24px); /* 23 px en 402 */
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background: #d8831c;
+  }
+
+  /* `Bases y Condiciones` (73:935): 203.3x28.9, 30/31.2. */
+  .terms-m__sheet .terms__heading-text {
+    display: block;
+    /* La caja del nodo, que es la TINTA: 28.9 es menos que los 31.2 de
+       interlineado, así que el renglón desborda, igual que en Figma. */
+    width: 50.572cqw;     /* 203.3 */
+    height: 7.189cqw;     /* 28.9 */
+    font-size: 7.463cqw;  /* 30 */
+    line-height: 1.04;    /* 31.2 */
+    color: #581f09;
     white-space: nowrap;
   }
 
-  /* El cuerpo también trae el tamaño del lienzo desktop (2.083cqw), que en
-     mobile da 8 px: ilegible. */
-  .terms-m__sheet .terms__body {
-    font-size: clamp(13px, 3.234cqw, 14px); /* 13 px en 402 */
-    line-height: 1.4;
-  }
+  /* `Lorem ipsum…` (73:939): 227x165 en (94, 417). Ese nodo es el bloque de
+     relleno del diseño, no el alto real del legal, que es largo y scrollea:
+     por eso sólo deciden la x y el ancho.
 
-  /* El texto scrollea dentro del pergamino; el botón queda siempre visible. */
-  /* El texto es largo y el pergamino NO crece: scrollea acá dentro, con la
-     misma barra propia del desktop. */
+     El alto lo pone el hueco disponible, y no el recorrido de la barra, porque
+     los números del frame no cierran entre sí: la barra va de 343 a 745 y el
+     botón arranca en 697, con lo cual una ventana del alto de la barra le
+     pasaría el texto por encima. Se corta 10 px antes del botón. */
   .terms-m__sheet .terms__viewport {
-    position: relative;
-    left: auto;
-    top: auto;
-    width: 100%;
-    height: auto;
-    flex: 1;
-    min-height: 0;
-    margin-top: 2.985cqw;
-    gap: 1.99cqw;
+    position: absolute;
+    left: 13.682cqw;      /* 55, o sea x 94 */
+    top: 36.567cqw;       /* 147, o sea y 417 */
+    width: 56.468cqw;     /* 227 */
+    height: 67.164cqw;    /* 270: de 417 a 687 */
+    margin: 0;
+    display: block;
+    /* La tipografía del nodo vive acá y no en `.terms__body`: el control mira
+       el elemento marcado, y el cuerpo lo hereda igual. */
+    font-family: var(--font-display);
+    font-size: 3.731cqw;  /* 15 */
+    line-height: 1.04;    /* 15.6 */
+    color: #581f09;
   }
 
   .terms-m__sheet .terms__scroll {
-    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    padding-right: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
   }
 
+  .terms-m__sheet .terms__body {
+    text-align: center;
+  }
+
+  /* `Rectangle 2` (73:942): el carril, 5x402 en (333, 343) — 294 y 73 adentro
+     del pergamino. `Rectangle 3` (73:943) es el pulgar, del mismo ancho. */
+  /* Ojo con el origen: la barra cuelga de `.terms__viewport`, no del
+     pergamino, así que sus dos coordenadas son las del nodo menos las de la
+     ventana: 294 - 55 y 343 - 417. Asoma por arriba a propósito —el frame la
+     arranca a la altura de la cinta del titular— y la ventana no recorta: el
+     que recorta es `.terms__scroll`, adentro. */
   .terms-m__sheet .terms__bar {
-    width: 1.493cqw;           /* 6 */
+    position: absolute;
+    left: 59.453cqw;      /* 239, o sea x 294 */
+    top: -18.408cqw;      /* -74, o sea y 343 */
+    width: 1.244cqw;      /* 5 */
+    height: 100cqw;       /* 402 */
+    border-radius: 12.438cqw;   /* 50 */
+    background: #d8831c80;
   }
 
-  /* El CTA vuelve al flujo: la regla del desktop lo deja absoluto y se montaba
-     encima del texto, además de no reservarle lugar al área de scroll. */
+  .terms-m__sheet .terms__bar-thumb {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    border-radius: 12.438cqw;   /* 50 */
+    background: #883307;
+  }
+
+  /* `Vector 1` (73:937): la cinta del botón, 147x39 en (131, 697) — 92 y 427
+     adentro del pergamino. */
+  /* El ancho y el alto los escribe `RibbonButton` como estilo inline, así que
+     van por sus props `mobileWidth`/`mobileHeight`, no por acá. */
   .terms-m__sheet .terms__cta {
-    position: relative;
-    left: auto;
-    top: auto;
-    flex: none;
-    margin-top: 3.483cqw;
-    width: 36.318cqw !important;  /* 146 */
-    height: 8.209cqw !important;  /* 33 */
+    position: absolute;
+    left: 22.886cqw;      /* 92 */
+    top: 106.219cqw;      /* 427 */
+    margin: 0;
+    /* El nodo la pinta plana, no con el degradado del botón de escritorio. */
+    background: #d8831c;
   }
 
+  /* `Acepto la misión` (73:938): 122.8x21 en (146, 707), o sea 15 y 10 adentro
+     de la cinta. Va con la caja del nodo y no ajustada al contenido: la tinta
+     mide 112 y el nodo declara 122.8, así que sobran 5.4 px por lado. */
   .terms-m__sheet .terms__cta .ribbon-btn__label {
-    padding-inline: 4%;
-    font-size: 3.98cqw;           /* 16 */
+    position: absolute;
+    left: 3.731cqw;       /* 15 */
+    top: 2.488cqw;        /* 10 */
+    width: 30.547cqw;     /* 122.8 */
+    height: 5.224cqw;     /* 21 */
+    display: grid;
+    place-items: center;
+    font-size: 4.975cqw;  /* 20 */
+    line-height: 1.04;    /* 20.8 */
   }
 }
