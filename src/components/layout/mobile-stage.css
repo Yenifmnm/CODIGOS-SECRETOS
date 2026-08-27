@@ -70,7 +70,8 @@
      se apoya en el pie —como la superficie del planeta— llega al borde y no
      reaparece el cielo debajo. Se descuentan las áreas seguras, que `.mstage`
      ya reserva como padding, para no generar scroll de más, y se suma lo que el
-     lienzo subió, o si no reaparece el cielo debajo del planeta del landing. */
+     lienzo subió, o si no reaparece el cielo debajo del planeta del landing.
+     En retrato lo pisa el bloque de más abajo, donde el alto lo fija el frame. */
   min-height: calc(var(--mstage-alto-util) - var(--mstage-corrimiento));
 }
 
@@ -96,6 +97,67 @@
       calc(var(--mstage-diseno-w) * 1px),
       calc(var(--mstage-alto-util) * var(--mstage-diseno-w) / var(--mstage-util-h))
     );
+  }
+
+  /* EL LIENZO CLIPEA COMO CLIPEA EL FRAME.
+
+     Los once frames tienen `clipsContent: true`, y en los once hay capas que se
+     salen: 2 en premios, 7 en inicio, y hasta 855 px en las de resultado. Figma
+     las corta en el borde del frame; el navegador no las cortaba, y esa
+     diferencia no la puede ver la tabla de capas —cada capa está en su caja
+     correcta, medida contra el spec— pero sí se ve en la pantalla. En inicio se
+     veía como 20 px de scroll: el glow `70:173` va hasta y 933 sobre un frame
+     de 913.
+
+     El alto sale del `aspect-ratio` y no de un `height` con porcentajes: los
+     porcentajes de `height` se resuelven contra el alto del bloque contenedor,
+     que acá es indefinido. Con el ancho ya fijado, la proporción del frame da
+     el alto exacto, en los dos ejes y a cualquier escala.
+
+     `min-height: 0` es necesario: sin eso el tamaño mínimo automático del
+     contenido gana sobre el `aspect-ratio` y la caja vuelve a crecer.
+
+     `clip` y no `hidden`: `hidden` crea un contenedor de scroll: la caja
+     quedaría desplazable con el teclado o con un `scrollIntoView` y el
+     contenido cortado se podría traer a la vista, que es justo lo que el frame
+     NO hace.
+
+     La copia de sangrado del fondo no se ve afectada: vive en `.mstage__sky`,
+     que es HERMANA del lienzo y no hija, así que sigue cubriendo el viewport
+     entero por detrás. Lo que el clip corta queda con la foto atrás, no con un
+     vacío.
+
+     SÓLO EL EJE VERTICAL, y esto es una desviación deliberada de «como clipea
+     el frame». En un teléfono de exactamente 402 los dos ejes dan lo mismo: el
+     borde del lienzo ES el borde de la pantalla. Pero con el tope de escala en
+     1, en cualquier teléfono más ancho —412, 414, 430, o sea la mayoría— el
+     lienzo queda centrado y el corte horizontal cae 14 px ADENTRO de la
+     pantalla: la nena de registro aparece rebanada por una línea vertical con
+     cielo a la izquierda. En el diseño ese corte coincide con el borde del
+     teléfono; acá no, y se lee como un error de render.
+
+     Verticalmente el frame corta y hay que copiarlo: es lo que saca los 855 px
+     de `Ellipse 1` en las de resultado y los 20 px de scroll de inicio.
+     Horizontalmente, el equivalente honesto del borde del frame es el borde de
+     la pantalla, y de eso ya se encarga el `overflow-x: hidden` de `.mstage`.
+
+     El par `visible`/`clip` es legal y Chromium lo conserva —no lo fuerza a
+     `auto`, que crearía un contenedor de scroll—. */
+  .mstage__canvas {
+    aspect-ratio: var(--mstage-diseno-w) / var(--mstage-diseno-h);
+    min-height: 0;
+    overflow-x: visible;
+    overflow-y: clip;
+  }
+
+  /* Con el alto del lienzo ya fijo, cualquier hijo con el `flex-shrink: 1` por
+     defecto se encoge para que el contenido entre. Y no tiene que entrar: tiene
+     que CORTARSE, que es lo que hace el frame. En inicio —la única de las diez
+     cuyo contenido pasa el borde— el menú se comía 20 px y arrastraba la
+     composición entera 20 px hacia arriba: once capas fuera de tolerancia con
+     todas sus cajas bien escritas, y el diff de píxeles de 24% a 53%. */
+  .mstage__canvas > * {
+    flex-shrink: 0;
   }
 }
 

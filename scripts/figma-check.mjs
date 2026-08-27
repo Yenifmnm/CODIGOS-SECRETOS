@@ -785,6 +785,13 @@ function reporte(pantalla, spec, viewport, desvios, pixeles, errores, referencia
       l.push('');
       l.push('Esta sección todavía no decide el exit code.');
       l.push('');
+      l.push('**Y no lo lista todo.** Este control mide una sola foto: el estado inicial');
+      l.push('de la ruta. Lo que sólo existe después de una interacción no aparece acá ni');
+      l.push('en la tabla de arriba, aunque esté escrito y marcado — las miniaturas a la');
+      l.push('izquierda del carrusel de PREMIOS estan declaradas en `Prizes.tsx` y aun asi');
+      l.push('figuran como sin implementar, porque en la posicion 0 no llegan al DOM.');
+      l.push('Problema abierto, con los tres casos confirmados, en `docs/FIGMA-WORKFLOW.md`.');
+      l.push('');
     }
   }
 

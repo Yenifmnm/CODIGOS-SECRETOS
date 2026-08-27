@@ -97,6 +97,16 @@ pantallas.
   que exista en el spec de la pantalla que se está midiendo; si no está ninguno,
   el reporte lo marca «pertenece a otro frame» y no cuenta como falla.
 
+## Lo que este control NO ve
+
+`figma:check` mide **una foto del estado inicial de cada ruta**. Lo que sólo
+existe después de una interacción no se compara, aunque esté escrito y marcado:
+las miniaturas a la izquierda del carrusel de PREMIOS, el menú desplegado
+(`menu-mobile`, que ni siquiera tiene ruta) y la variante de PARTICIPAR con el
+código ya cargado. Los tres son estados, no rutas, y ninguna cobertura los
+alcanza. Está anotado como problema abierto en `docs/FIGMA-WORKFLOW.md`; hasta
+que se resuelva, leé «0 fuera de tolerancia» como «0 en el estado inicial».
+
 ## Los assets
 
 Los `.png` sueltos de esta carpeta son los originales del diseñador. Los que usa

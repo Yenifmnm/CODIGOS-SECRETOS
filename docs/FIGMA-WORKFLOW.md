@@ -342,6 +342,34 @@ diseño lo puso: debajo de la suya.
 
 ---
 
+## Problema abierto: el checker es ciego al estado
+
+`figma:check` abre una ruta, espera a que cargue y mide **una sola foto**. Todo
+lo que el sitio sabe hacer y no está en esa foto queda sin comparar, aunque esté
+escrito y aunque esté marcado. No es una cuestión de cobertura: sumar `data-figma`
+no lo arregla, porque el elemento no está en el DOM en el instante en que se mide.
+
+Tres casos confirmados, y los tres son **estados, no rutas**:
+
+| Caso | Qué se pierde | Por qué |
+| --- | --- | --- |
+| Carrusel de PREMIOS | `premio 5 1` (73:747) y `premio 4 1` (73:748) | `nodoDeRanura()` asigna la marca por offset relativo a la miniatura activa. La captura toma el carrusel siempre en la posición 0, donde no hay nada a la izquierda, así que `miniIzq1` y `miniIzq2` nunca llegan al DOM. **Están declaradas en `Prizes.tsx`** y aun así el reporte inverso las lista como sin implementar — con razón: nada las compara |
+| `menu-mobile` (79:1111) | el frame entero, 25 capas | Es el menú desplegado. No tiene `ruta` en `figma/nodes.json` porque no es una URL, así que `figma-check` lo filtra de entrada. Es la única de las once que este control no puede tocar |
+| `CodeOnlyMobile` | la variante de PARTICIPAR con el código ya cargado | Mismo caso: es un estado de la pantalla, al que se llega por interacción y no por URL |
+
+Lo que tienen en común: la unidad de medida del control es la **ruta**, y el
+diseño está organizado por **pantalla**, que a veces es un estado. Mientras eso
+no cambie, «0 fuera de tolerancia» significa «0 fuera de tolerancia en el estado
+inicial de esta ruta», y conviene leerlo así.
+
+Las salidas posibles, ninguna elegida todavía: que `nodes.json` acepte pasos de
+interacción antes de medir; que `figma:check` mida N estados por ruta; o que las
+marcas de un componente con ranuras no dependan del estado. La primera es la que
+menos toca el código de producción y la que más se parece a lo que ya hace
+`?scenario=` en las cuatro pantallas de resultado.
+
+---
+
 ## La otra puerta: el MCP de Figma en Claude Code
 
 La API REST y el MCP devuelven la misma data; cambia por dónde entra y qué cuota
