@@ -147,16 +147,36 @@ sin registrar, que es como entra un usuario nuevo—: ahí el contador da **0001
 Abriendo `?scenario=CODE_ALREADY_USED#/codigo-utilizado` directamente da 0000,
 que es lo correcto y además lo único que puede pasar: no hubo canje.
 
-### `CodeOnlyMobile` está a la espera del frame
+### La página 15B del PDF está DESCARTADA — no la implementes
 
-La variante de PARTICIPAR con el código ya cargado **no tiene frame en Figma**.
-Funciona, y sus doce marcas siguen en `TODO` A PROPÓSITO: no hay nodo contra el
-cual medirlas. No se rediseña ni se le inventan coordenadas hasta que llegue el
-frame de la diseñadora.
+En `recursos/ajustes/Codigos Secretos 2026 - Web ajustes.pdf` hay una página
+**15B**, «carga de código con el participante ya identificado»: una versión de
+PARTICIPAR con sólo el Código Secreto, sin el campo de cédula. Se implementó el
+**25-08-2026** (`CodeOnlyMobile`, commit `b750330`) y se sacó el **27-08-2026**.
 
-Y es, además, uno de los tres casos del problema abierto de
-`docs/FIGMA-WORKFLOW.md`: es un ESTADO y no una ruta, así que ningún control la
-alcanza.
+**La clienta no la quiere.** Textual: «participas una vez, y al darle clic a
+"cargar otro código" me devuelve a esta pantalla pero ya sin el registro, sólo
+me da el resultado del código que cargué», y sobre la pantalla de CI completa
+—con cédula y código secreto—, «así debe verse, tal cual». Y: «así estaba antes,
+no sé qué pasó». Lo que pasó fue ese commit.
+
+Queda anotado acá justamente porque el PDF sigue teniendo esa página: si alguien
+lo lee de nuevo va a creer que falta implementarla. **No falta: se descartó.**
+
+Y ojo con leer el pedido como una sola cosa, que fue el error de fondo. Son DOS
+requisitos y sólo uno toca a esta pantalla:
+
+  a) después de «Cargar otro código» se vuelve a la pantalla de CI COMPLETA
+     (frame `70:343`, cédula y código secreto) — eso es `Welcome.tsx`;
+  b) al enviar desde ahí NO se pasa otra vez por el formulario de registro —
+     eso lo resuelve `useCodeFlow`, y no se toca.
+
+El campo de cédula queda **vacío**, como el frame. No se precarga con la de la
+sesión aunque parezca más cómodo: el diseño no lo tiene.
+
+Con esto se van las doce marcas `data-figma="TODO"`, que eran las únicas del
+proyecto, y PARTICIPAR deja de ser uno de los casos del problema abierto de
+`docs/FIGMA-WORKFLOW.md`: ya no tiene un estado sin frame.
 
 ## Los assets
 

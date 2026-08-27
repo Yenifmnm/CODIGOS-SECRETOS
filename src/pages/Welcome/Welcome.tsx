@@ -6,8 +6,6 @@ import { PromoButton } from '../../components/buttons/PromoButton';
 import { PurosolShip } from '../../components/promo/PurosolShip';
 import { IconCode, IconId, ParchmentField } from '../../components/forms/ParchmentField';
 import { useCodeFlow } from '../../app/useCodeFlow';
-import { useSession } from '../../app/SessionContext';
-import { CodeOnlyMobile } from './CodeOnlyMobile';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { box, centeredText, u } from '../../app/stage';
 import './welcome.css';
@@ -39,11 +37,6 @@ function validate(cedula: string, code: string): FieldErrors {
 /** BIENVENIDOS / carga de código — Figma 70:396. */
 export default function Welcome() {
   const location = useLocation();
-  /* Si la persona ya está identificada —se registró recién o su cédula ya fue
-     reconocida— la composición mobile pasa al estado de la página 15 del PDF:
-     sólo el Código Secreto, más el contador de códigos cargados. El flujo de
-     primera vez, que pide cédula y código, no cambia. */
-  const { participant } = useSession();
   // Al volver de REGISTRO se conserva el código que el usuario venía cargando.
   const prefill = (location.state ?? {}) as { cedula?: string; code?: string };
 
@@ -54,13 +47,14 @@ export default function Welcome() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    /* En el estado posterior a la identificación no hay campo de cédula en
-       pantalla: la que vale es la de la sesión. */
-    const ci = participant?.cedula ?? cedula;
-    const next = validate(ci, code);
+    /* La cédula sale SIEMPRE del campo: esta pantalla lo tiene siempre. Hubo
+       una versión que la tomaba de la sesión cuando la persona ya estaba
+       identificada, porque entonces el campo no se dibujaba; ver el comentario
+       de `WelcomeMobile`. */
+    const next = validate(cedula, code);
     setErrors(next);
     if (Object.keys(next).length > 0) return;
-    void submit(ci.trim(), code.trim().toUpperCase());
+    void submit(cedula.trim(), code.trim().toUpperCase());
   };
 
   const form = (
@@ -102,23 +96,7 @@ export default function Welcome() {
       compactMenu
       mobileCielo={{ nodo: '70:344', x: -46, y: -38, w: 493, h: 1070 }}
       mobile={
-        participant ? (
-          <CodeOnlyMobile
-            cedula={participant.cedula}
-            code={code}
-            onCodeChange={setCode}
-            onSubmit={onSubmit}
-            loading={loading}
-            error={error ?? errors.code ?? null}
-          />
-        ) : (
-          <WelcomeMobile
-            form={form}
-            onSubmit={onSubmit}
-            loading={loading}
-            error={error}
-          />
-        )
+        <WelcomeMobile form={form} onSubmit={onSubmit} loading={loading} error={error} />
       }
     >
       {/* --- Universo --- */}
@@ -198,10 +176,25 @@ interface WelcomeMobileProps {
    capa lleva el nodo del que salió y la geometría vive en `welcome.css`, en
    coordenadas del frame.
 
-   Es el PRIMER estado de la pantalla, el de la persona todavía sin
-   identificar. El segundo —sólo el Código Secreto, más el contador— es
-   `CodeOnlyMobile`, sale de la página 15 del PDF de ajustes y NO tiene frame
-   en este spec: sus marcas siguen en TODO a propósito.
+   ES LA ÚNICA COMPOSICIÓN DE ESTA PANTALLA, siempre, esté la persona
+   identificada o no. Cédula y Código Secreto, los dos campos del frame.
+
+   Hubo un segundo estado —sólo el Código Secreto, más el contador— que salía
+   de la página 15B del PDF de ajustes («carga de código con el participante ya
+   identificado»). Entró el 25-08-2026 y se sacó el 27-08-2026: LA CLIENTA NO LO
+   QUIERE. Textual: «participas una vez, y al darle clic a "cargar otro código"
+   me devuelve a esta pantalla pero ya sin el registro, sólo me da el resultado
+   del código que cargué», y sobre esta pantalla completa, «así debe verse, tal
+   cual».
+
+   Ojo con leer eso como que hay que sacar dos cosas: son dos requisitos y sólo
+   uno tocaba a esta pantalla. Volver siempre acá es uno; NO pasar de nuevo por
+   el formulario de registro es el otro, y ése lo resuelve `useCodeFlow` — que
+   no se toca.
+
+   Por eso la página 15B del PDF queda DESCARTADA. Está anotada en
+   `recursos/mobile/CLAUDE.md` para que nadie la vuelva a implementar leyendo
+   el PDF y creyendo que falta.
    -------------------------------------------------------------------------- */
 
 function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {

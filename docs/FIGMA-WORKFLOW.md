@@ -355,7 +355,7 @@ Tres casos confirmados, y los tres son **estados, no rutas**:
 | --- | --- | --- |
 | Carrusel de PREMIOS | `premio 5 1` (73:747) y `premio 4 1` (73:748) | `nodoDeRanura()` asigna la marca por offset relativo a la miniatura activa. La captura toma el carrusel siempre en la posición 0, donde no hay nada a la izquierda, así que `miniIzq1` y `miniIzq2` nunca llegan al DOM. **Están declaradas en `Prizes.tsx`** y aun así el reporte inverso las lista como sin implementar — con razón: nada las compara |
 | `menu-mobile` (79:1111) | el frame entero, 25 capas | Es el menú desplegado. No tiene `ruta` en `figma/nodes.json` porque no es una URL, así que `figma-check` lo filtra de entrada. Es la única de las once que este control no puede tocar |
-| `CodeOnlyMobile` | la variante de PARTICIPAR con el código ya cargado | Mismo caso: es un estado de la pantalla, al que se llega por interacción y no por URL |
+| ~~`CodeOnlyMobile`~~ | *(ya no aplica)* | Era la variante de PARTICIPAR con el código ya cargado. Se eliminó el 27-08-2026: la página 15B del PDF de la que salía quedó **descartada por decisión de la clienta**. PARTICIPAR tiene una sola composición y sí tiene frame (`70:343`). Ver `recursos/mobile/CLAUDE.md` |
 
 Lo que tienen en común: la unidad de medida del control es la **ruta**, y el
 diseño está organizado por **pantalla**, que a veces es un estado. Mientras eso
