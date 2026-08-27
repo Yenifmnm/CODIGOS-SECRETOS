@@ -208,10 +208,13 @@ export function ResultLayout({
           <p
             className={`result-m__title result-m__title--${titleTone}`}
             data-figma="74:1107 74:987 105:278 131:350"
-            /* El dorado omite el ancho del trazo (1 px contra los 2 del nodo);
-               el de contorno rojo omite las sombras, porque su blanco va al
-               20%. Cada tono omite lo suyo y nada más. */
-            data-figma-omitir={titleTone === 'gold' ? 'trazo-ancho' : 'sombras'}
+            /* Los dos tonos van a 1 px contra los 2 px del nodo, así que los
+               dos omiten `trazo-ancho`. El de contorno rojo omite además las
+               sombras, porque su blanco va al 20%; el dorado conserva su
+               resplandor al 100% y por eso no las omite. */
+            data-figma-omitir={
+              titleTone === 'gold' ? 'trazo-ancho' : 'trazo-ancho,sombras'
+            }
           >
             {title}
           </p>

@@ -12,6 +12,15 @@
  * había agregado: el relleno se pintaba ENCIMA del trazo, así que la letra de
  * color no adelgazaba y del contorno sólo se veía la mitad de afuera.
  *
+ * PARA GROSOR DE TRAZO, MIRÁ `trazo/relleno`, NO LA LUMINANCIA. La luminancia
+ * media de una franja NO distingue un contorno grueso con relleno chico de uno
+ * fino con relleno grande: las dos combinaciones pueden dar el mismo promedio.
+ * Me pasó: barriendo el ancho de los tres titulares de contorno rojo por
+ * luminancia media, la conclusión fue «2 px es lo más cerca del export» y era
+ * falsa. Medido por proporción, el trazo salía 2,3 veces más grueso que el del
+ * diseño. La proporción ya estaba en este script desde antes, como `reparto`;
+ * lo que fallé fue usar la otra para esa pregunta.
+ *
  * CÓMO DETECTA. No hay un detector de blanco: los colores salen del NODO. Cada
  * píxel se compara contra el relleno y contra el trazo del spec, y cuenta para
  * el que tenga más cerca, si está a menos de TOLERANCIA. Así
@@ -212,11 +221,25 @@ console.log(
     '  `antes` = con paint-order: stroke fill. Es un cociente: no depende de la escala.\n',
 );
 console.log(
-  '  pantalla                   nodo      texto                  antes  →  ahora    FIGMA   dist.antes  dist.ahora',
+  '  pantalla                   nodo      texto                  antes  →  ahora    FIGMA   dist.antes  dist.ahora   TRAZO/RELLENO ahora vs Figma',
 );
 console.log(
-  '  -------------------------  --------  ---------------------  --------------   ------   ----------  ----------',
+  '  -------------------------  --------  ---------------------  --------------   ------   ----------  ----------   ----------------------------',
 );
+/* trazo/relleno a partir del reparto. Un valor ALTO es un contorno grueso
+   comiéndose el relleno; uno bajo, un contorno fino. */
+const razon = (reparto) =>
+  reparto > 0 && reparto < 100 ? ((100 - reparto) / reparto).toFixed(2) : ' —  ';
+const veredicto = (ahora, ref) => {
+  const a = ahora > 0 && ahora < 100 ? (100 - ahora) / ahora : null;
+  const r = ref > 0 && ref < 100 ? (100 - ref) / ref : null;
+  if (a === null || r === null) return '';
+  const veces = a / r;
+  if (veces >= 1.35) return `   ← el trazo es ${veces.toFixed(2)}x el del diseño`;
+  if (veces <= 0.74) return `   ← el trazo es ${veces.toFixed(2)}x el del diseño`;
+  return '';
+};
+
 let malos = 0;
 let peor = 0;
 for (const f of filas) {
@@ -230,7 +253,11 @@ for (const f of filas) {
     `  ${f.slug.padEnd(25)}  ${f.id.padEnd(8)}  ${f.texto.slice(0, 21).padEnd(21)}  ` +
       `${String(f.antes.reparto + '%').padStart(5)} → ${String(f.ahora.reparto + '%').padStart(5)}   ` +
       `${(F === null ? '—' : F + '%').padStart(6)}   ${sig(dA)}   ${sig(dB)}` +
-      `${F !== null && Math.abs(dB) > Math.abs(dA) ? '   ← se alejó' : ''}`,
+      /* La PROPORCIÓN trazo/relleno, que es la que hay que mirar para el
+         grosor del contorno. `reparto` es el % de tinta que es relleno, así que
+         la proporción es (100 - reparto) / reparto. */
+      `   ${razon(f.ahora.reparto)} vs ${F === null ? '  —  ' : razon(F)}` +
+      `${F !== null ? veredicto(f.ahora.reparto, F) : ''}`,
   );
 }
 console.log('\n  Conteos absolutos, los dos lados a 1× y con el mismo recorte:');

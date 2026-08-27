@@ -210,18 +210,25 @@
   .result-m__title--outline {
     font-size: var(--result-m-title, 14.925cqw);   /* 60, el de `Estuviste cerca` */
     color: var(--c-title-red);          /* #E63303 */
-    /* ESTE SE QUEDA EN 2 px, y no es un olvido. Barrido igual que los otros,
-       contra los tres export donde aparece, la caja del nodo da:
+    /* 1 px, igual que los otros titulares. LA MEDICIÓN QUE DECÍA QUE ACÁ 2 px
+       era lo mejor ESTABA MAL HECHA, y la corrección importa más que el valor.
 
-         74:1107 «Estuviste cerca»       2px: -5,9 / -0,3   1px: -9,9 / -3,7
-         105:278 «Código fuera de...»    2px: -5,9 / +0,4   1px: -12,4 / -5,1
-         131:350 «Código fuera de...»    2px: -5,6 / +0,2   1px: -11,8 / -5,4
+       Aquel barrido comparaba la LUMINANCIA MEDIA de la franja, y ese promedio
+       NO distingue un contorno grueso con relleno chico de uno fino con relleno
+       grande: las dos combinaciones dan lo mismo. Por eso 2 px «ganaba».
 
-       En los tres, 2 px es lo más cerca del export EN LOS DOS MOTORES, y bajar
-       a 1 px aleja. Que el titular del landing necesite la mitad y éste no,
-       dice que la traducción no es un factor fijo: se mide por caja, no se
-       aplica una regla. */
-    -webkit-text-stroke: 0.498cqw var(--c-title-outline);   /* borde 2px #FCC102 */
+       Para grosor de trazo hay que mirar la PROPORCIÓN trazo/relleno. Medida
+       sobre el recorte del export contra el render:
+
+         74:1107 «Estuviste cerca»     Figma 0,45   con 2 px 1,13   -> 2,51x
+         105:278 y 131:350             Figma 0,79   con 2 px 2,57   -> 3,27x
+
+       La clienta lo midió sobre una captura del iPhone 17 en producción y le
+       dio 0,42 contra 0,96, o sea 2,30x. Dos instrumentos distintos, la misma
+       conclusión.
+
+       `npm run audit:trazo` ahora saca esa proporción como columna propia. */
+    -webkit-text-stroke: 0.249cqw var(--c-title-outline);   /* nodo 2px CENTER -> 1px de CSS */
     /* `0px 0px 44.016px #FFFFFF` + `0px 4px 10px #212F5C` del nodo.
 
        RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
