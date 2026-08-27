@@ -6,6 +6,7 @@ import { CloseButton } from '../../components/navigation/CloseButton';
 import { box, u } from '../../app/stage';
 import './code-help.css';
 
+import { LogoCodigos } from '../../components/promo/LogoCodigos';
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import jugos from '../../assets/promo/jugos.webp';
 import portal from '../../assets/planets/portal.webp';
@@ -61,13 +62,7 @@ export default function CodeHelp() {
 
           <CloseButton to="/participar" className="codehelp-m__close" data-figma="99:258" />
 
-          <img
-            src={logoCodigos}
-            alt="Códigos Secretos 2026"
-            className="codehelp-m__logo"
-            data-figma="73:783"
-            data-figma-omitir="sombras"
-          />
+          <LogoCodigos className="codehelp-m__logo" data-figma="73:783" />
 
           {/* El corte de renglón es el del Figma mobile, no uno automático. */}
           <p className="codehelp-m__title" data-figma="73:827">

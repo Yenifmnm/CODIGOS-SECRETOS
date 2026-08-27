@@ -9,6 +9,7 @@ import { box, centeredText } from '../../app/stage';
 import { mbox } from '../../app/mobileStage';
 import './home.css';
 
+import { LogoCodigos } from '../../components/promo/LogoCodigos';
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import planetaPremios from '../../assets/planets/planeta-premios.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
@@ -195,13 +196,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         data-figma="70:180 79:1120"
       />
 
-      <img
-        src={logoCodigos}
-        alt="Códigos Secretos 2026"
-        className="home-m__logo"
-        data-figma="70:169 79:1113"
-        data-figma-omitir="sombras"
-      />
+      <LogoCodigos className="home-m__logo" data-figma="70:169 79:1113" />
 
       <div className="mblock">
         {/* El segundo id de cada uno es el del mismo texto en el frame del menú

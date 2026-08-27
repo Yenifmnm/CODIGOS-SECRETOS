@@ -175,8 +175,7 @@
     width: 43.035cqw;        /* 173 */
     height: auto;
     margin-top: 18.408cqw;   /* y 148, desde el 74 en que arranca .result-m */
-    /* Los dos DROP_SHADOW del nodo: `0px 0px 250px #09EAFF` cada uno. */
-    filter: var(--logo-glow);   /* el halo del logo, en styles/tokens.css */
+    /* El resplandor lo pone `LogoCodigos`, repartido en dos elementos. */
   }
 
   .result-m__title {

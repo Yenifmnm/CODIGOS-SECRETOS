@@ -79,13 +79,10 @@
   width: 63.93cqw;    /* 257 */
   height: auto;
   margin-top: 19.154cqw;  /* y 151 */
-  /* El halo, en `--logo-glow`: un solo valor para las cinco pantallas que
-     muestran el logo. Son las DOS sombras del nodo, con su color y su
-     opacidad, pero con el radio ÷2 —125 y no 250—, que es la conversión
-     correcta de Figma a CSS. Está medido y explicado en `styles/tokens.css`.
-     Va en `filter` y no en `box-shadow` porque la sombra sigue el alfa del
-     arte; `box-shadow` dibujaría el rectángulo de la caja. */
-  filter: var(--logo-glow);
+  /* El resplandor NO va acá: lo pone `LogoCodigos`, que reparte las dos
+     sombras del nodo entre el contenedor y la imagen. Va en `filter` y no en
+     `box-shadow` porque sigue el alfa del arte, y va repartido porque
+     encadenarlas rompe en WebKit. */
   /* Hijo 2 del frame. `position: relative` sin desplazamiento: no mueve la
      caja —`figma:check` sigue midiendo lo mismo—, sólo lo hace participar del
      apilado en vez de quedar promovido por encima de todo por el `filter`. */

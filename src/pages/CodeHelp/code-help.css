@@ -175,8 +175,7 @@
     max-width: none;
     object-fit: contain;
     margin: 0;
-    /* Los dos `0 0 250px #09EAFF` del nodo. */
-    filter: var(--logo-glow);   /* el halo del logo, en styles/tokens.css */
+    /* El resplandor lo pone `LogoCodigos`, repartido en dos elementos. */
   }
 
   /* `Buscá el Código Secreto…` (73:827): 326x72 en (49, 322), centro x 212.

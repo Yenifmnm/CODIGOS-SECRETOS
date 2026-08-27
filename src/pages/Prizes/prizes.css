@@ -82,7 +82,6 @@
     height: 47.512cqw;    /* 191 */
     max-width: none;
     object-fit: contain;
-    /* Los dos `0 0 250px #09EAFF` del nodo. */
-    filter: var(--logo-glow);   /* el halo del logo, en styles/tokens.css */
+    /* El resplandor lo pone `LogoCodigos`, repartido en dos elementos. */
   }
 }

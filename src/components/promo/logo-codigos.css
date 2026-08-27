@@ -1,0 +1,23 @@
+/* El logo CÓDIGOS SECRETOS. El porqué del reparto está en `LogoCodigos.tsx`. */
+
+.logo-cs {
+  display: block;
+  /* La PRIMERA de las dos `0 0 250px #09EAFF` del nodo. La segunda va en la
+     imagen de adentro. No se encadenan en un mismo `filter`: ése es el patrón
+     que WebKit dibuja de más en las versiones nuevas y no dibuja en las
+     viejas. `--logo-glow` es UNA sombra, no las dos. */
+  filter: var(--logo-glow);
+}
+
+.logo-cs > img {
+  display: block;
+  width: 100%;
+  /* Con el contenedor sin alto definido —inicio y las de resultado— esto se
+     resuelve como `auto` y la imagen usa su proporción, que es lo que hacían
+     antes. Con alto definido —participar, premios y código— lo llena. */
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  /* La SEGUNDA sombra del nodo. */
+  filter: var(--logo-glow);
+}

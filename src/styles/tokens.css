@@ -104,13 +104,22 @@
      sombra de 250 el diff sube a 31,6%. El diseño tiene un halo brillante y
      CONTENIDO, no uno tenue y ancho.
 
-     Si hay que mover el halo, se mueve ACÁ: 31.095cqw son los 125 px.
+     ES **UNA** SOMBRA, NO LAS DOS. El nodo declara dos, y las dos se dibujan,
+     pero en DOS ELEMENTOS: `components/promo/LogoCodigos.tsx` pone una en el
+     contenedor y otra en la imagen. Encadenarlas en un mismo `filter` es el
+     patrón que WebKit no dibuja bien — medido en el cofre de GANASTE, donde
+     dejaba el 12% de los píxeles, y acá, donde en el landing da 10.404 píxeles
+     cian en WebKit contra 4.975 en Chromium, y en un iPhone 14 hace desaparecer
+     el logo entero. NO se vuelve a poner la segunda sombra en esta línea.
+
+     Si hay que mover el halo, se mueve ACÁ: 31.095cqw son los 125 px. Cambiar
+     este valor cambia las dos, porque las dos leen el mismo token.
 
      Los logos llevan `data-figma-omitir="sombras"` porque `figma-check.mjs`
      compara el radio del CSS contra el del nodo 1:1 y por lo tanto espera 250.
      Esa comparación es la que está mal, no el CSS — ver la nota del reporte.
      ------------------------------------------------------------------------- */
-  --logo-glow: drop-shadow(0 0 31.095cqw #09eaff) drop-shadow(0 0 31.095cqw #09eaff);
+  --logo-glow: drop-shadow(0 0 31.095cqw #09eaff);
 
   /* Tipografía */
   --font-display: 'DK Prince Frog', sans-serif;

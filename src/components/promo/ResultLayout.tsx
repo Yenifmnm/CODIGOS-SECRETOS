@@ -8,6 +8,7 @@ import { CodeCounter } from './CodeCounter';
 import { box, centeredText, u } from '../../app/stage';
 import './result-layout.css';
 
+import { LogoCodigos } from './LogoCodigos';
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import destello from '../../assets/effects/destello.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
@@ -197,13 +198,7 @@ export function ResultLayout({
             data-figma="107:174 107:164 107:182 131:352"
           />
 
-          <img
-            src={logoCodigos}
-            alt="Códigos Secretos 2026"
-            className="result-m__logo"
-            data-figma="74:1027 73:860 105:262 131:334"
-            data-figma-omitir="sombras"
-          />
+          <LogoCodigos className="result-m__logo" data-figma="74:1027 73:860 105:262 131:334" />
 
           {/* El ancho del trazo se omite SÓLO en el dorado de GANASTE, que va a
               1 px contra los 2 del nodo 74:987 —ver la medición en

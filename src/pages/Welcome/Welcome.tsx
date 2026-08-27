@@ -10,6 +10,7 @@ import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { box, centeredText, u } from '../../app/stage';
 import './welcome.css';
 
+import { LogoCodigos } from '../../components/promo/LogoCodigos';
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import pergamino2 from '../../assets/ui/pergamino-2.webp';
 import planetaPremios from '../../assets/planets/planeta-premios.webp';
@@ -210,13 +211,7 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
           premios, barco, los dos titulares, pergamino, destello, planeta vit y
           portal. Como todas son absolutas y ninguna declara `z-index`, el orden
           del DOM es el que manda y no hace falta apilarlas a mano. */}
-      <img
-        src={logoCodigos}
-        alt="Códigos Secretos 2026"
-        className="welcome-m__logo"
-        data-figma="70:345"
-        data-figma-omitir="sombras"
-      />
+      <LogoCodigos className="welcome-m__logo" data-figma="70:345" />
 
       <FloatingLayer amplitude={6} duration={7} delay={0.5}
         className="welcome-m__planeta" data-figma="70:346">

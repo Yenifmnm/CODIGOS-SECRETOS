@@ -7,6 +7,7 @@ import { centeredText } from '../../app/stage';
 import type { Prize } from '../../types/promo';
 import './prizes.css';
 
+import { LogoCodigos } from '../../components/promo/LogoCodigos';
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import glow from '../../assets/effects/glow.webp';
 
@@ -50,13 +51,7 @@ export default function Prizes() {
               que usa el reveal de GANASTE, no una aproximación en CSS. */}
           <img src={glow} alt="" aria-hidden="true" className="prizes-m__arc" data-figma="73:744" />
 
-          <img
-            src={logoCodigos}
-            alt="Códigos Secretos 2026"
-            className="prizes-m__logo"
-            data-figma="73:732"
-            data-figma-omitir="sombras"
-          />
+          <LogoCodigos className="prizes-m__logo" data-figma="73:732" />
           <PrizeCarousel
             prizes={prizes}
             onActiveChange={onActiveChange}
