@@ -970,7 +970,19 @@ function compararPintura(esperado, e, escala) {
     const espAncho = (esperado.trazoAncho ?? 0) * escala;
     if (esTexto) {
       const real = parseFloat(e.trazoAncho);
-      anotar('trazo (ancho)', `${red(espAncho)}px`, e.trazoAncho, Number.isFinite(real) && Math.abs(real - espAncho) <= 0.3, 'trazo');
+      /* CLAVE PROPIA, `trazo-ancho`, y no la de `trazo` a secas. El ancho es
+         lo único del trazo que a veces NO va 1:1: el número del nodo es la
+         entrada al rasterizador de Figma, y `-webkit-text-stroke` con ese mismo
+         número dibuja más grueso. Con una sola clave, omitir el ancho obligaba
+         a omitir también el color y el orden de pintado, que sí valen siempre.
+
+         No se aplica un factor acá: la corrección NO es constante. Medido
+         contra los export, el titular del landing (70:194) y el de participar
+         (70:349) necesitan la mitad, y los tres «Código fuera de órbita»
+         (74:1107, 105:278, 131:350) están mejor con el número del nodo tal
+         cual. Por eso se mide por caja y se omite donde corresponde, en vez de
+         inventar una regla. */
+      anotar('trazo (ancho)', `${red(espAncho)}px`, e.trazoAncho, Number.isFinite(real) && Math.abs(real - espAncho) <= 0.3, 'trazo-ancho');
       anotar('trazo (color)', trazo.color, e.trazoColor, mismoColor(trazo.color, e.trazoColor), 'trazo');
       anotar(
         'trazo (orden)',

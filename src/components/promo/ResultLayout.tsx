@@ -205,9 +205,15 @@ export function ResultLayout({
             data-figma-omitir="sombras"
           />
 
+          {/* El ancho del trazo se omite SÓLO en el dorado de GANASTE, que va a
+              1 px contra los 2 del nodo 74:987 —ver la medición en
+              `result-layout.css`—. Los tres titulares con contorno rojo se
+              quedan en 2 px porque ahí el número del nodo SÍ es el que más se
+              acerca al export, así que su ancho se sigue controlando. */}
           <p
             className={`result-m__title result-m__title--${titleTone}`}
             data-figma="74:1107 74:987 105:278 131:350"
+            data-figma-omitir={titleTone === 'gold' ? 'trazo-ancho' : undefined}
           >
             {title}
           </p>

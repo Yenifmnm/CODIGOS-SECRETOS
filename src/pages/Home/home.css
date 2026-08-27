@@ -102,7 +102,28 @@
   /* El nodo lleva además un trazo blanco de 2 px alineado al CENTRO, que es
      justo cómo pinta `-webkit-text-stroke`: la mitad para adentro de la letra
      y la mitad para afuera. Es lo que separa el dorado del cielo. */
-  -webkit-text-stroke: 0.498cqw #FFFFFF;  /* borde 2px */
+  /* ---------------------------------------------------------------------
+     EL TRAZO: 2 px EN EL NODO, 1 px EN CSS. No es un valor cambiado a ojo,
+     es una traducción, y es la misma familia que el `paint-order`.
+
+     El nodo declara `trazo 2px CENTER`, pero ese número es la entrada al
+     rasterizador de FIGMA, no al de CSS. `-webkit-text-stroke: 2px` dibuja
+     bastante más grueso que un trazo centrado de 2 px de Figma: se come el
+     relleno, junta las letras y las deja pálidas. La prueba es el diff contra
+     `recursos/mobile/pantallas/`, midiendo la caja del nodo en los dos motores:
+
+         2 px de CSS ....  +10,9 chromium  /  +9,5 webkit
+         1 px de CSS ....   -3,0 chromium  /  -4,0 webkit   <- éste
+         0 px ...........  -25,8 chromium  / -17,6 webkit
+
+     Y midiendo sólo las filas de glifos, que es donde se ve el engrosamiento:
+     de +16,1/+13,7 a +0,5/-2,0.
+
+     El resplandor de 44 px NO se toca: es del diseño. Si alguna vez hay que
+     bajarlo, se baja la OPACIDAD y no el radio — medido: achicar el radio
+     concentra la luz sobre el glifo y empeora la franja.
+     --------------------------------------------------------------------- */
+  -webkit-text-stroke: 0.249cqw #FFFFFF;  /* nodo 2px CENTER -> 1px de CSS */
   /* `0px 0px 44.016px #FFFFFF` + `0px 4px 4px #0000004D` del nodo. En un texto
      la sombra sigue los glifos, así que va en `text-shadow` y no en `filter`,
      que afectaría a toda la caja. */

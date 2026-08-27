@@ -15,10 +15,21 @@
  *
  * QUÉ MIDE. Por pantalla, el porcentaje de píxeles que difieren del export de
  * `recursos/mobile/pantallas/`, en Chromium y en WebKit, con el mismo recorte y
- * la misma tolerancia. Lo que importa es la COLUMNA DE LA DIFERENCIA: que
- * Chromium dé 8% y WebKit 30% en la misma pantalla dice dónde mirar; el valor
- * absoluto no, porque el export trae la barra de estado y otras capas que el
- * sitio no dibuja.
+ * la misma tolerancia.
+ *
+ * CÓMO SE LEE, Y ESTO IMPORTA. El criterio es que LOS DOS MOTORES SE ACERQUEN
+ * AL EXPORT. La brecha entre ellos baja como consecuencia; no es el objetivo.
+ *
+ * Ponerse como meta «que la brecha entre motores sea menor a 2» premia la
+ * convergencia por degradación, y no es teórico: barriendo el trazo del titular
+ * del landing, la variante `sin blanco` daba una brecha de 2,42 contra los 5,76
+ * de la versión buena, y lo lograba empeorando WebKit de 14,06% a 18,43%. Los
+ * dos motores más lejos del diseño, y el número de la brecha mejor. Por eso la
+ * tabla ordena por distancia al export y la brecha va al final, como derivada.
+ *
+ * El valor absoluto tampoco se lee solo: el export trae la barra de estado y
+ * capas que el sitio no dibuja, así que lo que compara es una pantalla contra
+ * sí misma entre motores y entre versiones.
  *
  * LÍMITE QUE HAY QUE TENER PRESENTE: el WebKit de Playwright NO es Safari de
  * iOS. Comparte el motor de rasterizado, que es lo que acá se está buscando,
@@ -166,18 +177,27 @@ await medidor.close();
 console.log('\n  Diff de píxeles contra el export, por motor.');
 console.log('  «más claro» = qué % de los píxeles distintos son MÁS CLAROS que el diseño;');
 console.log('  una banda blanca de más se ve como ese número cerca de 100.\n');
-console.log('  pantalla                     chromium   webkit    webkit − chromium   más claro (ch → wk)');
-console.log('  ---------------------------  --------   -------   -----------------   -------------------');
-let peor = null;
-for (const [slug] of PANTALLAS) {
+console.log('  ORDENADO POR DISTANCIA AL EXPORT. La brecha entre motores es la última');
+console.log('  columna a propósito: es una consecuencia, no la meta.\n');
+console.log('  pantalla                     chromium   webkit    el peor de los dos   brecha   más claro ch → wk');
+console.log('  ---------------------------  --------   -------   ------------------   ------   -----------------');
+const filas = PANTALLAS.map(([slug]) => {
   const a = ch.get(slug);
   const b = wk.get(slug);
-  const d = +(b.pct - a.pct).toFixed(2);
-  if (!peor || d > peor.d) peor = { slug, d };
+  return { slug, a, b, peor: Math.max(a.pct, b.pct), brecha: +Math.abs(b.pct - a.pct).toFixed(2) };
+}).sort((x, y) => y.peor - x.peor);
+for (const f of filas) {
   console.log(
-    `  ${slug.padEnd(27)}  ${String(a.pct + '%').padStart(7)}   ${String(b.pct + '%').padStart(7)}   ` +
-      `${(d > 0 ? '+' + d : String(d)).padStart(17)}   ${String(a.claro + '%').padStart(8)} → ${String(b.claro + '%').padStart(4)}`,
+    `  ${f.slug.padEnd(27)}  ${String(f.a.pct + '%').padStart(7)}   ${String(f.b.pct + '%').padStart(7)}   ` +
+      `${String(f.peor.toFixed(2) + '%').padStart(18)}   ${String(f.brecha).padStart(6)}   ` +
+      `${String(f.a.claro + '%').padStart(7)} → ${String(f.b.claro + '%').padStart(4)}`,
   );
 }
-console.log(`\n  La que más se separa entre motores: ${peor.slug} (+${peor.d} puntos).`);
+const lejos = filas[0];
+const brecha = filas.reduce((m, f) => (f.brecha > m.brecha ? f : m));
+console.log(
+  `\n  La más lejos del export: ${lejos.slug} (${lejos.peor.toFixed(2)}% en el peor motor).\n` +
+    `  La de mayor brecha entre motores: ${brecha.slug} (${brecha.brecha}).\n` +
+    `  Una brecha chica con las dos columnas altas NO es un logro: son los dos lejos del diseño.`,
+);
 process.exit(0);

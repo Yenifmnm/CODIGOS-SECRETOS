@@ -191,7 +191,19 @@
 
   .result-m__title--gold {
     color: var(--c-gold);
-    -webkit-text-stroke: 0.498cqw #FFFFFF;
+    /* Mismo caso que el titular del landing —ver la nota larga en `home.css`—:
+       el nodo 74:987 pide 2 px CENTER y en CSS eso dibuja de más.
+
+           2 px de CSS ....  +14,7 chromium  / +16,8 webkit
+           1 px de CSS ....   +7,1 chromium  / +10,4 webkit   <- éste
+           0 px ...........   -4,6 chromium  /  +4,2 webkit
+
+       Acá NO cae en cero: 1 px mejora los dos motores a la mitad, pero queda
+       un resto. Parte de ese resto no es el trazo —a 0 px WebKit sigue en
+       +4,2— y probablemente sea que el export de GANASTE muestra otro premio
+       que el que renderiza el mock. Se deja en 1 px, que es lo que la medición
+       sostiene, y el resto queda pendiente de un export comparable. */
+    -webkit-text-stroke: 0.249cqw #FFFFFF;  /* nodo 2px CENTER -> 1px de CSS */
     text-shadow: var(--glow-gold-text);
   }
 
@@ -199,6 +211,17 @@
   .result-m__title--outline {
     font-size: var(--result-m-title, 14.925cqw);   /* 60, el de `Estuviste cerca` */
     color: var(--c-title-red);          /* #E63303 */
+    /* ESTE SE QUEDA EN 2 px, y no es un olvido. Barrido igual que los otros,
+       contra los tres export donde aparece, la caja del nodo da:
+
+         74:1107 «Estuviste cerca»       2px: -5,9 / -0,3   1px: -9,9 / -3,7
+         105:278 «Código fuera de...»    2px: -5,9 / +0,4   1px: -12,4 / -5,1
+         131:350 «Código fuera de...»    2px: -5,6 / +0,2   1px: -11,8 / -5,4
+
+       En los tres, 2 px es lo más cerca del export EN LOS DOS MOTORES, y bajar
+       a 1 px aleja. Que el titular del landing necesite la mitad y éste no,
+       dice que la traducción no es un factor fijo: se mide por caja, no se
+       aplica una regla. */
     -webkit-text-stroke: 0.498cqw var(--c-title-outline);   /* borde 2px #FCC102 */
     /* `0px 0px 44.016px #FFFFFF` + `0px 4px 10px #212F5C` del nodo. */
     text-shadow: 0 0 10.949cqw #FFFFFF, 0 0.995cqw 2.488cqw #212F5C;

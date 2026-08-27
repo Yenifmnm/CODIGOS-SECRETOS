@@ -245,7 +245,16 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
       />
 
       <p className="welcome-m__hi" data-figma="70:348">¡Bienvenidos a bordo</p>
-      <p className="welcome-m__title" data-figma="70:349">Pequeños piratas!</p>
+      {/* `omitir="trazo-ancho"`: el nodo pide 2 px CENTER y el CSS pone 1. Ver
+          la medición en `welcome.css`. Sólo el ancho: color y orden se siguen
+          controlando. */}
+      <p
+        className="welcome-m__title"
+        data-figma="70:349"
+        data-figma-omitir="trazo-ancho"
+      >
+        Pequeños piratas!
+      </p>
 
       {/* Pergamino real del Figma; el formulario va encima como HTML accesible. */}
       <div className="welcome-m__scroll" data-figma="70:350">

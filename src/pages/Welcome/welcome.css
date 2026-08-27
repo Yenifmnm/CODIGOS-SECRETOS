@@ -206,8 +206,24 @@
     font-size: 13.682cqw; /* 55 */
     line-height: 1.0418;  /* 57.3 */
     color: var(--c-gold);
-    /* Trazo blanco de 2 px del nodo (70:349), alineado al CENTRO. */
-    -webkit-text-stroke: 0.498cqw #ffffff;
+    /* -------------------------------------------------------------------
+       EL TRAZO: 2 px EN EL NODO, 1 px EN CSS. No es un valor cambiado a ojo,
+       es una traducción, y es la misma familia que el `paint-order`.
+
+       El nodo declara `trazo 2px CENTER`, pero ese número es la entrada al
+       rasterizador de FIGMA, no al de CSS. `-webkit-text-stroke: 2px` dibuja
+       bastante más grueso que un trazo centrado de 2 px de Figma: se come el
+       relleno, junta las letras y las deja pálidas. La prueba es el diff contra
+       `recursos/mobile/pantallas/`, midiendo la caja del nodo en los dos motores:
+
+           2 px de CSS ....  +10,4 chromium  / +10,1 webkit
+           1 px de CSS ....   -0,8 chromium  /  -0,3 webkit   <- éste
+           0 px ...........  -19,0 chromium  / -10,9 webkit
+
+       Acá cae casi exacto en los dos motores. Mismo caso que el titular del
+       landing; ver la nota larga en `home.css`.
+       ------------------------------------------------------------------- */
+    -webkit-text-stroke: 0.249cqw #ffffff;  /* nodo 2px CENTER -> 1px de CSS */
     /* `0 0 44.016px #FFFFFF` + `0 4px 4px #0000004D` del nodo. */
     text-shadow: 0 0 10.949cqw #ffffff, 0 0.995cqw 0.995cqw #0000004d;
   }

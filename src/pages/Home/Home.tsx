@@ -207,7 +207,17 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         {/* El segundo id de cada uno es el del mismo texto en el frame del menú
             desplegado (79:1111), que reusa esta composición: sin él, con el menú
             abierto estas capas quedaban sin nodo y sus resplandores sin control. */}
-        <p className="home-m__title" data-figma="70:194 79:1122">Ganá un viaje al Caribe</p>
+        {/* `omitir="trazo-ancho"`: el nodo declara 2 px CENTER y el CSS pone 1,
+            porque ese número es la entrada al rasterizador de Figma y no al de
+            CSS. La medición está en `home.css`. Se omite SÓLO el ancho: el
+            color del trazo y el orden de pintado se siguen controlando. */}
+        <p
+          className="home-m__title"
+          data-figma="70:194 79:1122"
+          data-figma-omitir="trazo-ancho"
+        >
+          Ganá un viaje al Caribe
+        </p>
         <p className="home-m__sub" data-figma="70:193 79:1121">¡y cientos de premios más!</p>
       </div>
 
