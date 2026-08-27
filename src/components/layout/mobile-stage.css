@@ -24,25 +24,29 @@
       dino— queda en el área segura, debajo de la barra real. Es donde el diseño
       lo puso: debajo de la suya.
 
-   2. LA ESCALA. Antes salía sólo del ancho, y en un teléfono más bajo que el
-      diseño la composición no entraba: sobraba por abajo y aparecía scroll.
-      Ahora sale del eje que primero se queda corto:
+   2. LA ESCALA ES PROPORCIONAL AL ANCHO. El lienzo mide siempre lo que mide la
+      pantalla —hasta `--mstage-max`— y de ahí sale todo lo demás:
 
-          escala = min(ancho / 402, alto útil / útil, 1)
+          escala = ancho disponible / 402
 
-      El tope en 1 es lo que hace que la composición nunca se dibuje más grande
-      que el diseño. En un teléfono más ancho que 402 eso deja franjas al
-      costado: las tapa la capa de sangrado del fondo (`.mstage__bg--sangra`).
+      Esto es diseño responsive y no una lámina escalada, y la diferencia
+      importa. Hubo una versión que metía el alto en la cuenta,
+      `min(ancho/402, alto útil/útil, 1)`, para garantizar «entra sin scroll».
+      Entraba, pero achicaba: en un teléfono de 360x640 la composición se
+      dibujaba al 0,71 y quedaban 38 px de cielo a cada lado. O sea que para
+      que entrara a lo alto se encogía a lo ancho, y el resultado se veía chico
+      en el medio de la pantalla. El eje vertical no se resuelve encogiendo:
+      se resuelve dejando que la página fluya y scrollee, como cualquier página.
+
+      Lo que sostiene que esto sea responsive y no sólo un zoom son LOS PISOS EN
+      PÍXELES (ver `styles/tokens.css`): el texto que hay que leer, los inputs y
+      las áreas táctiles tienen un mínimo absoluto y dejan de escalar cuando lo
+      tocan. Sin eso, «proporcional» a 320 px significa 8 px de rótulo.
 
       No se aplica un `transform: scale()` sobre la página: se le da al lienzo
-      el ANCHO que corresponde a esa escala, y como `1cqw` es el 1% de ese
-      ancho, `mu()` y todos los porcentajes de las composiciones escalan solos.
-      Sin capas rasterizadas y sin romper el hit-testing.
-
-      Sólo en RETRATO. En landscape el alto útil es tan chico que la fórmula da
-      0,46 y la composición quedaría como una tira en el medio de la pantalla,
-      peor que el scroll. Ahí queda el comportamiento de siempre: escala por
-      ancho y se scrollea.
+      el ANCHO de la pantalla, y como `1cqw` es el 1% de ese ancho, `mu()` y
+      todos los porcentajes de las composiciones escalan solos. Sin capas
+      rasterizadas y sin romper el hit-testing.
 
    `container-type: inline-size` es lo que hace funcionar a `mu()`: 1cqw pasa a
    ser el 1% de este ancho. No se usa `size` porque la altura la decide el
@@ -71,34 +75,26 @@
      reaparece el cielo debajo. Se descuentan las áreas seguras, que `.mstage`
      ya reserva como padding, para no generar scroll de más, y se suma lo que el
      lienzo subió, o si no reaparece el cielo debajo del planeta del landing.
-     En retrato lo pisa el bloque de más abajo, donde el alto lo fija el frame. */
+     En retrato lo pisa el bloque de más abajo, donde el alto lo fija el frame:
+     si el frame da más alto que la pantalla, la página scrollea, que es lo que
+     tiene que pasar. */
   min-height: calc(var(--mstage-alto-util) - var(--mstage-corrimiento));
 }
 
-/* El ancho del lienzo, en dos declaraciones que TIENEN que estar en este orden
-   y en este archivo: las dos son `.mstage`, o sea la misma especificidad, y una
-   media query no suma. Si el respaldo viviera en `stage.css` —que se carga
-   después— ganaría siempre y la fórmula de retrato no se aplicaría nunca. */
+/* El ancho del lienzo: el de la pantalla, hasta `--mstage-max`. Una sola
+   declaración y en las dos orientaciones — el alto no entra en la cuenta, ver
+   el punto 2 de arriba. El `100%` se resuelve en el momento de usarse, y tanto
+   `.mstage__canvas` como `.mstage__sky-caja` lo usan contra bloques contenedores
+   del mismo ancho, así que los dos dan el mismo número y el cielo escala
+   exactamente como la composición. */
 .mstage {
-  /* Respaldo, y el valor de landscape: manda el ancho y la página scrollea. */
+  /* Por encima de este ancho la composición dejaría de leerse como una pantalla
+     de celular, así que se centra en vez de seguir creciendo. */
   --mstage-max: 520px;
   --mstage-w: min(100%, var(--mstage-max));
 }
 
 @media (orientation: portrait) {
-  .mstage {
-    /* min(ancho disponible, 402, alto útil x 402/útil): la escala expresada en
-       el ancho del lienzo. El `100%` se resuelve en el momento de usarse, y
-       tanto `.mstage__canvas` como `.mstage__sky-caja` lo usan contra bloques
-       contenedores del mismo ancho, así que los dos dan el mismo número y el
-       cielo escala exactamente como la composición. */
-    --mstage-w: min(
-      100%,
-      calc(var(--mstage-diseno-w) * 1px),
-      calc(var(--mstage-alto-util) * var(--mstage-diseno-w) / var(--mstage-util-h))
-    );
-  }
-
   /* EL LIENZO CLIPEA COMO CLIPEA EL FRAME.
 
      Los once frames tienen `clipsContent: true`, y en los once hay capas que se
@@ -127,19 +123,18 @@
      entero por detrás. Lo que el clip corta queda con la foto atrás, no con un
      vacío.
 
-     SÓLO EL EJE VERTICAL, y esto es una desviación deliberada de «como clipea
-     el frame». En un teléfono de exactamente 402 los dos ejes dan lo mismo: el
-     borde del lienzo ES el borde de la pantalla. Pero con el tope de escala en
-     1, en cualquier teléfono más ancho —412, 414, 430, o sea la mayoría— el
-     lienzo queda centrado y el corte horizontal cae 14 px ADENTRO de la
-     pantalla: la nena de registro aparece rebanada por una línea vertical con
-     cielo a la izquierda. En el diseño ese corte coincide con el borde del
-     teléfono; acá no, y se lee como un error de render.
+     SÓLO EL EJE VERTICAL. Verticalmente el frame corta y hay que copiarlo: es
+     lo que saca los 855 px de `Ellipse 1` en las de resultado y los 20 px de
+     scroll de inicio.
 
-     Verticalmente el frame corta y hay que copiarlo: es lo que saca los 855 px
-     de `Ellipse 1` en las de resultado y los 20 px de scroll de inicio.
-     Horizontalmente, el equivalente honesto del borde del frame es el borde de
-     la pantalla, y de eso ya se encarga el `overflow-x: hidden` de `.mstage`.
+     Horizontalmente no, y por dos motivos. En un teléfono el lienzo mide lo
+     mismo que la pantalla, así que el corte coincidiría con el borde y no
+     haría nada; y por encima de `--mstage-max` el lienzo queda centrado y el
+     corte caería ADENTRO de la pantalla, con la decoración que sangra rebanada
+     por una línea vertical recta. El equivalente honesto del borde del frame en
+     horizontal es el borde de la PANTALLA, y de eso se encarga el
+     `overflow-x: clip` de `.mstage`, que es el único lugar donde se recorta a
+     lo ancho.
 
      El par `visible`/`clip` es legal y Chromium lo conserva —no lo fuerza a
      `auto`, que crearía un contenedor de scroll—. */
