@@ -15,6 +15,7 @@
     "audit:color": "node scripts/medir-color.mjs",
     "audit:calidez": "node scripts/medir-calidez.mjs",
     "audit:cintas": "node scripts/medir-cintas.mjs",
+    "audit:gestos": "node scripts/medir-gestos.mjs",
     "figma:pull": "node scripts/figma-pull.mjs",
     "figma:check": "node scripts/figma-check.mjs"
   },

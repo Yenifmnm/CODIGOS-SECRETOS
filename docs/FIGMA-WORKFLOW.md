@@ -342,14 +342,15 @@ diseño lo puso: debajo de la suya.
 
 ---
 
-## Problema abierto: el checker es ciego al estado
+## Problema abierto: el checker es ciego al estado, al movimiento y al gesto
 
-`figma:check` abre una ruta, espera a que cargue y mide **una sola foto**. Todo
-lo que el sitio sabe hacer y no está en esa foto queda sin comparar, aunque esté
-escrito y aunque esté marcado. No es una cuestión de cobertura: sumar `data-figma`
-no lo arregla, porque el elemento no está en el DOM en el instante en que se mide.
+`figma:check` abre una ruta, espera a que cargue y mide **una sola foto quieta,
+sin tocar nada**. Todo lo que el sitio sabe hacer y no está en esa foto queda sin
+comparar, aunque esté escrito y aunque esté marcado. No es una cuestión de
+cobertura: sumar `data-figma` no lo arregla, porque o el elemento no está en el
+DOM en el instante en que se mide, o lo que falla no se dibuja.
 
-Tres casos confirmados, y los tres son **estados, no rutas**:
+Tres casos confirmados por **estado**, que no son rutas:
 
 | Caso | Qué se pierde | Por qué |
 | --- | --- | --- |
@@ -362,11 +363,24 @@ diseño está organizado por **pantalla**, que a veces es un estado. Mientras es
 no cambie, «0 fuera de tolerancia» significa «0 fuera de tolerancia en el estado
 inicial de esta ruta», y conviene leerlo así.
 
-Las salidas posibles, ninguna elegida todavía: que `nodes.json` acepte pasos de
-interacción antes de medir; que `figma:check` mida N estados por ruta; o que las
-marcas de un componente con ranuras no dependan del estado. La primera es la que
-menos toca el código de producción y la que más se parece a lo que ya hace
-`?scenario=` en las cuatro pantallas de resultado.
+Y dos ejes más, de la misma familia, donde el problema no es *cuál* estado se
+mide sino que la foto es una foto:
+
+| Eje | Qué se pierde | Caso real |
+| --- | --- | --- |
+| **Movimiento** | Todo lo que el control apaga para poder medir. `figma:check` y `audit:responsive` usan `reducedMotion: 'reduce'` para congelar las animaciones, así que lo que sólo existe con movimiento no está en la foto | Las partículas del reveal de GANASTE (`Sparkles`) hacían `if (reduced) return null`. Sobraban respecto del diseño y estuvieron puestas meses sin que nada las marcara |
+| **Gesto** | Todo lo que no pinta un píxel. `touch-action`, `setPointerCapture`, los umbrales de arrastre: el control no toca la pantalla, y Playwright por defecto usa mouse, donde el defecto ni siquiera se reproduce | La lupa de `/donde-esta-el-codigo` tenía `touch-action: none` sobre el 43% de la altura y dejaba la página **sin scroll en el teléfono**. Diez pantallas en ✓, 0 desvíos, y la clienta sin poder bajar |
+
+Del segundo salió `npm run audit:gestos` (`scripts/medir-gestos.mjs`), que sí
+pasa un dedo por el centro de las diez pantallas — contexto con `hasTouch: true`
+y `Input.dispatchTouchEvent` por CDP, porque con `page.mouse` no aparece. Cubre
+un eje, no el problema.
+
+Las salidas posibles para el eje del estado, ninguna elegida todavía: que
+`nodes.json` acepte pasos de interacción antes de medir; que `figma:check` mida N
+estados por ruta; o que las marcas de un componente con ranuras no dependan del
+estado. La primera es la que menos toca el código de producción y la que más se
+parece a lo que ya hace `?scenario=` en las cuatro pantallas de resultado.
 
 ---
 

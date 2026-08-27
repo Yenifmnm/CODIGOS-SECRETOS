@@ -99,13 +99,26 @@ pantallas.
 
 ## Lo que este control NO ve
 
-`figma:check` mide **una foto del estado inicial de cada ruta**. Lo que sólo
-existe después de una interacción no se compara, aunque esté escrito y marcado:
-las miniaturas a la izquierda del carrusel de PREMIOS, el menú desplegado
-(`menu-mobile`, que ni siquiera tiene ruta) y la variante de PARTICIPAR con el
-código ya cargado. Los tres son estados, no rutas, y ninguna cobertura los
-alcanza. Está anotado como problema abierto en `docs/FIGMA-WORKFLOW.md`; hasta
-que se resuelva, leé «0 fuera de tolerancia» como «0 en el estado inicial».
+`figma:check` mide **una foto quieta del estado inicial de cada ruta**. Compara
+cajas y color. No mira **estados**, no mira **animaciones** y no mira
+**gestos** — y las tres son la misma familia: cosas que sólo existen si algo
+pasa, y en la foto no pasa nada.
+
+Lo que queda afuera por estado: las miniaturas a la izquierda del carrusel de
+PREMIOS, el menú desplegado (`menu-mobile`, que ni siquiera tiene ruta). Están
+escritas y marcadas, y aun así nadie las compara.
+
+**Van tres defectos por este hueco, y hay que contarlos juntos:**
+
+| Defecto | Por dónde se coló |
+| --- | --- |
+| Las partículas del reveal de GANASTE, que no estaban en el diseño | Movimiento reducido: el componente devolvía `null` con `prefers-reduced-motion`, y el control mide justamente así |
+| El carrusel de PREMIOS: dos miniaturas nunca medidas | `nodoDeRanura()` reparte las marcas según la posición activa, y la captura toma siempre la 0 |
+| La lupa de `/donde-esta-el-codigo`, que dejaba la pantalla sin scroll | Un gesto. El control no toca nada: no hay dedo, no hay `touch-action`, no hay nada que medir |
+
+No son tres descuidos distintos: es un agujero con tres salidas. Está anotado
+como problema abierto en `docs/FIGMA-WORKFLOW.md`; hasta que se resuelva, leé
+«0 fuera de tolerancia» como «0 en el estado inicial, quieto y sin tocar».
 
 ### El caso de las partículas: invisible por partida doble
 
@@ -130,6 +143,42 @@ que acá el estado no lo elige el usuario, lo elige el propio control.
 
 Mientras eso siga así, «0 fuera de tolerancia» quiere decir «0 en el estado
 inicial de esta ruta, con el movimiento reducido».
+
+### El caso de la lupa: el control no toca la pantalla
+
+El catalejo de `/donde-esta-el-codigo` tenía `touch-action: none`. Su caja mide
+271x443 y cae en el centro exacto de la pantalla —el 43% de la altura, donde va
+el pulgar—, así que **en el teléfono la página no scrolleaba**. Lo reportó la
+clienta desde su celular; las diez pantallas seguían dando ✓ con 0 desvíos.
+
+Ningún control lo podía ver, y no por falta de cobertura:
+
+- `figma:check` compara geometría y color. `touch-action` no pinta un píxel.
+- `audit:responsive` mide anchos a distintos viewports. Tampoco toca la pantalla.
+- Playwright, por defecto, **usa mouse**. Con mouse el defecto no existe: el
+  scroll con rueda no le pide permiso a `touch-action`. Hace falta un contexto
+  con `hasTouch: true` y eventos de toque de verdad (`Input.dispatchTouchEvent`
+  por CDP), porque `page.mouse` no sirve para reproducirlo.
+
+De ahí salió `npm run audit:gestos` (`scripts/medir-gestos.mjs`): pasa un swipe
+vertical por el centro de las diez pantallas y pregunta **qué** scrolleó. El
+«qué» importa: en BASES el swipe mueve la hoja interna y no la ventana, y eso
+está bien. La primera versión del script miraba sólo `window.scrollY` y contaba
+BASES como falla.
+
+Dos cosas que quedaron aprendidas del arreglo:
+
+1. **`touch-action: pan-y` no alcanza solo, pero casi.** Medido: con el CSS
+   nuevo y el JS viejo, Chromium ya devolvía el scroll (151 px) — el compositor
+   decide antes de que corra nuestro código, así que `setPointerCapture` no le
+   gana. Lo que seguía roto era otra cosa: el lente **saltaba bajo el dedo** en
+   cada intento de scrollear y quedaba encendido, porque `pointerdown`
+   capturaba y posaba el catalejo sin esperar a saber para qué venía el dedo.
+2. **Por eso se decide por ángulo, no por evento.** No se captura nada hasta
+   que el dedo recorre 8 px; ahí, si predomina lo vertical se suelta el gesto
+   (el empate cae de ese lado a propósito) y si predomina lo horizontal recién
+   se captura. Un toque que termina sin llegar al umbral no es scroll ni
+   arrastre: posa el catalejo donde tocó, como antes.
 
 ### El contador en 0000 no es un bug
 
