@@ -939,10 +939,18 @@ function compararPintura(esperado, e, escala) {
     anotar('radio', `${red(esp)}px`, e.radio, Number.isFinite(real) && Math.abs(real - esp) <= 1);
   }
 
-  // El trazo. Y con él, el orden de pintado, que es la trampa: CSS por defecto
-  // dibuja el relleno y ENCIMA el trazo, así que un trazo centrado de 2px se
-  // come 1px de letra por todo el contorno y el texto queda pálido y hueco.
-  // Figma lo muestra al revés. `paint-order: stroke fill` lo corrige.
+  // El trazo. Y con él el orden de pintado, que ESTE CONTROL TUVO AL REVÉS
+  // hasta el 27-08-2026: exigía `paint-order: stroke fill`, una propiedad que
+  // Figma no tiene, con el argumento de que «el trazo se come la letra». En
+  // Figma un trazo CENTER se pinta ENCIMA del relleno —la mitad para adentro,
+  // la mitad para afuera—, así que sí, se la come: la letra de color adelgaza y
+  // el contorno es una banda completa. El orden por defecto de CSS, relleno y
+  // después trazo, ES el de Figma; lo que hacía `stroke fill` era tapar la mitad
+  // interior del trazo y dejar la letra sin adelgazar.
+  //
+  // No es un detalle: mientras esta línea pidiera `stroke fill`, el control
+  // reclamaba el defecto en las siete hojas que lo tenían. Fue el octavo lugar
+  // donde había que sacarlo.
   // El espejo no mueve la caja: sin este control, una pieza dada vuelta pasa
   // con las cuatro medidas en cero. Si el espejo vive en un hijo —porque el
   // elemento marcado lleva una animación que le pisaría el transform— se saca
@@ -966,9 +974,11 @@ function compararPintura(esperado, e, escala) {
       anotar('trazo (color)', trazo.color, e.trazoColor, mismoColor(trazo.color, e.trazoColor), 'trazo');
       anotar(
         'trazo (orden)',
-        'stroke fill',
+        'normal',
         e.ordenPintado,
-        Number.isFinite(real) && real > 0 ? String(e.ordenPintado).trim().startsWith('stroke') : true,
+        Number.isFinite(real) && real > 0
+          ? !String(e.ordenPintado).trim().startsWith('stroke')
+          : true,
         'trazo',
       );
     } else {

@@ -342,6 +342,34 @@ diseño lo puso: debajo de la suya.
 
 ---
 
+## Cuando el control pide el defecto
+
+El 27-08-2026 salió `paint-order: stroke fill` de siete hojas de estilo. Es una
+propiedad que **Figma no tiene**: la había agregado el código. En Figma un trazo
+CENTER se pinta ENCIMA del relleno —la mitad para adentro, la mitad para
+afuera—, así que la letra de color adelgaza y el contorno es una banda completa.
+Con `paint-order: stroke fill` el relleno tapa la mitad interior: la letra no
+adelgaza y del contorno se ve la mitad. La clienta lo vio antes que cualquier
+script: «parece que se juntan mucho y no se leen bien».
+
+**El octavo lugar donde estaba era este control.** `figma-check.mjs` tenía la
+regla `trazo (orden): esperaba stroke fill`, con el mismo razonamiento escrito en
+un comentario. Mientras esa línea estuviera ahí, el control no sólo dejaba pasar
+el defecto: lo **reclamaba**. Corregir las siete hojas hacía aparecer un desvío
+de pintura en cada pantalla con título.
+
+Lo que hay que sacar de acá no es el valor: es que **una expectativa mal puesta
+en el control es peor que la ausencia de control**, porque se lee como
+confirmación. La regla de `CLAUDE.md` —«el diseño se lee de `figma/spec/`, no de
+una captura»— vale también para las reglas del checker: `trazoAlineacion:
+"CENTER"` estaba en el spec todo el tiempo.
+
+Y para lo que el control no alcanza a ver, `npm run audit:trazo`
+(`scripts/medir-trazo.mjs`) cuenta la tinta: qué proporción de cada texto con
+trazo es relleno y qué proporción es contorno, en el render y en el export de
+Figma, con los colores del propio nodo. Al ser un COCIENTE se puede comparar el
+render a 3× contra un export de 1×, cosa que los conteos absolutos no permiten.
+
 ## Problema abierto: el checker es ciego al estado, al movimiento y al gesto
 
 `figma:check` abre una ruta, espera a que cargue y mide **una sola foto quieta,

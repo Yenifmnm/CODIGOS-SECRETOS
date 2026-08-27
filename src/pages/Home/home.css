@@ -103,10 +103,6 @@
      justo cómo pinta `-webkit-text-stroke`: la mitad para adentro de la letra
      y la mitad para afuera. Es lo que separa el dorado del cielo. */
   -webkit-text-stroke: 0.498cqw #FFFFFF;  /* borde 2px */
-  /* `paint-order` dibuja primero el trazo y encima el relleno, que es lo que
-     evita que el contorno se coma la letra. Mismo criterio que en
-     `result-layout.css`. */
-  paint-order: stroke fill;
   /* `0px 0px 44.016px #FFFFFF` + `0px 4px 4px #0000004D` del nodo. En un texto
      la sombra sigue los glifos, así que va en `text-shadow` y no en `filter`,
      que afectaría a toda la caja. */

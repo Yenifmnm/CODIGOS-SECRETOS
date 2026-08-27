@@ -206,11 +206,8 @@
     font-size: 13.682cqw; /* 55 */
     line-height: 1.0418;  /* 57.3 */
     color: var(--c-gold);
-    /* Trazo blanco de 2 px del nodo. `paint-order: stroke fill` porque CSS
-       dibuja el relleno y ENCIMA el trazo, que se come 1 px de letra por todo
-       el contorno; Figma lo hace al revés. */
+    /* Trazo blanco de 2 px del nodo (70:349), alineado al CENTRO. */
     -webkit-text-stroke: 0.498cqw #ffffff;
-    paint-order: stroke fill;
     /* `0 0 44.016px #FFFFFF` + `0 4px 4px #0000004D` del nodo. */
     text-shadow: 0 0 10.949cqw #ffffff, 0 0.995cqw 0.995cqw #0000004d;
   }

@@ -49,23 +49,19 @@
     0 0.208cqw 0.521cqw var(--c-deep-blue);
 }
 
-/* PERDISTE y errores de código: relleno ROJO con contorno DORADO por fuera.
-   Los colores salen de muestrear el titular del Figma
-   (`recursos/correcciones/perdiste.png`): relleno #e84115, contorno #fcc411.
-   Estaban invertidos —dorado adentro y rojo afuera—, que es lo que se veía
-   distinto del diseño. `paint-order` dibuja primero el trazo y encima el
-   relleno, que es lo que evita que el contorno se coma la letra. */
+/* PERDISTE y errores de código: relleno ROJO con contorno DORADO. El nodo
+   23:3163 lo confirma: relleno #E63303, trazo #FCC102 de 4 px alineado al
+   CENTRO. Estaban invertidos —dorado adentro y rojo afuera—, que es lo que se
+   veía distinto del diseño. */
 .result__title--outline {
   color: var(--c-title-red);
-  /* El trazo se centra sobre el contorno del glifo y `paint-order` pinta el
-     relleno encima, así que sólo se ve la mitad: para el grosor del Figma
-     (~9 px) hay que pedir el doble. */
-  /* PENDIENTE 23:3163 — stroke visual pendiente de confirmación: la definición
-     estructurada del nodo expone fill y sombras, pero no un stroke. El contorno
-     se ve en el render del Figma, así que se conserva el actual sin tocarlo
-     hasta poder compararlo contra el screenshot del nodo. */
+  /* OJO CON ESTE VALOR. 0.94cqw son ~18 px de diseño y el nodo pide 4. El
+     número salió de razonar que, como `paint-order: stroke fill` tapaba la
+     mitad interior del trazo, «hay que pedir el doble». Sacado el
+     `paint-order`, ese razonamiento ya no se sostiene y el trazo quedó al
+     cuádruple del diseño. No se toca en este cambio —el pedido era mover SÓLO
+     el orden de pintado, sin compensar nada—, pero está medido y anotado. */
   -webkit-text-stroke: 0.94cqw var(--c-title-outline);
-  paint-order: stroke fill;
   /* Mismas sombras que el nodo 23:3084, que el 23:3163 repite. */
   text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
     0 0.208cqw 0.521cqw var(--c-deep-blue);
@@ -196,7 +192,6 @@
   .result-m__title--gold {
     color: var(--c-gold);
     -webkit-text-stroke: 0.498cqw #FFFFFF;
-    paint-order: stroke fill;
     text-shadow: var(--glow-gold-text);
   }
 
@@ -205,7 +200,6 @@
     font-size: var(--result-m-title, 14.925cqw);   /* 60, el de `Estuviste cerca` */
     color: var(--c-title-red);          /* #E63303 */
     -webkit-text-stroke: 0.498cqw var(--c-title-outline);   /* borde 2px #FCC102 */
-    paint-order: stroke fill;
     /* `0px 0px 44.016px #FFFFFF` + `0px 4px 10px #212F5C` del nodo. */
     text-shadow: 0 0 10.949cqw #FFFFFF, 0 0.995cqw 2.488cqw #212F5C;
   }
@@ -485,7 +479,6 @@
     line-height: 1.04;
     color: var(--c-gold);   /* #FCC102 */
     -webkit-text-stroke: 0.249cqw #FFFFFF;   /* borde 1px */
-    paint-order: stroke fill;
     text-shadow: 0 0.995cqw 2.488cqw #212F5C;
     white-space: nowrap;
   }
