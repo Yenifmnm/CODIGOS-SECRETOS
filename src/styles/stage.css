@@ -138,7 +138,15 @@
 
   position: relative;
   min-height: 100svh;
-  overflow-x: hidden;
+  /* `clip` y no `hidden`, y es el único lugar donde se recorta en horizontal.
+     `hidden` crea un contenedor de scroll: lo que sangra queda invisible pero
+     DESPLAZABLE, y al enfocar un campo el navegador corre la pantalla. `clip`
+     recorta y no deja nada que scrollear.
+     Que el recorte viva acá y no en cada composición es lo que hace que el
+     corte caiga en el borde de la PANTALLA y no en el del lienzo, que desde
+     que la escala mira los dos ejes puede ser bastante más angosto. */
+  overflow-x: clip;
+  overflow-y: visible;
   padding-top: var(--safe-top);
   padding-bottom: var(--safe-bottom);
   padding-left: var(--safe-left);

@@ -1,7 +1,20 @@
 /* Escena del cofre cerrado en mobile — Figma "perdiste.png" (402x969). */
 
+/* EL RECORTE HORIZONTAL YA NO VA ACÁ. Lo hace `.mstage` con `overflow-x: clip`,
+   o sea en el borde de la PANTALLA.
+
+   Acá recortaba en el borde del LIENZO. Con la escala mirando los dos ejes eso
+   dejaba el resplandor del cofre cortado por dos líneas verticales rectas, a 14
+   px de cada borde en un teléfono de 430 y a 34 en uno de 320: un rectángulo
+   más claro en el medio de la pantalla. Se veía a simple vista y yo lo había
+   descartado dos veces como «preexistente» porque la lista de capas no lo
+   marcaba — el borde no era de una capa, era de este contenedor.
+
+   Vertical se queda: la escena tiene proporción fija y lo que se sale por abajo
+   alargaría la página. */
 .mchest {
-  overflow: hidden;
+  overflow-x: visible;
+  overflow-y: clip;
 }
 
 /* La superficie del planeta pasó a `.result-m__planet`, a nivel de pantalla:

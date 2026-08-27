@@ -26,8 +26,22 @@
     position: relative;
     width: 100%;
     height: 177.861cqw;   /* 715 = de 74 a 789 */
-    overflow-x: clip;
-    overflow-y: visible;
+     EL RECORTE HORIZONTAL YA NO VA ACÁ. Lo hace `.mstage` con `overflow-x:
+     clip`, o sea en el borde de la PANTALLA.
+
+     Acá recortaba en el borde del LIENZO, que es otra cosa desde que la escala
+     mira los dos ejes: en un teléfono de 360 el lienzo mide 302 y el recorte
+     caía 28,8 px ADENTRO de la pantalla. La decoración que sangra —el planeta
+     de arriba a la izquierda, el barco, el portal— quedaba cortada por una
+     línea vertical recta con cielo a un lado, de punta a punta de la
+     composición. Detectado midiendo el bitmap, no la lista de capas: ninguna
+     capa tenía el borde ahí, lo tenía el contenedor.
+
+     El motivo por el que existía sigue cubierto: `.mstage` pasó de
+     `overflow-x: hidden` a `clip`, y `clip` no crea contenedor de scroll, así
+     que ya no queda nada «invisible pero desplazable» que el navegador pueda
+     correr al enfocar un campo. */
+    overflow: visible;
   }
 
   /* `glow-Photoroom 3` (73:744) — la estela detrás del premio. Es el mismo

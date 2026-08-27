@@ -165,7 +165,19 @@
     width: 100%;
     margin-top: -18.408cqw;   /* -74 */
     height: 227.114cqw;       /* 913 */
-    overflow: clip;
+    /* EL RECORTE HORIZONTAL YA NO VA ACÁ. Lo hace `.mstage` con `overflow-x:
+       clip`, o sea en el borde de la PANTALLA.
+
+       Acá recortaba en el borde del LIENZO, que es otra cosa desde que la
+       escala mira los dos ejes: en un teléfono de 430 el lienzo mide 402 y el
+       recorte caía 14 px ADENTRO de la pantalla, con el nene y el destello
+       cortados por una línea vertical recta. Detectado midiendo el bitmap, no
+       la lista de capas: ninguna capa tenía el borde ahí, lo tenía el
+       contenedor.
+
+       Vertical se queda: el pergamino y los personajes se salen por abajo. */
+    overflow-x: visible;
+    overflow-y: clip;
   }
 
   /* `codigos secretos logo 1` (73:925): 211x157 en (91, 191). */
