@@ -28,7 +28,8 @@
  */
 
 import { chromium, webkit } from 'playwright';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 
 const BASE = process.env.BASE ?? 'http://localhost:5180';
 const BARRA = 62;
@@ -115,6 +116,47 @@ async function medir(tipo, nombre) {
   await nav.close();
   console.error(`  (${nombre} medido)`);
   return out;
+}
+
+/* CSS QUE SÓLO SE APLICA EN UN MOTOR. Si alguna hoja trae un
+   `@supports (-webkit-touch-callout: none)` —el truco habitual para apuntarle a
+   iOS— o cualquier otra condición que un motor cumpla y el otro no, entonces
+   este control ya no compara el MISMO diseño en los dos lados: compara dos
+   diseños y, si los dos aciertan, informa que coinciden. Eso es peor que no
+   medir, porque se lee como confirmación.
+
+   No se prohíbe la técnica: es válida y a veces es la única salida. Lo que no
+   puede pasar es que esté y que este script no lo sepa. */
+function cssPorMotor(dir, out = []) {
+  for (const nombre of readdirSync(dir)) {
+    const ruta = join(dir, nombre);
+    if (statSync(ruta).isDirectory()) {
+      cssPorMotor(ruta, out);
+      continue;
+    }
+    if (!nombre.endsWith('.css')) continue;
+    const texto = readFileSync(ruta, 'utf8');
+    const lineas = texto.split(/\r?\n/);
+    lineas.forEach((linea, i) => {
+      if (!/@supports/.test(linea)) return;
+      // Condiciones que separan motores: propiedades con prefijo de proveedor.
+      const m = linea.match(/@supports[^{]*(-webkit-|-moz-|-ms-)[^{]*/);
+      if (m) out.push({ ruta, linea: i + 1, texto: linea.trim() });
+    });
+  }
+  return out;
+}
+
+const gateadas = cssPorMotor('src');
+if (gateadas.length) {
+  console.log('\n  ⚠ HAY CSS QUE SÓLO SE APLICA EN UN MOTOR. Las columnas de abajo NO comparan');
+  console.log('    el mismo diseño: si las dos aciertan, es contra reglas distintas.\n');
+  for (const g of gateadas) {
+    console.log(`      ${g.ruta}:${g.linea}  ${g.texto.slice(0, 92)}`);
+  }
+  console.log(
+    '\n    Al leer la tabla, tener presente qué reglas caen dentro de esos bloques.',
+  );
 }
 
 const ch = await medir(chromium, 'chromium');
