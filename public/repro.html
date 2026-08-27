@@ -77,7 +77,8 @@
     text-align: center;
     font-weight: 400;
   }
-  .tit { font-size: 40px; line-height: 41.6px; color: #fcc102; -webkit-text-stroke: 2px #ffffff; }
+  /* 1 px y no 2: es la traduccion que ya esta aplicada en el sitio. */
+  .tit { font-size: 40px; line-height: 41.6px; color: #fcc102; -webkit-text-stroke: 1px #ffffff; }
   .sub { font-size: 30px; line-height: 31.2px; color: #ffffff; margin-top: 2px; }
 
   /* ---- 1. los text-shadow tal cual ---------------------------------------- */
@@ -111,6 +112,31 @@
   .o1 .tit { text-shadow: 0 0 44.016px rgba(255,255,255,0.60), 0 4px 4px #0000004d; }
   .o2 .tit { text-shadow: 0 0 44.016px rgba(255,255,255,0.35), 0 4px 4px #0000004d; }
   .o3 .tit { text-shadow: 0 0 44.016px rgba(255,255,255,0.20), 0 4px 4px #0000004d; }
+
+  /* ================= D. el logo, que en el iPhone 14 no se dibuja ==========
+     El token del sitio es
+       --logo-glow: drop-shadow(0 0 125px #09eaff) drop-shadow(0 0 125px #09eaff)
+     o sea DOS drop-shadow encadenadas. Es el patron que ya fallo en el cofre:
+     ahi WebKit no dibujaba la sombra; aca parece no dibujar la capa entera. */
+  .logo { display: block; width: 257px; margin: 0 auto; }
+  .d0 .logo { filter: drop-shadow(0 0 125px #09eaff) drop-shadow(0 0 125px #09eaff); }
+  .d1 .logo { filter: drop-shadow(0 0 125px #09eaff); }
+  .d2 .logo { filter: none; }
+
+  /* ================= E. el titular EN CONTEXTO ============================
+     Fondo real, velo azul y el logo con su resplandor, en las coordenadas del
+     diseno menos los 62 px de la barra de estado. La segunda es identica pero
+     SIN el logo: si las dos coinciden entre telefonos, el logo no es el
+     culpable del resplandor del titular. */
+  .escena {
+    position: relative; width: 402px; height: 380px; overflow: hidden;
+    background-image: url('./repro/fondo.webp');
+    background-size: 402px auto; background-position: center -18px;
+  }
+  .escena .velo { position: absolute; inset: 0; background: rgba(33,47,92,.51); }
+  .escena .logo { position: absolute; left: 50%; top: 89px; transform: translateX(-50%);
+                  margin: 0; filter: drop-shadow(0 0 125px #09eaff) drop-shadow(0 0 125px #09eaff); }
+  .escena .tit  { position: absolute; left: 0; right: 0; top: 277px; margin: 0; }
 
   .seccion {
     font: 700 13px/1.6 ui-monospace, Menlo, Consolas, monospace;
@@ -237,6 +263,65 @@
     <p class="tit">Gana un viaje al Caribe</p>
   </div>
 
+
+  <h2 class="seccion">D &middot; EL LOGO. En el iPhone 14 no se dibuja</h2>
+
+  <div class="caso d0">
+    <p class="rotulo"><b>D1 &mdash; como esta en el sitio</b>
+      <span class="nota">DOS drop-shadow de 125 px encadenadas</span></p>
+    <img class="logo" src="./repro/logo.webp" alt="Codigos Secretos">
+  </div>
+
+  <div class="caso d1">
+    <p class="rotulo"><b>D2 &mdash; UNA sola drop-shadow</b>
+      <span class="nota">un solo drop-shadow de 125 px</span></p>
+    <img class="logo" src="./repro/logo.webp" alt="Codigos Secretos">
+  </div>
+
+  <div class="caso d2">
+    <p class="rotulo"><b>D3 &mdash; sin filter</b>
+      <span class="nota">el logo pelado, sin resplandor</span></p>
+    <img class="logo" src="./repro/logo.webp" alt="Codigos Secretos">
+  </div>
+
+  <p class="veredicto">
+    Si en el iPhone 14 falta la D1 y aparecen la D2 y la D3, el problema es el
+    ENCADENADO de dos <code>drop-shadow</code> grandes, y el arreglo es el mismo
+    que se le hizo al cofre: repartirlas en dos elementos en vez de encadenarlas.
+    Si faltan las tres, no es el filtro sino el asset o el formato.
+  </p>
+
+  <h2 class="seccion">E &middot; EL TITULAR EN CONTEXTO, con logo y sin logo</h2>
+
+  <div class="caso">
+    <p class="rotulo"><b>E1 &mdash; con el logo y su resplandor</b>
+      <span class="nota">fondo real, velo azul al 51%, logo con --logo-glow</span></p>
+    <div class="escena">
+      <div class="velo"></div>
+      <img class="logo" src="./repro/logo.webp" alt="">
+      <p class="tit v1">Gana un viaje al Caribe</p>
+    </div>
+  </div>
+
+  <div class="caso">
+    <p class="rotulo"><b>E2 &mdash; identica pero SIN el logo</b>
+      <span class="nota">mismo fondo, mismo velo, mismo titular</span></p>
+    <div class="escena">
+      <div class="velo"></div>
+      <p class="tit v1">Gana un viaje al Caribe</p>
+    </div>
+  </div>
+
+  <p class="veredicto">
+    Se comparan E1 y E2 en el iPhone 14 y en el 17.
+    <br><br>
+    Si CON logo los dos telefonos se despegan y SIN logo coinciden, el culpable
+    es el <code>filter</code> del logo y arreglarlo resuelve las dos cosas de
+    una: el resplandor de mas en el 17 y el logo que falta en el 14. Nadie toca
+    el resplandor del titular y el 14 queda intacto.
+    <br><br>
+    Si coinciden en las dos, el logo no es y hay que ir por otro lado.
+  </p>
 
 </div>
 </body>
