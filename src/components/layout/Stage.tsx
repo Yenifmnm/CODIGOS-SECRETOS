@@ -31,6 +31,12 @@ interface StageProps {
   /** Cielo vertical de la rama mobile. No afecta al desktop. */
   mobileBg?: MobileBg;
   /**
+   * Prioridad de descarga del fondo mobile. Va por prop y no fija en el
+   * componente porque el ajuste de carga se hizo SÓLO en la landing: las otras
+   * pantallas quedan como estaban hasta medirlas una por una.
+   */
+  mobileBgPrioridad?: 'high' | 'low';
+  /**
    * Capa que se dibuja DENTRO del cielo, entre la foto y las estrellas. Es
    * para los velos que algunos frames apoyan sobre la foto de fondo: puestos
    * más arriba apagarían las estrellas, que en el Figma van por encima.
@@ -73,6 +79,7 @@ export function Stage({
   withMenu = true,
   compactMenu = false,
   mobileBg = 'cielo',
+  mobileBgPrioridad,
   mobileVelo,
   mobileCielo,
   mobileAlto = MOBILE_DESIGN_H,
@@ -94,7 +101,12 @@ export function Stage({
               landscape, y al costado en cualquier teléfono más ancho que los
               402 del diseño—. Va sin `data-figma` a propósito: su caja no es la
               de ningún nodo y no tiene que compararse con nada. */}
-          <img src={MOBILE_BG[mobileBg]} alt="" className="mstage__bg--sangra" />
+          <img
+            src={MOBILE_BG[mobileBg]}
+            alt=""
+            className="mstage__bg--sangra"
+            fetchPriority={mobileBgPrioridad}
+          />
           {/* Todo lo que es capa marcada del diseño va DENTRO de esta caja, que
               copia el ancho y el origen del lienzo. Fuera de ella `mu()` mediría
               contra el viewport y el fondo escalaría distinto que el resto. */}
@@ -105,6 +117,7 @@ export function Stage({
               src={MOBILE_BG[mobileBg]}
               alt=""
               className="mstage__bg"
+              fetchPriority={mobileBgPrioridad}
               data-figma={mobileCielo?.nodo}
               style={
                 mobileCielo

@@ -85,10 +85,25 @@ export function LogoCodigos({
       {/* El resplandor, ya dibujado. Va ANTES para quedar detrás, es
           `position: absolute` —así no cambia la caja que mide `figma:check`— y
           se sale de la caja los mismos 250 px de margen que trae el export. */}
+      {/* `fetchPriority="high"` sólo en la variante horneada, que es la de
+          INICIO y PARTICIPAR. Las dos van además en `preload` desde el HTML
+          (ver `vite.config.ts`): el atributo marca la prioridad y el preload
+          adelanta el descubrimiento. Sin el preload, el navegador no se entera
+          de que existen hasta que React renderiza. */}
       {horneado && (
-        <img src={halo} alt="" aria-hidden="true" className="logo-cs__halo" />
+        <img
+          src={halo}
+          alt=""
+          aria-hidden="true"
+          className="logo-cs__halo"
+          fetchPriority="high"
+        />
       )}
-      <img src={logoCodigos} alt="Códigos Secretos 2026" />
+      <img
+        src={logoCodigos}
+        alt="Códigos Secretos 2026"
+        fetchPriority={horneado ? 'high' : undefined}
+      />
     </span>
   );
 }

@@ -36,6 +36,13 @@ export default function Home() {
 
   return (
     <Stage
+      /* PRIORIDAD DE DESCARGA — sólo la landing, y no cambia nada visual.
+         Medido contra el build publicado: las quince imágenes se descubrían
+         todas entre 634 y 640 ms, o sea después de bajar el JS, ejecutarlo y
+         que React renderizara. El fondo y el logo van en `preload` desde el
+         HTML (ver `vite.config.ts`) y acá se les marca la prioridad; las
+         decoraciones bajan a `low` para que no compitan en ese momento. */
+      mobileBgPrioridad="high"
       title="El Tesoro Galáctico de los Códigos Secretos 2026"
       /* `CODIGO 1` (70:168): el encuadre de la foto, que no es el que da
          `object-fit: cover` sobre el viewport. */
@@ -194,6 +201,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         aria-hidden="true"
         className="home-m__b3"
         data-figma="70:180 79:1120"
+        fetchPriority="low"
       />
 
       <LogoCodigos
@@ -241,6 +249,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         alt=""
         aria-hidden="true"
         className="home-m__flare"
+        fetchPriority="low"
         data-figma="70:204"
       />
 
@@ -266,7 +275,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         <FloatingLayer amplitude={6} duration={6.8} delay={0.9} rotate={1.2}
           className="mabs" style={mbox({ x: -83, y: 8, w: 282, h: 286, sceneH: SCENE_H })}
           data-figma="70:171">
-          <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" />
+          <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
         </FloatingLayer>
 
         <img
@@ -274,6 +283,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
           alt=""
           aria-hidden="true"
           className="mabs mlayer-img home-m__glow"
+          fetchPriority="low"
           style={mbox({ x: -65, y: 110, w: 411, h: 261, sceneH: SCENE_H })}
           data-figma="70:173"
         />
@@ -281,19 +291,19 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         <FloatingLayer amplitude={10} duration={3.6} delay={0.1} rotate={-3}
           className="mabs" style={mbox({ x: 199, y: 197, w: 78, h: 78, sceneH: SCENE_H })}
           data-figma="70:174">
-          <img src={auriculares} alt="" aria-hidden="true" className="mlayer-img" />
+          <img src={auriculares} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={9} duration={4.2} delay={0.6} rotate={-2}
           className="mabs" style={mbox({ x: 36, y: 115, w: 130, h: 130, sceneH: SCENE_H })}
           data-figma="70:175">
-          <img src={playstationConsola} alt="" aria-hidden="true" className="mlayer-img" />
+          <img src={playstationConsola} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={8} duration={5.4} delay={1.4} drift={4} rotate={2}
           className="mabs" style={mbox({ x: 83, y: 198, w: 129, h: 130, sceneH: SCENE_H })}
           data-figma="70:176">
-          <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" />
+          <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
         </FloatingLayer>
 
         {/* El halo del barco va en su propia capa, quieta. El `drop-shadow` de
@@ -305,6 +315,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
           alt=""
           aria-hidden="true"
           className="mabs home-m__ship-halo"
+          fetchPriority="low"
           /* Marcado con el MISMO nodo que la nave. No es un duplicado inútil:
              la nave lleva `omitir="sombras"` porque el resplandor no vive en
              ella, y esta capa es la que sí lo dibuja. Entre las dos cubren el
@@ -331,6 +342,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
              avise: van juntas. Se omiten SÓLO las sombras: el resto de la
              pintura de esta capa se sigue controlando. */
           data-figma-omitir="sombras"
+          prioridad="low"
         />
       </MobileScene>
     </div>

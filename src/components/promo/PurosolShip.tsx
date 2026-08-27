@@ -13,6 +13,8 @@ interface PurosolShipProps {
   'data-figma'?: string;
   /** Ejes o controles que `figma:check` no debe aplicar a esta capa. */
   'data-figma-omitir'?: string;
+  /** Prioridad de descarga. La landing la baja: la nave es decoración. */
+  prioridad?: 'high' | 'low';
 }
 
 /**
@@ -27,6 +29,7 @@ export function PurosolShip({
   className,
   'data-figma': figma,
   'data-figma-omitir': figmaOmitir,
+  prioridad,
 }: PurosolShipProps) {
   const reduced = useReducedMotion();
   const animate = variant === 'enter' && !reduced;
@@ -43,6 +46,7 @@ export function PurosolShip({
         src={barco}
         alt=""
         className="ship__img"
+        fetchPriority={prioridad}
         style={flipped ? { transform: 'scaleX(-1)' } : undefined}
       />
     </div>
