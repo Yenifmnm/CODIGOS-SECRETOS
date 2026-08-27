@@ -127,6 +127,17 @@ export function ResultLayout({
       title={pageTitle}
       compactMenu
       mobileBg="profundo"
+      /* Los cuatro frames de resultado miden 969 y no 913. De este número sale
+         el alto útil contra el que la rama mobile calcula su escala: con el 913
+         por defecto estas cuatro se dibujarían un 6% más chicas de lo que les
+         corresponde en cualquier teléfono donde mande el eje vertical. */
+      mobileAlto={969}
+      /* `CODIGO 1`, el encuadre de la foto de fondo: (-22, -38) 445x965, uno por
+         frame. Faltaba —lo detectó el reporte inverso de `figma:check`, que lo
+         listaba como «sin implementar o sin marcar» en las cuatro—, así que la
+         foto se recortaba con `object-fit: cover` sobre el viewport en vez de
+         ir al encuadre del diseño, y nada lo comparaba con nada. */
+      mobileCielo={{ nodo: '74:1026 73:859 105:261 131:333', x: -22, y: -38, w: 445, h: 965 }}
       mobile={
         /* Composición mobile de las cuatro pantallas de resultado
            (ganaste / perdiste / codigo utilizado / codigo utilizado-1, 402x969).

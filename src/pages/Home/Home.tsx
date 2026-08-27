@@ -161,8 +161,9 @@ export default function Home() {
 /* --------------------------------------------------------------------------
    Composición mobile — Figma "landing.png" (402x913).
 
-   Las coordenadas Y del mockup llevan descontada la barra de estado del
-   sistema (54 px), que no se implementa: es sólo el marco del mockup.
+   Las coordenadas Y son las crudas del frame. El descuento de los 62 px de la
+   barra de estado lo hace el contenedor de la rama mobile una sola vez, en
+   `components/layout/mobile-stage.css`: acá no se descuenta nada.
 
    La escena inferior es un bloque de proporción fija: el cúmulo de premios y
    la nave se superponen igual que en el diseño, y cada pieza sigue siendo una

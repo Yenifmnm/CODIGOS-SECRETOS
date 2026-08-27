@@ -42,7 +42,7 @@ El mapa vivo está en `figma/nodes.json`; esta tabla es para leerla de un vistaz
 `Group 2.png` y `Group 3.png` son piezas sueltas (227×56 y 327×56), no
 pantallas.
 
-## Tres trampas de estos exports
+## Cuatro trampas de estos exports
 
 1. **No todos miden igual.** Los resultados son 402×969 y el resto 402×913. Un
    render de 402×874 comparado contra un diseño de 402×969 da un diff enorme que
@@ -51,17 +51,36 @@ pantallas.
 
 2. **Todos traen dibujada la barra de estado del teléfono.** Confirmado contra
    el archivo: cada frame mobile arranca con una instancia `Status bar - iPhone`
-   en `x=0 y=0`, de **402×62**. Es el `9:41` con la señal y la batería. El sitio
-   no la dibuja, así que el contenido del diseño empieza 62 px más abajo que el
-   del render.
+   en `x=0 y=0`, de **402×62**. Es el `9:41` con la señal y la batería. Esa
+   barra la dibuja el SISTEMA, fuera del viewport de la página.
 
-   **La decisión: no se compensa.** Las coordenadas del spec se usan tal cual,
-   con el origen en la esquina del frame, y el sitio deja esos 62 px libres
-   arriba como área de la barra del sistema —que en un teléfono real existe—.
-   Si al comparar aparece un desvío vertical parejo de ~62 px en toda la
+   **La decisión: se descuenta.** El cero del eje Y del sitio es el borde
+   inferior de esa barra, no el borde del frame.
+
+   Ojo si leíste la versión anterior de este archivo, que decía lo contrario
+   —«no se compensa… el sitio deja esos 62 px libres arriba como área de la
+   barra del sistema»—. Ese razonamiento contaba la barra dos veces: el sistema
+   la dibuja afuera y encima la página le reservaba lugar adentro, con lo cual
+   el contenido quedaba 62 px más abajo de lo que el diseño muestra respecto del
+   borde visible. El frame pone la píldora del menú en y 79, o sea 17 px debajo
+   de la barra; sin descontar, el sitio la ponía a 79 del borde de la página.
+
+   **Vos no descontás nada.** Las coordenadas del spec se copian tal cual, con
+   el cero en la esquina del frame. El descuento lo hace el contenedor una sola
+   vez para las once pantallas (`src/components/layout/mobile-stage.css`) y
+   `figma:check` hace la misma resta al comparar, leyendo el alto de la barra
+   del propio spec. Si aparece un desvío vertical parejo de ~62 px en toda la
    pantalla, no muevas capa por capa: el problema está en el contenedor.
 
-3. **El PNG es una foto de un instante.** Las animaciones (nave, estrellas,
+3. **El PNG trae la barra dibujada, y el render no.** Los exports de
+   `pantallas/` están a 1:1 y con la barra de estado incluida, así que para el
+   diff de píxeles `figma:check` les recorta esos 62 px de arriba. Sin ese
+   recorte el overlay queda corrido de punta a punta y el porcentaje no quiere
+   decir nada — y el overlay es lo que detectó, en bases, que el texto legal se
+   montaba sobre la cinta y sobre el botón mientras la tabla de capas daba las
+   16 en ✓.
+
+4. **El PNG es una foto de un instante.** Las animaciones (nave, estrellas,
    cofre, destellos) están congeladas en un fotograma cualquiera. Un diff alto
    en esas zonas no es un error de layout. `figma:check` desactiva las
    animaciones del sitio antes de la captura, pero no puede hacer nada con el

@@ -362,7 +362,8 @@ interface RegisterMobileProps {
 /* --------------------------------------------------------------------------
    Composición mobile — Figma "Registro.png" (402x913).
 
-   Medidas del mockup, ya descontada la barra de estado (54 px):
+   Medidas del mockup, en coordenadas crudas del frame —el descuento de la
+   barra de estado lo hace el contenedor, ver `layout/mobile-stage.css`—:
      pergamino    x 35..368   y 151..661   (333x510)
      logo         montado sobre el borde superior del pergamino
      dino         asomando arriba a la derecha
@@ -493,7 +494,11 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
             {cedula}
           </RibbonPlate>
 
-          <p className="register-m__note" data-figma="73:617">
+          {/* `data-figma-ejes="x,y,w"`: el aviso va en 11 px y no en los 8 del
+              Figma —es el piso de texto legible, ver `register.css`— así que
+              corta en dos renglones y mide más alto que su nodo. Los otros tres
+              ejes se siguen verificando. */}
+          <p className="register-m__note" data-figma="73:617" data-figma-ejes="x,y,w">
             Este registro debe ser realizado por un tutor mayor de 18 años*
           </p>
 

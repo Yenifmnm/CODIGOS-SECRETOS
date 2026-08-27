@@ -174,8 +174,13 @@
 /* -------------------------------------------------------------------------
    Mobile — Figma "landing" (plegado) y "vista menu desplegado".
 
-   Medidas leídas del mockup sobre el lienzo de 402: píldora 160x49 en x=25,
-   y=25 (ya descontada la barra de estado del sistema, que no se implementa).
+   Medidas del frame sobre el lienzo de 402: la píldora es 162x49 en (24, 79),
+   coordenadas crudas. Los 79 son 17 px por debajo del borde inferior de la
+   barra de estado, y así queda en pantalla: el descuento de esos 62 px lo hace
+   el contenedor para toda la rama mobile, en `layout/mobile-stage.css`. El
+   comentario viejo decía «y=25, ya descontada la barra, que no se implementa»,
+   que era la decisión anterior —dejarle a la barra 62 px libres DENTRO de la
+   página, contándola dos veces— y ya no rige.
    Al abrir, la píldora crece HACIA ABAJO hasta un panel de 195x180 con el logo
    arriba y tres píldoras claras apiladas.
 

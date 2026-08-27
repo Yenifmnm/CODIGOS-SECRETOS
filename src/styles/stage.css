@@ -97,8 +97,45 @@
    `min-height: 100svh` y no `100dvh`: el alto chico es el que tiene el
    navegador con sus barras desplegadas, así que la página nunca queda más
    corta que el viewport real y no aparece un salto cuando Safari esconde su
-   barra al scrollear. */
+   barra al scrollear. `svh` resuelve la barra de URL y NADA MÁS: el teclado es
+   otro mecanismo —con el `interactive-widget` por defecto, `resizes-visual`, no
+   toca el layout— así que no hay que esperar que esto lo cubra.
+
+   Las tres medidas de las que cuelga toda la rama mobile se declaran acá, en el
+   ancestro, porque `.mstage__canvas` las necesita para calcular su propio ancho
+   y no puede leerse a sí mismo. */
 .mstage {
+  /* El lienzo del diseño mobile: 402 de ancho por 913 de alto (969 en las
+     cuatro pantallas de resultado, que lo pisan desde `Stage`). */
+  --mstage-diseno-w: 402;
+  --mstage-diseno-h: 913;
+
+  /* `Status bar - iPhone`: la instancia de 402x62 con la que arranca cada frame
+     mobile. Es el `9:41` con la señal y la batería, o sea la barra que dibuja
+     el SISTEMA, no la página. Ver el bloque de `.mstage__canvas` para qué se
+     hace con ella. */
+  --mstage-barra: 62;
+
+  /* Lo que le queda al diseño una vez descontada esa barra: 851, o 907. Es el
+     alto contra el que hay que medir «entra sin scroll». */
+  --mstage-util-h: calc(var(--mstage-diseno-h) - var(--mstage-barra));
+
+  /* El alto REAL disponible, con las áreas seguras ya descontadas. Sin restar
+     `--safe-top` y `--safe-bottom` acá, en modo standalone la composición se
+     dimensiona contra un alto que el teléfono no le da y el recorte de abajo
+     vuelve igual. */
+  --mstage-alto-util: calc(100svh - var(--safe-top) - var(--safe-bottom));
+
+  /* Cuánto sube el lienzo para que su cero sea el borde inferior de la barra de
+     estado. Negativo, y en px reales: los 62 de diseño a la escala vigente.
+     `--mstage-w` se declara en `mobile-stage.css`, que es donde conviven el
+     valor de respaldo y la fórmula de retrato: las dos tienen la misma
+     especificidad, así que tienen que estar en el mismo archivo y en ese orden
+     o la media query pierde. */
+  --mstage-corrimiento: calc(
+    -1 * var(--mstage-w) * var(--mstage-barra) / var(--mstage-diseno-w)
+  );
+
   position: relative;
   min-height: 100svh;
   overflow-x: hidden;
@@ -118,9 +155,47 @@
   pointer-events: none;
 }
 
-/* `position: absolute` para que la pantalla pueda darle su encuadre con
-   `mobileCielo`. Sin encuadre, `inset` queda en auto y el resultado es el
-   mismo de antes: la foto llenando el cielo. */
+/* Dentro del cielo, la caja que copia la geometría del lienzo: mismo ancho,
+   mismo origen, misma escala. Existe porque `.mstage__sky` es `fixed` y vive
+   FUERA de `.mstage__canvas`, así que no hereda ni el ancho escalado ni el
+   corrimiento de la barra — y sin esto la foto de fondo, que es una capa
+   marcada del diseño, escalaba con el ancho crudo del teléfono mientras la
+   composición escalaba con el factor nuevo. En un teléfono de 430 el encuadre
+   salía 527 de ancho en vez de 493.
+
+   `container-type: inline-size` es lo que hace que `mu()` adentro mida contra
+   este ancho y no contra el viewport. */
+.mstage__sky-caja {
+  position: absolute;
+  /* El corrimiento va en `margin-top` y no sumado al `top`: los porcentajes de
+     `top` se resuelven contra el ALTO del bloque contenedor y los de `margin`
+     contra el ANCHO, que es la misma base contra la que resuelve `width`. Con
+     `top` el valor salía inválido y la caja se caía a `top: auto`. Es el mismo
+     mecanismo que usa `.mstage__canvas`. */
+  top: var(--safe-top);
+  margin-top: var(--mstage-corrimiento);
+  left: 50%;
+  width: var(--mstage-w);
+  height: 100%;
+  transform: translateX(-50%);
+  container-type: inline-size;
+  container-name: mstage;
+}
+
+/* El fondo va en DOS capas, y son dos por un motivo que no es estético.
+
+   `.mstage__bg` es la capa del nodo (`CODIGO 1`): lleva el `data-figma`, su
+   caja es la del Figma y escala con la composición, así que `figma:check` la
+   compara como a cualquier otra. Con el tope de escala en 1 esa caja deja de
+   cubrir el viewport en cuanto la pantalla es más ancha o más alta que el
+   diseño, y en landscape no lo cubre ni cerca: a 844x390 la composición ocupa
+   una franja en el medio y el resto quedaría vacío.
+
+   Por eso hay una segunda capa, `.mstage__bg--sangra`, con la misma imagen,
+   SIN marca y a pantalla completa, que rellena por detrás. La alternativa
+   —estirar la capa marcada hasta cubrir— convertía su caja en un desvío
+   permanente en las diez pantallas, que es justo el control que no queremos
+   perder. Un elemento más, la misma imagen, el checker intacto. */
 .mstage__bg {
   position: absolute;
   width: 100%;
@@ -132,6 +207,19 @@
   object-fit: cover;
   object-position: center top;
   display: block;
+}
+
+/* La capa de relleno: detrás de todo, sin marca, sin caja de diseño. */
+.mstage__bg--sangra {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  z-index: -1;
 }
 
 /* El contenido va por encima del cielo. */

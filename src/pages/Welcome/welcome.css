@@ -304,11 +304,18 @@
   }
 
   /* El área táctil crece hacia abajo, donde queda pergamino libre, para no
-     robarle el toque al botón que tiene encima. */
+     robarle el toque al botón que tiene encima.
+
+     Los `inset` son px fijos y no escalan, así que en las relaciones de aspecto
+     más bajas —donde la composición baja a 0,45— el total quedaba en 39 px:
+     apenas por debajo del dedo. El `min-height` planta el piso táctil, que es
+     uno de los tres del proyecto (ver `styles/tokens.css`). */
   .welcome-m__help::after {
     content: '';
     position: absolute;
     inset: -7px -10px -24px;
+    min-width: var(--tap-min);
+    min-height: var(--tap-min);
   }
 
   /* `planeta premios 1` (70:346): 282x286 en (-117, -143). Arranca 217 px por

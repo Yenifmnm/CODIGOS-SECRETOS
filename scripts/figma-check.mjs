@@ -91,12 +91,26 @@ for (const pantalla of objetivo) {
   const spec = leerSpec(pantalla.slug);
   const referencia = resolverReferencia(pantalla);
 
+  // LA BARRA DE ESTADO. Cada frame mobile arranca con una instancia
+  // `Status bar - iPhone` de 402×62: el `9:41` con la señal y la batería. Esa
+  // barra la dibuja el sistema operativo, fuera del viewport de la página, así
+  // que el sitio NO la dibuja y su contenido empieza 62 px más arriba que el
+  // del frame.
+  //
+  // Se lee del spec y no se escribe 62 a mano: en un frame que no la tenga
+  // —el desktop, o un frame mobile nuevo sin la instancia— sale 0 y todo esto
+  // se desactiva solo, en vez de correr una pantalla que no había que correr.
+  const barra = altoBarraEstado(spec);
+
   // El viewport sale, en este orden: de lo que diga nodes.json, del frame del
-  // spec, o del tamaño del PNG de referencia. Comparar un render de 402×874
-  // contra un diseño de 402×969 da un diff enorme que no significa nada.
+  // spec menos la barra, o del tamaño del PNG de referencia. Comparar un render
+  // de 402×874 contra un diseño de 402×969 da un diff enorme que no significa
+  // nada — y comparar contra los 969 enteros deja una franja vacía de 62 px
+  // abajo que el diff cuenta como distinta.
   const png = referencia ? tamanoPng(referencia) : null;
   const ancho = pantalla.viewport?.[0] ?? spec?.frame.w ?? png?.w ?? 402;
-  const alto = pantalla.viewport?.[1] ?? spec?.frame.h ?? png?.h ?? 874;
+  const alto =
+    pantalla.viewport?.[1] ?? (spec ? spec.frame.h - barra : null) ?? png?.h ?? 874;
 
   const pagina = await navegador.newPage({
     viewport: { width: Math.round(ancho), height: Math.round(alto) },
@@ -196,6 +210,11 @@ for (const pantalla of objetivo) {
     const porId = new Map();
     indexar(spec.arbol, porId);
     const escala = ancho / spec.frame.w; // el diseño puede estar a otra escala
+    // El cero del eje Y del sitio es el borde INFERIOR de la barra de estado,
+    // no el borde del frame. Todo lo esperado se corre esos 62 px de diseño;
+    // sin esto, las diez pantallas darían Δy −62 pareja y el reporte diría que
+    // está todo mal cuando lo que cambió es dónde está el cero.
+    const origenY = barra * escala;
 
     for (const m of medidos) {
       const id = m.ids.map((i) => i.replace('-', ':')).find((i) => porId.has(i));
@@ -241,7 +260,7 @@ for (const pantalla of objetivo) {
 
       const e = {
         x: esperado.rect.x * escala,
-        y: esperado.rect.y * escala,
+        y: esperado.rect.y * escala - origenY,
         w: (rotado && tam ? tam.w : esperado.rect.w) * escala,
         h: (rotado && tam ? tam.h : esperado.rect.h) * escala,
       };
@@ -307,7 +326,10 @@ for (const pantalla of objetivo) {
   // -------------------------------------------------------- 3. píxel a píxel
   let pixeles = null;
   if (referencia) {
-    pixeles = await compararImagenes(navegador, captura, referencia, dir, UMBRAL_PIXEL);
+    // El recorte va en px del RENDER, que es la escala en la que se compara.
+    pixeles = await compararImagenes(
+      navegador, captura, referencia, dir, UMBRAL_PIXEL, barra * (ancho / (spec?.frame.w ?? ancho)),
+    );
   }
 
   await pagina.close();
@@ -412,12 +434,12 @@ process.exit(fallas ? 1 : 0);
  * ancho del render, cuenta píxeles que difieren más que el umbral y escribe
  * el mapa de diferencias y el overlay.
  */
-async function compararImagenes(navegador, capturaPath, referenciaPath, dir, umbral) {
+async function compararImagenes(navegador, capturaPath, referenciaPath, dir, umbral, recorte = 0) {
   const pagina = await navegador.newPage();
   const aData = (p) => `data:image/png;base64,${fs.readFileSync(p).toString('base64')}`;
 
   const salida = await pagina.evaluate(
-    async ([srcA, srcB, umbral]) => {
+    async ([srcA, srcB, umbral, recorte]) => {
       const cargar = (src) =>
         new Promise((res, rej) => {
           const i = new Image();
@@ -439,12 +461,18 @@ async function compararImagenes(navegador, capturaPath, referenciaPath, dir, umb
         return { c, ctx };
       };
 
-      // La referencia se escala al ancho del render manteniendo proporción.
+      // La referencia se escala al ancho del render manteniendo proporción, y
+      // se le saca de arriba la banda de la barra de estado: el render arranca
+      // en el borde INFERIOR de esa barra y la referencia la trae dibujada.
       const escala = w / diseno.width;
-      const hDiseno = diseno.height * escala;
+      const recorteSrc = Math.round(recorte / escala);
+      const altoSrc = diseno.height - recorteSrc;
+      const hDiseno = altoSrc * escala;
+      const pintarDiseno = (ctx) =>
+        ctx.drawImage(diseno, 0, recorteSrc, diseno.width, altoSrc, 0, 0, w, hDiseno);
 
       const a = lienzo((ctx) => ctx.drawImage(render, 0, 0));
-      const b = lienzo((ctx) => ctx.drawImage(diseno, 0, 0, w, hDiseno));
+      const b = lienzo(pintarDiseno);
 
       const da = a.ctx.getImageData(0, 0, w, h).data;
       const db = b.ctx.getImageData(0, 0, w, h).data;
@@ -480,7 +508,7 @@ async function compararImagenes(navegador, capturaPath, referenciaPath, dir, umb
       const over = lienzo((ctx) => {
         ctx.drawImage(render, 0, 0);
         ctx.globalAlpha = 0.5;
-        ctx.drawImage(diseno, 0, 0, w, hDiseno);
+        pintarDiseno(ctx);
       });
 
       return {
@@ -489,11 +517,12 @@ async function compararImagenes(navegador, capturaPath, referenciaPath, dir, umb
         w,
         h,
         hDiseno: Math.round(hDiseno),
+        recorteSrc,
         diff: diff.c.toDataURL('image/png'),
         overlay: over.c.toDataURL('image/png'),
       };
     },
-    [aData(capturaPath), aData(referenciaPath), umbral],
+    [aData(capturaPath), aData(referenciaPath), umbral, recorte],
   );
 
   await pagina.close();
@@ -509,6 +538,7 @@ async function compararImagenes(navegador, capturaPath, referenciaPath, dir, umb
     total: salida.total,
     altoDiseno: salida.hDiseno,
     altoRender: salida.h,
+    recorte: salida.recorteSrc,
   };
 }
 
@@ -531,6 +561,26 @@ function pintaAlgo(n) {
   // no pinta nada, y marcarlo no verificaría ningún color.
   const visible = (p) => p && (p.tipo !== 'solido' || !/^#[0-9a-fA-F]{6}00$/.test(p.color ?? ''));
   return (n.relleno ?? []).some(visible) || (n.trazo ?? []).some(visible);
+}
+
+/**
+ * Alto de la instancia `Status bar - iPhone` del frame, en px de diseño.
+ *
+ * Devuelve 0 si el frame no la tiene. Se busca por nombre y no por id porque
+ * cada frame trae su propia instancia con un id distinto, y por tipo INSTANCE
+ * anclada arriba a la izquierda para no confundirla con nada.
+ */
+function altoBarraEstado(spec) {
+  if (!spec) return 0;
+  let alto = 0;
+  (function buscar(n) {
+    if (/^status bar/i.test(n.nombre ?? '') && n.rect && n.rect.y === 0) {
+      alto = Math.max(alto, n.rect.h);
+      return; // no hace falta entrar: sus hijos son el reloj y la batería
+    }
+    for (const h of n.hijos ?? []) buscar(h);
+  })(spec.arbol);
+  return alto;
 }
 
 /** Cuántas capas del spec pintan algo: el denominador de la cobertura. */
@@ -617,6 +667,13 @@ function reporte(pantalla, spec, viewport, desvios, pixeles, errores, referencia
     l.push('');
     l.push(`**${pixeles.pct}%** de los píxeles difieren (${pixeles.distintos.toLocaleString('es')} de ${pixeles.total.toLocaleString('es')}).`);
     l.push('');
+    if (pixeles.recorte) {
+      l.push(`A la referencia se le recortaron **${pixeles.recorte} px** de arriba: la barra de`);
+      l.push('estado que el diseñador dibujó en el frame y que el sitio no dibuja, porque');
+      l.push('la dibuja el sistema. Sin ese recorte el overlay queda corrido de punta a');
+      l.push('punta y el porcentaje no quiere decir nada.');
+      l.push('');
+    }
     l.push('- `render.png` — lo que dibuja el sitio');
     l.push('- `diff.png` — en rojo lo que no coincide');
     l.push('- `overlay.png` — el diseño al 50% encima del render');

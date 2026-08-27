@@ -9,6 +9,28 @@
     filter var(--dur-glow) var(--ease-soft);
 }
 
+/* EL PISO TÁCTIL. El botón escala con la composición —`aspect-ratio: 3/1` sobre
+   el ancho que le da la pantalla— y en las relaciones de aspecto más bajas su
+   alto cae por debajo de los 44 px del dedo: 38 en un viewport de 360x380, 35
+   en uno de 390x420.
+
+   Va como una capa invisible y no como `min-height` sobre el botón porque el
+   botón lleva la chapa con `object-fit: fill`: estirarlo deformaría el dibujo.
+   Así la chapa conserva su proporción y sólo crece el área que recibe el toque.
+   No mueve la caja del elemento, con lo cual `figma:check` sigue midiendo lo
+   mismo. Es uno de los tres pisos del proyecto (ver `styles/tokens.css`). */
+.promo-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  transform: translate(-50%, -50%);
+}
+
 .promo-btn__plate {
   position: absolute;
   inset: 0;

@@ -138,7 +138,9 @@
 /* -------------------------------------------------------------------------
    Composición mobile de las cuatro pantallas de resultado (lienzo 402x969).
    Orden: logo → titular → mensaje → botón → píldora del código → cofre →
-   contador. Medidas del Figma, ya descontada la barra de estado (54 px).
+   contador. Medidas del Figma en coordenadas crudas del frame: el descuento de
+   los 62 px de la barra de estado lo hace el contenedor de la rama mobile una
+   sola vez, en `layout/mobile-stage.css`.
    ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .result-m {

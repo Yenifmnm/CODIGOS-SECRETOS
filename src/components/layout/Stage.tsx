@@ -1,10 +1,10 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { SpaceBackground } from '../effects/SpaceBackground';
 import { StarField } from '../effects/StarField';
 import { SiteMenu } from '../navigation/SiteMenu';
 import { MobileStage } from './MobileStage';
 import { useIsMobile } from '../../hooks/useIsMobile';
-import { mu } from '../../app/mobileStage';
+import { MOBILE_DESIGN_H, mu } from '../../app/mobileStage';
 
 import fondoMobile from '../../assets/backgrounds/fondo-mobile.webp';
 import fondoMobileProfundo from '../../assets/backgrounds/fondo-mobile-profundo.webp';
@@ -48,6 +48,14 @@ interface StageProps {
    * desarmarse en una pantalla más alta o más baja que el lienzo.
    */
   mobileCielo?: { nodo: string; x: number; y: number; w: number; h: number };
+  /**
+   * Alto del frame mobile en px de diseño. 913 en las pantallas de flujo y 969
+   * en las cuatro de resultado. De acá sale el alto útil —menos la barra de
+   * estado— contra el que la rama mobile calcula su escala, así que una
+   * pantalla que declare el alto equivocado se dibuja más chica o más grande de
+   * lo que corresponde.
+   */
+  mobileAlto?: number;
   title: string;
 }
 
@@ -67,32 +75,50 @@ export function Stage({
   mobileBg = 'cielo',
   mobileVelo,
   mobileCielo,
+  mobileAlto = MOBILE_DESIGN_H,
   title,
 }: StageProps) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
     return (
-      <div className="mstage">
+      <div
+        className="mstage"
+        style={{ '--mstage-diseno-h': mobileAlto } as CSSProperties}
+      >
         {/* Cielo vertical fijo: no scrollea con el contenido. */}
         <div className="mstage__sky" aria-hidden="true">
-          <img
-            src={MOBILE_BG[mobileBg]}
-            alt=""
-            className="mstage__bg"
-            data-figma={mobileCielo?.nodo}
-            style={
-              mobileCielo
-                ? {
-                    left: mu(mobileCielo.x),
-                    top: mu(mobileCielo.y),
-                    width: mu(mobileCielo.w),
-                    height: mu(mobileCielo.h),
-                  }
-                : undefined
-            }
-          />
-          {mobileVelo}
+          {/* Capa de sangrado: la misma foto a pantalla completa, SIN marca.
+              Rellena lo que la capa del nodo deja descubierto cuando la
+              composición se escala por debajo del viewport —siempre en
+              landscape, y al costado en cualquier teléfono más ancho que los
+              402 del diseño—. Va sin `data-figma` a propósito: su caja no es la
+              de ningún nodo y no tiene que compararse con nada. */}
+          <img src={MOBILE_BG[mobileBg]} alt="" className="mstage__bg--sangra" />
+          {/* Todo lo que es capa marcada del diseño va DENTRO de esta caja, que
+              copia el ancho y el origen del lienzo. Fuera de ella `mu()` mediría
+              contra el viewport y el fondo escalaría distinto que el resto. */}
+          <div className="mstage__sky-caja">
+            {/* Capa del nodo: su caja es la del Figma y escala con la
+                composición, así que `figma:check` la mide como a cualquier otra. */}
+            <img
+              src={MOBILE_BG[mobileBg]}
+              alt=""
+              className="mstage__bg"
+              data-figma={mobileCielo?.nodo}
+              style={
+                mobileCielo
+                  ? {
+                      left: mu(mobileCielo.x),
+                      top: mu(mobileCielo.y),
+                      width: mu(mobileCielo.w),
+                      height: mu(mobileCielo.h),
+                    }
+                  : undefined
+              }
+            />
+            {mobileVelo}
+          </div>
           <StarField />
         </div>
         <MobileStage>

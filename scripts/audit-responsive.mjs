@@ -5,8 +5,7 @@
  *   npm run audit:responsive
  *
  * Recorre las 10 rutas del sitio en 17 viewports —de 320x568 a 430x932, más
- * tres con el alto recortado para simular el teclado abierto y uno en
- * landscape— y verifica en cada combinación:
+ * tres de alto muy corto y uno en landscape— y verifica en cada combinación:
  *
  *   · que no haya scroll horizontal, señalando qué elemento lo provoca;
  *   · que ningún input baje de 16px, que es lo que dispara el zoom automático
@@ -47,9 +46,19 @@ const RUTAS = [
 const VIEWPORTS = [
   [320, 568], [360, 640], [360, 800], [375, 667], [375, 812], [384, 848],
   [390, 844], [393, 852], [402, 874], [412, 892], [412, 915], [414, 896], [430, 932],
-  // Teclado abierto: alto útil reducido.
+  // VIEWPORTS BAJOS. Antes decía «teclado abierto», y era mentira: el meta
+  // viewport de `index.html` no declara `interactive-widget`, así que rige el
+  // valor por defecto, `resizes-visual`. Con eso el teclado NO redimensiona el
+  // layout —mueve el viewport visual por encima— y ninguno de estos tres
+  // tamaños simuló nunca un teclado.
+  //
+  // Se quedan igual, pero por lo que sí son: relaciones de aspecto muy bajas,
+  // el peor caso del término de alto de la escala mobile. Ahí la composición
+  // baja a 0,44–0,59 y el piso de texto legible es lo único que sostiene la
+  // advertencia del tutor. NO entran en la afirmación «entra sin scroll»: esa
+  // vale para los viewports de teléfono de arriba.
   [390, 420], [430, 500], [360, 380],
-  // Landscape.
+  // Landscape: acá la escala es la de siempre —por ancho— y se scrollea.
   [844, 390],
 ];
 

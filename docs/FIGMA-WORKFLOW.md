@@ -299,15 +299,46 @@ en vez de recalcularlo.
 
 Los exports mobile no miden todos igual: `landing`, `Registro`, `Premios`,
 `bases` y `donde esta el codigo` son **402×913**, mientras que `ganaste`,
-`perdiste` y `codigo utilizado` son **402×969**. Y varios traen la barra de
-estado del teléfono dibujada arriba (el `9:41` con la señal y la batería), que
-el sitio no dibuja.
+`perdiste` y `codigo utilizado` son **402×969**. Por eso `figma:check` toma el
+alto del frame del spec o, si no hay spec todavía, del PNG de referencia —
+nunca uno fijo.
 
-Esos ~55 px de diferencia corren todo el contenido hacia abajo y ensucian
-cualquier comparación. Por eso `figma:check` toma el alto del frame del spec o,
-si no hay spec todavía, del PNG de referencia — nunca uno fijo. Si el frame de
-Figma incluye la barra de estado, hay que decidir una vez si se descuenta del
-origen o si se compara igual, y anotarlo acá.
+### La barra de estado: se descuenta
+
+Los once frames mobile arrancan con una instancia `Status bar - iPhone` de
+**402×62**: el `9:41` con la señal y la batería. Esa barra la dibuja el sistema
+operativo, **fuera** del viewport de la página.
+
+**La decisión, y es una corrección de la anterior: se descuenta.** El cero del
+eje Y del sitio es el borde INFERIOR de esa barra, no el borde del frame.
+
+Antes no se descontaba, y el razonamiento era que el sitio le dejaba esos 62 px
+libres arriba «como área de la barra del sistema, que en un teléfono real
+existe». Eso contaba la barra dos veces: el sistema la dibuja afuera y encima la
+página le reservaba lugar adentro, así que el contenido terminaba 62 px más
+abajo de lo que el diseño muestra respecto del borde visible. Se ve en un
+número: el frame pone la píldora del menú en y 79, o sea 17 px por debajo de la
+barra; sin descontar, el sitio la ponía a 79 px del borde de la página.
+
+Dónde vive cada mitad del descuento:
+
+| Quién | Qué hace |
+| --- | --- |
+| `layout/mobile-stage.css` | sube el lienzo 62 px de diseño con un margen negativo. Una vez, para las once pantallas |
+| `figma-check.mjs` | hace la misma resta en la `y` esperada, leyendo el alto de la barra del propio spec |
+| `figma-check.mjs` | recorta esos 62 px de arriba del PNG de referencia antes del diff de píxeles |
+
+**Las composiciones no cambian.** Siguen escritas en las coordenadas crudas del
+frame, con el cero en el borde del mock: el descuento es un cambio de
+contenedor, no de capa. Al agregar una capa nueva se copia la `y` del spec tal
+cual y no se le resta nada.
+
+El alto se lee del spec y no se escribe `62` a mano: un frame sin esa instancia
+—el desktop, o un frame mobile nuevo— da 0 y el descuento se desactiva solo.
+
+Lo que el diseño pone por encima de y 62 —el planeta B3 de REGISTRO, la cabeza
+del dino— queda dentro del área segura, debajo de la barra real. Es donde el
+diseño lo puso: debajo de la suya.
 
 ---
 

@@ -1,9 +1,48 @@
 /* -------------------------------------------------------------------------
    Lienzo de la rama mobile.
 
-   El diseño está hecho sobre 402 px de ancho. El contenedor se estira hasta
-   `--mstage-max` y a partir de ahí queda centrado: por encima de ese ancho la
-   composición dejaría de leerse como una pantalla de celular.
+   El diseño está hecho sobre un frame de 402x913 (969 en las de resultado) que
+   incluye dibujada la barra de estado del iPhone. Todo lo que sigue son las dos
+   consecuencias de eso, y las dos se resuelven ACÁ, en el contenedor: ninguna
+   composición y ninguna capa cambia una coordenada.
+
+   1. EL ORIGEN. La barra de estado la dibuja el SISTEMA, fuera del viewport de
+      la página. Reservarle además 62 px adentro es contarla dos veces: el
+      contenido termina 62 px más abajo de lo que el diseño muestra respecto del
+      borde visible. Se ve en un número: el frame pone la píldora del menú en
+      y 79, o sea 17 px POR DEBAJO de la barra; sin descontarla, el sitio la
+      pone a 79 px del borde de la página.
+
+      Así que el lienzo se sube 62 px de diseño con un margen negativo, y el
+      cero de las coordenadas del Figma pasa a ser el borde inferior de la
+      barra. La píldora queda en 17, que es lo que el diseño quiere decir.
+      `figma:check` hace la misma resta al comparar (lee el alto de la barra del
+      propio spec), así que las capas siguen dando cero: lo único que cambió es
+      dónde está el cero.
+
+      Lo que el diseño pone por encima de y 62 —el planeta B3, la cabeza del
+      dino— queda en el área segura, debajo de la barra real. Es donde el diseño
+      lo puso: debajo de la suya.
+
+   2. LA ESCALA. Antes salía sólo del ancho, y en un teléfono más bajo que el
+      diseño la composición no entraba: sobraba por abajo y aparecía scroll.
+      Ahora sale del eje que primero se queda corto:
+
+          escala = min(ancho / 402, alto útil / útil, 1)
+
+      El tope en 1 es lo que hace que la composición nunca se dibuje más grande
+      que el diseño. En un teléfono más ancho que 402 eso deja franjas al
+      costado: las tapa la capa de sangrado del fondo (`.mstage__bg--sangra`).
+
+      No se aplica un `transform: scale()` sobre la página: se le da al lienzo
+      el ANCHO que corresponde a esa escala, y como `1cqw` es el 1% de ese
+      ancho, `mu()` y todos los porcentajes de las composiciones escalan solos.
+      Sin capas rasterizadas y sin romper el hit-testing.
+
+      Sólo en RETRATO. En landscape el alto útil es tan chico que la fórmula da
+      0,46 y la composición quedaría como una tira en el medio de la pantalla,
+      peor que el scroll. Ahí queda el comportamiento de siempre: escala por
+      ancho y se scrollea.
 
    `container-type: inline-size` es lo que hace funcionar a `mu()`: 1cqw pasa a
    ser el 1% de este ancho. No se usa `size` porque la altura la decide el
@@ -11,23 +50,53 @@
    ------------------------------------------------------------------------- */
 
 .mstage__canvas {
-  --mstage-max: 520px;
-
   container-type: inline-size;
   container-name: mstage;
   position: relative;
-  width: 100%;
-  max-width: var(--mstage-max);
+  width: var(--mstage-w);
   margin-inline: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  /* El origen sube al borde inferior de la barra de estado del diseño. Va en
+     las DOS orientaciones: descontar la barra es una corrección —el sitio no la
+     dibuja— y no depende de cómo esté el teléfono. Lo que sí es de retrato es
+     la fórmula del ancho, más abajo. */
+  margin-top: var(--mstage-corrimiento);
+
   /* Llena el alto del teléfono aunque el contenido sea más corto: así lo que
      se apoya en el pie —como la superficie del planeta— llega al borde y no
      reaparece el cielo debajo. Se descuentan las áreas seguras, que `.mstage`
-     ya reserva como padding, para no generar scroll de más. */
-  min-height: calc(100svh - var(--safe-top) - var(--safe-bottom));
+     ya reserva como padding, para no generar scroll de más, y se suma lo que el
+     lienzo subió, o si no reaparece el cielo debajo del planeta del landing. */
+  min-height: calc(var(--mstage-alto-util) - var(--mstage-corrimiento));
+}
+
+/* El ancho del lienzo, en dos declaraciones que TIENEN que estar en este orden
+   y en este archivo: las dos son `.mstage`, o sea la misma especificidad, y una
+   media query no suma. Si el respaldo viviera en `stage.css` —que se carga
+   después— ganaría siempre y la fórmula de retrato no se aplicaría nunca. */
+.mstage {
+  /* Respaldo, y el valor de landscape: manda el ancho y la página scrollea. */
+  --mstage-max: 520px;
+  --mstage-w: min(100%, var(--mstage-max));
+}
+
+@media (orientation: portrait) {
+  .mstage {
+    /* min(ancho disponible, 402, alto útil x 402/útil): la escala expresada en
+       el ancho del lienzo. El `100%` se resuelve en el momento de usarse, y
+       tanto `.mstage__canvas` como `.mstage__sky-caja` lo usan contra bloques
+       contenedores del mismo ancho, así que los dos dan el mismo número y el
+       cielo escala exactamente como la composición. */
+    --mstage-w: min(
+      100%,
+      calc(var(--mstage-diseno-w) * 1px),
+      calc(var(--mstage-alto-util) * var(--mstage-diseno-w) / var(--mstage-util-h))
+    );
+  }
 }
 
 /* Escena de proporción fija: sistema de referencia de las capas ilustradas. */

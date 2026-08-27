@@ -25,11 +25,37 @@
   --mobile-gap: clamp(8px, 2.5vw, 18px);
   /* Ancho máximo de la columna de contenido mobile. */
   --mobile-content-max: 520px;
-  /* Área táctil mínima recomendada. */
+  /* Área táctil mínima. Ver «los tres pisos» más abajo. */
   --tap-min: 44px;
-  /* Cuerpo mínimo de un input: por debajo de 16px Safari iOS hace zoom al
-     enfocar el campo y descoloca toda la composición. */
+  /* -------------------------------------------------------------------------
+     LOS TRES PISOS EN PÍXELES.
+
+     La rama mobile escala la composición entera con un solo factor (ver
+     `mobile-stage.css`), y a proporciones exactas hay cosas que dejan de
+     funcionar mucho antes de dejar de verse. Estas tres NO escalan: se plantan
+     en un mínimo absoluto y aceptan que a esa escala la proporción con el resto
+     del diseño se rompa. Es a propósito, y es la letra chica de la promesa de
+     «proporciones exactas».
+
+     Cada piso existe por un motivo distinto y no se pueden mezclar:
+
+       · --input-min-fs  el cuerpo de un input. Por debajo de 16px Safari iOS
+                         hace zoom al enfocar el campo y descoloca toda la
+                         composición. Es una regla del navegador, no una
+                         preferencia.
+       · --tap-min       el lado de un área táctil. Por debajo de 44px el dedo
+                         falla; es la cifra de las guías de Apple y de WCAG
+                         2.5.5.
+       · --text-min-fs   el cuerpo de un texto que hay que LEER. Lo decorativo
+                         escala sin piso; una advertencia legal, no.
+
+     El único texto del diseño por debajo de este piso es el aviso del tutor de
+     REGISTRO (nodo `73:618`), que el Figma pone en 8px. Va en 11 y se le deja
+     cortar en dos renglones: a 8px, con la composición escalada a 0,67 en una
+     pantalla de 320, quedaba en 5,3px reales.
+     ------------------------------------------------------------------------- */
   --input-min-fs: 16px;
+  --text-min-fs: 11px;
 
   /* Tipografía */
   --font-display: 'DK Prince Frog', sans-serif;

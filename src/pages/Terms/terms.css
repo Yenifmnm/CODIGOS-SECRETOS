@@ -140,7 +140,8 @@
 /* -------------------------------------------------------------------------
    Composición mobile — Figma "bases y condiciones.png" (402x913).
 
-   Medidas del mockup, ya descontada la barra de estado (54 px):
+   Medidas del mockup, en coordenadas crudas del frame —el descuento de la
+   barra de estado lo hace el contenedor, ver `layout/mobile-stage.css`—:
      pergamino  x 28..374   y 146..666   (346x520)
      logo montado sobre el borde superior
      ralph sentado en el planeta B3, arriba a la derecha, fuera del pergamino

@@ -1,12 +1,18 @@
 /* -------------------------------------------------------------------------
    INICIO — composición mobile (Figma "landing.png", lienzo 402).
 
-   Medidas del mockup, ya descontada la barra de estado del sistema (54 px):
+   Medidas del mockup:
      logo            x 78..322   y  94..266
      título dorado   y 281       ~34 px
      subtítulo       y 331       ~27 px
      botón CTA       x 78..322   y 378   244x82
      escena          y 466 en adelante, sangrando por los dos costados
+
+   LA BARRA DE ESTADO. Las coordenadas de abajo son las CRUDAS del frame, con
+   el cero en el borde de arriba del mock. El descuento de los 62 px de la barra
+   de estado lo hace el contenedor una sola vez para toda la rama mobile —ver
+   `components/layout/mobile-stage.css`— así que acá no se descuenta nada y no
+   hay que descontarlo al agregar una capa nueva.
    ------------------------------------------------------------------------- */
 
 .home-m {

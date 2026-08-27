@@ -289,6 +289,21 @@
      interlineado 1.2 más un padding; los cuatro números salen ahora del
      diseño. El `left` se corrige junto con el ancho: con el `left` viejo la
      nota quedaba pegada al margen izquierdo en vez de centrada. */
+  /* EL PISO DE TEXTO LEGIBLE. Este es el único texto de todo el diseño mobile
+     por debajo de 12: el Figma lo pone en 8. A 8 px y con la composición
+     escalada a 0,67 en una pantalla de 320 quedaba en 5,3 px reales, y es una
+     advertencia legal —de quién tiene que hacer el registro— así que no puede
+     depender de la vista del que mira.
+
+     Va en 11 y se planta ahí: `max()` contra `--text-min-fs` hace que escale
+     hacia arriba con la composición pero nunca por debajo de 11 px REALES. Es
+     uno de los tres pisos del proyecto; los tres están explicados juntos en
+     `styles/tokens.css`.
+
+     Con 11 el texto no entra en los 192,2 de ancho del nodo y corta en dos
+     renglones, que es lo aceptado a cambio de que se lea. Por eso el elemento
+     mide más alto que su nodo y la marca lleva `data-figma-ejes="x,y,w"`: la
+     posición y el ancho se siguen verificando, el alto no puede. */
   .register-m__note {
     position: absolute;
     left: 20.94%;              /* 97.2 - 26 del pergamino, sobre sus 340 */
@@ -297,8 +312,8 @@
     margin: 0;
     padding-bottom: 0;
     font-family: var(--font-display);
-    font-size: 1.99cqw;        /* 8 */
-    line-height: 1.0375;       /* 8.3 de interlineado */
+    font-size: max(var(--text-min-fs), 2.7363cqw);   /* 11; el Figma dice 8 */
+    line-height: 1.0375;
     color: var(--c-brown-dark);
     text-align: center;
     border-bottom: 1px solid #581f09;   /* `Vector 16` (73:619) */
