@@ -35,21 +35,36 @@ export function Sparkles({ count = 18, spread = 46, color = '#fcc102' }: Sparkle
 
   if (reduced) return null;
 
+  /* DOS ELEMENTOS POR PARTÍCULA, y no es decoración del marcado.
+
+     El desplazamiento va en `translate(var(--sx), var(--sy))`, y los
+     porcentajes de `translate` se resuelven contra el PROPIO elemento, no
+     contra el contenedor. Con la partícula midiendo entre 4 y 12 px, un
+     `--sx: 46%` movía la partícula 2 px: las dieciocho quedaban latiendo
+     encima del centro del premio y, sumadas con su `box-shadow`, se veían como
+     un punto naranja fijo en el medio del efecto. Así se veía en el teléfono.
+
+     `.sparkles__orbit` mide lo mismo que el contenedor (`inset: 0`), así que
+     ahí el porcentaje SÍ es «% del contenedor», que es lo que documenta la
+     prop `spread`. La partícula va adentro, chiquita y centrada. */
   return (
     <div className="sparkles" aria-hidden="true">
       {particles.map((p) => (
         <span
           key={p.id}
-          className="sparkles__dot"
+          className="sparkles__orbit"
           style={{
             '--sx': `${p.x}%`,
             '--sy': `${p.y}%`,
-            '--ssize': `${p.size}px`,
             '--sdelay': `${p.delay}s`,
             '--sdur': `${p.duration}s`,
-            '--scolor': color,
           } as React.CSSProperties}
-        />
+        >
+          <i
+            className="sparkles__dot"
+            style={{ '--ssize': `${p.size}px`, '--scolor': color } as React.CSSProperties}
+          />
+        </span>
       ))}
     </div>
   );

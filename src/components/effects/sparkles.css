@@ -4,6 +4,24 @@
   pointer-events: none;
 }
 
+/* La caja que se mueve. Mide lo mismo que `.sparkles`, y ésa es toda la razón
+   de que exista: los porcentajes de `translate()` se resuelven contra el PROPIO
+   elemento, así que para que `--sx: 46%` signifique «46% del contenedor» el
+   elemento que se traslada tiene que medir lo que mide el contenedor.
+
+   Antes el `translate` iba sobre la partícula, que mide entre 4 y 12 px: un
+   46% eran 2 px. Las dieciocho partículas quedaban latiendo encima del centro
+   del premio y, sumadas con su `box-shadow`, se veían como un punto naranja
+   fijo en el medio del efecto. */
+.sparkles__orbit {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: sparkle-drift var(--sdur) var(--sdelay) ease-in-out infinite;
+}
+
+/* La partícula: chiquita y centrada dentro de la caja que se mueve. */
 .sparkles__dot {
   position: absolute;
   left: 50%;
@@ -14,9 +32,6 @@
   border-radius: 50%;
   background: var(--scolor);
   box-shadow: 0 0 12px var(--scolor), 0 0 26px var(--scolor);
-  opacity: 0;
-  will-change: transform, opacity;
-  animation: sparkle-drift var(--sdur) var(--sdelay) ease-in-out infinite;
 }
 
 @keyframes sparkle-drift {
