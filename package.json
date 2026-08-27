@@ -18,6 +18,7 @@
     "audit:gestos": "node scripts/medir-gestos.mjs",
     "audit:trazo": "node scripts/medir-trazo.mjs",
     "audit:efectos": "node scripts/medir-efectos.mjs",
+    "audit:webkit": "node scripts/medir-webkit.mjs",
     "figma:pull": "node scripts/figma-pull.mjs",
     "figma:check": "node scripts/figma-check.mjs"
   },

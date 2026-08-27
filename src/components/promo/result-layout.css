@@ -407,10 +407,25 @@
 
   /* El cofre ABIERTO lleva los dos resplandores dorados del nodo `cofre 1`
      (74:1013): `0 30px 250px #EAC748` y `0 0 250px #EAC748`. El cerrado de las
-     otras tres pantallas no declara ninguno y conserva su sombra de apoyo. */
+     otras tres pantallas no declara ninguno y conserva su sombra de apoyo.
+
+     VAN EN DOS ELEMENTOS, UNO CADA UNO, Y NO ENCADENADAS EN UN SOLO `filter`.
+     Encadenadas, WebKit —o sea TODOS los navegadores de iPhone— no las dibuja:
+     medido, deja el 12% de los píxeles cálidos alrededor del cofre, menos que
+     sin filtro ninguno. Chromium las dibuja bien, así que en Android no se ve.
+
+     El límite es el ENCADENADO, no el radio: una sola de 500 sale igual en los
+     dos motores (1,00), dos de 250 en un mismo `filter` fallan (0,12), tres de
+     125 también (0,06), y las mismas dos repartidas en dos elementos salen
+     iguales (1,00). Cualquier `filter` de este proyecto con dos o más
+     `drop-shadow()` grandes encadenados es sospechoso; `npm run audit:webkit`
+     compara los dos motores contra el export. */
   .result-m--gold .mchest__img {
-    filter: drop-shadow(0 7.463cqw 62.19cqw #eac748)
-      drop-shadow(0 0 62.19cqw #eac748);
+    filter: drop-shadow(0 7.463cqw 62.19cqw #eac748);
+  }
+
+  .result-m--gold .mchest__stack {
+    filter: drop-shadow(0 0 62.19cqw #eac748);
   }
 
   .result-m--gold .result-m__counter {
