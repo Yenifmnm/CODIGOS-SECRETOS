@@ -102,7 +102,7 @@ npm run figma:check registro-mobile
 npm run figma:check -- --all
 ```
 
-Hace dos comprobaciones distintas, y la primera es la que importa:
+Hace tres comprobaciones distintas, y la primera es la que importa:
 
 **Capa por capa.** Todo elemento del DOM con `data-figma="23:3163"` se mide y se
 compara contra ese mismo nodo en el spec. Sale una tabla así:
@@ -115,6 +115,47 @@ compara contra ese mismo nodo en el spec. Sale una tabla así:
 
 Eso es accionable: *el pergamino está 14 px más abajo y 8 px más bajo de lo que
 dice el diseño*. Una captura no dice eso.
+
+**Al revés: qué falta.** La comprobación de arriba recorre el DOM, así que sólo
+puede hablar de lo que ya está marcado. Una capa del diseño que nadie escribió no
+está en el DOM y por lo tanto no aparece en ninguna fila: la pantalla da ✓ con 0
+desvíos igual. Ese fue el agujero por el que las dos cintas del titular de
+REGISTRO pasaron sin que nada las comparara nunca.
+
+Así que hay una segunda pasada que sale del **spec** y va en la dirección
+contraria: por cada capa que pinta algo y no tiene contraparte marcada en el DOM,
+la lista como «sin implementar o sin marcar».
+
+```
+✓ registro-mobile  402×913  28 capas medidas, 0 fuera de 2px
+    cobertura: 24/50 capas del diseño que pintan tienen data-figma
+    ⚠ 26 capa(s) del diseño sin implementar o sin marcar (14 sin ningún ancestro marcado)
+```
+
+«Pinta algo» = tiene relleno o trazo visible. Un grupo o un frame sin relleno no
+dibuja nada por sí mismo —lo dibujan sus hijos— así que no entra en la cuenta:
+marcarlo no verificaría nada.
+
+La columna **«Dentro de»** del reporte es la que hace accionable la lista, porque
+separa dos casos muy distintos:
+
+- **sin ancestro marcado** — la capa no está en el código. Hay que dibujarla, y
+  hasta entonces no hay ningún número que diga que falta.
+- **con un ancestro marcado** — está dibujada y la marca vive más arriba (el
+  vector y el rótulo de un botón, cubiertos por la marca del grupo). Bajar la
+  marca un nivel es opcional, y sólo suma si esa capa se puede mover por su
+  cuenta.
+
+El frame raíz no cuenta como ancestro que cubra: todas las capas descienden de él
+y está marcado en las once pantallas, así que si contara la distinción no
+distinguiría nada.
+
+Esta pasada **todavía no decide el código de salida**: informa. Dos categorías
+esperan una decisión antes de poder endurecerla —el chrome del iPhone (la barra
+de estado y el indicador de home, ocho capas por pantalla, que el sitio no puede
+dibujar) y las capas que sólo existen en un estado que la captura no visita, como
+las miniaturas a la izquierda del carrusel de PREMIOS, que no están en el DOM
+cuando el carrusel arranca en la primera posición—.
 
 **Píxel a píxel.** Escribe en `figma/check/<slug>/`:
 

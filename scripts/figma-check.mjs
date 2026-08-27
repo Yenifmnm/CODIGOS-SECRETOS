@@ -5,7 +5,7 @@
  *   node scripts/figma-check.mjs registro-mobile
  *   node scripts/figma-check.mjs --all
  *
- * Hace dos comprobaciones distintas, y las dos importan:
+ * Hace tres comprobaciones distintas, y las tres importan:
  *
  * 1. CAPA POR CAPA (la que arregla el "no queda igual"). Cada elemento del DOM
  *    marcado con `data-figma="23:3163"` se mide con getBoundingClientRect y se
@@ -13,7 +13,15 @@
  *    `figma/spec/<slug>.json`. Sale una tabla de desvíos en px: "el pergamino
  *    está 14 px más abajo y 6% más chico". Eso es accionable; una captura no.
  *
- * 2. PÍXEL A PÍXEL. Saca la captura de la ruta en el viewport del frame y la
+ * 2. AL REVÉS, QUÉ FALTA. La comprobación 1 recorre el DOM, así que sólo puede
+ *    hablar de lo que ya está marcado: una capa del diseño que nadie escribió no
+ *    está en el DOM y por lo tanto no existe para el reporte — la pantalla da ✓
+ *    con 0 desvíos igual. Esta recorre el SPEC en la dirección contraria y lista
+ *    cada capa que pinta algo y no tiene contraparte marcada. Es el agujero por
+ *    el que las dos cintas del titular de REGISTRO pasaron sin que nada las
+ *    comparara nunca.
+ *
+ * 3. PÍXEL A PÍXEL. Saca la captura de la ruta en el viewport del frame y la
  *    compara contra el PNG de referencia. Escribe tres imágenes en
  *    `figma/check/<slug>/`: la captura, el diff en rojo y el overlay
  *    (el diseño encima del render al 50%, para mirar a ojo).
@@ -73,6 +81,8 @@ const navegador = await chromium.launch(
 );
 let fallas = 0;
 let sinSpec = 0;
+let pintanTotal = 0;
+let sinMarcaTotal = 0;
 
 for (const pantalla of objetivo) {
   const dir = path.join(SALIDA, pantalla.slug);
@@ -277,7 +287,24 @@ for (const pantalla of objetivo) {
     }
   }
 
-  // -------------------------------------------------------- 2. píxel a píxel
+  // ------------------------------------------- 2. al revés: qué falta marcar
+  // La pasada de arriba sale del DOM, así que sólo ve lo que ya está escrito y
+  // marcado. Lo que el diseño tiene y el código no, no aparece por ninguna
+  // parte: la pantalla da ✓ con 0 desvíos porque las capas que faltan no entran
+  // en la cuenta. Esta sale del spec y busca lo contrario.
+  //
+  // Todavía NO decide si la pantalla pasa: no toca `fallas`. Primero hay que
+  // mirar la lista de las once pantallas y separar lo que falta dibujar de lo
+  // que está dibujado y sólo le falta bajar la marca un nivel.
+  const cobertura = spec
+    ? { sinMarca: capasSinMarca(spec.arbol, medidos), pintan: contarQuePintan(spec.arbol) }
+    : null;
+  if (cobertura) {
+    pintanTotal += cobertura.pintan;
+    sinMarcaTotal += cobertura.sinMarca.length;
+  }
+
+  // -------------------------------------------------------- 3. píxel a píxel
   let pixeles = null;
   if (referencia) {
     pixeles = await compararImagenes(navegador, captura, referencia, dir, UMBRAL_PIXEL);
@@ -295,7 +322,7 @@ for (const pantalla of objetivo) {
 
   fs.writeFileSync(
     path.join(dir, 'reporte.md'),
-    reporte(pantalla, spec, { ancho, alto }, desvios, pixeles, errores, referencia, medidos.length),
+    reporte(pantalla, spec, { ancho, alto }, desvios, pixeles, errores, referencia, medidos.length, cobertura),
   );
 
   // Sin spec no hubo comparación: no se pinta ✓, porque "0 desvíos sobre 0
@@ -315,6 +342,12 @@ for (const pantalla of objetivo) {
       `  ${marca} ${pantalla.slug}  ${ancho}×${alto}  ${medidos.length} capas medidas, ` +
         `${desviados.length} fuera de ${TOLERANCIA}px${huerfanos.length ? `, ${huerfanos.length} sin nodo` : ''}${resumenPx}`,
     );
+    if (cobertura) {
+      console.log(
+        `      cobertura: ${cobertura.pintan - cobertura.sinMarca.length}/${cobertura.pintan} ` +
+          'capas del diseño que pintan tienen data-figma',
+      );
+    }
     const ciegas = desvios.filter((x) => x.ciego);
     if (ciegas.length) {
       console.log(
@@ -335,6 +368,17 @@ for (const pantalla of objetivo) {
       }
       if (pinturaMal.length > 8) console.log(`        … y ${pinturaMal.length - 8} más, en el reporte`);
     }
+    if (cobertura?.sinMarca.length) {
+      const sueltas = cobertura.sinMarca.filter((x) => !x.ancestro);
+      console.log(
+        `      ⚠ ${cobertura.sinMarca.length} capa(s) del diseño sin implementar o sin marcar` +
+          ` (${sueltas.length} sin ningún ancestro marcado):`,
+      );
+      for (const x of cobertura.sinMarca.slice(0, 15)) console.log(`        ${lineaSinMarca(x)}`);
+      if (cobertura.sinMarca.length > 15) {
+        console.log(`        … y ${cobertura.sinMarca.length - 15} más, en el reporte`);
+      }
+    }
   }
 
   if (!medidos.length) {
@@ -349,6 +393,16 @@ const cierre = fallas
     ? `Ninguna pantalla se pudo comparar: falta el spec de ${sinSpec}. Corré figma:pull.`
     : 'Todo dentro de tolerancia.';
 console.log(`\n  Salida en figma/check/. ${cierre}`);
+if (pintanTotal) {
+  const pct = Math.round((100 * sinMarcaTotal) / pintanTotal);
+  console.log(
+    `  Cobertura del diseño: ${pintanTotal - sinMarcaTotal}/${pintanTotal} capas que pintan tienen ` +
+      `data-figma. Faltan ${sinMarcaTotal} (${pct}%), que nadie compara con nada.`,
+  );
+}
+// Las capas sin marcar todavía NO rompen nada: el exit code sigue saliendo sólo
+// de los desvíos, de la pintura y de los errores de JS. Cuando la lista de las
+// once pantallas esté depurada, sumar `sinMarcaTotal` a esta condición.
 process.exit(fallas ? 1 : 0);
 
 // ---------------------------------------------------------------- funciones
@@ -458,6 +512,79 @@ async function compararImagenes(navegador, capturaPath, referenciaPath, dir, umb
   };
 }
 
+/* ------------------------------------------------------- el reporte inverso
+
+   El control capa a capa recorre el DOM: mide lo que está marcado y lo compara
+   contra el spec. Por construcción no puede ver lo que NO está — una capa del
+   diseño que nadie escribió no aparece en el DOM, así que tampoco aparece en el
+   reporte, y la pantalla da ✓ con 0 desvíos igual. Las dos cintas del titular de
+   REGISTRO vivieron ahí: el diseño tiene dos vectores, el código las fusionaba en
+   una silueta recortada con clip-path, y nunca hubo un número que dijera que
+   faltaban.
+
+   Estas funciones cierran el agujero recorriendo el spec al revés. */
+
+/** ¿La capa dibuja tinta propia? Relleno o trazo, con algo de opacidad. */
+function pintaAlgo(n) {
+  if (n.oculto || n.opacidad === 0) return false;
+  // Alfa 00 —el `#FFFFFF00` con que Figma rellena los contenedores de instancia—
+  // no pinta nada, y marcarlo no verificaría ningún color.
+  const visible = (p) => p && (p.tipo !== 'solido' || !/^#[0-9a-fA-F]{6}00$/.test(p.color ?? ''));
+  return (n.relleno ?? []).some(visible) || (n.trazo ?? []).some(visible);
+}
+
+/** Cuántas capas del spec pintan algo: el denominador de la cobertura. */
+function contarQuePintan(nodo) {
+  return (pintaAlgo(nodo) ? 1 : 0) + (nodo.hijos ?? []).reduce((a, h) => a + contarQuePintan(h), 0);
+}
+
+/**
+ * Capas del diseño que pintan algo y no tienen `data-figma` en el DOM: «sin
+ * implementar o sin marcar».
+ *
+ * Un GROUP o un FRAME sin relleno queda fuera: no dibuja nada por sí mismo —lo
+ * dibujan sus hijos— así que marcarlo no verificaría nada.
+ *
+ * `ancestro` es la capa marcada más cercana hacia arriba, si hay alguna, y es lo
+ * que separa los dos casos que la lista mezclaría:
+ *
+ *   · sin ancestro marcado → la capa no está en el código. Hay que dibujarla, y
+ *     hasta entonces nada la compara con nada.
+ *   · con ancestro marcado → está dibujada, pero la marca vive más arriba: el
+ *     vector y el rótulo de un botón, cubiertos por la marca del grupo. Bajar la
+ *     marca un nivel es opcional. Sin esta distinción son mayoría en la lista y
+ *     tapan a las que de verdad faltan.
+ */
+function capasSinMarca(arbol, medidos) {
+  // Todos los ids declarados en el DOM, no sólo el que resolvió la comparación:
+  // un elemento compartido por varios frames declara varios, y ninguno de ellos
+  // está «sin marcar».
+  const marcados = new Set();
+  for (const m of medidos) for (const i of m.ids) marcados.add(i.replace('-', ':'));
+
+  const out = [];
+  recorrer(arbol, 0, null);
+  return out;
+
+  function recorrer(n, nivel, ancestro) {
+    const marcado = marcados.has(n.id);
+    if (!marcado && pintaAlgo(n)) out.push({ ...n, nivel, ancestro });
+    // El frame raíz no cuenta como ancestro que cubra: TODAS las capas
+    // descienden de él y está marcado en las once pantallas, así que si contara,
+    // «tiene un ancestro marcado» sería siempre verdadero y no distinguiría
+    // nada. De ahí el `nivel > 0`.
+    const heredado = marcado && nivel > 0 ? { id: n.id, nombre: n.nombre } : ancestro;
+    for (const h of n.hijos ?? []) recorrer(h, nivel + 1, heredado);
+  }
+}
+
+/** Una capa sin marcar, en una línea, para la consola. */
+function lineaSinMarca(x) {
+  const caja = x.rect ? ` [${x.rect.x}, ${x.rect.y}, ${x.rect.w}, ${x.rect.h}]` : '';
+  const dentro = x.ancestro ? `  · dentro de ${x.ancestro.nombre} (${x.ancestro.id}), ya marcado` : '';
+  return `${x.nombre} (${x.id}) ${x.tipo}${caja}${dentro}`;
+}
+
 function resolverReferencia(pantalla) {
   const candidatos = [
     pantalla.referencia && path.join(RAIZ, pantalla.referencia),
@@ -476,7 +603,7 @@ function tamanoPng(ruta) {
   return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) };
 }
 
-function reporte(pantalla, spec, viewport, desvios, pixeles, errores, referencia, marcadas) {
+function reporte(pantalla, spec, viewport, desvios, pixeles, errores, referencia, marcadas, cobertura) {
   const l = [];
   l.push(`# ${pantalla.slug}`);
   l.push('');
@@ -558,6 +685,51 @@ function reporte(pantalla, spec, viewport, desvios, pixeles, errores, referencia
     l.push('es un elemento compartido cuyo nodo vive en otra pantalla: no es falla.');
   }
   l.push('');
+
+  if (cobertura) {
+    const { sinMarca, pintan } = cobertura;
+    const sueltas = sinMarca.filter((x) => !x.ancestro);
+    l.push('## Capas del diseño sin implementar o sin marcar');
+    l.push('');
+    l.push(`**${pintan - sinMarca.length} de ${pintan}** capas que pintan algo tienen \`data-figma\`.`);
+    l.push('');
+    l.push('La tabla de arriba recorre el DOM, así que sólo puede hablar de lo que ya');
+    l.push('está marcado: una capa del diseño que nadie escribió no está en el DOM y');
+    l.push('por lo tanto no aparece en ninguna de sus filas. Esta sección recorre el');
+    l.push('spec al revés y lista lo que el diseño tiene y el código no compara.');
+    l.push('');
+    if (!sinMarca.length) {
+      l.push('Ninguna: todas las capas que pintan tienen su marca.');
+      l.push('');
+    } else {
+      l.push(`**${sinMarca.length} sin marcar**, y de esas **${sueltas.length} sin ningún ancestro marcado**.`);
+      l.push('');
+      l.push('| Capa | Nodo | Tipo | x | y | w | h | Dentro de |');
+      l.push('| --- | --- | --- | ---: | ---: | ---: | ---: | --- |');
+      for (const x of sinMarca) {
+        const r = x.rect ?? {};
+        const dentro = x.ancestro ? `\`${x.ancestro.id}\` ${x.ancestro.nombre}` : '**—**';
+        l.push(
+          `| ${'·'.repeat(x.nivel)}${escapar(x.nombre)} | \`${x.id}\` | ${x.tipo} | ` +
+            `${r.x ?? ''} | ${r.y ?? ''} | ${r.w ?? ''} | ${r.h ?? ''} | ${dentro} |`,
+        );
+      }
+      l.push('');
+      l.push('«Pinta algo» = tiene relleno o trazo visible. Un grupo o un frame sin');
+      l.push('relleno no dibuja nada por sí mismo —lo dibujan sus hijos— así que no');
+      l.push('entra en la cuenta: marcarlo no verificaría nada.');
+      l.push('');
+      l.push('La columna «Dentro de» es la que hace accionable la lista. Con `—`, la');
+      l.push('capa no está en el código: hay que dibujarla, y hasta entonces no hay');
+      l.push('ningún número que diga que falta. Con un nodo, está dibujada y la marca');
+      l.push('vive más arriba —el vector y el rótulo de un botón, cubiertos por la');
+      l.push('marca del grupo—: ahí bajar la marca un nivel es opcional, y sólo suma');
+      l.push('si esa capa se puede mover por su cuenta.');
+      l.push('');
+      l.push('Esta sección todavía no decide el exit code.');
+      l.push('');
+    }
+  }
 
   const pintura = desvios.flatMap((d) =>
     (d.pintura ?? []).map((x) => ({ ...x, capa: d.nombre, id: d.id })),
