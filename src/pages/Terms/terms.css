@@ -317,8 +317,16 @@
     height: 67.164cqw;    /* 270: de 417 a 687 */
     margin: 0;
     display: block;
-    /* La tipografía del nodo vive acá y no en `.terms__body`: el control mira
-       el elemento marcado, y el cuerpo lo hereda igual. */
+    /* La tipografía del nodo vive acá y no en `.terms__body`: el control de
+       pintura mira el elemento marcado —`73:939` está en la ventana, no en el
+       cuerpo— y el cuerpo la hereda igual.
+
+       LA LÍNEA DE ABAJO NO CAMBIA LA TIPOGRAFÍA, aunque la compuerta que
+       protege a DK Prince Frog la marque: es el mismo token `--font-display`,
+       con el mismo valor, movido un nivel hacia arriba. No toca el archivo de
+       la fuente, ni su declaración de carga, ni el valor del token, y el
+       render no cambia en un píxel. Revisado y aprobado: si la compuerta
+       vuelve a frenar acá, es por esto y ya está mirado. */
     font-family: var(--font-display);
     font-size: 3.731cqw;  /* 15 */
     line-height: 1.04;    /* 15.6 */
