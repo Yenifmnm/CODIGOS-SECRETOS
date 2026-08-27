@@ -131,6 +131,33 @@ que acá el estado no lo elige el usuario, lo elige el propio control.
 Mientras eso siga así, «0 fuera de tolerancia» quiere decir «0 en el estado
 inicial de esta ruta, con el movimiento reducido».
 
+### El contador en 0000 no es un bug
+
+En `codigo-utilizado` y `codigo-inexistente` el contador muestra **0000**, y
+está bien. `mockPromoApi.ts` sólo suma cuando el código se CONSUME:
+
+```js
+// Sólo los códigos efectivamente consumidos suman al contador.
+const consumed = status === 'WIN' || status === 'LOSE';
+```
+
+Un código ya usado o inexistente no se consume, así que no suma. Verificado
+recorriendo el flujo de verdad —participar → registro → perdiste, con la cédula
+sin registrar, que es como entra un usuario nuevo—: ahí el contador da **0001**.
+Abriendo `?scenario=CODE_ALREADY_USED#/codigo-utilizado` directamente da 0000,
+que es lo correcto y además lo único que puede pasar: no hubo canje.
+
+### `CodeOnlyMobile` está a la espera del frame
+
+La variante de PARTICIPAR con el código ya cargado **no tiene frame en Figma**.
+Funciona, y sus doce marcas siguen en `TODO` A PROPÓSITO: no hay nodo contra el
+cual medirlas. No se rediseña ni se le inventan coordenadas hasta que llegue el
+frame de la diseñadora.
+
+Y es, además, uno de los tres casos del problema abierto de
+`docs/FIGMA-WORKFLOW.md`: es un ESTADO y no una ruta, así que ningún control la
+alcanza.
+
 ## Los assets
 
 Los `.png` sueltos de esta carpeta son los originales del diseñador. Los que usa
