@@ -10,6 +10,7 @@ import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import jugos from '../../assets/promo/jugos.webp';
 import portal from '../../assets/planets/portal.webp';
 import destello from '../../assets/effects/destello.webp';
+import barco from '../../assets/promo/barco.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
 import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
 
@@ -35,12 +36,19 @@ export default function CodeHelp() {
     <Stage
       title="¿Dónde encuentro el código secreto?"
       compactMenu
+      mobileCielo={{ nodo: '73:782', x: -22, y: -38, w: 445, h: 965 }}
       mobile={
         /* Figma "donde esta el codigo" (402x913): cielo claro con horizonte,
            logo → titular dorado a dos renglones → nave completa a la izquierda
            del pack → pack apoyado sobre la superficie del planeta → píldora
            cian de contacto sobre esa superficie. */
-        <div className="codehelp-m" id="contenido" data-figma="TODO" data-figma-ejes="x,w">
+        <div
+          className="codehelp-m"
+          id="contenido"
+          data-figma="73:781"
+          data-figma-ejes="x,w"
+          data-figma-omitir="pintura"
+        >
           {/* Portal asomando por el borde superior derecho, con la X encima.
               Está en el Figma de esta vista y faltaba en la composición. */}
           <img
@@ -48,50 +56,69 @@ export default function CodeHelp() {
             alt=""
             aria-hidden="true"
             className="codehelp-m__portal"
-            data-figma="TODO"
+            data-figma="73:817"
           />
 
-          <CloseButton to="/participar" className="codehelp-m__close" data-figma="TODO" />
+          <CloseButton to="/participar" className="codehelp-m__close" data-figma="99:258" />
 
           <img
             src={logoCodigos}
             alt="Códigos Secretos 2026"
             className="codehelp-m__logo"
-            data-figma="TODO"
+            data-figma="73:783"
           />
 
           {/* El corte de renglón es el del Figma mobile, no uno automático. */}
-          <p className="codehelp-m__title" data-figma="TODO">
+          <p className="codehelp-m__title" data-figma="73:827">
             Buscá el Código Secreto en
             <br />
-            Los stickers de Purosol
+            los stickers de Purosol
           </p>
 
           {/* Superficie oscura sobre la que se apoyan el pack y la píldora. */}
-          <div className="codehelp-m__planet" aria-hidden="true" data-figma="TODO" />
+          <div className="codehelp-m__planet" aria-hidden="true" data-figma="73:819" />
 
-          <div className="codehelp-m__scene" data-figma="TODO">
+          {/* La escena no es un nodo: en el frame el destello, la nave y el
+              pack cuelgan sueltos del propio frame. */}
+          <div className="codehelp-m__scene">
             {/* Destello detrás del pack, como en el Figma. */}
             <img
               src={destello}
               alt=""
               aria-hidden="true"
               className="codehelp-m__flare"
-              data-figma="TODO"
+              data-figma="73:793"
             />
-            {/* `flipped`: el asset viene con la proa a la izquierda y en el
-                diseño navega hacia la derecha, con la llama saliendo por atrás. */}
-            <PurosolShip flipped className="codehelp-m__ship" data-figma="TODO" />
+            {/* `flipped` es el espejo horizontal del nodo: ver el porqué en
+                `code-help.css`, que tiene el detalle de cómo se resolvió. */}
+            <img src={barco} alt="" aria-hidden="true" className="codehelp-m__ship-halo" />
+            <PurosolShip
+              flipped
+              className="codehelp-m__ship"
+              data-figma="73:789"
+              /* El resplandor del nodo vive en `.codehelp-m__ship-halo`, la
+                 capa quieta de acá arriba: sobre la nave, que flota, un
+                 desenfoque de 250 px cuesta cuadros. Van juntas. */
+              data-figma-omitir="sombras"
+            />
             <TelescopeMagnifier
               src={jugos}
               alt={PACK_ALT}
               description={PACK_ALT}
               zoom={2.2}
-              data-figma="TODO"
+              data-figma="73:821"
             />
           </div>
 
-          <div className="codehelp-m__note" data-figma="TODO">{note}</div>
+          {/* En el frame la píldora son dos capas: `Rectangle 1` (73:824), la
+              superficie con su radio, y el texto adentro (73:825). Acá también,
+              para que las dos se puedan medir. `Group 3` (73:823) es el grupo
+              que las envuelve y tiene la misma caja que la superficie. */}
+          <div className="codehelp-m__note" data-figma="73:824">
+            <div className="codehelp-m__note-text" data-figma="73:825">
+              {note}
+            </div>
+          </div>
         </div>
       }
     >
