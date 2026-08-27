@@ -98,6 +98,33 @@
   .v4 .tit { text-shadow: none; }
   .v4 .sub { text-shadow: none; }
 
+
+  /* ---- B. barrido del radio del titular ---------------------------------- */
+  .r0 .tit { text-shadow: 0 0 44.016px #ffffff, 0 4px 4px #0000004d; }
+  .r1 .tit { text-shadow: 0 0 30px #ffffff, 0 4px 4px #0000004d; }
+  .r2 .tit { text-shadow: 0 0 20px #ffffff, 0 4px 4px #0000004d; }
+  .r3 .tit { text-shadow: 0 0 12px #ffffff, 0 4px 4px #0000004d; }
+  .r4 .tit { text-shadow: 0 0 6px #ffffff, 0 4px 4px #0000004d; }
+
+  /* ---- C. barrido de la opacidad, radio fijo en 44,016 -------------------- */
+  .o0 .tit { text-shadow: 0 0 44.016px rgba(255,255,255,1.00), 0 4px 4px #0000004d; }
+  .o1 .tit { text-shadow: 0 0 44.016px rgba(255,255,255,0.60), 0 4px 4px #0000004d; }
+  .o2 .tit { text-shadow: 0 0 44.016px rgba(255,255,255,0.35), 0 4px 4px #0000004d; }
+  .o3 .tit { text-shadow: 0 0 44.016px rgba(255,255,255,0.20), 0 4px 4px #0000004d; }
+
+  .seccion {
+    font: 700 13px/1.6 ui-monospace, Menlo, Consolas, monospace;
+    color: #fff; background: rgba(127,212,255,.14);
+    margin: 0; padding: 14px 16px; letter-spacing: .02em;
+  }
+  .veredicto {
+    font: 12px/1.65 ui-monospace, Menlo, Consolas, monospace;
+    color: #ffd9a8; background: rgba(255,140,0,.12);
+    border-left: 3px solid #ff9d2e; margin: 0; padding: 16px;
+  }
+  .veredicto b { color: #fff; }
+  .veredicto code { color: #7fd4ff; }
+
   .pie {
     font: 12px/1.6 ui-monospace, Menlo, Consolas, monospace;
     color: #90a8cc; padding: 22px 16px 40px; text-align: left;
@@ -139,12 +166,77 @@
   <p class="pie">
     Fondo <code>#212F5C</code> plano. Sin logo, sin estrellas, sin animaciones y
     sin ningun otro <code>filter</code> en la pagina. La fuente va embebida, asi
-    que esta pagina no depende del CSS del sitio.<br><br>
-    Si el destello aparece en la <b>1</b> y en la <b>3</b> pero no en la <b>2</b>,
-    son las sombras grandes del subtitulo. Si aparece en las cuatro, no es el
-    <code>text-shadow</code>. Si no aparece en ninguna, es una interaccion con
-    otra capa del landing.
+    que esta pagina no depende del CSS del sitio.
   </p>
+
+  <p class="veredicto">
+    MEDIDO EN UN iPhone 17 Pro, sobre la captura con las tres variantes juntas:
+    <b>1 = +127</b> sobre el fondo, <b>2 = +107</b>, <b>3 = +38</b>.
+    <br><br>
+    El destello NO son los radios de 250: son los CHICOS. El
+    <code>0 0 44.016px</code> del titular y el <code>0 0 41.4px</code> del
+    subtitulo solos producen el 84% del resplandor. Con un cuerpo de 40 px, un
+    halo de 44 no es una nube lejana: abraza el glifo, rellena las contraformas
+    y junta las letras. Es un ENGROSAMIENTO, y explica tambien la primera queja
+    sobre el grosor de la tipografia.
+    <br><br>
+    Queda descartada la regla de que &laquo;radio menor a 2x el cuerpo es
+    seguro&raquo;: estos estan en 1,1x y son los que fallan. Los barridos de
+    abajo buscan con que radio y con que opacidad el titular se parece al
+    recorte de <code>recursos/mobile/pantallas/landing.png</code>, en los dos
+    motores a la vez.
+  </p>
+
+  <h2 class="seccion">B &middot; barrido del RADIO del titular, blanco al 100%</h2>
+  <div class="caso r0">
+    <p class="rotulo"><b>B1 — radio 44.016 px</b>
+      <span class="nota">como esta en el sitio</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+  <div class="caso r1">
+    <p class="rotulo"><b>B2 — radio 30 px</b>
+      <span class="nota">30 / 40 = 0.75x el cuerpo</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+  <div class="caso r2">
+    <p class="rotulo"><b>B3 — radio 20 px</b>
+      <span class="nota">20 / 40 = 0.50x el cuerpo</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+  <div class="caso r3">
+    <p class="rotulo"><b>B4 — radio 12 px</b>
+      <span class="nota">12 / 40 = 0.30x el cuerpo</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+  <div class="caso r4">
+    <p class="rotulo"><b>B5 — radio 6 px</b>
+      <span class="nota">6 / 40 = 0.15x el cuerpo</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+
+
+  <h2 class="seccion">C &middot; barrido de la OPACIDAD del blanco, radio fijo en 44 px</h2>
+  <div class="caso o0">
+    <p class="rotulo"><b>C1 — blanco al 100%</b>
+      <span class="nota">como esta en el sitio</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+  <div class="caso o1">
+    <p class="rotulo"><b>C2 — blanco al 60%</b>
+      <span class="nota">rgba(255,255,255,0.60) a 44,016 px</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+  <div class="caso o2">
+    <p class="rotulo"><b>C3 — blanco al 35%</b>
+      <span class="nota">rgba(255,255,255,0.35) a 44,016 px</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+  <div class="caso o3">
+    <p class="rotulo"><b>C4 — blanco al 20%</b>
+      <span class="nota">rgba(255,255,255,0.20) a 44,016 px</span></p>
+    <p class="tit">Gana un viaje al Caribe</p>
+  </div>
+
 
 </div>
 </body>
