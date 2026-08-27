@@ -22,6 +22,12 @@ import destello from '../../assets/effects/destello.webp';
 import dino from '../../assets/characters/dino.webp';
 import nena from '../../assets/characters/nena.webp';
 import pluma from '../../assets/ui/pluma.webp';
+/* Las dos cintas del titular mobile, bajadas de sus nodos con
+   `figma:pull --export 73:614,73:643 --formato svg`. Son vectores dibujados a
+   mano —cada uno con sus propias muescas y su propio ancho—, no dos instancias
+   de una misma silueta: por eso no las puede dibujar `RibbonPlate`. */
+import cintaTitulo1 from '../../assets/ui/cinta-titulo-1.svg';
+import cintaTitulo2 from '../../assets/ui/cinta-titulo-2.svg';
 
 type Errors = Partial<Record<keyof RegistrationForm, string>>;
 
@@ -439,30 +445,41 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
         />
 
         <form className="register-m__form" onSubmit={onSubmit} noValidate>
-          {/* La cinta son dos vectores sueltos en el Figma —73:614 y 73:643,
-              un renglón cada uno— y acá es un solo `.plate__bg` recortado con
-              clip-path, así que no hay un par de cajas que comparar. La marca
-              va en el título, que sí es un nodo.
+          {/* El titular son TRES nodos, no uno: una cinta por renglón —`Vector 14`
+              (73:614) y `Vector 15` (73:643), en x/y y anchos distintos— y el
+              texto encima (73:616). Antes iba en un solo `RibbonPlate`, que las
+              fusionaba en una silueta recortada con clip-path: las dos cintas
+              del diseño quedaban sin caja que comparar y el reporte no las veía.
+              Ahora cada una es su propio SVG, bajado de su nodo, con su marca.
 
-              `data-figma-ejes="x,y"` acá y en los seis rótulos: en este frame
-              las capas de texto son cajas dibujadas a mano y no la medida del
-              texto. La de este título mide 240 de ancho, más que la cinta de
-              221 que lo contiene, y declara 15 de alto con un salto de línea
-              adentro. El ancho y el alto se siguen midiendo y se ven en el
-              reporte, pero no deciden.
+              `data-figma-omitir="fondo"`: el `#D8831C` viaja dentro del SVG, que
+              es el export exacto del nodo, así que el color es el del diseño por
+              construcción y no hay `background-color` que comparar. */}
+          <img
+            src={cintaTitulo1}
+            alt=""
+            aria-hidden="true"
+            className="register-m__title-cinta register-m__title-cinta--1"
+            data-figma="73:614"
+            data-figma-omitir="fondo"
+          />
+          <img
+            src={cintaTitulo2}
+            alt=""
+            aria-hidden="true"
+            className="register-m__title-cinta register-m__title-cinta--2"
+            data-figma="73:643"
+            data-figma-omitir="fondo"
+          />
 
-              Y su Δx queda en +11, que NO es un error a corregir: un solo
-              elemento sirve acá a dos nodos cuyas cajas no coinciden en el
-              Figma —el texto 73:616 en x 79 con 240 de ancho, la cinta
-              73:614+73:643 en x 90 con 221—. La cinta va a su nodo porque es
-              lo que se ve; el texto hereda esa caja y arrastra la diferencia.
-              Cerrar ese +11 significaría dibujar la cinta 19 px más ancha de
-              lo que dice el diseño. */}
-          <RibbonPlate tone="ochre" className="register-m__title-plate">
-            <h2 className="register-m__title" data-figma="73:616" data-figma-ejes="x,y">
-              Registrate para que tu pequeño pueda participar
-            </h2>
-          </RibbonPlate>
+          {/* Dos renglones, como en el diseño: el nodo 73:616 trae el salto
+              explícito («Registrate para que tu pequeño ⏎ pueda participar») y
+              cada renglón se apoya en su cinta. */}
+          <h2 className="register-m__title" data-figma="73:616">
+            Registrate para que tu pequeño
+            <br />
+            pueda participar
+          </h2>
 
           {/* Cada fila en su coordenada del Figma; el orden del DOM es el de
               lectura, que es también el orden de tabulación. */}

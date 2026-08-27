@@ -210,30 +210,57 @@
     z-index: 3;
   }
 
-  /* La cinta son `Vector 14` (73:614) y `Vector 15` (73:643): juntos van de
-     x 90 a 311 y de y 357 a 403. Manda el dibujo, no el número del texto que
-     lleva adentro —ver el comentario de la marca en `Register.tsx`—. */
-  .register-m__title-plate {
+  /* Una cinta por renglón, cada una en su caja del spec. No son dos copias de
+     la misma silueta: `Vector 14` mide 221x25 y `Vector 15` 146x24, con muescas
+     propias, y la segunda arranca 35 px más a la derecha. Los porcentajes son
+     del pergamino —(26, 213), 340x534—, como el resto del formulario. */
+  .register-m__title-cinta {
     position: absolute;
-    left: 18.824%;             /* 90 */
-    top: 26.97%;               /* 357 */
-    width: 65%;                /* 221 */
-    height: 8.4%;
+    pointer-events: none;
   }
 
-  /* Cuerpo e interlineado del nodo 73:616: 18 px y 18.7. */
+  .register-m__title-cinta--1 {
+    left: 18.824%;             /* 90 */
+    top: 26.966%;              /* 357 */
+    width: 65%;                /* 221 */
+    height: 4.682%;            /* 25 */
+  }
+
+  .register-m__title-cinta--2 {
+    left: 29.118%;             /* 125 */
+    top: 31.086%;              /* 379 */
+    width: 42.941%;            /* 146 */
+    height: 4.494%;            /* 24 */
+  }
+
+  /* Caja del nodo 73:616: (79, 361) y 240x15, con cuerpo 18 e interlineado
+     18.738 (el spec lo redondea a 18.7).
+
+     Los 15 de alto NO son el alto del texto: son el alto FIJO de la caja de
+     texto que dibujó el diseñador. El nodo trae `textAlignVertical: TOP` y dos
+     renglones —el salto es explícito en el contenido—, o sea 2 x 18.738 = 37.5
+     de texto dentro de una caja de 15, que desborda por abajo. Figma no recorta
+     el texto: lo deja salir. El dato que lo confirma es `absoluteRenderBounds`,
+     la tinta real del nodo, que mide 192.7x36.8 —dos renglones— contra los
+     240x15 de `absoluteBoundingBox`, que es lo único que `figma:pull` guarda.
+
+     Por eso acá el alto va fijo en 15 y el texto desborda igual que en el Figma:
+     la caja del elemento coincide con la del nodo en los cuatro ejes —de ahí que
+     ya no haga falta `data-figma-ejes`— y los renglones caen donde el diseño los
+     pone. Con `height: auto` el elemento mediría los 37.5 del contenido y daría
+     +22 de Δh contra un spec que no está equivocado. */
   .register-m__title {
-    position: relative;
-    left: -2.736cqw;          /* x 79, desde la cinta que arranca en x 90 */
-    top: -2.239cqw;           /* y 361, alineado al borde superior del nodo */
-    width: 59.701cqw;         /* 240 */
+    position: absolute;
+    left: 15.588%;             /* 79 */
+    top: 27.715%;              /* 361 */
+    width: 70.588%;            /* 240 */
+    height: 2.809%;            /* 15: la caja del nodo, no la del texto */
     margin: 0;
     font-family: var(--font-display);
-    font-size: 4.478cqw;       /* 18 */
-    line-height: 1.039;        /* 18.7 */
+    font-size: 4.4776cqw;      /* 18 */
+    line-height: 1.041;        /* 18.738 */
     color: var(--c-brown-dark);
     text-align: center;
-    white-space: nowrap;
   }
 
   /* Filas del formulario. Alturas y anchos leídos del Figma. */
