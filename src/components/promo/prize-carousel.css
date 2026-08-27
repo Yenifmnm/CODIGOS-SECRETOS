@@ -293,11 +293,30 @@
     z-index: 1;
   }
 
+  /* EL HALO TIENE QUE SER REDONDO. En el Figma cada miniatura lleva un halo
+     circular que se desvanece parejo —`premio 5 1`, `premio 4 1` y `premio 2 1`
+     son imágenes sueltas, sin efectos: el halo viene HORNEADO en el asset—.
+
+     Los assets del repo también lo traen horneado, pero con forma de cuadrado
+     redondeado, y ese borde recto se ve: alrededor del columpio queda un
+     recuadro claro, que es lo que se nota a simple vista en el teléfono. No lo
+     hace el `drop-shadow` de acá abajo —quitándolo el recuadro sigue—, lo hace
+     la imagen.
+
+     La máscara radial recorta esa esquina cuadrada y deja el halo circular. Los
+     porcentajes están calibrados contra estos assets: 46% cubre entero el
+     producto —incluido el joystick del PS5, abajo a la izquierda, y los pedales
+     del volante— y el desvanecido hasta 72% se come el borde recto.
+
+     Lo correcto de verdad sería el asset con el halo redondo, como el que usó
+     el diseñador. Mientras tanto, esto. */
   .carousel__thumb img {
     width: 86%;
     height: 86%;
     object-fit: contain;
     filter: drop-shadow(0 0 2.4cqw rgba(9, 234, 255, 0.75));
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 46%, rgba(0, 0, 0, 0) 72%);
+    mask-image: radial-gradient(circle at 50% 50%, #000 46%, rgba(0, 0, 0, 0) 72%);
   }
 
   .carousel__thumb--active img {
