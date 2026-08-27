@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { Sparkles } from '../effects/Sparkles';
 import { MobileScene } from '../layout/MobileStage';
 import { mbox } from '../../app/mobileStage';
 import type { Prize } from '../../types/promo';
@@ -165,7 +164,11 @@ export function PrizeRevealMobile({ prize }: Props) {
         >
           <img src={prize.image} alt={prize.name} className="reveal__prize" />
         </motion.div>
-        <Sparkles count={14} spread={44} />
+        {/* Acá iban unas partículas doradas, el componente `Sparkles`. NO ESTÁN EN EL
+            DISEÑO: en `ganaste-mobile` no hay ningún nodo que les corresponda.
+            Alrededor del cofre el frame tiene sólo `glow-Photoroom 3` (-53.7°),
+            `glow-Photoroom 2` (-76.5°) y los dos resplandores del propio nodo
+            `cofre 1`. Se sacaron. */}
       </motion.div>
       )}
     </MobileScene>

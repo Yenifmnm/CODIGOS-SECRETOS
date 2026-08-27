@@ -107,6 +107,30 @@ código ya cargado. Los tres son estados, no rutas, y ninguna cobertura los
 alcanza. Está anotado como problema abierto en `docs/FIGMA-WORKFLOW.md`; hasta
 que se resuelva, leé «0 fuera de tolerancia» como «0 en el estado inicial».
 
+### El caso de las partículas: invisible por partida doble
+
+En el reveal de GANASTE había unas partículas doradas (`Sparkles`) que **no
+existían en el diseño**: en `ganaste-mobile` no hay ningún nodo que les
+corresponda —alrededor del cofre el frame tiene sólo `glow-Photoroom 3`,
+`glow-Photoroom 2` y los dos resplandores del propio `cofre 1`—. Estuvieron
+puestas todo este tiempo y ningún control las marcó nunca. Por dos motivos, y
+los dos son el mismo agujero:
+
+1. **El reporte inverso no las podía listar.** Ese reporte va del spec al DOM:
+   busca nodos del diseño sin contraparte. Lo que sobra en el código y no está
+   en el diseño es el camino contrario, y nadie lo recorre.
+2. **La captura tampoco las veía.** El componente hacía `if (reduced) return
+   null`, y `figma:check` y `audit:responsive` miden con
+   `reducedMotion: 'reduce'` para congelar las animaciones. O sea que en el
+   único estado que se mide, las partículas no existían.
+
+Lo segundo es exactamente la misma familia que el carrusel de PREMIOS: el
+control mide UN estado y hay cosas que sólo viven en otro. Con el agravante de
+que acá el estado no lo elige el usuario, lo elige el propio control.
+
+Mientras eso siga así, «0 fuera de tolerancia» quiere decir «0 en el estado
+inicial de esta ruta, con el movimiento reducido».
+
 ## Los assets
 
 Los `.png` sueltos de esta carpeta son los originales del diseñador. Los que usa

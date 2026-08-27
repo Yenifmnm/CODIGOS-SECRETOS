@@ -318,17 +318,24 @@
     background: #061c67;
   }
 
-  /* Sobre el color del planeta en GANASTE.
-     Medido en los exports: en perdiste.png la superficie da RGB [6,28,103] y
-     en ganaste.png [68,75,94] —el nuestro esta en [15,36,99]—. La diferencia
-     NO es otro planeta: un asset distinto habria cambiado el tono, y aca lo
-     que pasa es que suben el rojo (+62) y el verde (+47) mientras el azul baja
-     apenas (-9). Esa firma es la de una luz calida cayendo sobre la misma
-     superficie: el cofre abierto, que en GANASTE ilumina toda la zona.
-     No se cambia el color del disco, que seria corregir el sintoma. El derrame
-     del cofre ya existe en la escena (effects/glow.webp); ampliarlo hasta que
-     tina el planeta requiere una cota que la propuesta no da, asi que queda
-     como esta y documentado. */
+  /* Sobre el color del planeta en GANASTE. RESUELTO — este comentario decía
+     antes que faltaba la cota; ya está.
+
+     El diagnóstico seguía siendo el correcto: en `perdiste.png` la superficie
+     da RGB [6,28,103] y en `ganaste.png` [68,75,94], con el nuestro en
+     [15,36,99]. Sube el rojo (+62) y el verde (+47) mientras el azul baja
+     apenas (-9), que es la firma de una luz cálida sobre la MISMA superficie,
+     no la de otro planeta. Esa luz es el cofre abierto.
+
+     La cota que faltaba: medir la calidez (R − B) por bandas en los márgenes
+     contra el export. Y la causa no era que el derrame fuera chico, sino que
+     estaba RECORTADO: `.mchest` cortaba en el pie del cofre y se comía el
+     derrame entero. Quitando ese recorte, la banda 850-900 pasa de -84 a -60
+     —el valor exacto del export— y la del pie de -94 a -66.
+
+     El color del disco NO se toca, que era y sigue siendo corregir el síntoma.
+     El detalle está en el comentario de `.mchest`, en
+     `promo/closed-chest-mobile.css`. */
   .result-m__planet-disc {
     position: absolute;
     left: 50%;

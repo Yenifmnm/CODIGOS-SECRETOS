@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { Sparkles } from '../effects/Sparkles';
 import { box } from '../../app/stage';
 import type { Prize } from '../../types/promo';
 import './prize-reveal.css';
@@ -121,7 +120,11 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
             style={{ '--holo-mask': `url(${prize.image})` } as React.CSSProperties}
           />
         </motion.div>
-        <Sparkles count={20} spread={52} />
+        {/* Acá iban unas partículas doradas, el componente `Sparkles`. NO ESTÁN EN EL
+            DISEÑO: en `ganaste` no hay ningún nodo que les corresponda.
+            Alrededor del cofre el frame tiene sólo `glow-Photoroom 3` (-53.7°),
+            `glow-Photoroom 2` (-76.5°) y los dos resplandores del propio nodo
+            `cofre 1`. Se sacaron. */}
       </motion.div>
       )}
     </div>

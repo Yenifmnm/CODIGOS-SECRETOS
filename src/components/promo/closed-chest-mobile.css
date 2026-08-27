@@ -10,11 +10,31 @@
    descartado dos veces como «preexistente» porque la lista de capas no lo
    marcaba — el borde no era de una capa, era de este contenedor.
 
-   Vertical se queda: la escena tiene proporción fija y lo que se sale por abajo
-   alargaría la página. */
+   Y EL VERTICAL TAMPOCO. El nodo `cofre 1` (74:1013) declara
+   `0px 30px 250px #EAC748` y `0px 0px 250px #EAC748`: un derrame dorado que,
+   con el cofre terminando en y 866,6 más 30 de desplazamiento y 250 de radio,
+   pasa del borde inferior del frame (969). En el diseño ese derrame tiñe todo
+   el planeta hasta abajo.
+
+   La escena termina justo en el pie del cofre —y 867—, así que este contenedor
+   cortaba el derrame entero. Medido: la calidez (R − B) en los márgenes contra
+   `recursos/mobile/pantallas/ganaste.png`, que es lo que sirve para un derrame
+   cálido sobre un cielo azul —mide el TINTE y no la luz, así que no se confunde
+   con la exposición del export—:
+
+       banda y      FIGMA   con clip   sin clip
+       850-900        -60       -84        -60
+       900-969        -77       -94        -66
+
+   Y el error medio sobre las siete bandas baja de 18 a 14. La banda del pie
+   pasa de 17 puntos fría a 11 caliente.
+
+   Lo que ya no hace falta que corte: la página no crece por esto. El lienzo
+   clipea en el frame (`layout/mobile-stage.css`), así que lo que se sale por
+   abajo se corta ahí, que es donde lo corta Figma. Comprobado: el alto del
+   documento no cambia. */
 .mchest {
-  overflow-x: visible;
-  overflow-y: clip;
+  overflow: visible;
 }
 
 /* La superficie del planeta pasó a `.result-m__planet`, a nivel de pantalla:
