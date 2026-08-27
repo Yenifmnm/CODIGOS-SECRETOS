@@ -62,6 +62,12 @@ export interface ResultLayoutProps {
    * la izquierda, y el titular y el mensaje con su propia geometría.
    */
   mobileVariante?: string;
+  /**
+   * Ejes que `figma:check` debe decidir en el mensaje. GANASTE lo usa porque
+   * su texto lleva el nombre del premio, que es dinámico: el ancho y la x
+   * dependen del catálogo, no del CSS.
+   */
+  mobileMensajeEjes?: string;
   pageTitle: string;
 }
 
@@ -95,6 +101,7 @@ export function ResultLayout({
   codeCount,
   mobileScene,
   mobileVariante,
+  mobileMensajeEjes,
   pageTitle,
 }: ResultLayoutProps) {
   const navigate = useNavigate();
@@ -196,7 +203,11 @@ export function ResultLayout({
           {/* Cada entrada es un renglón del diseño y se respeta también en
               mobile: los exports cortan justo ahí. Siguen siendo bloques que
               fluyen, así que en un teléfono angosto cada uno se parte solo. */}
-          <p className="result-m__msg" data-figma="74:1109 74:988 105:279 131:351">
+          <p
+            className="result-m__msg"
+            data-figma="74:1109 74:988 105:279 131:351"
+            data-figma-ejes={mobileMensajeEjes}
+          >
             {message.map((line) => (
               <span key={line} className="result-m__msg-line">
                 {line}
@@ -223,8 +234,16 @@ export function ResultLayout({
               CSS: el mockup dibuja TRES renglones porque incluye la línea
               «CANJEASTE EL CÓDIGO: …», y esa línea sólo existe cuando hay un
               código en la sesión. Abriendo la ruta directamente —que es como
-              mide `figma:check`— no lo hay y quedan dos. Con el recorrido real
-              son tres y la caja cierra. */}
+              mide `figma:check`— no lo hay y quedan dos: los 11 px que faltan
+              son ese renglón.
+
+              Medido recorriendo el flujo de verdad (participar → registro →
+              ganaste, con el código del mockup): la caja da 252.1x37.5 contra
+              los 257x36 del nodo, o sea Δh +1.5. Lo que queda es que el nodo es
+              4.9 px más ancho que su propia tinta, y como el texto va centrado
+              eso corre la x la mitad: 2.4. El centro coincide, 205.45 contra
+              205.5. La condición que lo cierra: si con un código en la sesión
+              el alto se aparta de 37.5, ahí sí hay CSS que mirar. */}
           <div
             className="result-m__note"
             data-figma="74:1041 74:991 105:270 131:342"

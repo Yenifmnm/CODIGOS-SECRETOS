@@ -39,6 +39,22 @@ export default function Winner() {
       codeCount={codeCount}
       scene={<PrizeReveal prize={prize} />}
       mobileScene={<PrizeRevealMobile prize={prize} />}
+      /* El mensaje nombra el premio, que sale del catálogo: el mockup dibuja
+         «te ganaste una Nintendo Switch!» y el sitio muestra el que devuelva el
+         backend. El párrafo se achica a su contenido, así que su caja ES la
+         tinta y el ancho depende del nombre, no del CSS.
+
+         Medido en la propia pantalla, cambiándole el texto y leyendo la caja,
+         contra el nodo 74:988 (39, 333x31):
+           «…una Nintendo Switch!»       39.2  332.6x31.2   Δ  0.2  -0.4  0.2
+           «…un PlayStation 5!»          58.3  294.3x31.2   Δ 19.3 -38.7  0.2
+           «…una Nintendo Switch OLED!»  39.0  333.0x62.4   Δ  0.0   0.0 31.4
+         Con la cadena del diseño la capa cierra en las tres medidas: lo que se
+         aparta es el nombre, no la caja. Por eso acá sólo deciden el alto y la
+         y, que no dependen del catálogo mientras el nombre entre en un renglón.
+         La condición que lo cierra: si con «te ganaste una Nintendo Switch!» la
+         caja se aparta de 39/333, ahí sí hay CSS que mirar. */
+      mobileMensajeEjes="y,h"
     />
   );
 }

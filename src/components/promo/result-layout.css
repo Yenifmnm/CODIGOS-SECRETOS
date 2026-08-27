@@ -236,6 +236,10 @@
   /* Píldora cian con el código canjeado y el teléfono de contacto. */
   /* `Rectangle 1` (74:1041): 313x51 en x 49, azul al 50% y radio 200. */
   .result-m__note {
+    /* Por delante de la escena: en el frame la píldora va después del cofre y
+       de los resplandores, que en GANASTE le pasan por detrás. */
+    position: relative;
+    z-index: 2;
     align-self: flex-start;
     margin-left: 12.189cqw; /* 49 */
     width: 77.861cqw;       /* 313 */
@@ -338,7 +342,23 @@
     margin-top: -1.965cqw;   /* y 269 */
   }
 
+  /* El nodo (74:988) mide 333 y arranca en x 39: su centro es 205.5, no el 201
+     del lienzo, igual que el titular. El `max-width` de 295 venía de PERDISTE y
+     acá recortaba 38 px, que es un renglón de más en cuanto el nombre del
+     premio es largo. Como el texto se achica a su contenido, la caja medida es
+     la tinta: sólo coincide con los 333 del nodo cuando el nombre es el que
+     dibujó el mockup.
+
+     Los nombres que no entran en 333 toman dos renglones y empujan 31.2 px lo
+     que va debajo —botón, píldora, escena y contador—. En el diseño no hay
+     lugar para absorberlos: el mensaje termina en 383 y el botón arranca en
+     385. Medido con los 19 premios del catálogo, el peor caso deja el cofre
+     terminando en 897.8 y el contador en 884.2 sobre un lienzo de 969, sin
+     recortes ni desbordes laterales. */
   .result-m--gold .result-m__msg {
+    position: relative;
+    left: 1.119cqw;          /* centro 205.5 */
+    max-width: 82.836cqw;    /* 333 */
     margin-top: -0.075cqw;   /* y 352 */
     font-size: 7.463cqw;   /* 30 */
     line-height: 1.04;     /* 31.2 */
@@ -352,13 +372,23 @@
     margin-top: 1.244cqw;    /* y 425 */
   }
 
+  /* La escena arranca en y 392 y la píldora termina en 517: se superponen 125
+     px, igual que en el frame, donde el cofre y los dos resplandores pasan por
+     detrás de ella. */
   .result-m--gold .result-m__scene {
-    /* Compensa el solapamiento mayor de la píldora sin mover cofre ni contador. */
-    margin-top: -14.676cqw;
+    margin-top: -31.095cqw;   /* y 392 */
+  }
+
+  /* El cofre ABIERTO lleva los dos resplandores dorados del nodo `cofre 1`
+     (74:1013): `0 30px 250px #EAC748` y `0 0 250px #EAC748`. El cerrado de las
+     otras tres pantallas no declara ninguno y conserva su sombra de apoyo. */
+  .result-m--gold .mchest__img {
+    filter: drop-shadow(0 7.463cqw 62.19cqw #eac748)
+      drop-shadow(0 0 62.19cqw #eac748);
   }
 
   .result-m--gold .result-m__counter {
-    margin-top: 0;
+    margin-top: -3.483cqw;    /* y 853, con la escena que termina en 867 */
   }
 
   /* `contador` (74:1044) en (71, 853) 107x60, y `Codigos cargados` (74:1047)

@@ -11,12 +11,23 @@ import cofreAbierto from '../../assets/promo/cofre-abierto.webp';
 import cofreCerrado from '../../assets/promo/cofre-cerrado.webp';
 import glow from '../../assets/effects/glow.webp';
 
-/** Alto de la escena en px del lienzo mobile. */
-const SCENE_H = 395;
+/**
+ * Alto de la escena en px del lienzo mobile. Las cuatro capas del frame van de
+ * y 392 —el borde de arriba de `glow-Photoroom 2`— a 866.6, el de abajo del
+ * cofre; la escena las cubre desde 392 y las cajas de abajo son esa y menos
+ * 392. La escena en sí no es un nodo: en el Figma las cuatro cuelgan del frame.
+ */
+const SCENE_H = 475;
 
 /* Misma coreografía que la versión desktop (`PrizeReveal`), con las cajas del
    Figma mobile: anticipación → apertura → estallido de luz → el premio emerge. */
 const T = { anticipation: 0.28, open: 0.34, prize: 0.62 };
+
+/* Los dos resplandores son el MISMO asset girado distinto: `glow-Photoroom 3`
+   (74:1012) a -53.7° y `glow-Photoroom 2` (74:1014) a -76.5°. Los dos miden
+   383.6x243.9 sin rotar, que es lo que declara `tamano` en el spec. */
+const GIRO_3 = 'rotate(-53.7deg)';
+const GIRO_2 = 'rotate(-76.5deg)';
 const openAt = T.anticipation;
 const lightAt = openAt + T.open * 0.4;
 const prizeAt = lightAt + 0.12;
@@ -43,48 +54,60 @@ export function PrizeRevealMobile({ prize }: Props) {
 
   if (reduced) {
     return (
-      <MobileScene height={SCENE_H} className="mchest" data-figma="TODO">
-        <div className="mchest__planet" aria-hidden="true" data-figma="TODO" />
+      <MobileScene height={SCENE_H} className="mchest">
+        <div className="mchest__planet" aria-hidden="true" />
         <img src={glow} alt="" aria-hidden="true"
           className="mabs mlayer-img reveal__glow"
-          style={mbox({ x: 3, y: -1, w: 384, h: 288, sceneH: SCENE_H })}
-          data-figma="TODO" />
+          style={{ ...mbox({ x: -33.9, y: 107.4, w: 383.6, h: 243.9, sceneH: SCENE_H }), transform: GIRO_3 }}
+          data-figma="74:1012" />
         <img src={cofreAbierto} alt="" aria-hidden="true"
           className="mabs mlayer-img mchest__img"
-          style={mbox({ x: 49, y: 133, w: 291, h: 258, sceneH: SCENE_H })}
-          data-figma="TODO" />
+          style={mbox({ x: 56, y: 195.6, w: 279, h: 279, sceneH: SCENE_H })}
+          data-figma="74:1013" />
+        <img src={glow} alt="" aria-hidden="true"
+          className="mabs mlayer-img reveal__glow"
+          style={{ ...mbox({ x: 117.25, y: 93, w: 383.6, h: 243.9, sceneH: SCENE_H }), transform: GIRO_2 }}
+          data-figma="74:1014" />
         {prize && (
           <img src={prize.image} alt={prize.name}
             className="mabs mlayer-img reveal__prize reveal__prize-layer"
-            style={mbox({ x: 140, y: 73, w: 216, h: 150, sceneH: SCENE_H })}
-            data-figma="TODO" />
+            style={mbox({ x: 146, y: 92.6, w: 224, h: 230, sceneH: SCENE_H })}
+            data-figma="74:1015" />
         )}
       </MobileScene>
     );
   }
 
   return (
-    <MobileScene height={SCENE_H} className="mchest" data-figma="TODO">
-      <div className="mchest__planet" aria-hidden="true" data-figma="TODO" />
+    <MobileScene height={SCENE_H} className="mchest">
+      <div className="mchest__planet" aria-hidden="true" />
 
-      {/* Resplandor que sale del cofre al abrirse. */}
-      <motion.img
-        src={glow}
-        alt=""
-        aria-hidden="true"
-        className="mabs mlayer-img reveal__glow"
-        style={mbox({ x: 3, y: -1, w: 384, h: 288, sceneH: SCENE_H })}
-        data-figma="TODO"
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: [0, 1, 0.75], scale: [0.5, 1.16, 1] }}
-        transition={{ delay: lightAt, duration: 1.1, times: [0, 0.45, 1], ease: 'easeOut' }}
-      />
+      {/* El resplandor que sale del cofre son DOS capas del mismo asset, giradas
+          distinto: `glow-Photoroom 3` por detrás y `glow-Photoroom 2` por
+          delante del cofre, como en el orden del frame.
+          El giro va en un contenedor y la animación en la imagen de adentro:
+          Framer Motion escribe `transform` y se comería la rotación. */}
+      <div
+        className="mabs"
+        style={{ ...mbox({ x: -33.9, y: 107.4, w: 383.6, h: 243.9, sceneH: SCENE_H }), transform: GIRO_3 }}
+        data-figma="74:1012"
+      >
+        <motion.img
+          src={glow}
+          alt=""
+          aria-hidden="true"
+          className="mlayer-img reveal__glow"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: [0, 1, 0.75], scale: [0.5, 1.16, 1] }}
+          transition={{ delay: lightAt, duration: 1.1, times: [0, 0.45, 1], ease: 'easeOut' }}
+        />
+      </div>
 
       {/* Cofre: se comprime y luego abre. */}
       <motion.div
         className="mabs mchest__img"
-        style={mbox({ x: 49, y: 133, w: 291, h: 258, sceneH: SCENE_H })}
-        data-figma="TODO"
+        style={mbox({ x: 56, y: 195.6, w: 279, h: 279, sceneH: SCENE_H })}
+        data-figma="74:1013"
         initial={{ scale: 0.86, y: '4%', opacity: 0 }}
         animate={{ scale: [0.86, 0.94, 1.06, 1], y: ['4%', '2%', '-1%', '0%'], opacity: 1 }}
         transition={{ duration: T.anticipation + T.open + 0.3, ease: 'easeOut', times: [0, 0.35, 0.72, 1] }}
@@ -101,12 +124,29 @@ export function PrizeRevealMobile({ prize }: Props) {
         />
       </motion.div>
 
+      {/* El segundo resplandor va DELANTE del cofre, como en el frame. */}
+      <div
+        className="mabs"
+        style={{ ...mbox({ x: 117.25, y: 93, w: 383.6, h: 243.9, sceneH: SCENE_H }), transform: GIRO_2 }}
+        data-figma="74:1014"
+      >
+        <motion.img
+          src={glow}
+          alt=""
+          aria-hidden="true"
+          className="mlayer-img reveal__glow"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: [0, 1, 0.75], scale: [0.5, 1.16, 1] }}
+          transition={{ delay: lightAt + 0.1, duration: 1.1, times: [0, 0.45, 1], ease: 'easeOut' }}
+        />
+      </div>
+
       {/* Premio: emerge desde dentro del cofre. */}
       {prize && (
       <motion.div
         className="mabs reveal__prize-layer"
-        style={mbox({ x: 140, y: 73, w: 216, h: 150, sceneH: SCENE_H })}
-        data-figma="TODO"
+        style={mbox({ x: 146, y: 92.6, w: 224, h: 230, sceneH: SCENE_H })}
+        data-figma="74:1015"
         initial={{ opacity: 0, y: '78%', scale: 0.45 }}
         animate={{ opacity: 1, y: '0%', scale: 1 }}
         transition={{ delay: prizeAt, duration: T.prize, ease: [0.16, 0.9, 0.28, 1] }}
