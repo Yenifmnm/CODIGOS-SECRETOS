@@ -329,11 +329,26 @@
        render no cambia en un píxel. Revisado y aprobado: si la compuerta
        vuelve a frenar acá, es por esto y ya está mirado. */
     font-family: var(--font-display);
-    font-size: 3.731cqw;  /* 15 */
+    /* Piso de texto legible: el cuerpo de las bases es lo que hay que poder
+       leer para aceptarlas. Ver la familia completa en `styles/tokens.css`. */
+    font-size: max(var(--text-min-fs), 3.731cqw);  /* 15 */
     line-height: 1.04;    /* 15.6 */
     color: #581f09;
   }
 
+  /* La última línea visible quedaba cortada por la mitad contra el borde de la
+     ventana, y con el botón justo debajo se leía como un error de maquetación y
+     no como «hay más abajo». Pasa porque el alto disponible no es múltiplo del
+     interlineado, y no puede serlo: el hueco lo decide el botón —ver el
+     comentario de `.terms__viewport`, donde el propio frame se contradice, la
+     barra de 343 a 745 y el botón en 697—.
+
+     Se resuelve con una máscara: los últimos píxeles se desvanecen, así el
+     corte deja de ser una línea recta a media altura de letra y pasa a ser la
+     señal de que el texto sigue. Va en `mask` y no en un degradado encima,
+     porque el pergamino de atrás no es un color plano contra el que degradar.
+     El desvanecido es proporcional al cuerpo (`1.2em`), así que acompaña al
+     piso de texto cuando éste entra en acción. */
   .terms-m__sheet .terms__scroll {
     position: absolute;
     inset: 0;
@@ -341,9 +356,22 @@
     padding-right: 0;
     overflow-y: auto;
     overscroll-behavior-y: contain;
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 1.2em), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 1.2em), transparent 100%);
   }
 
+  /* `.terms__body` trae del bloque de escritorio un `font-size: 2.083cqw`, que
+     allá son los 40 px del lienzo de 1920. Acá `1cqw` es el 1% de 402, así que
+     el MISMO valor daba **8,37 px** — y no por la escala: a 402 px, con escala
+     1, el cuerpo de las bases salía en 8,37 cuando el diseño pide 15. Una
+     unidad relativa escrita para otro contenedor, heredada sin querer.
+
+     Se hereda del `.terms__viewport`, que es el que lleva la tipografía del
+     nodo y su piso. `inherit` y no un número: así hay UN solo lugar donde vive
+     el cuerpo del legal. */
   .terms-m__sheet .terms__body {
+    font-size: inherit;
+    line-height: inherit;
     text-align: center;
   }
 

@@ -10,6 +10,7 @@
     "typecheck": "tsc -b --noEmit",
     "audit:premios": "python scripts/audit-premios.py",
     "audit:responsive": "node scripts/audit-responsive.mjs",
+    "audit:anchos": "node scripts/medir-anchos.mjs",
     "figma:pull": "node scripts/figma-pull.mjs",
     "figma:check": "node scripts/figma-check.mjs"
   },

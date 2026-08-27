@@ -49,10 +49,29 @@
        · --text-min-fs   el cuerpo de un texto que hay que LEER. Lo decorativo
                          escala sin piso; una advertencia legal, no.
 
-     El único texto del diseño por debajo de este piso es el aviso del tutor de
-     REGISTRO (nodo `73:618`), que el Figma pone en 8px. Va en 11 y se le deja
-     cortar en dos renglones: a 8px, con la composición escalada a 0,67 en una
-     pantalla de 320, quedaba en 5,3px reales.
+     EL PISO DE TEXTO ES DE FAMILIA, NO DE NODO. Lo lleva todo el texto que hay
+     que LEER para poder usar el sitio, y se escribe siempre igual:
+
+         font-size: max(var(--text-min-fs), <el valor del diseño en cqw>);
+
+     El `max()` deja que el texto crezca con la composición y le pone el suelo
+     abajo. El interlineado va sin unidad —`1.04`, no `15.6px`— para que siga al
+     cuerpo cuando el piso muerde; con un interlineado en px los renglones se
+     superponen apenas el piso entra en acción.
+
+     Quiénes son la familia hoy:
+
+       · `.register-m__note`     el aviso del tutor (73:618). El Figma lo pone
+                                 en 8; va en 11 y corta en dos renglones
+       · `.terms__viewport`      el cuerpo de las BASES, que se hereda al
+                                 `.terms__body`. Diseño 15
+       · `.result-m__note`       el teléfono para reclamar el premio en las
+                                 cuatro de resultado. Diseño 12
+
+     Los rótulos del formulario NO están en la familia, y es una decisión
+     tomada: son texto DENTRO de cajas medidas contra el nodo, y subirlos los
+     desbordaría en las diez pantallas. Lo que les corresponde es un piso de
+     ESCALA, que es otra discusión y está abierta.
      ------------------------------------------------------------------------- */
   --input-min-fs: 16px;
   --text-min-fs: 11px;

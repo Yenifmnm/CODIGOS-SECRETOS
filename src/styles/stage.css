@@ -167,17 +167,35 @@
    este ancho y no contra el viewport. */
 .mstage__sky-caja {
   position: absolute;
+
+  /* EL ANCHO ES EL DEL VIEWPORT, NO EL DEL LIENZO, y esa es toda la diferencia.
+
+     Antes copiaba `--mstage-w`. Con el tope de escala en 1 y el término de
+     alto, en un teléfono de 320x568 el lienzo mide 268 y esta caja medía 268:
+     quedaban 26 px muertos a cada lado, en toda la altura, en las diez
+     pantallas —34 en las de resultado—. La capa de sangrado del cielo tapaba el
+     agujero con un recorte DISTINTO de la misma foto, así que además había una
+     costura.
+
+     Una capa que sangra tiene que medirse contra lo que la ve, que es la
+     pantalla. Con `width: 100%` sobre `.mstage__sky` —que es `fixed; inset: 0`—
+     `1cqw` acá pasa a ser el 1% del viewport, y el encuadre del nodo, que en el
+     diseño va de x -46 a 447 sobre un lienzo de 402, sigue sobrando por los dos
+     lados a cualquier ancho: cubre siempre.
+
+     A 402 los dos anchos coinciden, así que `figma:check` —que mide justo
+     ahí— no ve ninguna diferencia y la caja del nodo sigue comparándose. */
+  top: var(--safe-top);
   /* El corrimiento va en `margin-top` y no sumado al `top`: los porcentajes de
      `top` se resuelven contra el ALTO del bloque contenedor y los de `margin`
      contra el ANCHO, que es la misma base contra la que resuelve `width`. Con
      `top` el valor salía inválido y la caja se caía a `top: auto`. Es el mismo
-     mecanismo que usa `.mstage__canvas`. */
-  top: var(--safe-top);
-  margin-top: var(--mstage-corrimiento);
-  left: 50%;
-  width: var(--mstage-w);
+     mecanismo que usa `.mstage__canvas`, con la diferencia de que acá la escala
+     es la del viewport. */
+  margin-top: calc(-1 * 100% * var(--mstage-barra) / var(--mstage-diseno-w));
+  left: 0;
+  width: 100%;
   height: 100%;
-  transform: translateX(-50%);
   container-type: inline-size;
   container-name: mstage;
 }

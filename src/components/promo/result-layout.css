@@ -245,7 +245,13 @@
     align-self: flex-start;
     margin-left: 12.189cqw; /* 49 */
     width: 77.861cqw;       /* 313 */
-    height: 12.687cqw;      /* 51 */
+    /* `min-height` y no `height`: cuando el piso de texto entra en acción el
+       teléfono pasa a tres renglones y con un alto fijo se salía de la píldora
+       —el fondo quedaba detrás de dos renglones y el tercero sobre la escena—.
+       A 402, que es donde mide `figma:check`, el contenido son dos renglones de
+       12,5 y el mínimo manda: la caja sigue dando los 51 del nodo. */
+    min-height: 12.687cqw;  /* 51 */
+    padding-block: 1cqw;
     margin-top: 5.97cqw;    /* y 530 */
     display: flex;
     align-items: center;
@@ -254,7 +260,11 @@
     background: rgba(33, 47, 92, 0.5);   /* #212F5C80 */
     backdrop-filter: blur(2px);
     font-family: var(--font-display);
-    font-size: 2.985cqw;    /* 12 */
+    /* Piso de texto legible: acá está el teléfono al que hay que llamar para
+       reclamar el premio, así que es de lo más importante de la pantalla y a la
+       vez de lo más chico. A 320 caía a 7,5 px. Ver la familia completa en
+       `styles/tokens.css`. */
+    font-size: max(var(--text-min-fs), 2.985cqw);   /* 12 */
     line-height: 1.0417;    /* 12.5 */
     color: #fff;
     text-align: center;
@@ -272,11 +282,22 @@
      La caja está ACOTADA —de y=750 del diseño hasta el pie de la pantalla— y
      recorta al disco. Sin ese recorte el círculo, que mide 190cqw de diámetro,
      se extendía cientos de píxeles por debajo del contenido y alargaba la
-     página con un vacío azul enorme. */
+     página con un vacío azul enorme.
+
+     EL ANCHO ES EL DEL VIEWPORT. El horizonte del planeta es una capa que
+     sangra: en el diseño toca los dos bordes del frame. Con `left: 0; right: 0`
+     medía el ancho del LIENZO, y en un teléfono de 320 eso son 268: el planeta
+     quedaba como un rectángulo con dos esquinas rectas a 34 px de cada borde,
+     en vez de un horizonte curvo de punta a punta.
+
+     `100vw` no puede provocar scroll horizontal acá aunque incluya la barra:
+     `.mstage` tiene `overflow-x: hidden`, y el lienzo declara
+     `overflow-x: visible`, así que la caja se puede pasar sin que nada crezca. */
   .result-m__planet-clip {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
     top: 187.313cqw;        /* 753 */
     bottom: 0;
     overflow: hidden;
