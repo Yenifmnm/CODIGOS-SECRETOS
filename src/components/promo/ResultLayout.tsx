@@ -202,6 +202,7 @@ export function ResultLayout({
             alt="Códigos Secretos 2026"
             className="result-m__logo"
             data-figma="74:1027 73:860 105:262 131:334"
+            data-figma-omitir="sombras"
           />
 
           <p

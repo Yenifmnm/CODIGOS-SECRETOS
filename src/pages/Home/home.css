@@ -79,12 +79,13 @@
   width: 63.93cqw;    /* 257 */
   height: auto;
   margin-top: 19.154cqw;  /* y 151 */
-  /* Los dos DROP_SHADOW del nodo, tal cual: `0px 0px 250px #09EAFF` cada uno.
-     250 px de diseño sobre el lienzo de 402 son 62.19cqw, y en un DROP_SHADOW
-     el radio de Figma va 1:1 al de CSS (el ÷2 es de los LAYER_BLUR).
+  /* El halo, en `--logo-glow`: un solo valor para las cinco pantallas que
+     muestran el logo. Son las DOS sombras del nodo, con su color y su
+     opacidad, pero con el radio ÷2 —125 y no 250—, que es la conversión
+     correcta de Figma a CSS. Está medido y explicado en `styles/tokens.css`.
      Va en `filter` y no en `box-shadow` porque la sombra sigue el alfa del
      arte; `box-shadow` dibujaría el rectángulo de la caja. */
-  filter: drop-shadow(0 0 62.19cqw #09EAFF) drop-shadow(0 0 62.19cqw #09EAFF);
+  filter: var(--logo-glow);
   /* Hijo 2 del frame. `position: relative` sin desplazamiento: no mueve la
      caja —`figma:check` sigue midiendo lo mismo—, sólo lo hace participar del
      apilado en vez de quedar promovido por encima de todo por el `filter`. */

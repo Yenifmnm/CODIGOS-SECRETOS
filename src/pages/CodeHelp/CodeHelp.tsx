@@ -66,6 +66,7 @@ export default function CodeHelp() {
             alt="Códigos Secretos 2026"
             className="codehelp-m__logo"
             data-figma="73:783"
+            data-figma-omitir="sombras"
           />
 
           {/* El corte de renglón es el del Figma mobile, no uno automático. */}

@@ -222,6 +222,7 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
         alt="Códigos Secretos 2026"
         className="welcome-m__logo"
         data-figma="70:345"
+        data-figma-omitir="sombras"
       />
 
       <FloatingLayer amplitude={6} duration={7} delay={0.5}

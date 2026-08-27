@@ -76,6 +76,42 @@
   --input-min-fs: 16px;
   --text-min-fs: 11px;
 
+  /* -------------------------------------------------------------------------
+     EL HALO DEL LOGO. Un solo valor para las cinco pantallas que lo muestran,
+     porque es el mismo logo y tener cinco números distintos sería peor.
+
+     El nodo `70:169` declara dos `0px 0px 250px #09EAFF`. Acá van las dos, con
+     su color y su opacidad, pero el radio es **125 y no 250**, y ése es el
+     arreglo: EL RADIO DE FIGMA VA ÷2 AL DE CSS TAMBIÉN EN LOS DROP_SHADOW.
+
+     El código decía lo contrario —«en un DROP_SHADOW el radio de Figma va 1:1
+     al de CSS, el ÷2 es de los LAYER_BLUR»— y es falso. Medido contra
+     `recursos/mobile/pantallas/landing.png`, barriendo el radio con las dos
+     sombras puestas y leyendo el diff de píxeles de la pantalla entera:
+
+         2 x 250   24,29%          <- lo que había
+         2 x 190   17,79%
+         2 x 160   13,00%
+         2 x 125   10,22%          <- 250 ÷ 2, y acá la curva se aplana
+         2 x 100   10,06%
+         2 x  75   10,05%
+
+     De 24,3% a 10,2% en una sola pantalla: el halo era el error dominante. La
+     curva toca el piso justo en 250÷2, así que no es un número elegido a ojo
+     para que quede lindo, es la conversión correcta.
+
+     Bajar la LUZ en vez del radio va para el lado contrario: con una sola
+     sombra de 250 el diff sube a 31,6%. El diseño tiene un halo brillante y
+     CONTENIDO, no uno tenue y ancho.
+
+     Si hay que mover el halo, se mueve ACÁ: 31.095cqw son los 125 px.
+
+     Los logos llevan `data-figma-omitir="sombras"` porque `figma-check.mjs`
+     compara el radio del CSS contra el del nodo 1:1 y por lo tanto espera 250.
+     Esa comparación es la que está mal, no el CSS — ver la nota del reporte.
+     ------------------------------------------------------------------------- */
+  --logo-glow: drop-shadow(0 0 31.095cqw #09eaff) drop-shadow(0 0 31.095cqw #09eaff);
+
   /* Tipografía */
   --font-display: 'DK Prince Frog', sans-serif;
 

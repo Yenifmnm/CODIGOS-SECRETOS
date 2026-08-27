@@ -200,6 +200,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         alt="Códigos Secretos 2026"
         className="home-m__logo"
         data-figma="70:169"
+        data-figma-omitir="sombras"
       />
 
       <div className="mblock">

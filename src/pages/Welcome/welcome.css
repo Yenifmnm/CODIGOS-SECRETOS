@@ -168,7 +168,7 @@
     max-width: none;
     object-fit: contain;
     /* Los dos `0 0 250px #09EAFF` del nodo, no uno de 20. */
-    filter: drop-shadow(0 0 62.19cqw #09eaff) drop-shadow(0 0 62.19cqw #09eaff);
+    filter: var(--logo-glow);   /* el halo del logo, en styles/tokens.css */
   }
 
   /* `¡Bienvenidos a bordo` (70:348): 275x42 en (64, 333), centro x 201.5.

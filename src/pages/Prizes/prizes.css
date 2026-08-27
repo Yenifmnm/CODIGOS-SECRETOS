@@ -83,6 +83,6 @@
     max-width: none;
     object-fit: contain;
     /* Los dos `0 0 250px #09EAFF` del nodo. */
-    filter: drop-shadow(0 0 62.19cqw #09eaff) drop-shadow(0 0 62.19cqw #09eaff);
+    filter: var(--logo-glow);   /* el halo del logo, en styles/tokens.css */
   }
 }

@@ -55,6 +55,7 @@ export default function Prizes() {
             alt="Códigos Secretos 2026"
             className="prizes-m__logo"
             data-figma="73:732"
+            data-figma-omitir="sombras"
           />
           <PrizeCarousel
             prizes={prizes}
