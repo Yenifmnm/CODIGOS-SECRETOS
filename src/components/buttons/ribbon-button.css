@@ -16,11 +16,15 @@
     background-color var(--dur-glow) var(--ease-soft);
 }
 
-/* Con la silueta real del nodo, el recorte genérico y el degradado sobran: el
-   dibujo y el color vienen dentro del SVG. El rótulo se apoya encima. */
+/* Con la silueta real del nodo sobra el recorte genérico: el dibujo viene
+   dentro del SVG.
+
+   NO HACE FALTA APAGAR NINGÚN FONDO ACÁ, y es a propósito que no esté: la
+   clase de tono —la que lo pinta— directamente no se emite cuando hay silueta.
+   Ver el porqué en `RibbonButton.tsx`. Poner un `background: none` acá sería
+   engañoso: tiene la misma especificidad que las de tono y perdería igual. */
 .ribbon-btn--svg {
   clip-path: none;
-  background: none;
 }
 
 .ribbon-btn--svg .ribbon-btn__label {

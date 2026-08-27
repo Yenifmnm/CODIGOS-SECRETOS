@@ -4,6 +4,7 @@ import { Stage } from '../../components/layout/Stage';
 import { Deco } from '../../components/layout/Deco';
 import { RibbonButton } from '../../components/buttons/RibbonButton';
 import { RibbonPlate } from '../../components/promo/RibbonPlate';
+import { RibbonSvg } from '../../components/promo/RibbonSvg';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
 import { promoApi } from '../../services/promoApi';
@@ -467,21 +468,15 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
               `data-figma-omitir="fondo"`: el `#D8831C` viaja dentro del SVG, que
               es el export exacto del nodo, así que el color es el del diseño por
               construcción y no hay `background-color` que comparar. */}
-          <img
+          <RibbonSvg
             src={cinta614}
-            alt=""
-            aria-hidden="true"
+            nodo="73:614"
             className="register-m__title-cinta register-m__title-cinta--1"
-            data-figma="73:614"
-            data-figma-omitir="fondo"
           />
-          <img
+          <RibbonSvg
             src={cinta643}
-            alt=""
-            aria-hidden="true"
+            nodo="73:643"
             className="register-m__title-cinta register-m__title-cinta--2"
-            data-figma="73:643"
-            data-figma-omitir="fondo"
           />
 
           {/* Dos renglones, como en el diseño: el nodo 73:616 trae el salto

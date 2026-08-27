@@ -428,13 +428,16 @@
      adentro del pergamino. */
   /* El ancho y el alto los escribe `RibbonButton` como estilo inline, así que
      van por sus props `mobileWidth`/`mobileHeight`, no por acá. */
+  /* Sin `background`. Lo había, plano, con un comentario que decía que «el nodo
+     la pinta plana, no con el degradado del botón de escritorio». Era cierto
+     mientras el color plano ERA la cinta; desde que la cinta es el SVG del nodo
+     (`73:937`), ese fondo sólo servía para taparla: la regla es (0,2,0) y le
+     ganaba a cualquier intento de apagarlo desde el componente. */
   .terms-m__sheet .terms__cta {
     position: absolute;
     left: 22.886cqw;      /* 92 */
     top: 106.219cqw;      /* 427 */
     margin: 0;
-    /* El nodo la pinta plana, no con el degradado del botón de escritorio. */
-    background: #d8831c;
   }
 
   /* `Acepto la misión` (73:938): 122.8x21 en (146, 707), o sea 15 y 10 adentro

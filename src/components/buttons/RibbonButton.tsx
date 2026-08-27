@@ -60,7 +60,22 @@ export function RibbonButton({
   return (
     <button
       type="button"
-      className={['ribbon-btn', `ribbon-btn--${tone}`, silueta ? 'ribbon-btn--svg' : null, className]
+      /* CON SILUETA NO SE EMITE LA CLASE DE TONO, y ésa es toda la corrección.
+
+         `ribbon-btn--gold` / `--ochre` / `--ghost` no hacen otra cosa que
+         pintar el fondo: un degradado más un `box-shadow` interior. Con la
+         silueta del nodo, el dibujo Y el color vienen dentro del SVG, así que
+         no hay tono que aplicar — y ese fondo, si se emite, lo tapa entero.
+
+         Intentar ganarle desde `.ribbon-btn--svg { background: none }` no
+         funciona y no puede funcionar: tienen la misma especificidad (0,1,0) y
+         las de tono están declaradas después en la hoja, así que ganan por
+         orden. Subirle la especificidad sería una carrera contra cualquier
+         override futuro. No emitir la clase deja la carrera sin contrincante.
+
+         Además saca el `box-shadow: inset 0 -3px 0`, que sobre una silueta
+         rasgada dibujaba una barra recta en el pie del botón. */
+      className={['ribbon-btn', silueta ? 'ribbon-btn--svg' : `ribbon-btn--${tone}`, className]
         .filter(Boolean)
         .join(' ')}
       style={{

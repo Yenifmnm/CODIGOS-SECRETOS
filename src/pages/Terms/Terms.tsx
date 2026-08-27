@@ -6,6 +6,7 @@ import { Parchment } from '../../components/promo/Parchment';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { RibbonButton } from '../../components/buttons/RibbonButton';
 import { RibbonSvg } from '../../components/promo/RibbonSvg';
+import { useIsMobile } from '../../hooks/useIsMobile';
 /* Las dos cintas de esta pantalla, bajadas de sus nodos con
    `figma:pull --export`. Cada una tiene su propia silueta de papel rasgado; el
    catálogo está en `assets/ui/cintas/README.md`. */
@@ -25,6 +26,16 @@ import nene from '../../assets/characters/nene.webp';
 
 /** BASES Y CONDICIONES — Figma 22:3021. */
 export default function Terms() {
+  /* LAS SILUETAS SON SÓLO DE LA RAMA MOBILE, y hay que decirlo explícito porque
+     `content` es UN fragmento compartido por las dos ramas: el mismo marcado se
+     estila distinto con `.terms-m__sheet`. Los SVG de `73:934` y `73:937` son
+     los nodos del frame mobile; en escritorio el frame es otro (22:3021) y su
+     cinta la sigue dibujando el degradado con `clip-path`. Sin este guardia,
+     escritorio terminaba mostrando la silueta mobile estirada.
+
+     En REGISTRO no hace falta: ahí la composición mobile es un componente
+     aparte (`RegisterMobile`), así que la prop no llega nunca a escritorio. */
+  const esMobile = useIsMobile();
   const navigate = useNavigate();
   const { acceptTerms } = useSession();
   const [terms, setTerms] = useState<TermsData | null>(null);
@@ -109,7 +120,7 @@ export default function Terms() {
             rectángulo con `background: #d8831c` recortado por un `clip-path`
             genérico que ni siquiera estaba puesto acá — se heredaba del bloque
             de escritorio, ver `terms.css`. */}
-        <RibbonSvg src={cintaTitulo} nodo="73:934" />
+        {esMobile && <RibbonSvg src={cintaTitulo} nodo="73:934" />}
         <span className="terms__heading-text" data-figma="73:935">
           Bases y Condiciones
         </span>
@@ -151,7 +162,7 @@ export default function Terms() {
         mobileWidth={147}
         mobileHeight={39}
         onClick={accept}
-        silueta={cintaBoton}
+        silueta={esMobile ? cintaBoton : undefined}
         data-figma-cinta="73:937"
         data-figma-label="73:938"
       >

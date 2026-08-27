@@ -214,19 +214,19 @@
      la misma silueta: `Vector 14` mide 221x25 y `Vector 15` 146x24, con muescas
      propias, y la segunda arranca 35 px más a la derecha. Los porcentajes son
      del pergamino —(26, 213), 340x534—, como el resto del formulario. */
-  .register-m__title-cinta {
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .register-m__title-cinta--1 {
+  /* Estas dos son `RibbonSvg`, igual que las otras diez, así que ya traen
+     `position: absolute` e `inset: 0`. Acá se les da su caja propia, y por eso
+     los selectores llevan `.register-m` adelante: `.ribbon-svg` tiene la misma
+     especificidad (0,1,0) y sin ese punto de más el resultado dependería de en
+     qué orden termine cada hoja en el bundle. Con (0,2,0) gana siempre. */
+  .register-m .register-m__title-cinta--1 {
     left: 18.824%;             /* 90 */
     top: 26.966%;              /* 357 */
     width: 65%;                /* 221 */
     height: 4.682%;            /* 25 */
   }
 
-  .register-m__title-cinta--2 {
+  .register-m .register-m__title-cinta--2 {
     left: 29.118%;             /* 125 */
     top: 31.086%;              /* 379 */
     width: 42.941%;            /* 146 */
