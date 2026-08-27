@@ -165,6 +165,9 @@ export default function Terms() {
         silueta={esMobile ? cintaBoton : undefined}
         data-figma-cinta="73:937"
         data-figma-label="73:938"
+        /* Sólo el tamaño: la posición se aparta del nodo a propósito para que
+           el rótulo quede centrado en la cinta. El porqué, en `terms.css`. */
+        data-figma-label-ejes="w,h"
       >
         Acepto la misión
       </RibbonButton>

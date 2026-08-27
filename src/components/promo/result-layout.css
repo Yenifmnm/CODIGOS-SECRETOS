@@ -193,6 +193,16 @@
     /* Mismo caso que el titular del landing —ver la nota larga en `home.css`—:
        el nodo 74:987 pide 2 px CENTER y en CSS eso dibuja de más.
 
+       CERRADO, NO PENDIENTE. Este trazo se queda a 1 px aunque la proporción diga
+       que sigue grueso. Medido, trazo/relleno contra el recorte del export:
+       
+         74:987 «¡Felicidades»   Figma 0,45   con 1 px 0,59   -> 1,31x
+
+       Bajarlo a ~0,7 px lo mete por debajo del píxel, donde el trazo pasa a
+       depender de la densidad de pantalla y puede desaparecer en un dispositivo a
+       1x. Para esa magnitud el riesgo no se justifica. Decisión del 27-08-2026:
+       no volver a abrirlo sin un motivo nuevo.
+
            2 px de CSS ....  +14,7 chromium  / +16,8 webkit
            1 px de CSS ....   +7,1 chromium  / +10,4 webkit   <- éste
            0 px ...........   -4,6 chromium  /  +4,2 webkit
@@ -556,7 +566,20 @@
     font-size: 6.219cqw;    /* 25 */
     line-height: 1.04;
     color: var(--c-gold);   /* #FCC102 */
-    -webkit-text-stroke: 0.249cqw #FFFFFF;   /* borde 1px */
+    /* 0,5 px, la mitad del 1 px del nodo. ERA EL PEOR CASO DEL PROYECTO:
+       medida la proporción trazo/relleno contra el recorte del export, daba
+       2,33 contra 0,30, o sea 7,81 veces más grueso que el diseño.
+
+       Con la luminancia media yo había dicho que esta medición estaba
+       «contaminada por el fondo» —la caja de 148x26 incluye el planeta de
+       atrás—. La proporción no depende del fondo, y ahí se vio que no estaba
+       contaminada: estaba mal.
+
+       Medio píxel es válido acá: en un teléfono a 3x son 1,5 píxeles físicos.
+       Es el mismo motivo por el que NO se baja más el de los titulares que
+       están a 1 px — ahí la mitad caería en 0,5 de un cuerpo mucho mayor y el
+       trazo quedaría por debajo del píxel en pantallas a 1x. */
+    -webkit-text-stroke: 0.1245cqw #FFFFFF;   /* nodo 1px CENTER -> 0,5px de CSS */
     text-shadow: 0 0.995cqw 2.488cqw #212F5C;
     white-space: nowrap;
   }

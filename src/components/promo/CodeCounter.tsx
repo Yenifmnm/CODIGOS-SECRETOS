@@ -16,6 +16,8 @@ interface CodeCounterProps {
   'data-figma'?: string;
   /** Nodo del Figma del rótulo («Códigos cargados»). */
   'data-figma-label'?: string;
+  /** Controles que `figma:check` no debe aplicar al rótulo. */
+  'data-figma-label-omitir'?: string;
 }
 
 /**
@@ -31,6 +33,7 @@ export function CodeCounter({
   className,
   'data-figma': figma,
   'data-figma-label': figmaLabel,
+  'data-figma-label-omitir': figmaLabelOmitir,
 }: CodeCounterProps) {
   const padded = String(Math.max(0, Math.trunc(count))).padStart(digits, '0').slice(-digits);
 
@@ -49,7 +52,12 @@ export function CodeCounter({
           ))}
         </output>
       </div>
-      <span className="code-counter__label" aria-hidden="true" data-figma={figmaLabel}>
+      <span
+        className="code-counter__label"
+        aria-hidden="true"
+        data-figma={figmaLabel}
+        data-figma-omitir={figmaLabelOmitir}
+      >
         {label}
       </span>
     </div>

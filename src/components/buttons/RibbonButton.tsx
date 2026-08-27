@@ -18,6 +18,9 @@ interface RibbonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * el diseño; el nodo de la cinta va en `data-figma`, que viaja en `...rest`.
    */
   'data-figma-label'?: string;
+  /** Ejes que `figma:check` debe medir en el rótulo. Sirve cuando la posición
+      se aparta del nodo a propósito y el tamaño no. */
+  'data-figma-label-ejes'?: string;
   /**
    * El SVG de la silueta de ESTE nodo, de `assets/ui/cintas/`.
    *
@@ -53,6 +56,7 @@ export function RibbonButton({
   className,
   style,
   'data-figma-label': figmaLabel,
+  'data-figma-label-ejes': figmaLabelEjes,
   silueta,
   'data-figma-cinta': figmaCinta,
   ...rest
@@ -90,7 +94,11 @@ export function RibbonButton({
       {...rest}
     >
       {silueta && figmaCinta && <RibbonSvg src={silueta} nodo={figmaCinta} />}
-      <span className="ribbon-btn__label" data-figma={figmaLabel}>
+      <span
+        className="ribbon-btn__label"
+        data-figma={figmaLabel}
+        data-figma-ejes={figmaLabelEjes}
+      >
         {children}
       </span>
     </button>

@@ -70,7 +70,15 @@ export default function CodeHelp() {
           clienta el 27-08-2026, replicada desde HOME por consistencia y
           anotada al lado del valor en el CSS. Mientras esté, el control no
           avisa si alguien toca esas sombras por error. */}
-          <p className="codehelp-m__title" data-figma="73:827" data-figma-omitir="sombras">
+          {/* `omitir` suma `trazo-ancho`: el trazo va a 0,5 px contra el 1 px del nodo. Medida la
+          proporción trazo/relleno contra el recorte del export, con 1 px daba
+          5,43 veces el del diseño. El tamaño y el color del trazo se siguen controlando: sólo se
+          omite el ancho. */}
+          <p
+            className="codehelp-m__title"
+            data-figma="73:827"
+            data-figma-omitir="sombras,trazo-ancho"
+          >
             Buscá el Código Secreto en
             <br />
             los stickers de Purosol

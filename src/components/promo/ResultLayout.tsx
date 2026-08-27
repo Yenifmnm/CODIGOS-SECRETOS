@@ -290,6 +290,12 @@ export function ResultLayout({
             className="result-m__counter"
             data-figma="74:1044 74:1022 105:273 131:345"
             data-figma-label="74:1047 74:1018 105:276 131:348"
+            /* El trazo del rótulo va a 0,5 px contra el 1 px del nodo: con
+               1 px la proporción trazo/relleno daba 2,33 contra 0,30 del
+               export, o sea 7,81 veces más grueso, el peor caso del
+               proyecto. El porqué está en `result-layout.css`. Se omite
+               SÓLO el ancho; el color del trazo se sigue controlando. */
+            data-figma-label-omitir="trazo-ancho"
           />
         </div>
       }

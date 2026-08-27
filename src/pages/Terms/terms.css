@@ -440,13 +440,24 @@
     margin: 0;
   }
 
-  /* `Acepto la misión` (73:938): 122.8x21 en (146, 707), o sea 15 y 10 adentro
-     de la cinta. Va con la caja del nodo y no ajustada al contenido: la tinta
-     mide 112 y el nodo declara 122.8, así que sobran 5.4 px por lado. */
+  /* `Acepto la misión` (73:938): 122.8x21. La CAJA es la del nodo —la tinta
+     mide 112 y el nodo declara 122.8, así que sobran 5.4 px por lado—, pero la
+     POSICIÓN no: va centrada en la cinta.
+
+     El nodo la pone en (146, 707) y la cinta `Vector 1` (73:937) en (131, 697)
+     con 147x39. O sea que en el propio Figma el texto queda 3 px a la derecha
+     del centro de la cinta —207,4 contra 204,5— y 1 px por debajo. El render
+     reproducía ese descentrado fielmente, y la clienta lo vio: pidió el
+     27-08-2026 que el rótulo quede en el medio del pergamino.
+
+     Así que acá el diseño NO manda: centrado es (147-122.8)/2 = 12,1 y
+     (39-21)/2 = 9. Por eso el rótulo lleva `ejes="w,h"`: se le sigue
+     controlando el tamaño, que es el del nodo, y no la posición, que se
+     apartó a propósito. */
   .terms-m__sheet .terms__cta .ribbon-btn__label {
     position: absolute;
-    left: 3.731cqw;       /* 15 */
-    top: 2.488cqw;        /* 10 */
+    left: 3.010cqw;       /* 12,1 — centrado en los 147 de la cinta */
+    top: 2.239cqw;        /* 9 — centrado en los 39 */
     width: 30.547cqw;     /* 122.8 */
     height: 5.224cqw;     /* 21 */
     display: grid;

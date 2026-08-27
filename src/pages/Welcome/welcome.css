@@ -236,6 +236,16 @@
 
        Acá cae casi exacto en los dos motores. Mismo caso que el titular del
        landing; ver la nota larga en `home.css`.
+
+       CERRADO, NO PENDIENTE. Este trazo se queda a 1 px aunque la proporción diga
+       que sigue grueso. Medido, trazo/relleno contra el recorte del export:
+       
+           70:349 «Pequeños piratas!»   Figma 0,79   con 1 px 1,22   -> 1,56x
+
+       Bajarlo a ~0,7 px lo mete por debajo del píxel, donde el trazo pasa a
+       depender de la densidad de pantalla y puede desaparecer en un dispositivo a
+       1x. Para esa magnitud el riesgo no se justifica. Decisión del 27-08-2026:
+       no volver a abrirlo sin un motivo nuevo.
        ------------------------------------------------------------------- */
     -webkit-text-stroke: 0.249cqw #ffffff;  /* nodo 2px CENTER -> 1px de CSS */
     /* `0 0 44.016px #FFFFFF` + `0 4px 4px #0000004D` del nodo.

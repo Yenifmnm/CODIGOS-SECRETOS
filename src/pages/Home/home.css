@@ -116,6 +116,16 @@
      Y midiendo sólo las filas de glifos, que es donde se ve el engrosamiento:
      de +16,1/+13,7 a +0,5/-2,0.
 
+     CERRADO, NO PENDIENTE. Este trazo se queda a 1 px aunque la proporción diga
+     que sigue grueso. Medido, trazo/relleno contra el recorte del export:
+     
+       70:194 y 79:1122   Figma 0,92   con 1 px 1,27   -> 1,38x
+
+     Bajarlo a ~0,7 px lo mete por debajo del píxel, donde el trazo pasa a
+     depender de la densidad de pantalla y puede desaparecer en un dispositivo a
+     1x. Para esa magnitud el riesgo no se justifica. Decisión del 27-08-2026:
+     no volver a abrirlo sin un motivo nuevo.
+
      El resplandor de 44 px NO se toca: es del diseño. Si alguna vez hay que
      bajarlo, se baja la OPACIDAD y no el radio — medido: achicar el radio
      concentra la luz sobre el glifo y empeora la franja.

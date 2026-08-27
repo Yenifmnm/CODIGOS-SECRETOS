@@ -192,8 +192,12 @@
     font-size: 8.706cqw;  /* 35 */
     line-height: 1.04;    /* 36.4 */
     color: var(--c-gold);
-    /* Trazo de 1 px del nodo (73:827), alineado al CENTRO. */
-    -webkit-text-stroke: 0.249cqw #ffffff;
+    /* 0,5 px, la mitad del 1 px del nodo 73:827. Medida la proporción
+       trazo/relleno contra el recorte del export daba 1,27 contra 0,23: 5,43
+       veces más grueso que el diseño, el segundo peor caso del proyecto.
+
+       Medio píxel es válido acá: en un teléfono a 3x son 1,5 píxeles físicos. */
+    -webkit-text-stroke: 0.1245cqw #ffffff;   /* nodo 1px CENTER -> 0,5px de CSS */
     /* `0 0 6.288` + `0 0 44.016` blancos y `0 4px 10px #212F5C`.
 
        RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
