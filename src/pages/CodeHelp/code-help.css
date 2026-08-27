@@ -1,9 +1,7 @@
 /* DÓNDE ESTÁ EL CÓDIGO — Figma 19:2982 */
 
-/* Acá vivía un segundo `@font-face` que cargaba un .otf de DK Prince Frog bajo
-   otro nombre de familia. Esa tipografía ya no se usa —su licencia no habilita
-   el uso web y la sustitución por Chewy es definitiva—, así que estas reglas
-   toman `--font-display` como el resto del sitio. */
+/* Esta pantalla toma la declaración global de DK Prince Frog mediante
+   `--font-display`, igual que el resto del sitio. */
 
 /* Planeta oscuro del fondo: un círculo enorme del que sólo se ve el casquete
    superior. Mismo recurso que `.result__planet` de las pantallas de resultado. */

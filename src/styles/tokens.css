@@ -2,14 +2,6 @@
    Tokens — valores tomados directamente del Figma (13:48 "vistas web").
    ------------------------------------------------------------------------- */
 
-/* La tipografía del sitio es Chewy, y la carga `index.html` desde Google Fonts.
-   El Figma está dibujado con DK Prince Frog, que es comercial y cuya licencia no
-   habilita el uso web, así que la sustitución es DEFINITIVA: no hay `@font-face`
-   propio ni archivo que reponer. Chewy se eligió midiendo contra la original
-   —mismo peso de trazo, mismo redondeo— y está declarada en `figma/nodes.json`
-   para que `figma:check` acepte una donde el spec pide la otra, y siga avisando
-   si un texto cae en una tercera. */
-
 :root {
   /* -------------------------------------------------------------------------
      Áreas seguras del dispositivo.
@@ -40,8 +32,7 @@
   --input-min-fs: 16px;
 
   /* Tipografía */
-  --font-display: 'Chewy', 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', system-ui,
-    sans-serif;
+  --font-display: 'DK Prince Frog', sans-serif;
 
   /* Paleta */
   --c-deep-blue: #212f5c;

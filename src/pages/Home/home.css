@@ -54,13 +54,8 @@
 .home-m__title {
   margin: -0.746cqw 0 0;  /* y 339: pisa 3 px el borde inferior del logo, como en el diseño */
   font-family: var(--font-display);
-  /* El nodo dice 40 px, pero está dibujado con DK Prince Frog y el sitio usa
-     Chewy, que a ese cuerpo mide 361.8 px contra los 328 de la caja: no entra
-     en un renglón y parte el titular en dos, corriendo 42 px toda la pantalla.
-     Se iguala la CAJA del nodo y no su número: 36.3 px dan los 328 exactos, y
-     el interlineado se sube para conservar los 42 de alto. */
-  font-size: 9.03cqw;   /* 36.3 (el nodo dice 40, con la otra tipografía) */
-  line-height: 1.157;   /* 42 de alto, como el nodo */
+  font-size: 9.95cqw;   /* 40 */
+  line-height: 1.04;    /* 41.6 */
   color: var(--c-gold);           /* fill #FCC102 */
   /* El nodo lleva además un trazo blanco de 2 px alineado al CENTRO, que es
      justo cómo pinta `-webkit-text-stroke`: la mitad para adentro de la letra
@@ -86,9 +81,8 @@
 .home-m__sub {
   margin: 0.1cqw 0 0;   /* y 381 */
   font-family: var(--font-display);
-  /* Mismo caso: 30 px de Chewy miden 302.9 contra los 276 del nodo. */
-  font-size: 6.791cqw;  /* 27.3 (el nodo dice 30) */
-  line-height: 1.135;   /* 31 de alto, como el nodo */
+  font-size: 7.463cqw;  /* 30 */
+  line-height: 1.04;    /* 31.2 */
   color: var(--c-white);
   /* Los cinco DROP_SHADOW del nodo: 41.4, 82.8, 250 y 250 blancos, más el
      `0px 4px 4px #00000040`. */
@@ -121,12 +115,6 @@
   object-fit: cover;
   z-index: 0;
   pointer-events: none;
-}
-
-/* El rótulo del botón: 30 px de Chewy miden 234.9 contra los 205 del nodo, así
-   que va a 26.2 y el interlineado sube para conservar los 31 de alto. */
-.home-m__cta .promo-btn__label {
-  line-height: 1.183;
 }
 
 .home-m__cta {

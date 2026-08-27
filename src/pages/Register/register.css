@@ -221,17 +221,19 @@
     height: 8.4%;
   }
 
-  /* Cuerpo e interlineado del nodo 73:616: 18 px y 18.7. Estaba en 13 porque
-     con Chewy —más ancha que DK Prince Frog— el texto no entraba en la cinta;
-     con la fuente real entra, y vuelve a cortarse en dos renglones como en el
-     diseño. */
+  /* Cuerpo e interlineado del nodo 73:616: 18 px y 18.7. */
   .register-m__title {
+    position: relative;
+    left: -2.736cqw;          /* x 79, desde la cinta que arranca en x 90 */
+    top: -2.239cqw;           /* y 361, alineado al borde superior del nodo */
+    width: 59.701cqw;         /* 240 */
     margin: 0;
     font-family: var(--font-display);
     font-size: 4.478cqw;       /* 18 */
     line-height: 1.039;        /* 18.7 */
     color: var(--c-brown-dark);
     text-align: center;
+    white-space: nowrap;
   }
 
   /* Filas del formulario. Alturas y anchos leídos del Figma. */
@@ -259,19 +261,7 @@
      (81.3% del pergamino = 269 px) y el alto de un cuerpo de 9 px con
      interlineado 1.2 más un padding; los cuatro números salen ahora del
      diseño. El `left` se corrige junto con el ancho: con el `left` viejo la
-     nota quedaba pegada al margen izquierdo en vez de centrada.
-
-     DESVÍO CONOCIDO — `figma:check` da Δh +8,7 en esta capa y no es un error
-     de estas reglas. El diseño mete la advertencia en un renglón de 8,9 px;
-     acá entra en dos. Con el cuerpo de 8 px que manda el nodo la frase necesita
-     201 px y la caja mide 192,2: el Figma está dibujado con DK Prince Frog y el
-     sitio usa Chewy, que es más ancha. La sustitución es definitiva, así que
-     este desvío también.
-
-     NO se baja el cuerpo para compensar, que es lo que se hizo con los textos
-     del landing. Este es el aviso legal del tutor mayor de 18 años, ya está en
-     el mínimo legible, y achicarlo para ganar 9 px de caja sería empeorar lo
-     que importa para mejorar un número. */
+     nota quedaba pegada al margen izquierdo en vez de centrada. */
   .register-m__note {
     position: absolute;
     left: 20.94%;              /* 97.2 - 26 del pergamino, sobre sus 340 */

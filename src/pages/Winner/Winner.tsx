@@ -26,6 +26,7 @@ export default function Winner() {
       pageTitle="¡Felicidades! Ganaste"
       title="¡Felicidades"
       titleSize={138}
+      mobileTitleSize={80}
       titleTone="gold"
       titleY={457}
       message={[prize ? `te ganaste ${prize.article ?? 'un'} ${prize.name}!` : 'te ganaste un premio!']}

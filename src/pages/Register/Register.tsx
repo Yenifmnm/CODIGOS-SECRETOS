@@ -273,11 +273,6 @@ export default function Register() {
         glow="0 0 2.4cqw #09eaff" float={{ amplitude: 6, duration: 5.2 }} />
 
       <form className="register__form" onSubmit={onSubmit} noValidate id="contenido">
-        {/* El Figma pide 42px, pero está dibujado con "DK Prince Frog", que es
-            condensada. Con la sustituta Chewy ese cuerpo no entra en la cinta
-            (+15% de ancho), así que se baja a 36 para respetar el ancho de la
-            columna. Cuando se incorpore la tipografía licenciada (ver
-            public/fonts/README.md) se vuelve a 42. */}
         <RibbonPlate
           tone="ochre"
           className="register__title-plate abs"
@@ -289,7 +284,7 @@ export default function Register() {
             zIndex: Z.title,
           }}
         >
-          <h2 className="register__title" style={{ fontSize: u(36) }}>
+          <h2 className="register__title" style={{ fontSize: u(42) }}>
             Registrate para que tu pequeño pueda participar
           </h2>
         </RibbonPlate>
