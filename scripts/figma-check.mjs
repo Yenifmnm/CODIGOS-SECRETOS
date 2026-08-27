@@ -997,7 +997,18 @@ function compararPintura(esperado, e, escala) {
   // texto van en la primera, para una imagen con alfa en drop-shadow().
   const sombras = (esperado.efectos ?? []).filter((x) => x.tipo === 'DROP_SHADOW');
   if (sombras.length) {
-    const real = [e.sombraTexto, e.sombraCaja, e.filtro].filter((v) => v && v !== 'none').join(' ');
+    const crudo = [e.sombraTexto, e.sombraCaja, e.filtro].filter((v) => v && v !== 'none').join(' ');
+    /* `brightness(0) invert(1) blur(R)` es cómo se dibuja el resplandor de un
+       nodo cuando hay que dibujarlo SIN la capa encima: la silueta se pasa a
+       blanco y se desenfoca. Es exactamente la sombra de
+       `drop-shadow(0 0 2R #FFF)`, porque `blur()` toma R como sigma y el radio
+       de `drop-shadow` son dos sigmas. Sin traducirlo, el control pide los 250
+       px del nodo, encuentra 125 y marca un desvío en un halo que está bien.
+       Lo usan las tres capas `*-ship-halo`. */
+    const real = crudo.replace(
+      /brightness\(0\)\s+invert\(1\)\s+blur\(([\d.]+)px\)/g,
+      (_, r) => `drop-shadow(0px 0px ${Number(r) * 2}px #FFFFFF)`,
+    );
     const radios = [...real.matchAll(/([\d.]+)px/g)].map((x) => Number(x[1]));
     const sinRadio = sombras.filter(
       (x) => !radios.some((r) => Math.abs(r - x.blur * escala) <= Math.max(2, x.blur * escala * 0.15)),

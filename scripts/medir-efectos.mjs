@@ -104,8 +104,20 @@ const RECOGER = () => {
     // Una entrada por PROPIEDAD. Un `filter` con dos `drop-shadow()` es un
     // efecto declarado dos veces, no dos hallazgos distintos.
     if (vivo(cs.filter)) {
-      if (/drop-shadow\(/.test(cs.filter)) pinta.push(['filter:drop-shadow', cs.filter]);
-      if (/\bblur\(/.test(cs.filter)) pinta.push(['filter:blur', cs.filter]);
+      if (/drop-shadow\(/.test(cs.filter)) {
+        pinta.push(['filter:drop-shadow', cs.filter]);
+      } else if (/brightness\(0\)\s+invert\(1\)\s+blur\(/.test(cs.filter)) {
+        /* `brightness(0) invert(1) blur(R)` NO es un desenfoque de capa: es el
+           resplandor de un nodo dibujado SIN la capa encima —la silueta pasada
+           a blanco y desparramada—, o sea la misma sombra que
+           `drop-shadow(0 0 2R #FFF)`. Cuenta como DROP_SHADOW. Si no se
+           distinguiera, las tres capas `*-ship-halo` saldrían listadas como
+           efecto inventado justo después de haberlas arreglado.
+           `figma-check.mjs` hace la misma traducción al comparar sombras. */
+        pinta.push(['filter:drop-shadow', cs.filter]);
+      } else if (/\bblur\(/.test(cs.filter)) {
+        pinta.push(['filter:blur', cs.filter]);
+      }
     }
     if (vivo(cs.backdropFilter) && /blur\(/.test(cs.backdropFilter)) {
       pinta.push(['backdrop-filter:blur', cs.backdropFilter]);

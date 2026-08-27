@@ -92,7 +92,17 @@ export default function CodeHelp() {
             />
             {/* `flipped` es el espejo horizontal del nodo: ver el porqué en
                 `code-help.css`, que tiene el detalle de cómo se resolvió. */}
-            <img src={barco} alt="" aria-hidden="true" className="codehelp-m__ship-halo" />
+            {/* Marcado con el mismo nodo que la nave: ella omite las sombras
+                porque el resplandor no vive ahí, y esta capa es la que lo
+                dibuja. */}
+            <img
+              src={barco}
+              alt=""
+              aria-hidden="true"
+              className="codehelp-m__ship-halo"
+              data-figma="73:789"
+              data-figma-omitir="pintura"
+            />
             <PurosolShip
               flipped
               className="codehelp-m__ship"

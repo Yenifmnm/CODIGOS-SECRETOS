@@ -192,20 +192,23 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         alt=""
         aria-hidden="true"
         className="home-m__b3"
-        data-figma="70:180"
+        data-figma="70:180 79:1120"
       />
 
       <img
         src={logoCodigos}
         alt="Códigos Secretos 2026"
         className="home-m__logo"
-        data-figma="70:169"
+        data-figma="70:169 79:1113"
         data-figma-omitir="sombras"
       />
 
       <div className="mblock">
-        <p className="home-m__title" data-figma="70:194">Ganá un viaje al Caribe</p>
-        <p className="home-m__sub" data-figma="70:193">¡y cientos de premios más!</p>
+        {/* El segundo id de cada uno es el del mismo texto en el frame del menú
+            desplegado (79:1111), que reusa esta composición: sin él, con el menú
+            abierto estas capas quedaban sin nodo y sus resplandores sin control. */}
+        <p className="home-m__title" data-figma="70:194 79:1122">Ganá un viaje al Caribe</p>
+        <p className="home-m__sub" data-figma="70:193 79:1121">¡y cientos de premios más!</p>
       </div>
 
       {/* Destello detrás del tablón. En el Figma va encima de los dos textos y
@@ -223,7 +226,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
           plate="carga"
           mobileFontSize={30}
           onClick={onStart}
-          data-figma="70:202"
+          data-figma="70:202 79:1124"
           data-figma-label="70:197"
         >
           Cargá acá tu código
@@ -279,6 +282,16 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
           alt=""
           aria-hidden="true"
           className="mabs home-m__ship-halo"
+          /* Marcado con el MISMO nodo que la nave. No es un duplicado inútil:
+             la nave lleva `omitir="sombras"` porque el resplandor no vive en
+             ella, y esta capa es la que sí lo dibuja. Entre las dos cubren el
+             nodo entero, y cada una aporta su fila a la tabla de `figma:check`.
+             Antes esta capa no tenía marca y el resplandor de 250 px --el
+             efecto más grande de la pantalla-- no lo comprobaba nadie.
+             El segundo id es el del mismo barco en el frame del menú
+             desplegado, que reusa esta composición. */
+          data-figma="70:178 79:1119"
+          data-figma-omitir="pintura"
           style={mbox({ x: 199, y: 0, w: 401, h: 275, sceneH: SCENE_H })}
         />
 
@@ -286,7 +299,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
           variant="enter"
           className="mabs home-m__ship"
           style={mbox({ x: 199, y: 0, w: 401, h: 275, sceneH: SCENE_H })}
-          data-figma="70:178"
+          data-figma="70:178 79:1119"
           /* El resplandor del nodo existe y está con su valor exacto, pero vive
              en `.home-m__ship-halo`, la capa quieta de acá arriba: sobre este
              elemento —que se anima— costaba 40 ms por cuadro. El control de

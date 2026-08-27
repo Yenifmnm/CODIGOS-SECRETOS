@@ -223,7 +223,16 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
         <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" />
       </FloatingLayer>
 
-      <img src={barco} alt="" aria-hidden="true" className="welcome-m__ship-halo" />
+      {/* Marcado con el mismo nodo que la nave: ella omite las sombras porque el
+          resplandor no vive ahí, y esta capa es la que lo dibuja. */}
+      <img
+        src={barco}
+        alt=""
+        aria-hidden="true"
+        className="welcome-m__ship-halo"
+        data-figma="70:347"
+        data-figma-omitir="pintura"
+      />
       <PurosolShip
         className="welcome-m__ship"
         data-figma="70:347"
