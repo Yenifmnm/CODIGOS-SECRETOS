@@ -45,11 +45,14 @@
   will-change: transform;
 }
 
+/* Sin resplandor: el nodo del premio —`nintendo -2 1` (74:1015) en GANASTE—
+   declara `efectos: null`. El halo blanco y dorado que había acá no sale de
+   ningún nodo. Lo que sí lleva resplandor en esa pantalla es el cofre abierto
+   (`cofre 1`, 74:1013), y lo tiene con los valores del suyo. */
 .reveal__prize {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 0 1.6cqw #fff) drop-shadow(0 0 4cqw var(--c-gold));
 }
 
 /* Barrido holográfico sobre el premio.

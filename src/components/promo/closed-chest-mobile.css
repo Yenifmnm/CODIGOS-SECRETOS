@@ -63,6 +63,19 @@
   pointer-events: none;
 }
 
+/* ESTA SOMBRA NO ESTÁ EN EL DISEÑO, Y SE QUEDA. Es una decisión, no un olvido.
+
+   `cofre cerrado 1` —74:1105 en PERDISTE, 105:277 y 131:349 en los dos errores—
+   declara `efectos: null`. El cofre ABIERTO de GANASTE es otro nodo, `cofre 1`
+   (74:1013), y ése sí trae sus dos resplandores dorados, que están puestos con
+   sus valores exactos en `result-layout.css`.
+
+   La sombra de apoyo se conserva porque sin ella el cofre cerrado queda flotando
+   sobre el planeta, sin peso. `npm run audit:efectos` la lista como inventada y
+   está bien que lo haga: el control no puede saber cuáles son deliberadas. Es la
+   única de la lista que sobrevivió a la revisión del 27-08-2026; las otras cinco
+   —el vidrio de la barra del menú, el de las dos notas, el resplandor del premio
+   y la sombra del menú desplegado— se sacaron. */
 .mchest__img {
   z-index: 1;
   transform-origin: 50% 92%;

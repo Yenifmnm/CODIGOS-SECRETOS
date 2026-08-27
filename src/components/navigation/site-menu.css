@@ -27,7 +27,9 @@
   padding-inline: 1.25cqw;
   border-radius: 500px;
   background: var(--c-cyan-50);
-  backdrop-filter: blur(2px);
+  /* SIN `backdrop-filter`. El nodo `barra menu mobile` declara `efectos: null`
+     —y su relleno es `#FFFFFF00` con opacidad 0, o sea que en el diseño esta
+     capa no pinta nada—. El desenfoque de 2 px estaba en las once pantallas. */
   box-shadow: 0 0 0 rgba(9, 234, 255, 0);
   transition: box-shadow var(--dur-glow) var(--ease-soft);
 }
@@ -229,7 +231,9 @@
     padding-inline: 4.478cqw; /* 18 */
     border-radius: 500px;
     background: var(--c-cyan-50);
-    backdrop-filter: blur(2px);
+    /* Acá tampoco. La rama mobile tenía su propia copia del desenfoque, y es la
+       que efectivamente se aplicaba en las once pantallas: sacar sólo la de la
+       rama de escritorio no cambiaba nada en el teléfono. */
     transition:
       width 300ms var(--ease-soft),
       height 320ms var(--ease-soft),
@@ -245,7 +249,11 @@
     padding: 0 var(--m-pad) 3.483cqw;
     border-radius: 5.224cqw; /* 21 */
     background: rgba(214, 236, 248, 0.82);
-    box-shadow: 0 0.5cqw 4cqw rgba(11, 22, 66, 0.28);
+    /* `none` y no la ausencia de la línea: si se borrara, ganaría por cascada
+       la de `.site-menu--open .site-menu__bar` de la rama de escritorio —el
+       resplandor cian de más arriba— y el efecto inventado seguiría, sólo que
+       de otro color. El nodo 79:1128 declara `efectos: null`. */
+    box-shadow: none;
   }
 
   /* El logo mantiene su lugar en la fila superior en los dos estados. */

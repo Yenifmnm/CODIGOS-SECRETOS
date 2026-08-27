@@ -251,8 +251,10 @@
     align-items: center;
     justify-content: center;
     border-radius: 49.751cqw;   /* radio 200 */
+    /* El nodo `Rectangle 1` pide este relleno translúcido y NADA más:
+       `efectos: null`. El `backdrop-filter: blur(2px)` que había acá convertía
+       un panel translúcido en vidrio esmerilado, que es otra cosa. */
     background: rgba(33, 47, 92, 0.5);   /* #212F5C80 */
-    backdrop-filter: blur(2px);
     font-family: var(--font-display);
     /* Piso de texto legible: acá está el teléfono al que hay que llamar para
        reclamar el premio, así que es de lo más importante de la pantalla y a la
