@@ -44,7 +44,37 @@
 
 /* Columna central, con los valores del frame 65:123. Las cuatro capas van
    centradas y en flujo, así que cada margen es la distancia al borde de abajo
-   de la anterior; el del logo se cuenta desde el 74 en que arranca `.home-m`. */
+   de la anterior; el del logo se cuenta desde el 74 en que arranca `.home-m`.
+
+   EL APILADO ES EL ORDEN DEL FRAME, Y CADA `z-index` ES EL ÍNDICE DEL HIJO.
+
+   El logo es el hijo 2 de `65:123` y el titular el 11, así que su resplandor
+   cian va DEBAJO del texto. En CSS no pasaba eso: `filter` promueve al logo a
+   la capa de elementos posicionados —se pinta en el paso de los contextos de
+   apilado, no en el de los bloques en flujo— y los dos textos son
+   `position: static`, con lo cual el logo terminaba pintando ENCIMA.
+
+   El resultado era que los dos `drop-shadow(0 0 250px #09EAFF)` del nodo
+   `70:169` caían sobre el titular: el dorado `#FCC102` salía `#D6C82F`, el
+   texto se veía difuminado y el trazo blanco desaparecía. Los tres síntomas
+   eran uno solo. Aislado apagando capas de a una con contexto limpio: la única
+   que corregía el color era el glow del logo.
+
+   Se arregla por apilado y NO tocando la sombra: los efectos son los del nodo,
+   tal cual, con su radio, su color y su opacidad. Lo que estaba mal era el
+   orden, no la sombra.
+
+   Los números salen del spec, así que el mapa se lee sin adivinar:
+
+       2   codigos secretos logo 1        70:169
+       9   planeta vit 2 1                70:180
+      10   ¡y cientos de premios más!     70:193
+      11   Ganá un viaje al Caribe        70:194
+      12   destello-Photoroom-Photoroom   70:204
+      13   boton de carga 1 + su rótulo   70:202 / 70:197
+
+   Las capas de la escena de abajo (índices 3 a 8) no llevan `z-index` propio:
+   no se cruzan con ninguna de éstas y el orden del DOM ya las deja bien. */
 .home-m__logo {
   width: 63.93cqw;    /* 257 */
   height: auto;
@@ -55,6 +85,11 @@
      Va en `filter` y no en `box-shadow` porque la sombra sigue el alfa del
      arte; `box-shadow` dibujaría el rectángulo de la caja. */
   filter: drop-shadow(0 0 62.19cqw #09EAFF) drop-shadow(0 0 62.19cqw #09EAFF);
+  /* Hijo 2 del frame. `position: relative` sin desplazamiento: no mueve la
+     caja —`figma:check` sigue midiendo lo mismo—, sólo lo hace participar del
+     apilado en vez de quedar promovido por encima de todo por el `filter`. */
+  position: relative;
+  z-index: 2;
 }
 
 .home-m__title {
@@ -75,6 +110,10 @@
      la sombra sigue los glifos, así que va en `text-shadow` y no en `filter`,
      que afectaría a toda la caja. */
   text-shadow: 0 0 10.949cqw #FFFFFF, 0 0.995cqw 0.995cqw #0000004D;
+  /* Hijo 11: por encima del logo (2) y por debajo del destello (12) y del
+     botón (13), igual que en el frame. */
+  position: relative;
+  z-index: 11;
 }
 
 /* `.mblock` separa a sus hijos con `gap: 2.5cqw` (10 px). Acá los dos textos
@@ -94,6 +133,9 @@
      `0px 4px 4px #00000040`. */
   text-shadow: 0 0 10.299cqw #FFFFFF, 0 0 20.597cqw #FFFFFF,
     0 0 62.19cqw #FFFFFF, 0 0 62.19cqw #FFFFFF, 0 0.995cqw 0.995cqw #00000040;
+  /* Hijo 10. */
+  position: relative;
+  z-index: 10;
 }
 
 /* `Rectangle 6` (117:293): velo azul marino al 51% sobre la foto de fondo.
@@ -119,16 +161,19 @@
   width: 46.269cqw;   /* 186 */
   height: 30.597cqw;  /* 123 */
   object-fit: cover;
-  z-index: 0;
+  /* Hijo 12: por encima del titular, que ahora declara el suyo. Antes iba en 0
+     y quedaba bien igual porque el titular no participaba del apilado. */
+  z-index: 12;
   pointer-events: none;
 }
 
 .home-m__cta {
   width: 63.433cqw;   /* 255 */
   margin-top: 4.925cqw;  /* y 432 */
-  /* El destello va por debajo del botón, como en el frame. */
+  /* Hijo 13, el último de esta columna: el destello va por debajo del botón,
+     como en el frame. */
   position: relative;
-  z-index: 1;
+  z-index: 13;
 }
 
 /* La escena sangra por los dos costados: se sale del ancho del lienzo a
