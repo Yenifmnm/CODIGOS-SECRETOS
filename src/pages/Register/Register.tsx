@@ -22,12 +22,23 @@ import destello from '../../assets/effects/destello.webp';
 import dino from '../../assets/characters/dino.webp';
 import nena from '../../assets/characters/nena.webp';
 import pluma from '../../assets/ui/pluma.webp';
-/* Las dos cintas del titular mobile, bajadas de sus nodos con
-   `figma:pull --export 73:614,73:643 --formato svg`. Son vectores dibujados a
-   mano —cada uno con sus propias muescas y su propio ancho—, no dos instancias
-   de una misma silueta: por eso no las puede dibujar `RibbonPlate`. */
-import cintaTitulo1 from '../../assets/ui/cinta-titulo-1.svg';
-import cintaTitulo2 from '../../assets/ui/cinta-titulo-2.svg';
+/* LAS DIEZ CINTAS DE ESTA PANTALLA, una por nodo, bajadas con
+   `figma:pull --export`. Son vectores dibujados a mano y cada uno tiene su
+   propia silueta de papel rasgado: distintas muescas, distintos bordes. No hay
+   una silueta genérica que sirva para las diez, que es lo que había.
+
+   El nombre del archivo es el id del nodo a propósito — el catálogo está en
+   `assets/ui/cintas/README.md`. */
+import cinta614 from '../../assets/ui/cintas/73-614.svg';   // titular, renglón 1
+import cinta643 from '../../assets/ui/cintas/73-643.svg';   // titular, renglón 2
+import cinta613 from '../../assets/ui/cintas/73-613.svg';   // Nombre y Apellido
+import cinta612 from '../../assets/ui/cintas/73-612.svg';   // Fecha de nacimiento
+import cinta633 from '../../assets/ui/cintas/73-633.svg';   // Número de cédula
+import cinta629 from '../../assets/ui/cintas/73-629.svg';   // Email
+import cinta636 from '../../assets/ui/cintas/73-636.svg';   // Ciudad
+import cinta639 from '../../assets/ui/cintas/73-639.svg';   // Teléfono
+import cinta621 from '../../assets/ui/cintas/73-621.svg';   // botón Registrarme
+import cinta624 from '../../assets/ui/cintas/73-624.svg';   // botón Cancelar
 
 type Errors = Partial<Record<keyof RegistrationForm, string>>;
 
@@ -457,7 +468,7 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
               es el export exacto del nodo, así que el color es el del diseño por
               construcción y no hay `background-color` que comparar. */}
           <img
-            src={cintaTitulo1}
+            src={cinta614}
             alt=""
             aria-hidden="true"
             className="register-m__title-cinta register-m__title-cinta--1"
@@ -465,7 +476,7 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
             data-figma-omitir="fondo"
           />
           <img
-            src={cintaTitulo2}
+            src={cinta643}
             alt=""
             aria-hidden="true"
             className="register-m__title-cinta register-m__title-cinta--2"
@@ -484,13 +495,25 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
 
           {/* Cada fila en su coordenada del Figma; el orden del DOM es el de
               lectura, que es también el orden de tabulación. */}
-          <RibbonPlate className="register-m__cell register-m__cell--fullname" data-figma="73:613">
+          <RibbonPlate
+            className="register-m__cell register-m__cell--fullname"
+            data-figma="73:613"
+            silueta={cinta613}
+          >
             {fullName}
           </RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--birth" data-figma="73:612">
+          <RibbonPlate
+            className="register-m__cell register-m__cell--birth"
+            data-figma="73:612"
+            silueta={cinta612}
+          >
             {birthDate}
           </RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--cedula" data-figma="73:633">
+          <RibbonPlate
+            className="register-m__cell register-m__cell--cedula"
+            data-figma="73:633"
+            silueta={cinta633}
+          >
             {cedula}
           </RibbonPlate>
 
@@ -502,13 +525,25 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
             Este registro debe ser realizado por un tutor mayor de 18 años*
           </p>
 
-          <RibbonPlate className="register-m__cell register-m__cell--email" data-figma="73:629">
+          <RibbonPlate
+            className="register-m__cell register-m__cell--email"
+            data-figma="73:629"
+            silueta={cinta629}
+          >
             {email}
           </RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--city" data-figma="73:636">
+          <RibbonPlate
+            className="register-m__cell register-m__cell--city"
+            data-figma="73:636"
+            silueta={cinta636}
+          >
             {city}
           </RibbonPlate>
-          <RibbonPlate className="register-m__cell register-m__cell--phone" data-figma="73:639">
+          <RibbonPlate
+            className="register-m__cell register-m__cell--phone"
+            data-figma="73:639"
+            silueta={cinta639}
+          >
             {phone}
           </RibbonPlate>
 
@@ -519,6 +554,8 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
               mobileFontSize={14}
               disabled={submitting}
               data-figma="73:620"
+              silueta={cinta621}
+              data-figma-cinta="73:621"
             >
               {submitting ? 'Enviando…' : 'Registrarme'}
             </RibbonButton>
@@ -528,6 +565,8 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
               mobileFontSize={14}
               onClick={onCancel}
               data-figma="73:623"
+              silueta={cinta624}
+              data-figma-cinta="73:624"
             >
               Cancelar
             </RibbonButton>

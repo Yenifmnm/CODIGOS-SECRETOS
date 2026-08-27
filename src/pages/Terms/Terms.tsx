@@ -5,6 +5,12 @@ import { Deco } from '../../components/layout/Deco';
 import { Parchment } from '../../components/promo/Parchment';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { RibbonButton } from '../../components/buttons/RibbonButton';
+import { RibbonSvg } from '../../components/promo/RibbonSvg';
+/* Las dos cintas de esta pantalla, bajadas de sus nodos con
+   `figma:pull --export`. Cada una tiene su propia silueta de papel rasgado; el
+   catálogo está en `assets/ui/cintas/README.md`. */
+import cintaTitulo from '../../assets/ui/cintas/73-934.svg';
+import cintaBoton from '../../assets/ui/cintas/73-937.svg';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { box } from '../../app/stage';
@@ -98,7 +104,12 @@ export default function Terms() {
     <>
       {/* La cinta y su texto son dos capas del frame: `Vector 1` (73:934) es
           la silueta y `Bases y Condiciones` (73:935) el rótulo de adentro. */}
-      <p className="terms__heading" data-figma="73:934">
+      <p className="terms__heading">
+        {/* `Vector 1` (73:934): la cinta, con el vector del nodo. Antes era un
+            rectángulo con `background: #d8831c` recortado por un `clip-path`
+            genérico que ni siquiera estaba puesto acá — se heredaba del bloque
+            de escritorio, ver `terms.css`. */}
+        <RibbonSvg src={cintaTitulo} nodo="73:934" />
         <span className="terms__heading-text" data-figma="73:935">
           Bases y Condiciones
         </span>
@@ -140,7 +151,8 @@ export default function Terms() {
         mobileWidth={147}
         mobileHeight={39}
         onClick={accept}
-        data-figma="73:937"
+        silueta={cintaBoton}
+        data-figma-cinta="73:937"
         data-figma-label="73:938"
       >
         Acepto la misión

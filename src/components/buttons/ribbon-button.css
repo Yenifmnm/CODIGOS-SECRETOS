@@ -16,6 +16,18 @@
     background-color var(--dur-glow) var(--ease-soft);
 }
 
+/* Con la silueta real del nodo, el recorte genérico y el degradado sobran: el
+   dibujo y el color vienen dentro del SVG. El rótulo se apoya encima. */
+.ribbon-btn--svg {
+  clip-path: none;
+  background: none;
+}
+
+.ribbon-btn--svg .ribbon-btn__label {
+  position: relative;
+  z-index: 1;
+}
+
 .ribbon-btn--gold {
   background: linear-gradient(180deg, #fcd45a 0%, var(--c-gold) 48%, var(--c-orange) 100%);
   box-shadow: inset 0 -3px 0 rgba(136, 51, 7, 0.35);

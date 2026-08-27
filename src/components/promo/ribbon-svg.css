@@ -1,0 +1,19 @@
+/* La silueta de una cinta, con el SVG de su nodo.
+
+   Llena la caja del elemento que la contiene, que es el que lleva la medida del
+   diseño. `object-fit: fill` y no `contain`: la caja del SVG y la del nodo son
+   la misma —el export sale con el `width`/`height` del nodo— así que estirar no
+   deforma nada, y `contain` metería franjas si algún redondeo no cierra.
+
+   `max-width: none` porque `global.css` le pone `max-width: 100%` a toda imagen
+   y varias cintas se dibujan dentro de contenedores más angostos. */
+.ribbon-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}

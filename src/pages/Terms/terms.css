@@ -286,7 +286,15 @@
   }
 
   /* `Vector 1` (73:934): la cinta del titular, 240x42.9 en (85, 343), o sea
-     46 y 73 adentro del pergamino. */
+     46 y 73 adentro del pergamino.
+
+     `clip-path: none` Y `background: none`, y las dos líneas hacen falta.
+
+     El chevrón que se veía acá NO era una decisión: este bloque pisaba el
+     `transform` y el `background` del bloque de escritorio pero NO el
+     `clip-path`, así que heredaba su `polygon()` de seis puntos. Una fuga, no
+     un diseño. El dibujo y el color vienen ahora dentro del SVG del nodo
+     (`RibbonSvg`), que tiene la silueta de papel rasgado de verdad. */
   .terms-m__sheet .terms__heading {
     position: absolute;
     left: 11.443cqw;      /* 46 */
@@ -298,11 +306,15 @@
     padding: 0;
     display: grid;
     place-items: center;
-    background: #d8831c;
+    clip-path: none;
+    background: none;
   }
 
   /* `Bases y Condiciones` (73:935): 203.3x28.9, 30/31.2. */
   .terms-m__sheet .terms__heading-text {
+    /* Por encima de la cinta, que ahora es una imagen y no un fondo. */
+    position: relative;
+    z-index: 1;
     display: block;
     /* La caja del nodo, que es la TINTA: 28.9 es menos que los 31.2 de
        interlineado, así que el renglón desborda, igual que en Figma. */
