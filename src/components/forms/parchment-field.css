@@ -224,22 +224,69 @@
     scroll-margin-block: 96px 120px;
   }
 
+  /* `Rectangle 3` (70:362) y `Rectangle 4` (70:364): 278x30 en x 61.
+     El ícono arranca 10 px adentro de la cápsula y el rótulo en 39, que son
+     los 100 del nodo menos los 61 de la cápsula. */
   .pfield--pill {
-    height: 7.711cqw;           /* 31 */
-    padding-inline: 2.488cqw;
-    gap: 1.99cqw;
-    border-radius: 500px;
+    height: 7.463cqw;           /* 30 */
+    padding-inline: 2.488cqw;   /* 10 */
+    gap: 1.99cqw;               /* 8 */
+    border-radius: 7.463cqw;    /* 30 */
+    /* El rótulo va a 15 px, el cuerpo del nodo (70:363 y 70:365). */
+    font-size: 3.731cqw;        /* 15 */
   }
 
+  /* `Cédula` (70:363) y `Código secreto` (70:365): los dos son una caja FIJA
+     de 76x12 en x 100, o sea 39 adentro de la cápsula. Va absoluta, no como
+     ítem del flex: en el frame es una capa suelta, y así el input ocupa el
+     ancho completo cuando el rótulo se retira al escribir.
+
+     76 es la caja que dibujó el diseñador, no la tinta: «Cédula» mide 35.2 y
+     «Código secreto» 73.3. Y 12 de alto es menos que los 15.6 de interlineado
+     del propio nodo —el texto se sale de su marco también en Figma—, así que
+     la caja se declara y el renglón desborda, como allá. */
   .pfield--pill .pfield__label {
+    position: absolute;
+    left: 9.701cqw;             /* 39 */
+    top: 2.488cqw;              /* 10 */
+    width: 18.905cqw;           /* 76 */
+    height: 2.985cqw;           /* 12 */
     min-width: 0;
-    gap: 1.493cqw;
+    line-height: 1.04;          /* 15.6, el del nodo */
+    text-align: left;           /* el nodo los alinea a la izquierda */
   }
 
+  /* Con el campo cargado el rótulo ya no se ve, pero su caja sigue encima del
+     input: sin esto se queda con el toque y el cursor no cae donde se tocó. */
+  .pfield--pill:not(.pfield--empty) .pfield__label {
+    pointer-events: none;
+  }
+
+  /* Los dos íconos no miden lo mismo —la cédula 21x14 y el candado 12x16—, así
+     que comparten una ranura del ancho del más ancho y se centran en ella: eso
+     deja el candado en 14.5 contra los 13 del nodo, 1.5 px, y el rótulo en 39
+     para los dos. */
+  .pfield--pill .pfield__icon {
+    width: 5.224cqw;            /* 21 */
+    justify-content: center;
+  }
+
+  /* Los dos íconos salen del Figma y no son cuadrados ni iguales entre sí: la
+     cédula es 21x14 (70:370) y el candado 12x16 (70:366). La caja se adapta a
+     cada uno en vez de encajarlos en un cuadrado. */
   .pfield__icon {
-    width: 4.975cqw;            /* 20 */
-    height: 4.975cqw;
+    width: auto;
+    height: auto;
     flex: none;
+  }
+
+  .pfield__icon img {
+    display: block;
+    width: auto;
+    height: auto;
+    /* El nodo los pinta al 60%: el `#581F0999` del spec es el `#581F09` del
+       SVG más la opacidad del nodo, que el export no trae. */
+    opacity: 0.6;
   }
 
   /* Campo del registro: el Figma lo dibuja en UNA sola línea —el rótulo a la

@@ -113,56 +113,103 @@
    Composición mobile — Figma "CI.png". Ver comentario en Welcome.tsx para las
    coordenadas de origen. Todo en cqw del lienzo de 402.
    ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------
+   Composición mobile — frame `CI` 70:343 (402x913).
+
+   Todo va en coordenadas del frame, absolutas contra `.welcome-m`, que arranca
+   en 74 —donde arranca toda composición mobile, detrás del `<nav>` del menú—:
+   cada `top` es la y del spec menos 74, y la x va tal cual.
+
+   Por qué absoluto y no en flujo: en flujo el error se acumulaba hacia abajo.
+   La tabla daba -62.8 arriba y -81.8 en los campos, o sea 19 px de deriva entre
+   la primera capa y la última. Cada capa contra su nodo no acumula nada.
+
+   Lo único que sigue en flujo es el interior del pergamino, y a propósito: el
+   frame no dibuja estado de error, y si los campos fueran absolutos un mensaje
+   de validación se montaría sobre el botón. Así, cuando no hay error las capas
+   caen en su nodo, y cuando lo hay empujan hacia abajo como cualquier
+   formulario.
+
+   Los `min(...svh)` que había en el logo y los dos titulares se fueron: ataban
+   el cuerpo al alto de la ventana y ningún cuerpo del spec podía cumplirse.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .welcome-m {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .welcome-m__logo {
-    width: min(63.93cqw, 30.27svh);  /* 257 en el area util del export */
-    height: auto;
-    margin-top: 2.488cqw;
-    filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
-  }
-
-  /* Negativo a propósito: codigos-secretos.webp deja ~21 px transparentes bajo
-     el logo, así que su caja termina mucho más abajo que el dibujo. */
-  .welcome-m__hi {
-    margin: -1.493cqw 0 0;
-    font-family: var(--font-display);
-    font-size: min(8.458cqw, 4.005svh);   /* 34 */
-    line-height: 1.1;
-    color: var(--c-white);
-    text-shadow: 0 0 3.5cqw #fff, 0 0 8cqw rgba(255, 255, 255, 0.65),
-      0 2px 4px rgba(0, 0, 0, 0.35);
-  }
-
-  .welcome-m__title {
-    margin: -0.995cqw 0 0;
-    font-family: var(--font-display);
-    font-size: min(11.343cqw, 5.371svh);  /* 45.6 */
-    line-height: 1.05;
-    color: var(--c-gold);
-    text-shadow: var(--glow-gold-text);
-  }
-
-  /* El pergamino conserva la proporción del desktop (918x616 ≈ 342x230).
-     Los `min(...svh)` de este bloque están calibrados contra los 849 px del
-     área útil del export —no contra los 913 del PNG, que incluyen la barra de
-     estado de iOS—. Sin ellos la pantalla obliga a scrollear en teléfonos más
-     bajos que el lienzo de diseño. */
-  .welcome-m__scroll {
     position: relative;
-    /* Sin tope svh a propósito: el pergamino es una imagen de proporción fija
-       con el formulario en HTML encima. Si la imagen se achica por alto pero la
-       tipografía sigue atada al ancho, el enlace de ayuda se sale por el
-       rodillo inferior. Escala sólo con el ancho. */
-    width: 91.542cqw;                     /* 368 */
-    aspect-ratio: 342 / 230;
-    margin-top: 1.741cqw;
+    width: 100%;
+    height: 208.706cqw;   /* 839 = de 74 a 913 */
+    /* El frame recorta: el fondo sangra 46 a la izquierda, el barco 166 a la
+       derecha y el portal 144 a la izquierda. Sin esto esos px le dan scroll
+       horizontal a `.mstage`, que lo tiene en `hidden` —invisible pero
+       desplazable— y al enfocar un campo el navegador corre la pantalla. */
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
+  /* `codigos secretos logo 1` (70:345): 257x191 en (71, 151). */
+  .welcome-m__logo {
+    position: absolute;
+    left: 17.662cqw;      /* 71 */
+    top: 19.154cqw;       /* 151 - 74 */
+    width: 63.93cqw;      /* 257 */
+    height: 47.512cqw;    /* 191 */
+    max-width: none;
+    object-fit: contain;
+    /* Los dos `0 0 250px #09EAFF` del nodo, no uno de 20. */
+    filter: drop-shadow(0 0 62.19cqw #09eaff) drop-shadow(0 0 62.19cqw #09eaff);
+  }
+
+  /* `¡Bienvenidos a bordo` (70:348): 275x42 en (64, 333), centro x 201.5.
+     Se achica a su contenido y se centra en el centro del nodo, no en el del
+     lienzo: son 0.5 px de diferencia, pero es el número del spec. */
+  .welcome-m__hi {
+    position: absolute;
+    left: 50.124cqw;      /* centro x 201.5 */
+    top: 64.428cqw;       /* 333 - 74 */
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 97.015cqw;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 9.95cqw;   /* 40 */
+    line-height: 1.04;    /* 41.6 */
+    color: var(--c-white);
+    /* Los cinco efectos del nodo: 41.4, 82.8, 250 y 250 blancos, más el 0/4/4
+       negro al 25%. Van 1:1 al radio de CSS —el /2 es sólo para LAYER_BLUR—. */
+    text-shadow: 0 0 10.299cqw #ffffff, 0 0 20.597cqw #ffffff,
+      0 0 62.19cqw #ffffff, 0 0 62.19cqw #ffffff,
+      0 0.995cqw 0.995cqw #00000040;
+  }
+
+  /* `Pequeños piratas!` (70:349): 319x57 en (42, 366), centro x 201.5. */
+  .welcome-m__title {
+    position: absolute;
+    left: 50.124cqw;      /* centro x 201.5 */
+    top: 72.637cqw;       /* 366 - 74 */
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 97.015cqw;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 13.682cqw; /* 55 */
+    line-height: 1.0418;  /* 57.3 */
+    color: var(--c-gold);
+    /* Trazo blanco de 2 px del nodo. `paint-order: stroke fill` porque CSS
+       dibuja el relleno y ENCIMA el trazo, que se come 1 px de letra por todo
+       el contorno; Figma lo hace al revés. */
+    -webkit-text-stroke: 0.498cqw #ffffff;
+    paint-order: stroke fill;
+    /* `0 0 44.016px #FFFFFF` + `0 4px 4px #0000004D` del nodo. */
+    text-shadow: 0 0 10.949cqw #ffffff, 0 0.995cqw 0.995cqw #0000004d;
+  }
+
+  /* `pergamino 2 1` (70:350): 367x246 en (16, 423). */
+  .welcome-m__scroll {
+    position: absolute;
+    left: 3.98cqw;        /* 16 */
+    top: 86.816cqw;       /* 423 - 74 */
+    width: 91.294cqw;     /* 367 */
+    height: 61.194cqw;    /* 246 */
   }
 
   .welcome-m__scroll-img {
@@ -170,94 +217,170 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    max-width: none;
     object-fit: fill;
     pointer-events: none;
   }
 
-  /* El formulario vive en flujo normal dentro del pergamino: los campos y el
-     texto pueden crecer sin romper la composición. */
+  /* El formulario en flujo dentro del pergamino. Cada margen es la distancia
+     entre el borde de abajo de una capa del frame y el de arriba de la que
+     sigue, así que sin error todo cae en su nodo. */
   .welcome-m__form {
     position: absolute;
     inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 4.478cqw 9.453cqw 0;   /* 18 arriba, 38 a los lados */
+    padding: 5.721cqw 0 0;   /* 23: el título arranca en y 446 */
   }
 
+  /* `Ingresá tus datos para participar` (70:357): 228x21 en (87, 446). */
   .welcome-m__form-title {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 3.731cqw;        /* 15 */
-    line-height: 1.1;
-    color: var(--c-brown-dark);
+    font-size: 4.975cqw;      /* 20 */
+    line-height: 1.04;        /* 20.8 */
+    color: var(--c-brown);    /* #883307, el del nodo */
     text-align: center;
   }
 
+  /* `Vector 5` (70:360): 282 de ancho en (62, 470.5). */
   .welcome-m__rule {
-    width: 100%;
-    height: 1px;
-    margin-top: 1.741cqw;
-    background: var(--c-brown-30);
+    align-self: flex-start;
+    margin: 0.871cqw 0 0 11.443cqw;   /* y 470.5 · x 62 */
+    width: 70.149cqw;                 /* 282 */
+    /* El nodo lo declara como TRAZO de 1 px #883307, no como una caja con
+       fondo: la capa mide 282x0 y lo que se ve es su borde. */
+    height: 0;
+    border-top: 1px solid var(--c-brown);
   }
 
+  /* `Rectangle 3` (70:362) y `Rectangle 4` (70:364): 278x30 en x 61, y 489 y
+     524. Los 5 px de separación son el hueco entre las dos cápsulas. */
   .welcome-m__fields {
-    width: 100%;
+    align-self: flex-start;
+    margin: 4.353cqw 0 0 11.194cqw;   /* y 489 · x 61 */
+    width: 69.154cqw;                 /* 278 */
     display: flex;
     flex-direction: column;
-    gap: 1.493cqw;              /* 6 */
-    margin-top: 2.239cqw;
+    gap: 1.244cqw;                    /* 5 */
   }
 
-  /* El botón del Figma ocupa el 40% del ancho del pergamino; con la medida
-     anterior el bloque crecía y empujaba el enlace sobre el rodillo inferior. */
+  /* `boton secundario 1` (70:361): 151x50 en (127, 564). */
   .welcome-m__submit {
-    width: 34.826cqw;           /* 140 */
-    margin-top: 2.239cqw;
+    align-self: flex-start;
+    margin: 2.488cqw 0 0 27.612cqw;   /* y 564 · x 127 */
+    width: 37.562cqw;                 /* 151 */
+    height: 12.438cqw;                /* 50 */
   }
 
-  /* El área táctil no baja de 44 px aunque el pergamino se achique. */
   .welcome-m__submit > * {
+    height: 100%;
     min-height: 44px;
   }
 
-  /* El enlace conserva su cuerpo de diseño; el área táctil se amplía con un
-     pseudo-elemento que crece sobre todo hacia abajo, donde queda pergamino
-     libre, para no robarle el toque al botón que tiene encima. */
+  /* `Participar` (70:369): 81x26 en (164, 578). El botón es una tabla de
+     madera y no es simétrica: el nodo pone el rótulo 2 px a la derecha y 2.4
+     abajo del centro de la caja, no en el centro exacto. */
+  .welcome-m__submit .promo-btn__label {
+    position: relative;
+    left: 0.423cqw;    /* 1.7 */
+    top: 0.597cqw;     /* 2.4 */
+  }
+
+  /* `¿Dónde encuentro el código secreto?` (70:358): 149x12 en (127, 619).
+     El subrayado es `Vector 6` (70:359), que en el frame es una capa aparte;
+     acá lo dibuja el propio `text-decoration` y por eso no se marca. */
   .welcome-m__help {
     position: relative;
+    align-self: flex-start;
     display: inline-block;
-    margin-top: 1.99cqw;
+    margin: 1.244cqw 0 0 27.612cqw;   /* y 619 · x 127 */
     font-family: var(--font-display);
-    font-size: 2.985cqw;        /* 12 */
+    font-size: 2.985cqw;              /* 12 */
+    line-height: 1.0417;              /* 12.5 */
     color: var(--c-brown);
     text-decoration: underline;
   }
 
+  /* El área táctil crece hacia abajo, donde queda pergamino libre, para no
+     robarle el toque al botón que tiene encima. */
   .welcome-m__help::after {
     content: '';
     position: absolute;
     inset: -7px -10px -24px;
   }
 
-  .welcome-m__scene {
-    margin-top: 3.483cqw;
+  /* `planeta premios 1` (70:346): 282x286 en (-117, -143). Arranca 217 px por
+     encima del bloque, que empieza en 74: en el frame asoma por el borde de
+     arriba y por el izquierdo. */
+  .welcome-m__planeta {
+    position: absolute;
+    left: -29.104cqw;     /* -117 */
+    top: -53.98cqw;       /* -143 - 74 */
+    width: 70.149cqw;     /* 282 */
+    height: 71.144cqw;    /* 286 */
   }
 
+  /* `destello-Photoroom` (70:351): 153x101 en (125, 650). Va por delante del
+     pergamino, sobre el rodillo de abajo. */
+  .welcome-m__destello {
+    position: absolute;
+    left: 31.095cqw;      /* 125 */
+    top: 143.284cqw;      /* 650 - 74 */
+    width: 38.06cqw;      /* 153 */
+    height: 25.124cqw;    /* 101 */
+  }
+
+  /* `planeta vit 1 1` (70:353): 175x86 en (278, 19), con LAYER_BLUR 10.
+     El desenfoque de capa va a la MITAD en CSS —`blur(5px)`—, que es la única
+     conversión con /2; las sombras del diseño van 1:1. */
+  .welcome-m__planeta-vit {
+    position: absolute;
+    left: 69.154cqw;      /* 278 */
+    top: -13.682cqw;      /* 19 - 74 */
+    width: 43.532cqw;     /* 175 */
+    height: 21.393cqw;    /* 86 */
+    filter: blur(5px);
+  }
+
+  /* `portal 1` (70:355): 304x248 en (-144, 701). */
+  .welcome-m__portal {
+    position: absolute;
+    left: -35.821cqw;     /* -144 */
+    top: 155.97cqw;       /* 701 - 74 */
+    width: 75.622cqw;     /* 304 */
+    height: 61.692cqw;    /* 248 */
+  }
+
+  /* El `0 0 250px #FFFFFF` del nodo `barco 1`, en una capa QUIETA y aparte.
+     Es el mismo patrón del landing: sobre el barco —que flota— el navegador
+     vuelve a rasterizar un desenfoque de 250 px en cada cuadro y la pantalla
+     se cae. La copia se corre 1000 px a la izquierda y su sombra se desplaza
+     esos mismos 1000 px, así que en pantalla queda sólo el halo; los dos
+     números se cancelan y no dependen del ancho del teléfono. */
+  .welcome-m__ship-halo {
+    position: absolute;
+    left: 50cqw;          /* 201 */
+    top: 143.532cqw;      /* 651 - 74 */
+    width: 91.294cqw;     /* 367 */
+    height: 62.687cqw;    /* 252 */
+    max-width: none;
+    object-fit: contain;
+    transform: translateX(-1000px);
+    filter: drop-shadow(1000px 0 62.19cqw #ffffff);
+  }
+
+  /* `barco 1` (70:347): 367x252 en (201, 651). */
   .welcome-m__ship {
-    z-index: 2;
+    position: absolute;
+    left: 50cqw;          /* 201 */
+    top: 143.532cqw;      /* 651 - 74 */
+    width: 91.294cqw;     /* 367 */
+    height: 62.687cqw;    /* 252 */
   }
 
-  /* Los dos íconos del formulario NO miden lo mismo en el Figma: la cédula
-   (72:455) es 52x35 y el código secreto (72:451) es 30x40 —más angosto y más
-   alto—. El contenedor compartido de `.pfield__icon` los igualaba en 56x42,
-   que es lo que el PDF marca como "ícono de código secreto ajustar". */
-.welcome__fields .pfield:nth-child(2) .pfield__icon {
-  width: 1.563cqw;  /* 30 */
-  height: 2.083cqw; /* 40 */
-}
-
-.welcome__error {
+  .welcome__error {
     margin: 1.244cqw 0 0;
     font-size: 3.234cqw;
   }

@@ -83,6 +83,18 @@ Escribe en `figma/spec/`:
 Las coordenadas son **relativas al frame**: `(0,0)` es la esquina del diseño, no
 del lienzo de Figma. Eso es lo que se traduce a CSS sin hacer cuentas.
 
+**Bajar un asset del diseño.** Cuando una pieza está en el Figma y no en el
+repo —un ícono, un adorno— se baja del nodo en vez de pedírsela al diseñador:
+
+```bash
+npm run figma:pull -- --export 70:366,70:370            # svg por defecto
+npm run figma:pull -- --export 70:178 --formato png --escala 2
+```
+
+Queda en `figma/assets/<nodo>.<formato>`. Bajarlo del nodo garantiza que sea la
+pieza exacta y no un recorte, que es una diferencia que `figma:check` no puede
+ver: compara cajas, no los píxeles de una imagen.
+
 ### 2. `figma:check` — medir
 
 ```bash

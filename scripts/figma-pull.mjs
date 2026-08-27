@@ -3,6 +3,13 @@
  *
  *   FIGMA_TOKEN=figd_xxx node scripts/figma-pull.mjs registro-mobile
  *   FIGMA_TOKEN=figd_xxx node scripts/figma-pull.mjs --all
+ *   FIGMA_TOKEN=figd_xxx node scripts/figma-pull.mjs --export 70:366,70:370
+ *
+ * Con --export baja los nodos como archivo a `figma/assets/`, en el formato que
+ * diga --formato (svg por defecto, o png con --escala). Sirve para los íconos y
+ * las piezas que están en el diseño y no en el repo: el candado y la cédula de
+ * los campos de la pantalla CI, por ejemplo. Bajarlos del nodo evita el paso de
+ * pedírselos al diseñador y garantiza que sea la pieza exacta, no un recorte.
  *
  * El mapa de qué frame es cada pantalla vive en `figma/nodes.json`.
  *
@@ -37,6 +44,18 @@ const SALIDA = path.join(RAIZ, 'figma', 'spec');
 
 const args = process.argv.slice(2);
 const conPng = args.includes('--png');
+
+// --export 70:366,70:370  [--formato svg|png] [--escala 2]
+const iExport = args.indexOf('--export');
+const exportar = iExport !== -1 ? (args[iExport + 1] ?? '').split(/[\s,]+/).filter(Boolean) : [];
+// Ojo: indexOf devuelve -1 cuando la bandera no está, y args[-1 + 1] es
+// args[0]. Sin este guard, `--export 70:366` tomaba «--export» como formato.
+const bandera = (nombre) => {
+  const i = args.indexOf(nombre);
+  return i === -1 ? null : args[i + 1] ?? null;
+};
+const formato = bandera('--formato') ?? 'svg';
+const escalaExport = Number(bandera('--escala')) || 1;
 const todos = args.includes('--all');
 const pedidos = args.filter((a) => !a.startsWith('--'));
 
@@ -54,6 +73,29 @@ if (!fs.existsSync(MAPA)) salir(`No existe ${rel(MAPA)}. Copiá figma/nodes.exam
 const mapa = JSON.parse(fs.readFileSync(MAPA, 'utf8'));
 const fileKey = mapa.fileKey;
 if (!fileKey) salir(`${rel(MAPA)} no tiene "fileKey".`);
+
+// ------------------------------------------------------- exportar un asset
+if (exportar.length) {
+  if (!['svg', 'png', 'jpg', 'pdf'].includes(formato)) salir(`Formato no soportado: ${formato}`);
+  const ids = exportar.map(normalizarId);
+  const q = `format=${formato}` + (formato === 'png' || formato === 'jpg' ? `&scale=${escalaExport}` : '');
+  const r = await pedir(`/images/${fileKey}?ids=${ids.join(',')}&${q}`);
+  const dir = path.join(RAIZ, 'figma', 'assets');
+  fs.mkdirSync(dir, { recursive: true });
+
+  for (const id of ids) {
+    const url = r.images?.[id];
+    if (!url) {
+      console.error(`  ✗ ${id}: Figma no devolvió imagen (¿nodo vacío o id mal escrito?)`);
+      continue;
+    }
+    const bytes = await fetch(url).then((x) => x.arrayBuffer());
+    const archivo = path.join(dir, `${id.replace(':', '-')}.${formato}`);
+    fs.writeFileSync(archivo, Buffer.from(bytes));
+    console.log(`  ✓ ${id}  →  figma/assets/${path.basename(archivo)}  (${Math.round(bytes.byteLength / 1024)} kB)`);
+  }
+  process.exit(0);
+}
 
 const pantallas = Object.entries(mapa.pantallas ?? {})
   .map(([slug, valor]) => ({ slug, ...(typeof valor === 'string' ? { node: valor } : valor) }))
