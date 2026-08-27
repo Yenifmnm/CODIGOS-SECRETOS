@@ -211,7 +211,11 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
           premios, barco, los dos titulares, pergamino, destello, planeta vit y
           portal. Como todas son absolutas y ninguna declara `z-index`, el orden
           del DOM es el que manda y no hace falta apilarlas a mano. */}
-      <LogoCodigos className="welcome-m__logo" data-figma="70:345" />
+      <LogoCodigos
+        className="welcome-m__logo"
+        resplandor="horneado"
+        data-figma="70:345"
+      />
 
       <FloatingLayer amplitude={6} duration={7} delay={0.5}
         className="welcome-m__planeta" data-figma="70:346">

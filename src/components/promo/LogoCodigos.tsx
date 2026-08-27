@@ -1,9 +1,22 @@
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
+import halo from '../../assets/logos/codigos-secretos-halo.webp';
 import './logo-codigos.css';
 
 interface LogoCodigosProps {
   /** La clase que posiciona el logo en cada pantalla. Va al contenedor. */
   className?: string;
+  /**
+   * De dónde sale el resplandor cian.
+   *
+   *   `css`       — `drop-shadow` en tiempo de ejecución. Es lo que hacen
+   *                 PREMIOS, CÓDIGO y las cuatro de resultado.
+   *   `horneado`  — una imagen con el resplandor ya dibujado, exportada del
+   *                 propio nodo. Cero desenfoque en tiempo de ejecución.
+   *
+   * Sólo INICIO y PARTICIPAR usan `horneado`, que son las dos donde se reportó
+   * el cuadrado y la demora. Las otras tres quedan como estaban.
+   */
+  resplandor?: 'css' | 'horneado';
   /** Nodo del Figma de esta capa, para `npm run figma:check`. */
   'data-figma'?: string;
 }
@@ -52,16 +65,29 @@ interface LogoCodigosProps {
  * Cinco pantallas lo usan: inicio, participar, premios, código y las cuatro de
  * resultado. Se cambia acá una vez, no en cinco lugares.
  */
-export function LogoCodigos({ className, 'data-figma': figma }: LogoCodigosProps) {
+export function LogoCodigos({
+  className,
+  resplandor = 'css',
+  'data-figma': figma,
+}: LogoCodigosProps) {
+  const horneado = resplandor === 'horneado';
   return (
     <span
-      className={['logo-cs', className].filter(Boolean).join(' ')}
+      className={['logo-cs', horneado && 'logo-cs--horneado', className]
+        .filter(Boolean)
+        .join(' ')}
       data-figma={figma}
       /* El resplandor del nodo se dibuja repartido entre este elemento y la
          imagen, así que la comparación de sombras del checker —que mira UN
          elemento— no puede validarlo. Lo valida el diff de píxeles. */
       data-figma-omitir="sombras"
     >
+      {/* El resplandor, ya dibujado. Va ANTES para quedar detrás, es
+          `position: absolute` —así no cambia la caja que mide `figma:check`— y
+          se sale de la caja los mismos 250 px de margen que trae el export. */}
+      {horneado && (
+        <img src={halo} alt="" aria-hidden="true" className="logo-cs__halo" />
+      )}
       <img src={logoCodigos} alt="Códigos Secretos 2026" />
     </span>
   );

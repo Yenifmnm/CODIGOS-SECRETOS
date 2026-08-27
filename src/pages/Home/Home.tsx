@@ -196,7 +196,11 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         data-figma="70:180 79:1120"
       />
 
-      <LogoCodigos className="home-m__logo" data-figma="70:169 79:1113" />
+      <LogoCodigos
+        className="home-m__logo"
+        resplandor="horneado"
+        data-figma="70:169 79:1113"
+      />
 
       <div className="mblock">
         {/* El segundo id de cada uno es el del mismo texto en el frame del menú

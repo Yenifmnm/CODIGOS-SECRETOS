@@ -26,6 +26,57 @@
   height: 100%;
   max-width: none;
   object-fit: contain;
-  /* La SEGUNDA sombra del nodo. */
+  /* La sombra del nodo, para las tres pantallas que siguen con la variante
+     `css`: PREMIOS, CÓDIGO y las cuatro de resultado. */
   filter: var(--logo-glow);
+}
+
+/* ---------------------------------------------------------------------------
+   VARIANTE HORNEADA. En INICIO y PARTICIPAR el resplandor NO se calcula: viene
+   dibujado en una imagen exportada del propio nodo 70:169, con sus dos efectos.
+
+   Por qué. Un `drop-shadow` de 125 px obliga a Safari a un buffer aparte que
+   primero dibuja recortado y refina después: eso es el cuadrado que aparecía
+   alrededor del logo y se iba al tocar la pantalla, y es también parte de la
+   demora, porque el desenfoque se calcula antes de poder pintar. Pasar de dos
+   sombras a una no alcanzó porque el problema es el RADIO, no la cantidad.
+
+   Por qué en DOS imágenes y no en una sola. El export del nodo con sus efectos
+   mide 757x691 px de diseño —el nodo es 257x191 y las sombras agregan 250 px
+   por lado— y para que el logo quede tan nítido como hoy habría que exportarlo
+   a 4x: más de 1 MB. En cambio el resplandor es un degradado suave, que
+   soporta baja resolución sin que se note: va a 0,25x y pesa 35 kB, y el logo
+   nítido de siempre (114 kB) se dibuja ENCIMA, tapando la copia borrosa que
+   trae el export debajo. Total 149 kB contra los 613 kB que costaría hornear
+   todo junto a 2x, y con el logo más nítido que esa opción.
+   --------------------------------------------------------------------------- */
+.logo-cs--horneado {
+  position: relative;
+}
+
+/* Cero filtro: ni en el contenedor ni en ninguna de las dos imágenes. */
+.logo-cs--horneado > img {
+  filter: none;
+}
+
+/* Las medidas salen del export: 757x691 con el nodo de 257x191 centrado, o sea
+   250 px de margen por lado. En porcentaje de la caja del logo, para que
+   acompañe si la caja cambia de tamaño. */
+.logo-cs > .logo-cs__halo {
+  position: absolute;
+  left: -97.276%;    /* -250 / 257 */
+  top: -130.890%;    /* -250 / 191 */
+  width: 294.553%;   /*  757 / 257 */
+  height: 361.780%;  /*  691 / 191 */
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  /* Detrás del logo nítido, sin sacar la caja del flujo: al ser `absolute` no
+     cambia lo que mide `figma:check` sobre el contenedor. */
+  z-index: 0;
+}
+
+.logo-cs--horneado > img:not(.logo-cs__halo) {
+  position: relative;
+  z-index: 1;
 }
