@@ -6,12 +6,16 @@
 
 name: Publicar microsite
 
-# DESACTIVADO: el disparo por push está comentado mientras se calibran las
-# pantallas mobile contra el Figma. Se publica a mano desde la pestaña Actions
-# («Run workflow») y se vuelve a activar descomentando estas dos líneas.
+# Cada push a main publica. El disparo estuvo comentado un tiempo «mientras se
+# calibran las pantallas mobile contra el Figma», y esa razón ya no aplica: las
+# diez composiciones mobile están medidas contra el spec con `npm run
+# figma:check`, así que la calibración ya no depende de mirar el sitio publicado.
+#
+# `workflow_dispatch` se queda igual, para poder republicar a mano sin tener que
+# inventar un commit.
 on:
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -24,13 +28,17 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# Las cinco acciones van en la primera versión que corre sobre Node 24: el
+# runner deja de avisar por el node20 en camino de baja. `node-version: 20` de
+# más abajo es otra cosa —el Node con el que se compila el proyecto— y no se
+# toca acá.
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: npm
@@ -40,9 +48,9 @@ jobs:
       # Falla el build si hay errores de tipos, antes de publicar nada.
       - run: npm run build
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
@@ -54,4 +62,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
