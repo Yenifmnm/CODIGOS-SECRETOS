@@ -222,8 +222,25 @@
        dice que la traducción no es un factor fijo: se mide por caja, no se
        aplica una regla. */
     -webkit-text-stroke: 0.498cqw var(--c-title-outline);   /* borde 2px #FCC102 */
-    /* `0px 0px 44.016px #FFFFFF` + `0px 4px 10px #212F5C` del nodo. */
-    text-shadow: 0 0 10.949cqw #FFFFFF, 0 0.995cqw 2.488cqw #212F5C;
+    /* `0px 0px 44.016px #FFFFFF` + `0px 4px 10px #212F5C` del nodo.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%.
+
+       El trazo de esta regla NO se toca: los tres titulares rojos (74:1107,
+       105:278, 131:350) quedan a 2 px porque medido es su mejor valor. */
+    text-shadow: 0 0 10.949cqw rgba(255, 255, 255, 0.2),
+      0 0.995cqw 2.488cqw #212F5C;
   }
 
   .result-m__msg {
@@ -233,9 +250,24 @@
     font-size: 6.219cqw;    /* 25 */
     line-height: 1.04;      /* 26 */
     color: var(--c-white);
-    /* Los cuatro DROP_SHADOW del nodo: 82.8, 250 y 250 blancos, mas el 0/4/4. */
-    text-shadow: 0 0 20.597cqw #FFFFFF, 0 0 62.19cqw #FFFFFF,
-      0 0 62.19cqw #FFFFFF, 0 0.995cqw 0.995cqw #00000040;
+    /* Los cuatro DROP_SHADOW del nodo: 82.8, 250 y 250 blancos, mas el 0/4/4.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%. */
+    text-shadow: 0 0 20.597cqw rgba(255, 255, 255, 0.2),
+      0 0 62.19cqw rgba(255, 255, 255, 0.2),
+      0 0 62.19cqw rgba(255, 255, 255, 0.2),
+      0 0.995cqw 0.995cqw #00000040;
     text-align: center;
   }
 

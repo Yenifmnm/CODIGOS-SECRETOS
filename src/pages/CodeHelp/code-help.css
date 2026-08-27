@@ -194,8 +194,22 @@
     color: var(--c-gold);
     /* Trazo de 1 px del nodo (73:827), alineado al CENTRO. */
     -webkit-text-stroke: 0.249cqw #ffffff;
-    /* `0 0 6.288` + `0 0 44.016` blancos y `0 4px 10px #212F5C`. */
-    text-shadow: 0 0 1.564cqw #ffffff, 0 0 10.949cqw #ffffff,
+    /* `0 0 6.288` + `0 0 44.016` blancos y `0 4px 10px #212F5C`.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%. */
+    text-shadow: 0 0 1.564cqw rgba(255, 255, 255, 0.2),
+      0 0 10.949cqw rgba(255, 255, 255, 0.2),
       0 0.995cqw 2.488cqw #212f5c;
     text-align: center;
     z-index: 3;

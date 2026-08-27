@@ -65,7 +65,12 @@ export default function CodeHelp() {
           <LogoCodigos className="codehelp-m__logo" data-figma="73:783" />
 
           {/* El corte de renglón es el del Figma mobile, no uno automático. */}
-          <p className="codehelp-m__title" data-figma="73:827">
+          {/* `omitir="sombras"`: el resplandor blanco va al 20% y el nodo lo declara
+          al 100%. NO es un desvío a corregir: es la reducción pedida por la
+          clienta el 27-08-2026, replicada desde HOME por consistencia y
+          anotada al lado del valor en el CSS. Mientras esté, el control no
+          avisa si alguien toca esas sombras por error. */}
+          <p className="codehelp-m__title" data-figma="73:827" data-figma-omitir="sombras">
             Buscá el Código Secreto en
             <br />
             los stickers de Purosol

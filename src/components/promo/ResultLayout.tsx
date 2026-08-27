@@ -208,7 +208,10 @@ export function ResultLayout({
           <p
             className={`result-m__title result-m__title--${titleTone}`}
             data-figma="74:1107 74:987 105:278 131:350"
-            data-figma-omitir={titleTone === 'gold' ? 'trazo-ancho' : undefined}
+            /* El dorado omite el ancho del trazo (1 px contra los 2 del nodo);
+               el de contorno rojo omite las sombras, porque su blanco va al
+               20%. Cada tono omite lo suyo y nada más. */
+            data-figma-omitir={titleTone === 'gold' ? 'trazo-ancho' : 'sombras'}
           >
             {title}
           </p>
@@ -219,6 +222,12 @@ export function ResultLayout({
           <p
             className="result-m__msg"
             data-figma="74:1109 74:988 105:279 131:351"
+            /* `omitir="sombras"`: el resplandor blanco va al 20% y el nodo lo declara
+          al 100%. NO es un desvío a corregir: es la reducción pedida por la
+          clienta el 27-08-2026, replicada desde HOME por consistencia y
+          anotada al lado del valor en el CSS. Mientras esté, el control no
+          avisa si alguien toca esas sombras por error. */
+            data-figma-omitir="sombras"
             data-figma-ejes={mobileMensajeEjes}
           >
             {message.map((line) => (

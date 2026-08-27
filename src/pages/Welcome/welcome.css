@@ -186,9 +186,24 @@
     line-height: 1.04;    /* 41.6 */
     color: var(--c-white);
     /* Los cinco efectos del nodo: 41.4, 82.8, 250 y 250 blancos, más el 0/4/4
-       negro al 25%. Van 1:1 al radio de CSS —el /2 es sólo para LAYER_BLUR—. */
-    text-shadow: 0 0 10.299cqw #ffffff, 0 0 20.597cqw #ffffff,
-      0 0 62.19cqw #ffffff, 0 0 62.19cqw #ffffff,
+       negro al 25%. Van 1:1 al radio de CSS —el /2 es sólo para LAYER_BLUR—.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%. */
+    text-shadow: 0 0 10.299cqw rgba(255, 255, 255, 0.2),
+      0 0 20.597cqw rgba(255, 255, 255, 0.2),
+      0 0 62.19cqw rgba(255, 255, 255, 0.2),
+      0 0 62.19cqw rgba(255, 255, 255, 0.2),
       0 0.995cqw 0.995cqw #00000040;
   }
 
@@ -223,8 +238,22 @@
        landing; ver la nota larga en `home.css`.
        ------------------------------------------------------------------- */
     -webkit-text-stroke: 0.249cqw #ffffff;  /* nodo 2px CENTER -> 1px de CSS */
-    /* `0 0 44.016px #FFFFFF` + `0 4px 4px #0000004D` del nodo. */
-    text-shadow: 0 0 10.949cqw #ffffff, 0 0.995cqw 0.995cqw #0000004d;
+    /* `0 0 44.016px #FFFFFF` + `0 4px 4px #0000004D` del nodo.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%. */
+    text-shadow: 0 0 10.949cqw rgba(255, 255, 255, 0.2),
+      0 0.995cqw 0.995cqw #0000004d;
   }
 
   /* `pergamino 2 1` (70:350): 367x246 en (16, 423). */

@@ -220,8 +220,24 @@ export function PrizeCarousel({
       {caption !== undefined && (
         /* El rotulo es el nombre del premio, que sale del catalogo: el parrafo
            se achica a su contenido, asi que su caja ES la tinta y el ancho lo
-           decide el nombre, no el CSS. Por eso solo deciden el alto y la y. */
-        <p className="carousel__caption" data-figma={nodos?.nombre} data-figma-ejes="y,h">
+           decide el nombre, no el CSS. Por eso solo deciden el alto y la y.
+
+           `omitir="sombras"`: el resplandor blanco va al 20% y el nodo lo
+           declara al 100%. NO es un desvio a corregir: es la reduccion pedida
+           por la clienta el 27-08-2026, replicada desde HOME por consistencia y
+           anotada al lado del valor en el CSS. Mientras este, el control no
+           avisa si alguien toca esas sombras por error.
+
+           Ojo con el formato: aca estamos DENTRO de una expresion JS y no entre
+           hijos de JSX, asi que el comentario va con la sintaxis de JS y no
+           envuelto en llaves. Y no puede contener la secuencia que cierra un
+           comentario de bloque, porque lo termina antes de tiempo. */
+        <p
+          className="carousel__caption"
+          data-figma={nodos?.nombre}
+          data-figma-ejes="y,h"
+          data-figma-omitir="sombras"
+        >
           {caption}
         </p>
       )}

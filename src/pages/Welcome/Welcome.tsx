@@ -239,14 +239,19 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
         data-figma-omitir="sombras"
       />
 
-      <p className="welcome-m__hi" data-figma="70:348">¡Bienvenidos a bordo</p>
+      {/* `omitir="sombras"`: el resplandor blanco va al 20% y el nodo lo declara
+          al 100%. NO es un desvío a corregir: es la reducción pedida por la
+          clienta el 27-08-2026, replicada desde HOME por consistencia. */}
+      <p className="welcome-m__hi" data-figma="70:348" data-figma-omitir="sombras">
+        ¡Bienvenidos a bordo
+      </p>
       {/* `omitir="trazo-ancho"`: el nodo pide 2 px CENTER y el CSS pone 1. Ver
           la medición en `welcome.css`. Sólo el ancho: color y orden se siguen
           controlando. */}
       <p
         className="welcome-m__title"
         data-figma="70:349"
-        data-figma-omitir="trazo-ancho"
+        data-figma-omitir="trazo-ancho,sombras"
       >
         Pequeños piratas!
       </p>
