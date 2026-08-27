@@ -372,9 +372,23 @@
   /* El `0 0 250px #FFFFFF` del nodo `barco 1`, en una capa QUIETA y aparte.
      Es el mismo patrón del landing: sobre el barco —que flota— el navegador
      vuelve a rasterizar un desenfoque de 250 px en cada cuadro y la pantalla
-     se cae. La copia se corre 1000 px a la izquierda y su sombra se desplaza
-     esos mismos 1000 px, así que en pantalla queda sólo el halo; los dos
-     números se cancelan y no dependen del ancho del teléfono. */
+     se cae.
+  /* CÓMO SE DIBUJA. `brightness(0)` deja la silueta en negro y `invert(1)` la
+     pasa a blanco —ninguno de los dos toca el canal alfa—, y `blur()` la
+     desparrama. Eso ES la sombra que dibujaría `drop-shadow`, pero sin la copia
+     del barco encima, que era todo el problema.
+
+     El radio va a la MITAD porque no son la misma unidad: `drop-shadow(0 0 B)`
+     desenfoca con sigma B/2, y `blur(R)` usa R como sigma. 62.19 → 31.095cqw,
+     que son los 250 px del nodo.
+
+     Antes esto era la sombra de una copia corrida 1000 px a la izquierda, con
+     la sombra devuelta otros 1000 px. Lo que resolvía el problema de
+     rendimiento NO era el desplazamiento: era que el desenfoque de 250 px
+     viviera en una capa QUIETA en vez de sobre el barco, que se anima. Esta
+     capa sigue quieta, así que cuesta lo mismo. El desplazamiento sólo servía
+     para esconder la copia del barco, y a cambio ataba el resplandor a la
+     región del filtro: si el navegador la recortaba, el halo se cortaba. */
   .welcome-m__ship-halo {
     position: absolute;
     left: 50cqw;          /* 201 */
@@ -383,8 +397,7 @@
     height: 62.687cqw;    /* 252 */
     max-width: none;
     object-fit: contain;
-    transform: translateX(-1000px);
-    filter: drop-shadow(1000px 0 62.19cqw #ffffff);
+    filter: brightness(0) invert(1) blur(31.095cqw);
   }
 
   /* `barco 1` (70:347): 367x252 en (201, 651). */

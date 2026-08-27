@@ -191,15 +191,26 @@
 }
 
 /* El resplandor `0px 0px 250px #FFFFFF` del nodo `barco 1`, sin el barco.
-   La imagen se dibuja 1000 px a la izquierda —fuera del lienzo, que recorta— y
-   la sombra se desplaza esos mismos 1000 px, así que lo único que cae en
-   pantalla es el halo. Los dos valores son el mismo número y se cancelan, así
-   que no depende del ancho del teléfono.
-   Existe porque el filtro tiene que vivir en una capa QUIETA: sobre el barco,
-   que entra navegando y después flota, el navegador volvía a rasterizar un
-   desenfoque de 250 px en cada cuadro y la pantalla caía a 20 fps. */
+   Vive en una capa QUIETA y aparte porque sobre el barco —que entra navegando y
+   después flota— el navegador volvía a rasterizar un desenfoque de 250 px en
+   cada cuadro y la pantalla caía a 20 fps.
+/* CÓMO SE DIBUJA. `brightness(0)` deja la silueta en negro y `invert(1)` la
+   pasa a blanco —ninguno de los dos toca el canal alfa—, y `blur()` la
+   desparrama. Eso ES la sombra que dibujaría `drop-shadow`, pero sin la copia
+   del barco encima, que era todo el problema.
+
+   El radio va a la MITAD porque no son la misma unidad: `drop-shadow(0 0 B)`
+   desenfoca con sigma B/2, y `blur(R)` usa R como sigma. 62.19 → 31.095cqw,
+   que son los 250 px del nodo.
+
+   Antes esto era la sombra de una copia corrida 1000 px a la izquierda, con
+   la sombra devuelta otros 1000 px. Lo que resolvía el problema de
+   rendimiento NO era el desplazamiento: era que el desenfoque de 250 px
+   viviera en una capa QUIETA en vez de sobre el barco, que se anima. Esta
+   capa sigue quieta, así que cuesta lo mismo. El desplazamiento sólo servía
+   para esconder la copia del barco, y a cambio ataba el resplandor a la
+   región del filtro: si el navegador la recortaba, el halo se cortaba. */
 .home-m__ship-halo {
   z-index: 1;
-  transform: translateX(-1000px);
-  filter: drop-shadow(1000px 0 62.19cqw #FFFFFF);
+  filter: brightness(0) invert(1) blur(31.095cqw);
 }
