@@ -37,8 +37,12 @@
 
 .welcome__pirates {
   color: #fcc102;
-  text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
-    0 0.208cqw 0.208cqw rgba(0, 0, 0, 0.3);
+  -webkit-text-stroke: 2px #ffffff;
+  paint-order: stroke fill;
+  text-shadow: none;
+  filter: drop-shadow(0 0 0.328cqw rgba(255, 255, 255, 0.7))
+    drop-shadow(0 0 2.292cqw rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0.208cqw 0.521cqw rgba(33, 47, 92, 0.65));
   white-space: nowrap;
   text-align: center;
 }
