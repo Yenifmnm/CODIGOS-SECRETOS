@@ -224,8 +224,27 @@
   top: -4.478cqw;     /* -18 */
   width: 113.433cqw;  /* 456 */
   height: 240.796cqw; /* 968 */
-  min-height: 100%;   /* en un teléfono más alto que el lienzo, cubre igual */
+  /* En un teléfono más alto que el lienzo, cubre igual. Se le descuenta el
+     sangrado del cielo: su bloque contenedor ahora mide el viewport MÁS 320, y
+     sin la resta el velo salía 203 px más alto que el nodo y `figma:check` lo
+     marcaba. Lo de afuera lo cubre la sombra de abajo, no el alto. */
+  min-height: calc(100% - 2 * var(--mstage-sangrado, 0px));
   background: rgba(33, 47, 92, 0.51);  /* #212F5C al 51% */
+
+  /* El velo sangra con el cielo, y por `box-shadow` y no agrandando la caja.
+     Una sombra de puro esparcido pinta el mismo color en el anillo de AFUERA
+     del borde, sin tocar `getBoundingClientRect()`: la capa sigue midiendo
+     456x968 y `figma:check` la sigue comparando contra `Rectangle 6`.
+
+     Hace falta porque el cielo ahora sangra 160 px: sin esto, la franja de más
+     está tapada por la foto pero NO por el velo, y la foto sin velo se ve MÁS
+     CLARA. O sea que sangrar el cielo solo habría cambiado un síntoma por otro
+     —justo el que se reportó—.
+
+     Y no se puede resolver con una segunda capa de relleno como la de la foto:
+     dos velos al 51% se suman al 76% donde se pisan. La sombra no se pisa con
+     el fondo del elemento, se dibuja al lado. */
+  box-shadow: 0 0 0 var(--mstage-sangrado, 0px) rgba(33, 47, 92, 0.51);
   pointer-events: none;
 }
 

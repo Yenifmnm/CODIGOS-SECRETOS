@@ -154,10 +154,34 @@
   background: #0b1642;
 }
 
-/* Capa del cielo: fija, cubre el viewport, nunca intercepta el puntero. */
+/* Capa del cielo: fija, cubre el viewport, nunca intercepta el puntero.
+
+   SANGRA POR ARRIBA Y POR ABAJO, y ese es el punto. Con `inset: 0` esta capa
+   medía exactamente el viewport y ni un píxel más. En un navegador de escritorio
+   eso alcanza; en Safari de iPhone no, porque el viewport CAMBIA DE ALTO
+   mientras se usa la página: la barra de direcciones se pliega y se despliega al
+   scrollear, y el borde de arriba del área visible se mueve. Una capa fija de
+   alto exacto queda corta durante ese movimiento y deja ver lo que hay detrás
+   —el color plano de `.mstage`—, que es la franja de arriba que reportó la
+   clienta en un iPhone 17.
+
+   No se pudo reproducir en WebKit headless: ahí el viewport no se mueve solo.
+   Medido a cinco altos (620, 700, 760, 812 y 874) y en tres posiciones de
+   scroll, con un detector de filos rectos —cuántas columnas dan un escalón en
+   la misma fila—, el render de WebKit y el de Chromium son iguales y el único
+   filo de los primeros 200 px son las letras del logo. O sea que el defecto
+   necesita el viewport móvil de verdad para aparecer.
+
+   El sangrado tapa esa clase entera de una vez: la barra de Safari mide menos de
+   90 px arriba y menos de 60 abajo, así que 160 sobran.
+
+   NADA MARCADO SE MUEVE: `.mstage__sky-caja` le suma el mismo sangrado a su
+   `top`, con lo cual su origen en coordenadas del viewport queda idéntico.
+   `figma:check` no ve ninguna diferencia. */
 .mstage__sky {
+  --mstage-sangrado: 160px;
   position: fixed;
-  inset: 0;
+  inset: calc(-1 * var(--mstage-sangrado)) 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -193,7 +217,10 @@
 
      A 402 los dos anchos coinciden, así que `figma:check` —que mide justo
      ahí— no ve ninguna diferencia y la caja del nodo sigue comparándose. */
-  top: var(--safe-top);
+  /* El sangrado del cielo se le devuelve acá, así el origen de las capas
+     marcadas queda donde estaba: el cielo empieza 160 px más arriba y esta caja
+     baja los mismos 160. */
+  top: calc(var(--safe-top) + var(--mstage-sangrado));
   /* El corrimiento va en `margin-top` y no sumado al `top`: los porcentajes de
      `top` se resuelven contra el ALTO del bloque contenedor y los de `margin`
      contra el ANCHO, que es la misma base contra la que resuelve `width`. Con
