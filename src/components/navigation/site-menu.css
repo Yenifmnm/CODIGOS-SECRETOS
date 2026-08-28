@@ -255,8 +255,8 @@
     grid-template-rows: var(--m-pill-h) 1fr;
     align-items: start;
     padding: 0 var(--m-pad) 3.483cqw;
-    border-radius: 5.224cqw; /* 21 */
-    background: rgba(214, 236, 248, 0.82);
+    border-radius: 6.468cqw; /* 26, panel de Figma */
+    background: rgba(255, 255, 255, 0.57);
     /* `none` y no la ausencia de la línea: si se borrara, ganaría por cascada
        la de `.site-menu--open .site-menu__bar` de la rama de escritorio —el
        resplandor cian de más arriba— y el efecto inventado seguiría, sólo que
@@ -356,8 +356,8 @@
   }
 
   .site-menu__link--active {
-    background: #fff;
-    box-shadow: 0 0 2.5cqw var(--c-cyan);
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: none;
   }
 
   /* Entrada escalonada, adaptada al lienzo chico. */
