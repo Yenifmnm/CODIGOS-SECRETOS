@@ -23,6 +23,7 @@ import planetaPremios from '../../assets/planets/planeta-premios.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
 import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
 import portal from '../../assets/planets/portal.webp';
+import portalDesktop from '../../assets/planets/portal-codehelp-desktop.png';
 import destello from '../../assets/effects/destello.webp';
 import barco from '../../assets/promo/barco.webp';
 
@@ -123,7 +124,7 @@ export default function Welcome() {
       {/* --- Universo --- */}
       <Deco src={planetaPremios} x={-137} y={-308} w={674} h={683} opacity={0.5}
         float={{ amplitude: 6, duration: 7, delay: 0.5 }} />
-      <Deco src={portal} x={-336} y={404} w={873} h={711}
+      <Deco src={portalDesktop} x={-336} y={404} w={873} h={711}
         float={{ amplitude: 9, duration: 6.2, delay: 1.2, rotate: 1 }} />
       <Deco src={destello} x={313} y={187} w={415} h={275} opacity={0.5}
         float={{ amplitude: 10, duration: 4.4 }} />
