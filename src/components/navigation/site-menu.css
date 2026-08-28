@@ -292,6 +292,14 @@
     position: relative;
   }
 
+  /* Safari conserva `:hover` después del toque. En mobile el botón no lleva
+     el resplandor de interacción de desktop, así que se neutraliza sólo acá. */
+  .site-menu__toggle:hover,
+  .site-menu__toggle:focus-visible {
+    transform: none;
+    filter: none;
+  }
+
   /* El dibujo mantiene la medida del Figma; el área que responde al dedo se
      amplía con un pseudo-elemento invisible hasta el mínimo recomendado. */
   .site-menu__toggle::after,
