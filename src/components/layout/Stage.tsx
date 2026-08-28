@@ -30,6 +30,8 @@ interface StageProps {
   compactMenu?: boolean;
   /** Fondo exclusivo de una composición desktop. Mobile nunca usa esta prop. */
   desktopBg?: string;
+  /** Clase opcional del contenedor desktop. La rama mobile nunca la renderiza. */
+  desktopClassName?: string;
   /** Cielo vertical de la rama mobile. No afecta al desktop. */
   mobileBg?: MobileBg;
   /**
@@ -81,6 +83,7 @@ export function Stage({
   withMenu = true,
   compactMenu = false,
   desktopBg,
+  desktopClassName,
   mobileBg = 'cielo',
   mobileBgPrioridad,
   mobileVelo,
@@ -147,7 +150,7 @@ export function Stage({
   }
 
   return (
-    <div className="stage">
+    <div className={`stage${desktopClassName ? ` ${desktopClassName}` : ''}`}>
       {/* Fondo en su propia capa "cover": llena la ventana sea cual sea su forma. */}
       <div className="stage__bg" aria-hidden="true">
         {desktopBg ? (

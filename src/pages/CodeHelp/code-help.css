@@ -3,31 +3,6 @@
 /* Esta pantalla toma la declaración global de DK Prince Frog mediante
    `--font-display`, igual que el resto del sitio. */
 
-/* Planeta oscuro del fondo: un círculo enorme del que sólo se ve el casquete
-   superior. Mismo recurso que `.result__planet` de las pantallas de resultado. */
-.codehelp__planet {
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 8%,
-    rgba(17, 44, 120, 0.97) 0%,
-    rgba(8, 26, 88, 0.99) 12%,
-    #061c67 30%
-  );
-  box-shadow: 0 -0.4cqw 4cqw rgba(9, 234, 255, 0.22);
-  pointer-events: none;
-}
-
-.codehelp__halo {
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(9, 234, 255, 0.26) 0%,
-    rgba(9, 234, 255, 0.12) 40%,
-    rgba(9, 234, 255, 0) 66%
-  );
-  pointer-events: none;
-}
-
 .codehelp__title {
   margin: 0;
   font-family: var(--font-display);
@@ -35,11 +10,37 @@
   line-height: 1.0417;
   transform: translateX(-50%);
   white-space: normal;
+  -webkit-text-stroke: 2px #ffffff;
+  paint-order: stroke fill;
+  text-shadow: 0 0 0.328cqw rgba(255, 255, 255, 0.7),
+    0 0 2.292cqw rgba(255, 255, 255, 0.55),
+    0 0.208cqw 0.521cqw #212f5c;
 }
 
 .codehelp__title span {
   display: block;
   white-space: nowrap;
+}
+
+/* El frame desktop es estático: la flotación compartida alteraba las
+   coordenadas de la nave al tomar una captura de comparación. */
+.codehelp__ship {
+  animation: none;
+}
+
+/* En monitores más anchos que 16:9 el lienzo permanece centrado y contenido,
+   igual que Figma. Las piezas ligadas al grupo izquierdo (menú, logo, portal
+   y barco) compensan el margen de ese lado; la escena del planeta, el pack,
+   el título y el cometa hacen lo mismo contra el borde derecho. */
+@media (min-aspect-ratio: 16 / 9) and (min-width: 900px) {
+  .stage--codehelp .codehelp__left-anchor,
+  .stage--codehelp .site-menu {
+    translate: calc((100vw - 100cqw) / -2) 0;
+  }
+
+  .stage--codehelp .codehelp__right-anchor {
+    translate: calc((100vw - 100cqw) / 2) 0;
+  }
 }
 
 .codehelp__note {

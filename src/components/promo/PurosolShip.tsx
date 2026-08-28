@@ -1,9 +1,11 @@
 import type { CSSProperties } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import barco from '../../assets/promo/barco.webp';
+import barcoDefault from '../../assets/promo/barco.webp';
 import './purosol-ship.css';
 
 interface PurosolShipProps {
+  /** Recurso alternativo para una exportación puntual de Figma. */
+  src?: string;
   /** `enter` navega desde la derecha hacia su posición y luego queda flotando. */
   variant?: 'enter' | 'idle';
   flipped?: boolean;
@@ -23,6 +25,7 @@ interface PurosolShipProps {
  * repetir el trayecto completo.
  */
 export function PurosolShip({
+  src = barcoDefault,
   variant = 'idle',
   flipped = false,
   style,
@@ -43,7 +46,7 @@ export function PurosolShip({
       aria-hidden="true"
     >
       <img
-        src={barco}
+        src={src}
         alt=""
         className="ship__img"
         fetchPriority={prioridad}

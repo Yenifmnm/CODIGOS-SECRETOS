@@ -4,6 +4,7 @@ import { FloatingLayer } from '../effects/FloatingLayer';
 
 interface DecoProps extends BoxSpec {
   src: string;
+  className?: string;
   /** Parámetros de flotación; omitirlos deja el elemento quieto. */
   float?: { amplitude?: number; duration?: number; delay?: number; drift?: number; rotate?: number };
   opacity?: number;
@@ -22,6 +23,7 @@ interface DecoProps extends BoxSpec {
  */
 export function Deco({
   src,
+  className,
   float,
   opacity,
   blur,
@@ -58,7 +60,7 @@ export function Deco({
   );
 
   return (
-    <div className="abs" style={{ ...box(spec), zIndex, pointerEvents: 'none', ...style }}>
+    <div className={['abs', className].filter(Boolean).join(' ')} style={{ ...box(spec), zIndex, pointerEvents: 'none', ...style }}>
       {float ? <FloatingLayer {...float}>{img}</FloatingLayer> : img}
     </div>
   );
