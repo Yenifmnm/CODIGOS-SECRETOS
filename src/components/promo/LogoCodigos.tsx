@@ -1,5 +1,6 @@
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import halo from '../../assets/logos/codigos-secretos-halo.webp';
+import haloResultado from '../../assets/logos/codigos-secretos-halo-resultado.webp';
 import './logo-codigos.css';
 
 interface LogoCodigosProps {
@@ -13,10 +14,21 @@ interface LogoCodigosProps {
    *   `horneado`  — una imagen con el resplandor ya dibujado, exportada del
    *                 propio nodo. Cero desenfoque en tiempo de ejecución.
    *
-   * Sólo INICIO y PARTICIPAR usan `horneado`, que son las dos donde se reportó
-   * el cuadrado y la demora. Las otras tres quedan como estaban.
+   * INICIO, PARTICIPAR y las cuatro de RESULTADO usan `horneado`. PREMIOS y
+   * CÓDIGO siguen con `css`: ahí todavía no se reportó el cuadrado, y el mismo
+   * cambio les haría falta el día que aparezca.
    */
   resplandor?: 'css' | 'horneado';
+  /**
+   * De qué nodo salió el halo horneado. Hace falta porque el resplandor del
+   * diseño mide 250 px SIEMPRE, y los logos no: el del landing es 257x191 y el
+   * de las pantallas de resultado 173x129. El mismo archivo estirado daría un
+   * halo de 168 px en vez de 250, así que cada tamaño tiene el suyo.
+   *
+   *   `landing`    — nodo 70:169, logo 257x191, export 757x691
+   *   `resultado`  — nodo 74:1027, logo 173x129, export 673x629
+   */
+  halo?: 'landing' | 'resultado';
   /** Nodo del Figma de esta capa, para `npm run figma:check`. */
   'data-figma'?: string;
 }
@@ -68,12 +80,19 @@ interface LogoCodigosProps {
 export function LogoCodigos({
   className,
   resplandor = 'css',
+  halo: haloDe = 'landing',
   'data-figma': figma,
 }: LogoCodigosProps) {
   const horneado = resplandor === 'horneado';
+  const deResultado = haloDe === 'resultado';
   return (
     <span
-      className={['logo-cs', horneado && 'logo-cs--horneado', className]
+      className={[
+        'logo-cs',
+        horneado && 'logo-cs--horneado',
+        horneado && deResultado && 'logo-cs--halo-resultado',
+        className,
+      ]
         .filter(Boolean)
         .join(' ')}
       data-figma={figma}
@@ -92,11 +111,11 @@ export function LogoCodigos({
           de que existen hasta que React renderiza. */}
       {horneado && (
         <img
-          src={halo}
+          src={deResultado ? haloResultado : halo}
           alt=""
           aria-hidden="true"
           className="logo-cs__halo"
-          fetchPriority="high"
+          fetchPriority={deResultado ? undefined : 'high'}
         />
       )}
       <img

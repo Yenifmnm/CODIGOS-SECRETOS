@@ -64,10 +64,13 @@
    acompañe si la caja cambia de tamaño. */
 .logo-cs > .logo-cs__halo {
   position: absolute;
-  left: -97.276%;    /* -250 / 257 */
-  top: -130.890%;    /* -250 / 191 */
-  width: 294.553%;   /*  757 / 257 */
-  height: 361.780%;  /*  691 / 191 */
+  /* Los valores por defecto son los del landing. Van por variable porque el
+     resplandor del diseño mide 250 px SIEMPRE y los logos no, así que el margen
+     en PORCENTAJE de la caja del logo cambia de pantalla a pantalla. */
+  left: var(--halo-x, -97.276%);    /* -250 / 257 */
+  top: var(--halo-y, -130.890%);    /* -250 / 191 */
+  width: var(--halo-w, 294.553%);   /*  757 / 257 */
+  height: var(--halo-h, 361.780%);  /*  691 / 191 */
   max-width: none;
   object-fit: fill;
   pointer-events: none;
@@ -79,4 +82,16 @@
 .logo-cs--horneado > img:not(.logo-cs__halo) {
   position: relative;
   z-index: 1;
+}
+
+/* LAS CUATRO PANTALLAS DE RESULTADO. Su logo mide 173x129 y no 257x191, y el
+   resplandor del nodo sigue siendo 250 px por lado: el export es 673x629. Con
+   los porcentajes del landing el halo habría quedado en 168 px en vez de 250,
+   o sea dos tercios del diseño, así que estas cuatro llevan los suyos y su
+   propio archivo. */
+.logo-cs--halo-resultado {
+  --halo-x: -144.509%;   /* -250 / 173 */
+  --halo-y: -193.798%;   /* -250 / 129 */
+  --halo-w: 389.017%;    /*  673 / 173 */
+  --halo-h: 487.597%;    /*  629 / 129 */
 }

@@ -207,7 +207,24 @@ export function ResultLayout({
             data-figma="107:174 107:164 107:182 131:352"
           />
 
-          <LogoCodigos className="result-m__logo" data-figma="74:1027 73:860 105:262 131:334" />
+          {/* HORNEADO, como INICIO y PARTICIPAR. Con la variante `css` este
+              logo lleva `drop-shadow(0 0 125px)` sobre una caja de 173x129, y
+              eso en Safari de iPhone obliga a un búfer aparte que se dibuja
+              recortado: el borde de ese recorte es el cuadro tenue que reportó
+              la clienta alrededor del logo. En WebKit headless es peor todavía
+              —el logo directamente NO SE DIBUJA—, mientras que en Chromium sale
+              bien, que es la firma de siempre de este defecto.
+
+              Horneado no hay desenfoque en tiempo de ejecución: no hay búfer, no
+              hay recorte y no hay cuadro. Las cuatro pantallas de resultado
+              comparten este componente y el mismo nodo, así que se arregla una
+              vez para las cuatro. */}
+          <LogoCodigos
+            className="result-m__logo"
+            resplandor="horneado"
+            halo="resultado"
+            data-figma="74:1027 73:860 105:262 131:334"
+          />
 
           {/* El ancho del trazo se omite SÓLO en el dorado de GANASTE, que va a
               1 px contra los 2 del nodo 74:987 —ver la medición en
