@@ -10,6 +10,12 @@
       drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.55))
       drop-shadow(0 4px 4px rgba(0, 0, 0, 0.3));
   }
+
+  /* Compensa la métrica interna de DK Prince Frog para que el rótulo quede
+     ópticamente centrado en el pergamino del nodo 13:72. */
+  .home-desktop__cta .promo-btn__label {
+    transform: translateY(-0.4167cqw);
+  }
 }
 
 /* -------------------------------------------------------------------------

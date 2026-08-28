@@ -86,7 +86,6 @@ export default function Home() {
       <PurosolShip variant="enter" style={{ ...box({ x: 1322, y: 273, w: 1016, h: 696 }), zIndex: 3 }} />
 
       {/* --- Cúmulo de premios (izquierda) --- */}
-      <Deco src={glow} x={-211} y={390} w={883} h={561} opacity={0.9} />
       <Deco
         src={planetaPremios}
         x={-104}
@@ -95,6 +94,7 @@ export default function Home() {
         h={510}
         float={{ amplitude: 7, duration: 6.8, delay: 0.9, rotate: 1.2 }}
       />
+      <Deco src={glow} x={-211} y={390} w={883} h={561} />
       <Deco
         src={playstation}
         x={7}
@@ -155,9 +155,10 @@ export default function Home() {
 
       <PromoButton
         id="contenido"
-        className="abs"
+        className="home-desktop__cta abs"
         style={{ ...box({ x: 660, y: 759, w: 573, h: 192 }), zIndex: 7 }}
         fontSize={60}
+        plate="carga"
         onClick={goParticipar}
       >
         Cargá acá tu código
