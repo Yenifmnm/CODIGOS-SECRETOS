@@ -28,6 +28,18 @@
   white-space: nowrap;
 }
 
+@media (min-width: 900px) {
+  .terms__heading {
+    clip-path: none;
+    background: none;
+  }
+
+  .terms__heading-text {
+    position: relative;
+    z-index: 1;
+  }
+}
+
 /* Área de texto: 556,471 → 843x376 dentro del stage. */
 .terms__viewport {
   position: absolute;

@@ -12,6 +12,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
    catálogo está en `assets/ui/cintas/README.md`. */
 import cintaTitulo from '../../assets/ui/cintas/73-934.svg';
 import cintaBoton from '../../assets/ui/cintas/73-937.svg';
+import cintaDesktop from '../../assets/ui/cintas/terms-desktop.svg';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { box } from '../../app/stage';
@@ -19,10 +20,16 @@ import type { Terms as TermsData } from '../../types/promo';
 import './terms.css';
 
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
+import logoCodigosDesktop from '../../assets/logos/codigos-secretos-terms-desktop.png';
+import fondoTermsDesktop from '../../assets/backgrounds/fondo-terms-desktop.png';
+import pergaminoTermsDesktop from '../../assets/ui/pergamino-terms-desktop.png';
 import destello from '../../assets/effects/destello.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
+import planetaVitDesktop from '../../assets/planets/planeta-vit-terms-desktop.png';
 import ralph from '../../assets/characters/ralph.webp';
 import nene from '../../assets/characters/nene.webp';
+import ralphDesktop from '../../assets/characters/ralph-terms-desktop.png';
+import neneDesktop from '../../assets/characters/nene-terms-desktop.png';
 
 /** BASES Y CONDICIONES — Figma 22:3021. */
 export default function Terms() {
@@ -39,7 +46,6 @@ export default function Terms() {
   const navigate = useNavigate();
   const { acceptTerms } = useSession();
   const [terms, setTerms] = useState<TermsData | null>(null);
-  const [opened, setOpened] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -120,8 +126,11 @@ export default function Terms() {
             rectángulo con `background: #d8831c` recortado por un `clip-path`
             genérico que ni siquiera estaba puesto acá — se heredaba del bloque
             de escritorio, ver `terms.css`. */}
-        {esMobile && <RibbonSvg src={cintaTitulo} nodo="73:934" />}
-        <span className="terms__heading-text" data-figma="73:935">
+        <RibbonSvg
+          src={esMobile ? cintaTitulo : cintaDesktop}
+          nodo={esMobile ? '73:934' : '22:3032'}
+        />
+        <span className="terms__heading-text" data-figma={esMobile ? '73:935' : '22:3036'}>
           Bases y Condiciones
         </span>
       </p>
@@ -162,9 +171,9 @@ export default function Terms() {
         mobileWidth={147}
         mobileHeight={39}
         onClick={accept}
-        silueta={esMobile ? cintaBoton : undefined}
-        data-figma-cinta="73:937"
-        data-figma-label="73:938"
+        silueta={esMobile ? cintaBoton : cintaDesktop}
+        data-figma-cinta={esMobile ? '73:937' : '22:3074'}
+        data-figma-label={esMobile ? '73:938' : '22:3075'}
         /* Sólo el tamaño: la posición se aparta del nodo a propósito para que
            el rótulo quede centrado en la cinta. El porqué, en `terms.css`. */
         data-figma-label-ejes="w,h"
@@ -178,6 +187,7 @@ export default function Terms() {
     <Stage
       title="Bases y condiciones"
       compactMenu
+      desktopBg={fondoTermsDesktop}
       mobileCielo={{ nodo: '73:892', x: -22, y: -38, w: 445, h: 965 }}
       mobile={
         /* Figma "bases y condiciones.png": logo montado sobre el pergamino,
@@ -235,29 +245,23 @@ export default function Terms() {
         </div>
       }
     >
-      <Deco src={destello} x={67} y={-72} w={745} h={494} opacity={0.85}
-        float={{ amplitude: 9, duration: 5.4 }} />
-      <Deco src={planetaVit1} x={-130} y={792} w={339} h={166} blur={5} opacity={0.9}
-        float={{ amplitude: 6, duration: 6.8, drift: 5 }} />
+      <Deco src={planetaVitDesktop} x={-130} y={792} w={339} h={166} blur={5} opacity={0.9} />
 
       <Parchment
+        src={pergaminoTermsDesktop}
         style={{ ...box({ x: 347, y: 253, w: 1226, h: 780 }), zIndex: 3 }}
-        onOpened={() => setOpened(true)}
       >
         <div className="terms__inner" id="contenido">{content}</div>
       </Parchment>
 
-      {/* Ralph "lee" con el catalejo cuando el pergamino termina de abrirse. */}
-      <div className={`abs terms__ralph${opened ? ' terms__ralph--reading' : ''}`}
+      <div className="abs terms__ralph"
         style={{ ...box({ x: 1560, y: 34, w: 360, h: 658 }), zIndex: 4 }} aria-hidden="true">
-        <img src={ralph} alt="" className="deco" />
+        <img src={ralphDesktop} alt="" className="deco" />
       </div>
 
-      <Deco src={nene} x={24} y={312} w={492} h={820} zIndex={4}
-        float={{ amplitude: 7, duration: 5.8, delay: 0.7, rotate: -1 }} />
+      <Deco src={neneDesktop} x={24} y={312} w={492} h={820} zIndex={4} />
 
-      <Deco src={logoCodigos} x={749} y={100} w={395} h={294} zIndex={5}
-        glow="0 0 2.4cqw #09eaff" float={{ amplitude: 6, duration: 5.2 }} />
+      <Deco src={logoCodigosDesktop} x={749} y={100} w={395} h={294} zIndex={5} />
     </Stage>
   );
 }

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import pergamino1 from '../../assets/ui/pergamino-1.webp';
+import pergaminoDefault from '../../assets/ui/pergamino-1.webp';
 import './parchment.css';
 
 interface ParchmentProps {
   children: ReactNode;
+  /** Exportación alternativa para una composición puntual de Figma. */
+  src?: string;
   /** Retardo antes de empezar a desplegar, en ms. */
   delay?: number;
   style?: CSSProperties;
@@ -28,6 +30,7 @@ interface ParchmentProps {
  */
 export function Parchment({
   children,
+  src = pergaminoDefault,
   delay = 180,
   style,
   className,
@@ -71,7 +74,7 @@ export function Parchment({
     >
       <div className="parchment__sheet">
         <img
-          src={pergamino1}
+          src={src}
           alt=""
           aria-hidden="true"
           className="parchment__img"
