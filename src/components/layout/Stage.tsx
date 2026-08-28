@@ -28,6 +28,8 @@ interface StageProps {
   withMenu?: boolean;
   /** Menú siempre plegado: registro, carga de código y resultados. */
   compactMenu?: boolean;
+  /** Fondo exclusivo de una composición desktop. Mobile nunca usa esta prop. */
+  desktopBg?: string;
   /** Cielo vertical de la rama mobile. No afecta al desktop. */
   mobileBg?: MobileBg;
   /**
@@ -78,6 +80,7 @@ export function Stage({
   mobile,
   withMenu = true,
   compactMenu = false,
+  desktopBg,
   mobileBg = 'cielo',
   mobileBgPrioridad,
   mobileVelo,
@@ -147,7 +150,16 @@ export function Stage({
     <div className="stage">
       {/* Fondo en su propia capa "cover": llena la ventana sea cual sea su forma. */}
       <div className="stage__bg" aria-hidden="true">
-        <SpaceBackground />
+        {desktopBg ? (
+          <img
+            src={desktopBg}
+            alt=""
+            className="deco deco--cover"
+            style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+          />
+        ) : (
+          <SpaceBackground />
+        )}
       </div>
       <div className="stage__inner">
         <div className="layer" style={{ zIndex: 2 }}>

@@ -13,7 +13,6 @@
 /* ---------- Cinta del título ----------
    Ancho fijo, igual al de la columna de campos, como en el Figma. */
 .register__title-plate {
-  transform: translateX(-50%);
   padding-inline: 1.25cqw; /* 24 */
 }
 
@@ -35,6 +34,16 @@
   padding-inline: 1.4583cqw; /* 28 */
 }
 
+.register__field--full {
+  padding-left: 1.5104cqw;  /* 29: Vector 3 arranca en x 606 */
+  padding-right: 1.4063cqw; /* 27: termina en x 1309 */
+}
+
+.register__field--half {
+  padding-left: 1.4583cqw;  /* 28 */
+  padding-right: 1.0938cqw; /* 21: línea de 313 px dentro de 362 */
+}
+
 .register__field .pfield {
   width: 100%;
 }
@@ -43,10 +52,46 @@
   margin: 0;
   font-family: var(--font-display);
   color: var(--c-brown-dark);
-  text-decoration: underline;
-  text-underline-offset: 0.35em;
+  border-bottom: 1px solid #581f09;
   opacity: 0.9;
   line-height: 1.04;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  /* Las líneas de Figma están 8 px por encima del centrado geométrico de la
+     cinta y tienen 1 px al 70% de marrón. */
+  .register__field .plate__content {
+    transform: translateY(-0.4167cqw);
+  }
+
+  .register__field .pfield--line {
+    border-bottom: 0;
+  }
+
+  .register__field .pfield--line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.2083cqw; /* 4 px: y 507/597/736/823 del frame */
+    height: 1px;
+    background: rgba(88, 31, 9, 0.7);
+    pointer-events: none;
+  }
+
+  .register__field .pfield--line:focus-within::after {
+    background: var(--c-gold);
+  }
+
+  .register__field .pfield--invalid.pfield--line::after {
+    background: #c0341a;
+  }
+
+  .register__form > .ribbon-btn .ribbon-btn__label {
+    transform: translateY(-0.1563cqw);
+  }
 }
 
 /* ---------- Mobile ---------- */

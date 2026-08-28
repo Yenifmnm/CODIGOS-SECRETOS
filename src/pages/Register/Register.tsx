@@ -11,11 +11,12 @@ import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { useCodeFlow } from '../../app/useCodeFlow';
 import { MIN_AGE, completedAge, isOfAge, maxBirthDate } from '../../app/age';
-import { box, centeredText, u } from '../../app/stage';
+import { box, u } from '../../app/stage';
 import type { RegistrationForm } from '../../types/promo';
 import './register.css';
 
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
+import fondoRegistroDesktop from '../../assets/backgrounds/fondo-registro-desktop.png';
 import pergamino1 from '../../assets/ui/pergamino-1.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
 import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
@@ -40,6 +41,10 @@ import cinta636 from '../../assets/ui/cintas/73-636.svg';   // Ciudad
 import cinta639 from '../../assets/ui/cintas/73-639.svg';   // Teléfono
 import cinta621 from '../../assets/ui/cintas/73-621.svg';   // botón Registrarme
 import cinta624 from '../../assets/ui/cintas/73-624.svg';   // botón Cancelar
+import cintaDesktopTitulo from '../../assets/ui/cintas/desktop/registro-titulo.svg';
+import cintaDesktopCompleta from '../../assets/ui/cintas/desktop/registro-campo-completo.svg';
+import cintaDesktopMitad from '../../assets/ui/cintas/desktop/registro-campo-mitad.svg';
+import cintaDesktopBoton from '../../assets/ui/cintas/desktop/registro-boton.svg';
 
 type Errors = Partial<Record<keyof RegistrationForm, string>>;
 
@@ -48,19 +53,15 @@ type Errors = Partial<Record<keyof RegistrationForm, string>>;
    Las cintas se apoyan en una sola columna: así los campos de ancho completo y
    los de media caña quedan alineados por los dos bordes.
    -------------------------------------------------------------------------- */
-const COL_X = 578;
-const COL_W = 764;
-const COL_GAP = 40;
-const HALF_W = (COL_W - COL_GAP) / 2; // 362
-const ROW_H = 62;
-
 const FORM = {
-  titleY: 373,
-  row1: 452,
-  row2: 540,
-  noteY: 636,
-  row3: 681,
-  row4: 767,
+  title: { x: 578, y: 358, w: 759.274, h: 73.314 },
+  row1: { x: 577, y: 450, w: 759.274, h: 73.314 },
+  row2Left: { x: 577, y: 542, w: 362, h: 71 },
+  row2Right: { x: 974, y: 542, w: 362, h: 71 },
+  note: { x: 670.5, y: 636, w: 553, h: 27 },
+  row3: { x: 577, y: 679, w: 759.274, h: 73.314 },
+  row4Left: { x: 577, y: 768, w: 362, h: 71 },
+  row4Right: { x: 974, y: 768, w: 362, h: 71 },
   buttonsY: 863,
 } as const;
 
@@ -70,11 +71,6 @@ const FORM = {
    que le sigue. Las cintas nunca se solapan entre sí, con lo cual invertir el
    orden no tiene contrapartida. */
 const Z = { row1: 12, row2: 11, row3: 10, row4: 9, buttons: 8, note: 6, title: 5 } as const;
-
-const rowFull = (y: number) => box({ x: COL_X, y, w: COL_W, h: ROW_H });
-const rowLeft = (y: number) => box({ x: COL_X, y, w: HALF_W, h: ROW_H });
-const rowRight = (y: number) =>
-  box({ x: COL_X + HALF_W + COL_GAP, y, w: HALF_W, h: ROW_H });
 
 const EMPTY: RegistrationForm = {
   fullName: '',
@@ -260,6 +256,7 @@ export default function Register() {
     <Stage
       title="Registro"
       compactMenu
+      desktopBg={fondoRegistroDesktop}
       /* `CODIGO 1` (73:552): mismo encuadre que el landing. */
       mobileCielo={{ nodo: '73:552', x: -46, y: -38, w: 493, h: 1070 }}
       mobile={
@@ -271,66 +268,111 @@ export default function Register() {
         />
       }
     >
-      <Deco src={destello} x={134} y={-50} w={745} h={494} opacity={0.85}
-        float={{ amplitude: 9, duration: 5.4 }} />
-      <Deco src={planetaVit1} x={-130} y={792} w={339} h={166} blur={5} opacity={0.9}
-        float={{ amplitude: 6, duration: 6.8, drift: 5 }} />
-      <Deco src={planetaVit2} x={1525} y={-96} w={395} h={428} blur={5} opacity={0.8}
-        float={{ amplitude: 7, duration: 7.2, delay: 1 }} />
+      <Deco src={pergamino1} x={347} y={253} w={1226} h={780} zIndex={1} />
+      <Deco src={destello} x={134} y={-50} w={745} h={494} zIndex={2} />
+      <Deco src={planetaVit1} x={-130} y={792} w={339} h={166} blur={5} opacity={0.9} zIndex={2} />
+      <Deco
+        src={planetaVit2}
+        x={1567.487}
+        y={-144.819}
+        w={310.263}
+        h={357.948}
+        rotate={-15.63}
+        blur={5}
+        opacity={0.8}
+        zIndex={2}
+      />
 
-      <Deco src={pergamino1} x={347} y={253} w={1226} h={780} zIndex={2} />
+      <Deco src={dino} x={1492} y={393} w={474} h={798} zIndex={3} />
+      <Deco
+        src={nena}
+        x={36}
+        y={487}
+        w={359}
+        h={793}
+        zIndex={3}
+        glow="8px 4px 20px rgba(0, 0, 0, 0.25)"
+      />
+      <Deco
+        src={pluma}
+        x={1334.579}
+        y={732.856}
+        w={190.194}
+        h={346.007}
+        rotate={17.9}
+        zIndex={4}
+        glow="0 4px 10px rgba(0, 0, 0, 0.25)"
+      />
 
-      <Deco src={dino} x={1492} y={393} w={474} h={798} zIndex={3}
-        float={{ amplitude: 8, duration: 4.8, delay: 0.3, rotate: 1.2 }} />
-      <Deco src={nena} x={36} y={487} w={359} h={793} zIndex={3}
-        float={{ amplitude: 7, duration: 5.6, delay: 0.9, rotate: -1.2 }} />
-      <Deco src={pluma} x={1392} y={712} w={287} h={388} zIndex={4}
-        float={{ amplitude: 10, duration: 4.2, delay: 1.6, rotate: 3 }} />
-
-      <Deco src={logoCodigos} x={749} y={100} w={395} h={294} zIndex={4}
-        glow="0 0 2.4cqw #09eaff" float={{ amplitude: 6, duration: 5.2 }} />
+      <Deco src={logoCodigos} x={749} y={100} w={395} h={294} zIndex={4} />
 
       <form className="register__form" onSubmit={onSubmit} noValidate id="contenido">
         <RibbonPlate
           tone="ochre"
           className="register__title-plate abs"
-          style={{
-            left: u(960),
-            top: u(FORM.titleY),
-            width: u(COL_W),
-            height: u(ROW_H),
-            zIndex: Z.title,
-          }}
+          data-figma="63:101"
+          silueta={cintaDesktopTitulo}
+          style={{ ...box(FORM.title), zIndex: Z.title }}
         >
           <h2 className="register__title" style={{ fontSize: u(42) }}>
             Registrate para que tu pequeño pueda participar
           </h2>
         </RibbonPlate>
 
-        <RibbonPlate className="register__field abs" style={{ ...rowFull(FORM.row1), zIndex: Z.row1 }}>
+        <RibbonPlate
+          className="register__field register__field--full abs"
+          data-figma="18:2947"
+          silueta={cintaDesktopCompleta}
+          style={{ ...box(FORM.row1), zIndex: Z.row1 }}
+        >
           {fieldEls[0]}
         </RibbonPlate>
-        <RibbonPlate className="register__field abs" style={{ ...rowLeft(FORM.row2), zIndex: Z.row2 }}>
+        <RibbonPlate
+          className="register__field register__field--half abs"
+          data-figma="18:2953"
+          silueta={cintaDesktopMitad}
+          style={{ ...box(FORM.row2Left), zIndex: Z.row2 }}
+        >
           {fieldEls[1]}
         </RibbonPlate>
-        <RibbonPlate className="register__field abs" style={{ ...rowRight(FORM.row2), zIndex: Z.row2 }}>
+        <RibbonPlate
+          className="register__field register__field--half abs"
+          data-figma="18:2959"
+          silueta={cintaDesktopMitad}
+          style={{ ...box(FORM.row2Right), zIndex: Z.row2 }}
+        >
           {fieldEls[2]}
         </RibbonPlate>
 
         <p
           className="abs register__note"
-          style={{ ...centeredText(960, FORM.noteY, 25), zIndex: Z.note }}
+          style={{ ...box(FORM.note), fontSize: u(25), zIndex: Z.note }}
         >
           Este registro debe ser realizado por un tutor mayor de 18 años*
         </p>
 
-        <RibbonPlate className="register__field abs" style={{ ...rowFull(FORM.row3), zIndex: Z.row3 }}>
+        <RibbonPlate
+          className="register__field register__field--full abs"
+          data-figma="18:2963"
+          silueta={cintaDesktopCompleta}
+          style={{ ...box(FORM.row3), zIndex: Z.row3 }}
+        >
           {fieldEls[3]}
         </RibbonPlate>
-        <RibbonPlate className="register__field abs" style={{ ...rowLeft(FORM.row4), zIndex: Z.row4 }}>
+        <RibbonPlate
+          className="register__field register__field--half abs"
+          data-figma="18:2967"
+          silueta={cintaDesktopMitad}
+          style={{ ...box(FORM.row4Left), zIndex: Z.row4 }}
+        >
           {fieldEls[4]}
         </RibbonPlate>
-        <RibbonPlate className="register__field abs" style={{ ...rowRight(FORM.row4), zIndex: Z.row4 }}>
+        <RibbonPlate
+          className="register__field register__field--half abs"
+          data-figma="18:2970"
+          silueta={cintaDesktopMitad}
+          style={{ ...box(FORM.row4Right), zIndex: Z.row4 }}
+        >
           {fieldEls[5]}
         </RibbonPlate>
 
@@ -338,6 +380,8 @@ export default function Register() {
           type="submit"
           tone="ochre"
           className="abs"
+          silueta={cintaDesktopBoton}
+          data-figma-cinta="18:2974"
           width={296}
           height={58}
           fontSize={40}
@@ -351,6 +395,8 @@ export default function Register() {
           type="button"
           tone="ochre"
           className="abs"
+          silueta={cintaDesktopBoton}
+          data-figma-cinta="18:2979"
           width={296}
           height={58}
           fontSize={40}
