@@ -47,8 +47,8 @@
   -webkit-text-stroke: 4px #ffffff;
   paint-order: stroke fill;
   text-shadow: none;
-  filter: drop-shadow(0 0 6.288px rgba(255, 255, 255, 0.55))
-    drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.3))
+  filter: drop-shadow(0 0 6.288px #ffffff)
+    drop-shadow(0 0 44.016px #ffffff)
     drop-shadow(0 4px 10px #212f5c);
 }
 
@@ -69,8 +69,8 @@
   -webkit-text-stroke: 4px #fcc102;
   paint-order: stroke fill;
   text-shadow: none;
-  filter: drop-shadow(0 0 6.288px #ffffff)
-    drop-shadow(0 0 44.016px #ffffff)
+  filter: drop-shadow(0 0 6.288px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.3))
     drop-shadow(0 4px 10px #212f5c);
 }
 
