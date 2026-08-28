@@ -41,15 +41,62 @@
   animation: result-title-in 620ms var(--ease-soft) both;
 }
 
-/* GANASTE: dorado con resplandor blanco. */
+/* GANASTE: dorado con resplandor blanco. Nodo `¡Felicidades` (23:3084):
+   relleno #FCC102, borde 4px #FFFFFF y tres sombras —0 0 6.288 #FFF,
+   0 0 44.016 #FFF, 0 4 10 #212F5C—. Exclusiva de esta pantalla: sólo
+   `Winner.tsx` pasa `titleTone="gold"`; las otras tres pasan `outline`.
+
+   COPIAR LOS NÚMEROS DEL PANEL DE FIGMA NO DA EL DIBUJO DE FIGMA, y acá hay
+   dos motivos distintos, medidos por separado contra `figma/spec/ganaste.png`,
+   que es el render del propio archivo.
+
+   1. LAS SOMBRAS NO SE ENCADENAN. Figma calcula las tres desde la MISMA
+      silueta y las compone. `filter: drop-shadow(a) drop-shadow(b)` pasa el
+      resultado de una a la siguiente: la de 44 px se calculaba sobre el texto
+      MÁS la de 6 px, y la oscura sobre todo eso. De ahí el exceso de halo que
+      reportó la clienta. `text-shadow` con las tres separadas por coma es el
+      modelo de Figma: todas salen del mismo glifo.
+
+      Y el radio necesita el DOBLE. Medido el brillo medio de lo que no es
+      tinta —el halo sobre el cielo— contra los 114.8 del render de Figma:
+
+                        Chromium   WebKit
+        encadenado        +12.1     +16.7   <- lo que había
+        text-shadow x1    -12.8      -4.9
+        text-shadow x1.8   -7.3      +1.3
+        text-shadow x2     -6.1      +2.5   <- esto
+        text-shadow x2.2   -5.7      +3.0
+
+      El x2 es el punto donde los dos motores quedan más cerca del diseño; el
+      óptimo de cada uno por separado cae a los lados (2.2 en Chromium, 1.8 en
+      WebKit) y la diferencia entre ellos baja como consecuencia.
+
+   2. `paint-order: stroke fill` ENGORDABA LA LETRA. Mete el borde DETRÁS del
+      relleno, así que no le come nada al glifo. El borde CENTER de Figma va
+      encima y sí se lo come. Contado en píxeles de relleno dorado contra los
+      24.606 del render de Figma:
+
+                                    Chromium   WebKit
+        4px con `stroke fill`         1.29x     1.25x   <- lo que había
+        4px orden normal              0.86x     0.91x
+        3px orden normal              0.94x     0.99x
+        2px orden normal              1.02x     1.07x   <- esto
+
+      Con el orden por defecto de CSS —relleno y después borde—, que es el de
+      Figma, el ancho que reproduce el dibujo es 2 px y no 4. Es el mismo
+      resultado que ya estaba medido para los titulares mobile: el trazo de CSS
+      dibuja más grueso que un borde CENTER, y la traducción no es un factor
+      fijo, se mide por caja.
+
+   Los valores van en `cqw` y no en px para que escalen con el lienzo, como el
+   resto de la composición: 1cqw son 19.2 px de diseño. */
 .result__title--gold {
   color: var(--c-gold);
-  -webkit-text-stroke: 4px #ffffff;
-  paint-order: stroke fill;
-  text-shadow: none;
-  filter: drop-shadow(0 0 6.288px #ffffff)
-    drop-shadow(0 0 44.016px #ffffff)
-    drop-shadow(0 4px 10px #212f5c);
+  -webkit-text-stroke: 0.1042cqw #ffffff;   /* 2px sobre el lienzo de 1920 */
+  text-shadow:
+    0 0 0.655cqw #ffffff,                   /* nodo 6.288, x2 medido */
+    0 0 4.585cqw #ffffff,                   /* nodo 44.016, x2 medido */
+    0 0.2083cqw 0.5208cqw #212f5c;          /* nodo 0 4 10, sin tocar */
 }
 
 /* PERDISTE y errores de código: relleno rojo y las sombras del diseño.
