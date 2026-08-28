@@ -276,17 +276,34 @@
      Se toma 9 px, que es el unico hueco entre dos cajas iguales (`premio 5` y
      `premio 4`, 91 a 100) y reproduce ese 90.5; alrededor de la activa el
      frame se solapa porque la ficha esta dibujada mas grande. */
+  /* AIRE ARRIBA Y ABAJO PARA QUE EL RESPLANDOR NO SE RECORTE.
+     `overflow-x: auto` hace de esta tira un contenedor de scroll, y un
+     contenedor de scroll RECORTA en su caja de padding. La miniatura activa
+     mide 135 y la tira medía 134, así que su resplandor se cortaba: en Safari
+     de iPhone eso se veía como un CUADRADO alrededor de la ficha activa, y por
+     eso aparecía en todos los premios al pasar con las flechas.
+
+     No se puede usar `overflow-y: visible` —con `overflow-x: auto` el CSS lo
+     fuerza a `auto`—, así que se agranda la caja de recorte sin mover nada:
+     `top` sube 34, `height` crece 68 y `padding-block` de 34 devuelve el
+     contenido a su lugar. Con `box-sizing: border-box` la caja de contenido
+     sigue midiendo 134 y en la misma `y`; lo único que cambia es dónde
+     recorta. Medido: la tira y la ficha activa quedan en la misma coordenada
+     que antes.
+
+     No confundir con el `will-change` de `.carousel__item`, que era el mismo
+     síntoma en la imagen GRANDE y ya está resuelto aparte. */
   .carousel__thumbs {
     position: absolute;
     left: 0;
-    top: 144.527cqw;        /* 655 - 74: el borde de arriba de la activa */
+    top: 136.069cqw;        /* 655 - 74 - 34 de aire */
     width: 100%;
-    height: 33.333cqw;      /* 134 */
+    height: 50.249cqw;      /* 134 + 34 de aire arriba y 34 abajo */
     display: flex;
     justify-content: flex-start;
     align-items: center;    /* el eje 722, comun a la activa y a las chicas */
     gap: 2.239cqw;          /* 9 */
-    padding: 0 2.239cqw;    /* 9: donde arranca `premio 5 1` */
+    padding: 8.458cqw 2.239cqw;   /* 34 de aire · 9 donde arranca `premio 5 1` */
     margin: 0;
     list-style: none;
     overflow-x: auto;
