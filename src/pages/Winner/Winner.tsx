@@ -20,6 +20,12 @@ export default function Winner() {
        NO se inventa un premio —mostrar el equivocado es peor que no mostrar
        ninguno—: se felicita sin nombrarlo y el panel ya trae el teléfono. */
   const prize: Prize | undefined = lastResult ? lastResult.prize : MOCK_PRIZES[0];
+  const message = prize
+    ? `te ganaste ${prize.article ?? 'un'} ${prize.name}!`
+    : 'te ganaste un premio!';
+  const desktopMessage = prize
+    ? `te ganaste ${prize.article ?? 'un'} ${prize.name.replace(/\s+OLED\b/i, '')}!`
+    : message;
 
   return (
     <ResultLayout
@@ -29,7 +35,8 @@ export default function Winner() {
       mobileTitleSize={80}
       titleTone="gold"
       titleY={463}
-      message={[prize ? `te ganaste ${prize.article ?? 'un'} ${prize.name}!` : 'te ganaste un premio!']}
+      message={[message]}
+      desktopMessage={[desktopMessage]}
       messageSize={60}
       messageWidth={666}
       messageY={616}

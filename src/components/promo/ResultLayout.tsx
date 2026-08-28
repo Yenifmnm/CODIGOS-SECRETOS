@@ -46,6 +46,8 @@ export interface ResultLayoutProps {
    * que se respeta en desktop; en mobile los renglones se unen y fluyen solos.
    */
   message: string[];
+  /** Texto alternativo exclusivo de desktop; mobile conserva `message`. */
+  desktopMessage?: string[];
   messageSize?: number;
   /** Ancho del bloque de mensaje en px de diseño. */
   messageWidth?: number;
@@ -99,6 +101,7 @@ export function ResultLayout({
   titleX = 479,
   titleY = 463,
   message,
+  desktopMessage,
   messageSize = 34,
   messageWidth = 760,
   messageY = 613,
@@ -390,7 +393,7 @@ export function ResultLayout({
           zIndex: 6,
         }}
       >
-        {message.map((line, i) => (
+        {(desktopMessage ?? message).map((line, i) => (
           <span key={line} className="result__message-line">
             {i > 0 && ' '}
             {line}
