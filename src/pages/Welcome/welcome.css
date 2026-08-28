@@ -47,7 +47,7 @@
   margin: 0;
   font-family: var(--font-display);
   color: var(--c-brown);
-  line-height: 1.05;
+  line-height: 1.04;
   text-align: center;
 }
 
@@ -100,6 +100,12 @@
   text-underline-offset: 0.3em;
   text-align: center;
   transition: color var(--dur-glow) var(--ease-soft), text-shadow var(--dur-glow) var(--ease-soft);
+}
+
+@media (min-width: 900px) {
+  .welcome__help {
+    line-height: 1.04;
+  }
 }
 
 .welcome__help:hover,

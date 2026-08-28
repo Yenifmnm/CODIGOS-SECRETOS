@@ -25,7 +25,7 @@
   margin: 0;
   font-family: var(--font-display);
   color: var(--c-brown-dark);
-  line-height: 1.05;
+  line-height: 1.04;
   text-align: center;
   white-space: nowrap;
 }
@@ -46,6 +46,7 @@
   text-decoration: underline;
   text-underline-offset: 0.35em;
   opacity: 0.9;
+  line-height: 1.04;
 }
 
 /* ---------- Mobile ---------- */

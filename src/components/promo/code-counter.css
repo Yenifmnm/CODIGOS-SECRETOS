@@ -58,6 +58,18 @@
   white-space: nowrap;
 }
 
+@media (min-width: 900px) {
+  .code-counter__value {
+    text-shadow: none;
+  }
+
+  .code-counter__label {
+    font-size: 1.563cqw; /* 30px sobre el lienzo web de 1920 */
+    line-height: 1.04;
+    text-shadow: 0 0 2.292cqw #fff, 0 0.208cqw 0.521cqw #212f5c;
+  }
+}
+
 @media (max-width: 899px) {
   .code-counter {
     gap: 10px;

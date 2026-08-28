@@ -36,6 +36,7 @@
 
 .result__title {
   text-align: center;
+  line-height: 1.041;
   /* Aparición del titular. */
   animation: result-title-in 620ms var(--ease-soft) both;
 }
@@ -43,28 +44,34 @@
 /* GANASTE: dorado con resplandor blanco. */
 .result__title--gold {
   color: var(--c-gold);
-  /* Nodo 23:3084: 0 0 6.288px, 0 0 44.016px y 0 4px 10px #212F5C, pasados a
-     cqw sobre el lienzo de 1920 (1cqw = 19.2 px). */
+  -webkit-text-stroke: 4px #ffffff;
+  paint-order: stroke fill;
+  text-shadow: none;
+  filter: drop-shadow(0 0 6.288px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 4px 10px #212f5c);
+}
+
+/* PERDISTE y errores de código: relleno rojo y las sombras del diseño.
+   El contorno se elimina en escritorio por la corrección explícita del
+   cliente: era el efecto que engrosaba y juntaba visualmente los glifos. */
+.result__title--outline {
+  color: var(--c-title-red);
+  /* Mismas sombras que el nodo 23:3084, que el 23:3163 repite. */
   text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
     0 0.208cqw 0.521cqw var(--c-deep-blue);
 }
 
-/* PERDISTE y errores de código: relleno ROJO con contorno DORADO. El nodo
-   23:3163 lo confirma: relleno #E63303, trazo #FCC102 de 4 px alineado al
-   CENTRO. Estaban invertidos —dorado adentro y rojo afuera—, que es lo que se
-   veía distinto del diseño. */
-.result__title--outline {
-  color: var(--c-title-red);
-  /* OJO CON ESTE VALOR. 0.94cqw son ~18 px de diseño y el nodo pide 4. El
-     número salió de razonar que, como `paint-order: stroke fill` tapaba la
-     mitad interior del trazo, «hay que pedir el doble». Sacado el
-     `paint-order`, ese razonamiento ya no se sostiene y el trazo quedó al
-     cuádruple del diseño. No se toca en este cambio —el pedido era mover SÓLO
-     el orden de pintado, sin compensar nada—, pero está medido y anotado. */
-  -webkit-text-stroke: 0.94cqw var(--c-title-outline);
-  /* Mismas sombras que el nodo 23:3084, que el 23:3163 repite. */
-  text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
-    0 0.208cqw 0.521cqw var(--c-deep-blue);
+/* PERDISTE web: contorno dorado y sombras del nodo Figma 23:3163. La clase
+   es exclusiva del titular desktop; las variantes mobile usan `result-m__`. */
+.result__title--loser {
+  color: #e63303;
+  -webkit-text-stroke: 4px #fcc102;
+  paint-order: stroke fill;
+  text-shadow: none;
+  filter: drop-shadow(0 0 6.288px #ffffff)
+    drop-shadow(0 0 44.016px #ffffff)
+    drop-shadow(0 4px 10px #212f5c);
 }
 
 @keyframes result-title-in {
@@ -80,7 +87,7 @@
 
 .result__message {
   text-align: center;
-  line-height: 1.12;
+  line-height: 1.041;
   white-space: normal;
   animation: result-fade-in 560ms var(--ease-soft) 220ms both;
 }
@@ -112,7 +119,7 @@
   background: var(--c-cyan-50);
   font-family: var(--font-display);
   font-size: 1.302cqw; /* 25 */
-  line-height: 1.12;
+  line-height: 1.04;
   color: #fff;
   text-align: center;
   white-space: nowrap;

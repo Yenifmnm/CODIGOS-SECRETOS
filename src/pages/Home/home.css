@@ -1,3 +1,17 @@
+/* Título de Inicio exclusivo de la composición web (nodo Figma 17:2906).
+   El trazo blanco de 2 px es independiente del resplandor y separa el relleno
+   dorado del cielo, tal como se ve en el diseño. */
+@media (min-width: 900px) {
+  .t-gold.home-desktop__title {
+    -webkit-text-stroke: 2px #ffffff;
+    paint-order: stroke fill;
+    text-shadow: none;
+    filter: drop-shadow(0 0 6.288px rgba(255, 255, 255, 0.7))
+      drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.55))
+      drop-shadow(0 4px 4px rgba(0, 0, 0, 0.3));
+  }
+}
+
 /* -------------------------------------------------------------------------
    INICIO — composición mobile (Figma "landing.png", lienzo 402).
 

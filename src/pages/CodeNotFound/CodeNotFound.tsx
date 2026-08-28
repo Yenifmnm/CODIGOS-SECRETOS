@@ -12,15 +12,15 @@ export default function CodeNotFound() {
     <ResultLayout
       pageTitle="Código fuera de órbita"
       title="¡Código fuera de órbita!"
-      titleSize={86}
+      titleSize={100}
       mobileTitleSize={40}
       mobileVariante="orbita"
       titleTone="outline"
       titleX={499}
-      titleY={484}
+      titleY={488}
       message={['Este código secreto no existe.', 'Ingresá uno nuevo para seguir avanzando.']}
-      messageSize={34}
-      messageWidth={620}
+      messageSize={40}
+      messageWidth={577}
       messageY={616}
       ctaY={730}
       code={lastResult?.code}

@@ -32,7 +32,7 @@
   margin: 0;
   font-family: var(--font-display);
   text-align: center;
-  line-height: 1.08;
+  line-height: 1.0417;
   transform: translateX(-50%);
   white-space: normal;
 }
@@ -52,7 +52,7 @@
   background: #0783b3;
   font-family: var(--font-display);
   font-size: 1.302cqw; /* 25 */
-  line-height: 1.12;
+  line-height: 1.04;
   color: #fff;
   text-align: center;
 }

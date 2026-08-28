@@ -140,7 +140,7 @@ export default function Home() {
       />
 
       <p
-        className="t-display t-gold abs"
+        className="home-desktop__title t-display t-gold abs"
         style={{ ...centeredText(948, 540, 100), zIndex: 5 }}
       >
         Ganá un viaje al Caribe

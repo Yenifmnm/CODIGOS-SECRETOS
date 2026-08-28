@@ -126,6 +126,19 @@ select {
   text-shadow: var(--glow-white-text);
 }
 
+/* Tipografía exclusiva de las vistas web de escritorio. La rama mobile
+   conserva sus reglas calibradas por separado. */
+@media (min-width: 900px) {
+  .t-display {
+    line-height: 1.041;
+  }
+
+  .t-white-glow {
+    text-shadow: 0 0 41.4px #fff, 0 0 82.8px #fff, 0 0 250px #fff,
+      0 0 250px #fff, 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
+}
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,

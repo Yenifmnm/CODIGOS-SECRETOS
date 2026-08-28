@@ -33,6 +33,8 @@ export interface ResultLayoutProps {
   mobileTitleShift?: number;
   /** `gold` = GANASTE; `outline` = relleno dorado con contorno rojo (PERDISTE y errores). */
   titleTone?: 'gold' | 'outline';
+  /** Variante visual adicional aplicada únicamente al titular de escritorio. */
+  desktopTitleVariant?: string;
   /** Centro X e Y del titular en coordenadas de diseño. */
   titleX?: number;
   titleY?: number;
@@ -89,6 +91,7 @@ export function ResultLayout({
   mobileTitleSize,
   mobileTitleShift,
   titleTone = 'gold',
+  desktopTitleVariant,
   titleX = 479,
   titleY = 463,
   message,
@@ -331,7 +334,9 @@ export function ResultLayout({
 
       {/* --- Columna de texto --- */}
       <p
-        className={`t-display result__title result__title--${titleTone} abs`}
+        className={`t-display result__title result__title--${titleTone}${
+          desktopTitleVariant ? ` result__title--${desktopTitleVariant}` : ''
+        } abs`}
         style={{ ...centeredText(titleX, titleY, titleSize), zIndex: 6 }}
       >
         {title}
@@ -360,7 +365,7 @@ export function ResultLayout({
         id="contenido"
         className="abs"
         style={{ ...box({ x: 276, y: ctaY, w: 375, h: 125 }), zIndex: 7 }}
-        fontSize={42}
+        fontSize={50}
         onClick={reload}
       >
         Cargar otro código

@@ -100,6 +100,10 @@
 /* La etiqueta flotante es sólo del layout de escritorio: en mobile los campos
    ya apilan etiqueta sobre input y no hay nada que resolver. */
 @media (min-width: 900px) {
+  .pfield--pill .pfield__label {
+    line-height: 1.04;
+  }
+
   .pfield--line .pfield__label {
     position: absolute;
     left: 0;
@@ -109,6 +113,8 @@
     /* El input ocupa todo el ancho por debajo: dejar pasar el click hace que
        tocar la etiqueta enfoque el campo igual. */
     pointer-events: none;
+    color: var(--c-brown-60);
+    line-height: 1.04;
   }
 
   .pfield--line:focus-within .pfield__label,

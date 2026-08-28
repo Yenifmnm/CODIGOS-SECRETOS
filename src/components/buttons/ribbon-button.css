@@ -58,6 +58,12 @@
   white-space: nowrap;
 }
 
+@media (min-width: 900px) {
+  .ribbon-btn__label {
+    line-height: 1.04;
+  }
+}
+
 .ribbon-btn:hover:not(:disabled),
 .ribbon-btn:focus-visible:not(:disabled) {
   transform: scale(1.05);
