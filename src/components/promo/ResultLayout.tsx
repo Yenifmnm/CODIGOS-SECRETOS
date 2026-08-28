@@ -365,7 +365,13 @@ export function ResultLayout({
         id="contenido"
         className="abs"
         style={{ ...box({ x: 276, y: ctaY, w: 375, h: 125 }), zIndex: 7 }}
-        fontSize={50}
+        /* 48 y no 50: el botón mide 375 y el rótulo lleva `padding: 0 30px`, o
+           sea 315 px útiles. A 50 el texto necesita EXACTAMENTE 315 y cae al
+           límite: «código» se iba al segundo renglón en las tres pantallas de
+           error. A 48 necesita 302 y entra con margen. Medido en el navegador
+           a 1920. Es sólo la composición de escritorio; el botón mobile es otro
+           elemento y no se toca. */
+        fontSize={48}
         onClick={reload}
       >
         Cargar otro código
