@@ -37,6 +37,13 @@ export default function CodeHelp() {
     <Stage
       title="¿Dónde encuentro el código secreto?"
       compactMenu
+      /* PRIORIDAD DE DESCARGA. Nada visual cambia. Medido contra el build
+         publicado con la red a 4 Mbps: el fondo, el logo y su halo se descubren
+         a los 256 ms porque el `preload` del index.html los alcanza, pero
+         `portal`, `barco`, `destello` y `jugos` recién a los 1.147 ms, y
+         `portal` --el asset más pesado del build, 276 kB-- terminaba último, a
+         2.468 ms. Acá se marca qué va primero. */
+      mobileBgPrioridad="high"
       mobileCielo={{ nodo: '73:782', x: -22, y: -38, w: 445, h: 965 }}
       mobile={
         /* Figma "donde esta el codigo" (402x913): cielo claro con horizonte,
@@ -58,6 +65,9 @@ export default function CodeHelp() {
             aria-hidden="true"
             className="codehelp-m__portal"
             data-figma="73:817"
+            /* Alta: es la pieza pesada que define la parte de arriba de la
+               composición, y la que llegaba última. */
+            fetchPriority="high"
           />
 
           <CloseButton to="/participar" className="codehelp-m__close" data-figma="99:258" />
@@ -97,6 +107,7 @@ export default function CodeHelp() {
               aria-hidden="true"
               className="codehelp-m__flare"
               data-figma="73:793"
+              fetchPriority="low"
             />
             {/* `flipped` es el espejo horizontal del nodo: ver el porqué en
                 `code-help.css`, que tiene el detalle de cómo se resolvió. */}
@@ -110,10 +121,12 @@ export default function CodeHelp() {
               className="codehelp-m__ship-halo"
               data-figma="73:789"
               data-figma-omitir="pintura"
+              fetchPriority="low"
             />
             <PurosolShip
               flipped
               className="codehelp-m__ship"
+              prioridad="low"
               data-figma="73:789"
               /* Dos controles que este elemento no puede pasar, los dos por
                  lo mismo: `.ship` lleva la animación de flotación, que escribe

@@ -11,6 +11,12 @@ import { box, centeredText, u } from '../../app/stage';
 import './welcome.css';
 
 import { LogoCodigos } from '../../components/promo/LogoCodigos';
+import { Prefetch } from '../../components/layout/Prefetch';
+import jugos from '../../assets/promo/jugos.webp';
+
+/* Estable entre renders: si el array se recreara en cada uno, el efecto de
+   `Prefetch` volvería a correr y a reinsertar el enlace en cada render. */
+const PREFETCH_CODIGO = [jugos];
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import pergamino2 from '../../assets/ui/pergamino-2.webp';
 import planetaPremios from '../../assets/planets/planeta-premios.webp';
@@ -92,9 +98,23 @@ export default function Welcome() {
   );
 
   return (
-    <Stage
-      title="Bienvenidos a bordo, pequeños piratas"
-      compactMenu
+    <>
+      {/* Lo que va a hacer falta en `/donde-esta-el-codigo`, la pantalla a la
+          que se llega desde acá con «¿Dónde encuentro el código secreto?».
+
+          Va UNA sola imagen y no las nueve de esa pantalla: medido, ocho ya
+          están en caché para cuando la persona toca el enlace —el fondo, el
+          logo y su halo, el portal, la nave, el destello, el logo de PuroSol y
+          el cursor, todos compartidos con ésta— y la única que falta es
+          `jugos.webp`, el pack sobre el que va la lupa: 72 kB.
+
+          `prefetch` baja con prioridad de ociosidad, así que no compite con lo
+          que esta pantalla necesita ahora. */}
+      <Prefetch urls={PREFETCH_CODIGO} />
+
+      <Stage
+        title="Bienvenidos a bordo, pequeños piratas"
+        compactMenu
       mobileCielo={{ nodo: '70:344', x: -46, y: -38, w: 493, h: 1070 }}
       mobile={
         <WelcomeMobile form={form} onSubmit={onSubmit} loading={loading} error={error} />
@@ -159,7 +179,8 @@ export default function Welcome() {
           </Link>
         </form>
       </div>
-    </Stage>
+      </Stage>
+    </>
   );
 }
 
