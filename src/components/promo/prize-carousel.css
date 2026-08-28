@@ -133,6 +133,24 @@
     transform: none !important;
   }
 
+  /* SIN `will-change` EN MOBILE. La regla de arriba lo pone en `transform,
+     opacity`, y eso promueve cada item a capa propia. En Safari de iPhone esa
+     capa se dibuja con un lienzo del tamaño EXACTO del elemento —283x291— así
+     que el resplandor de la imagen de adentro se recorta ahí: el borde del
+     recorte es el RECTÁNGULO que se veía alrededor de cada premio, y por eso
+     aparecía en todos al pasar con las flechas.
+
+     Verificado en WebKit: apagándolo, el resplandor vuelve a ser redondo con el
+     mismo filtro. NO era el encadenado esta vez —eso ya se había corregido y el
+     cuadro seguía—: era la promoción a capa.
+
+     Sólo la rama mobile; la de escritorio lo conserva. El coste es que el
+     navegador no pre-promueve el elemento antes de la transición, y a cambio el
+     resplandor no se corta. */
+  .carousel__item {
+    will-change: auto;
+  }
+
   .carousel__item img {
     width: 100%;
     height: 100%;
