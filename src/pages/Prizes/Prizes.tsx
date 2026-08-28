@@ -10,6 +10,7 @@ import './prizes.css';
 import { LogoCodigos } from '../../components/promo/LogoCodigos';
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import glow from '../../assets/effects/glow.webp';
+import fondoPremiosDesktop from '../../assets/backgrounds/fondo-premios-desktop.png';
 
 /** PREMIOS — Figma 57:86. El catálogo llega de `promoApi.getPrizes()`. */
 export default function Prizes() {
@@ -71,6 +72,15 @@ export default function Prizes() {
         </div>
       }
     >
+      {/* En Figma el planeta, el portal y la Vía Láctea forman parte de la
+          misma capa `fondo inicio 1` (57:87), no son objetos separados. */}
+      <img
+        src={fondoPremiosDesktop}
+        alt=""
+        aria-hidden="true"
+        className="prizes__background"
+      />
+
       <Deco src={logoCodigos} x={685} y={117} w={523} h={390} zIndex={4}
         glow="0 0 2.8cqw #09eaff" float={{ amplitude: 7, duration: 5.4 }} />
 

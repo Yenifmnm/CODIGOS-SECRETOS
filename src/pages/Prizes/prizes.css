@@ -1,5 +1,22 @@
 /* PREMIOS — Figma 57:86 */
 
+@media (min-width: 900px) {
+  .prizes__background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: max(100vw, calc(100dvh * 16 / 9));
+    height: max(100dvh, calc(100vw * 9 / 16));
+    display: block;
+    max-width: none;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+}
+
 .prizes__name {
   text-align: center;
   transition: opacity 220ms var(--ease-soft);
