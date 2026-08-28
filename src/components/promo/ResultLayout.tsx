@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useLayoutEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Stage } from '../layout/Stage';
 import { Deco } from '../layout/Deco';
@@ -48,6 +48,8 @@ export interface ResultLayoutProps {
   message: string[];
   /** Texto alternativo exclusivo de desktop; mobile conserva `message`. */
   desktopMessage?: string[];
+  /** En desktop, fuerza que el mensaje de esta pantalla quede en un solo renglón. */
+  desktopMessageSingleLine?: boolean;
   messageSize?: number;
   /** Ancho del bloque de mensaje en px de diseño. */
   messageWidth?: number;
@@ -102,6 +104,7 @@ export function ResultLayout({
   titleY = 463,
   message,
   desktopMessage,
+  desktopMessageSingleLine = false,
   messageSize = 34,
   messageWidth = 760,
   messageY = 613,
@@ -117,6 +120,37 @@ export function ResultLayout({
 }: ResultLayoutProps) {
   const navigate = useNavigate();
   const reload = () => navigate('/participar');
+  const desktopMessageRef = useRef<HTMLParagraphElement>(null);
+  const desktopMessageText = (desktopMessage ?? message).join(' ');
+
+  /* GANASTE admite nombres de longitud variable. En desktop se conserva el
+     cuerpo del Figma siempre que entra; si un premio es más largo, se mide la
+     tinta real con DK Prince Frog y se reduce sólo ese renglón. La rama mobile
+     usa otro elemento (`result-m__msg`) y nunca pasa por este ajuste. */
+  useLayoutEffect(() => {
+    if (!desktopMessageSingleLine) return;
+
+    const element = desktopMessageRef.current;
+    if (!element) return;
+
+    const desktop = window.matchMedia('(min-width: 900px)');
+    const fit = () => {
+      element.style.fontSize = u(messageSize);
+      if (!desktop.matches) return;
+
+      const available = element.clientWidth;
+      const required = element.scrollWidth;
+      if (!available || required <= available) return;
+
+      const baseSize = Number.parseFloat(window.getComputedStyle(element).fontSize);
+      element.style.fontSize = `${baseSize * (available / required)}px`;
+    };
+
+    fit();
+    void document.fonts.ready.then(fit);
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [desktopMessageSingleLine, desktopMessageText, messageSize, messageWidth]);
 
   const codeLabel = codeRedeemed ? 'CANJEASTE EL CÓDIGO' : 'CÓDIGO INGRESADO';
 
@@ -383,7 +417,10 @@ export function ResultLayout({
       </p>
 
       <p
-        className="t-display t-white-glow result__message abs"
+        ref={desktopMessageRef}
+        className={`t-display t-white-glow result__message abs${
+          desktopMessageSingleLine ? ' result__message--single-line' : ''
+        }`}
         style={{
           left: u(480),
           top: u(messageY),

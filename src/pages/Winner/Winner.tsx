@@ -23,9 +23,6 @@ export default function Winner() {
   const message = prize
     ? `te ganaste ${prize.article ?? 'un'} ${prize.name}!`
     : 'te ganaste un premio!';
-  const desktopMessage = prize
-    ? `te ganaste ${prize.article ?? 'un'} ${prize.name.replace(/\s+OLED\b/i, '')}!`
-    : message;
 
   return (
     <ResultLayout
@@ -36,7 +33,7 @@ export default function Winner() {
       titleTone="gold"
       titleY={463}
       message={[message]}
-      desktopMessage={[desktopMessage]}
+      desktopMessageSingleLine
       messageSize={60}
       messageWidth={666}
       messageY={616}

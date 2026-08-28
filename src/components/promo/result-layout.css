@@ -157,6 +157,16 @@
   display: block;
 }
 
+@media (min-width: 900px) {
+  .result__message--single-line {
+    white-space: nowrap;
+  }
+
+  .result__message--single-line .result__message-line {
+    display: inline;
+  }
+}
+
 @keyframes result-fade-in {
   from {
     opacity: 0;
