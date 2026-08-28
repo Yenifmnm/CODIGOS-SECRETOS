@@ -15,6 +15,7 @@ export default function Loser() {
       titleSize={140}
       titleTone="outline"
       desktopTitleVariant="loser"
+      desktopLeftCometX={-90}
       titleY={463}
       message={['¡Seguí participando, cada código', 'te acerca más al tesoro galáctico!']}
       messageSize={40}

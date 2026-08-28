@@ -9,7 +9,8 @@ import { box, centeredText, u } from '../../app/stage';
 import './result-layout.css';
 
 import { LogoCodigos } from './LogoCodigos';
-import logoCodigos from '../../assets/logos/codigos-secretos.webp';
+import logoCodigosResultDesktop from '../../assets/logos/codigos-secretos-result-desktop.png';
+import logoPurosolResultDesktop from '../../assets/logos/purosol-result-desktop.png';
 import destello from '../../assets/effects/destello.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
 import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
@@ -35,6 +36,8 @@ export interface ResultLayoutProps {
   titleTone?: 'gold' | 'outline';
   /** Variante visual adicional aplicada únicamente al titular de escritorio. */
   desktopTitleVariant?: string;
+  /** X del cometa izquierdo, exclusiva de la composición desktop. */
+  desktopLeftCometX?: number;
   /** Centro X e Y del titular en coordenadas de diseño. */
   titleX?: number;
   titleY?: number;
@@ -92,6 +95,7 @@ export function ResultLayout({
   mobileTitleShift,
   titleTone = 'gold',
   desktopTitleVariant,
+  desktopLeftCometX = 1,
   titleX = 479,
   titleY = 463,
   message,
@@ -130,6 +134,8 @@ export function ResultLayout({
     <Stage
       title={pageTitle}
       compactMenu
+      desktopClassName="result-stage"
+      desktopMenuLogo={logoPurosolResultDesktop}
       mobileBg="profundo"
       /* Los cuatro frames de resultado miden 969 y no 913. De este número sale
          el alto útil contra el que la rama mobile calcula su escala: con el 913
@@ -310,7 +316,7 @@ export function ResultLayout({
       <div className="result__vignette abs" style={{ zIndex: 0 }} />
 
       {/* --- Universo --- */}
-      <Deco src={destello} x={1} y={155} w={415} h={275} opacity={0.5}
+      <Deco src={destello} x={desktopLeftCometX} y={155} w={415} h={275} opacity={0.5}
         float={{ amplitude: 9, duration: 5.2 }} />
       <Deco src={destello} x={713} y={40} w={297} h={197}
         float={{ amplitude: 7, duration: 4.4, delay: 0.7 }} />
@@ -321,6 +327,7 @@ export function ResultLayout({
       <Deco src={planetaVit2} x={1811} y={146} w={169} h={184} rotate={15.05} blur={5} opacity={0.8}
         float={{ amplitude: 6, duration: 7, delay: 0.9 }} />
 
+      <div className="result__right-group abs">
       {/* Superficie del planeta sobre la que se apoya el cofre.
           Geometría exacta de la elipse del Figma: nodo 23:3092 en GANASTE y
           23:3161 en PERDISTE, los dos [889, 794, 951, 911]. Antes era una
@@ -329,7 +336,20 @@ export function ResultLayout({
           y 11 ("replicar el planeta y el tamaño como en la propuesta"). */}
       <div className="result__planet abs" style={{ ...box({ x: 889, y: 794, w: 951, h: 911 }), zIndex: 1 }} />
 
-      <Deco src={logoCodigos} x={299} y={202} w={329} h={245} zIndex={4}
+      {/* --- Escena (cofre / premio) --- */}
+      {scene}
+
+      <CodeCounter
+        className="abs"
+        count={codeCount}
+        /* Nodo 64:111 / 64:117: la placa arranca en (1168, 940). */
+        style={{ left: u(1168), top: u(940), zIndex: 7 }}
+      />
+      </div>
+
+      <div className="result__left-group abs">
+
+      <Deco src={logoCodigosResultDesktop} x={299} y={202} w={329} h={245} zIndex={4}
         glow="0 0 2.4cqw #09eaff" float={{ amplitude: 6, duration: 5 }} />
 
       {/* --- Columna de texto --- */}
@@ -377,22 +397,17 @@ export function ResultLayout({
         Cargar otro código
       </PromoButton>
 
-      {/* --- Escena (cofre / premio) --- */}
-      {scene}
-
       {/* --- Pie: aviso de stickers y contador --- */}
       <div className="result__note abs" style={{ ...box({ x: 150, y: 896, w: 630, h: 97 }), zIndex: 7 }}>
         {note}
       </div>
+      </div>
 
-      <CodeCounter
-        className="abs"
-        count={codeCount}
-        /* Nodo 64:111 / 64:117: la placa arranca en (1168, 940). */
-        style={{ left: u(1168), top: u(940), zIndex: 7 }}
+      <CloseButton
+        to="/participar"
+        className="result__close"
+        style={{ left: u(1737), top: u(34) }}
       />
-
-      <CloseButton to="/participar" style={{ left: u(1737), top: u(34) }} />
     </Stage>
   );
 }

@@ -16,6 +16,8 @@ export default function CodeUsed() {
       mobileTitleSize={40}
       mobileVariante="orbita"
       titleTone="outline"
+      desktopTitleVariant="error"
+      desktopLeftCometX={-90}
       titleX={499}
       titleY={488}
       message={['Este código secreto ya fue activado.', 'Ingresá uno nuevo para seguir avanzando.']}

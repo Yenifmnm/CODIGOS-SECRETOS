@@ -29,6 +29,8 @@ interface SiteMenuProps {
    * desplegado abierto por defecto: el menú arranca plegado y no distrae.
    */
   compact?: boolean;
+  /** Recurso alternativo para una composición desktop puntual. */
+  logoSrc?: string;
 }
 
 /**
@@ -38,7 +40,7 @@ interface SiteMenuProps {
  * Permanece siempre accesible durante la navegación (requisito del PPT) y se
  * cierra con ESC o al hacer click fuera.
  */
-export function SiteMenu({ compact = false }: SiteMenuProps) {
+export function SiteMenu({ compact = false, logoSrc = logoPurosol }: SiteMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLElement>(null);
   const panelId = useId();
@@ -94,7 +96,7 @@ export function SiteMenu({ compact = false }: SiteMenuProps) {
         data-figma-omitir="pintura"
       >
         <NavLink to="/" className="site-menu__brand" aria-label="PuroSol — Inicio">
-          <img src={logoPurosol} alt="PuroSol" />
+          <img src={logoSrc} alt="PuroSol" />
         </NavLink>
 
         <span className="site-menu__divider" aria-hidden="true" />

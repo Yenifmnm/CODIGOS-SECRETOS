@@ -121,6 +121,19 @@
     drop-shadow(0 4px 10px #212f5c);
 }
 
+/* Las dos pantallas de error comparten el amarillo del titular de PERDISTE,
+   pero con un trazo más fino porque el cuerpo es 100px y no 140px. Esta clase
+   sólo existe en la composición desktop: mobile renderiza `result-m__title`. */
+.result__title--error {
+  color: #e63303;
+  -webkit-text-stroke: 2px #fcc102;
+  paint-order: stroke fill;
+  text-shadow: none;
+  filter: drop-shadow(0 0 6.288px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 4px 10px #212f5c);
+}
+
 @keyframes result-title-in {
   from {
     opacity: 0;
@@ -183,6 +196,37 @@
 .result__note-code strong {
   font-weight: 400;
   letter-spacing: 0.04em;
+}
+
+/* En un viewport desktop más ancho que 16:9, el lienzo se contiene completo
+   y deja dos sangrías laterales. El PDF pide ocuparlas sin deformar imágenes:
+   se redistribuyen los grupos hacia afuera conservando tamaños, alturas y las
+   coordenadas originales cuando el viewport sí es 16:9. */
+@media (min-width: 900px) {
+  .result-stage {
+    --result-sangria-total: calc(100vw - 100cqw);
+  }
+
+  .result-stage .result__left-group,
+  .result-stage .result__right-group {
+    inset: 0;
+  }
+
+  .result-stage .result__left-group {
+    translate: calc(var(--result-sangria-total) * -0.25) 0;
+  }
+
+  .result-stage .result__right-group {
+    translate: calc(var(--result-sangria-total) * 0.25) 0;
+  }
+
+  .result-stage .site-menu {
+    translate: calc(var(--result-sangria-total) * -0.36) 0;
+  }
+
+  .result-stage .result__close {
+    translate: calc(var(--result-sangria-total) * 0.4) 0;
+  }
 }
 
 /* -------------------------------------------------------------------------

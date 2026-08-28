@@ -32,6 +32,8 @@ interface StageProps {
   desktopBg?: string;
   /** Clase opcional del contenedor desktop. La rama mobile nunca la renderiza. */
   desktopClassName?: string;
+  /** Logo de menú exclusivo de una composición desktop. */
+  desktopMenuLogo?: string;
   /** Cielo vertical de la rama mobile. No afecta al desktop. */
   mobileBg?: MobileBg;
   /**
@@ -84,6 +86,7 @@ export function Stage({
   compactMenu = false,
   desktopBg,
   desktopClassName,
+  desktopMenuLogo,
   mobileBg = 'cielo',
   mobileBgPrioridad,
   mobileVelo,
@@ -168,7 +171,7 @@ export function Stage({
         <div className="layer" style={{ zIndex: 2 }}>
           <h1 className="sr-only">{title}</h1>
           {children}
-          {withMenu && <SiteMenu compact={compactMenu} />}
+          {withMenu && <SiteMenu compact={compactMenu} logoSrc={desktopMenuLogo} />}
         </div>
       </div>
     </div>
