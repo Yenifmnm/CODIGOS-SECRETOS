@@ -138,9 +138,19 @@
     height: 100%;
     object-fit: contain;
     /* El halo cian ya viene pintado en el propio asset, igual que en el Figma.
-       Este es el que lo separa del fondo estrellado. */
-    filter: drop-shadow(0 0 6cqw rgba(9, 234, 255, 0.85))
-      drop-shadow(0 0 14cqw rgba(9, 234, 255, 0.45));
+       Este es el que lo separa del fondo estrellado.
+
+       UNA SOLA `drop-shadow`, no dos encadenadas. Con dos, Safari en iPhone
+       recorta la región del filtro y dibuja un RECTÁNGULO alrededor del
+       resplandor: se ve el filo recto arriba, abajo y a los costados. Está
+       reportado sobre el premio «Columpio de jardín», que es de los más anchos,
+       y reproducido en WebKit.
+
+       Es el tercer caso del mismo patrón en este proyecto: el cofre de GANASTE
+       —donde WebKit dejaba el 12% de los píxeles cálidos— y el logo, que
+       dibujaba el mismo cuadrado. Ahí quedó medido que el límite es el
+       ENCADENADO y no el radio. */
+    filter: drop-shadow(0 0 14cqw rgba(9, 234, 255, 0.85));
   }
 
   /* En mobile solo se ve el premio activo: los laterales no entran. */
@@ -334,7 +344,8 @@
   }
 
   .carousel__thumb--active img {
-    filter: drop-shadow(0 0 3.5cqw #fff) drop-shadow(0 0 7cqw var(--c-cyan));
+    /* Misma razón que la imagen grande: una sola, no dos encadenadas. */
+    filter: drop-shadow(0 0 7cqw var(--c-cyan));
   }
 
   .carousel__thumb:active {
