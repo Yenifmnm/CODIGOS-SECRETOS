@@ -24,7 +24,7 @@
   color: var(--c-brown-dark);
   font-family: var(--font-display);
   font-size: 2.083cqw; /* 40 */
-  line-height: 1.1;
+  line-height: 1.04;
   white-space: nowrap;
 }
 
@@ -88,7 +88,7 @@
 .terms__body {
   font-family: var(--font-display);
   font-size: 2.083cqw; /* 40 */
-  line-height: 1.16;
+  line-height: 1.04;
   color: var(--c-brown-dark);
   text-align: center;
 }
@@ -462,6 +462,17 @@
     height: 5.224cqw;     /* 21 */
     display: grid;
     place-items: center;
+    /* SIN el padding lateral que trae `.ribbon-btn__label`. Con
+       `box-sizing: border-box`, esos 14,7 px por lado dejaban la caja de
+       contenido en 93 px para un texto que mide 111: el texto no entraba, y en
+       grid lo que desborda se va HACIA UN SOLO LADO, el derecho. Por eso la
+       tinta quedaba 9,3 px a la derecha del centro de la cinta aunque la CAJA
+       estuviera centrada.
+
+       Ese fue mi error del 27-08-2026: centré la caja y di el trabajo por
+       hecho sin medir la tinta. Medir la caja no alcanza cuando el contenido
+       desborda. */
+    padding: 0;
     font-size: 4.975cqw;  /* 20 */
     line-height: 1.04;    /* 20.8 */
   }
