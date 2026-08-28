@@ -125,12 +125,57 @@
   }
 
   .carousel__item {
-    position: static;
+    /* `relative` y no `static` sólo para que el halo de abajo tenga de dónde
+       colgarse. En el flujo se comporta igual, así que la ranura no se mueve. */
+    position: relative;
+    z-index: 0;
     width: 100%;
     max-width: none;
     height: 100%;
     margin: 0;
     transform: none !important;
+  }
+
+  /* EL HALO, COMO CAPA PROPIA. Antes era un `drop-shadow` sobre la imagen y ese
+     era el CUADRADO de iPhone: WebKit recorta la salida del filtro en la caja
+     del elemento —la región del filtro es la caja más un 10% por lado— y un
+     desenfoque de 56 px no entra ahí. Chromium la deja derramar, y de ahí que
+     Android se viera bien y iPhone no.
+
+     Un degradado no se recorta: se dibuja donde se le dice, igual en los dos
+     motores. Es la misma solución que se usó para el resplandor del logo.
+
+     LOS NÚMEROS SALEN DE MEDIR, no de elegir algo parecido. Barrido de 36
+     combinaciones en WebKit contra `pantallas/Premios.png` —con Nintendo Switch
+     en la ranura, que es el premio que el export muestra— sobre la caja del
+     premio con 24 px de aire:
+
+       con el drop-shadow (lo publicado)   23.29 de media   27.61% de píxeles lejos
+       sin nada                            25.33            37.11%
+       150% · 0.6 · 60%  ← esto            22.20            23.44%
+
+     O sea que además de sacar el cuadrado queda MÁS cerca del diseño que antes.
+     El óptimo es una meseta ancha —de 140 a 170%, alfa 0,5 a 0,6, fin en 60%
+     dan todos entre 22,2 y 22,7—, así que el valor no es delicado.
+
+     El halo del propio asset se queda: el Figma lo tiene horneado ahí y esta
+     capa lo acompaña, no lo reemplaza. */
+  .carousel__item::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150%;
+    height: 150%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(9, 234, 255, 0.6) 0%,
+      rgba(9, 234, 255, 0.6) 18%,
+      rgba(9, 234, 255, 0) 60%
+    );
+    z-index: -1;
+    pointer-events: none;
   }
 
   /* SIN `will-change` EN MOBILE. La regla de arriba lo pone en `transform,
@@ -151,24 +196,42 @@
     will-change: auto;
   }
 
+  /* SIN FILTRO. El halo cian ya viene HORNEADO en el asset, y el Figma no le
+     pone ningún efecto: `premio 1 1` (58.3, 303, 283x291) es `fill imagen` y
+     nada más. El `drop-shadow` que había acá era un agregado nuestro, y era el
+     que dibujaba el CUADRADO que reportó la clienta en iPhone.
+
+     MEDIDO, la misma imagen en su caja de 283x291 sobre negro, sin nada más
+     alrededor (skate-mediano):
+
+       sin filtro                     halo redondo en los dos motores
+       drop-shadow 56px en Chromium   halo redondo, se derrama fuera de la caja
+       drop-shadow 56px en WebKit     halo CORTADO en los cuatro lados
+
+     WebKit recorta la salida del filtro en la caja del elemento; Chromium la
+     deja derramar. Y el halo horneado ya llega al 93% del semiancho —medido en
+     los 19 assets—, así que su sombra desborda siempre: en iPhone el corte cae
+     dentro de lo que se ve y queda el filo recto.
+
+     Por eso aparecía en TODOS los premios y por eso Android se veía bien.
+
+     Los dos arreglos anteriores —el `will-change` de `.carousel__item` y el
+     recorte de la tira de miniaturas— eran recortes REALES y distintos, pero
+     ninguno era este. Van tres cajas que recortan lo mismo; la diferencia es
+     que sacando el filtro no queda ninguna. */
   .carousel__item img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    /* El halo cian ya viene pintado en el propio asset, igual que en el Figma.
-       Este es el que lo separa del fondo estrellado.
+  }
 
-       UNA SOLA `drop-shadow`, no dos encadenadas. Con dos, Safari en iPhone
-       recorta la región del filtro y dibuja un RECTÁNGULO alrededor del
-       resplandor: se ve el filo recto arriba, abajo y a los costados. Está
-       reportado sobre el premio «Columpio de jardín», que es de los más anchos,
-       y reproducido en WebKit.
-
-       Es el tercer caso del mismo patrón en este proyecto: el cofre de GANASTE
-       —donde WebKit dejaba el 12% de los píxeles cálidos— y el logo, que
-       dibujaba el mismo cuadrado. Ahí quedó medido que el límite es el
-       ENCADENADO y no el radio. */
-    filter: drop-shadow(0 0 14cqw rgba(9, 234, 255, 0.85));
+  /* La regla de escritorio `.carousel__item--active img` (arriba, fuera de la
+     media query) vale también acá y trae DOS `drop-shadow` encadenadas. Se
+     apaga expresamente: sin esto, sacar el filtro del renglón de arriba deja
+     entrar el de escritorio, que es peor —encadenado y recortado igual—.
+     La regla de escritorio no se toca. */
+  .carousel__item--active img {
+    filter: none;
   }
 
   /* En mobile solo se ve el premio activo: los laterales no entran. */
@@ -352,35 +415,29 @@
     z-index: 1;
   }
 
-  /* EL HALO TIENE QUE SER REDONDO. En el Figma cada miniatura lleva un halo
-     circular que se desvanece parejo —`premio 5 1`, `premio 4 1` y `premio 2 1`
-     son imágenes sueltas, sin efectos: el halo viene HORNEADO en el asset—.
+  /* SIN FILTRO Y SIN MÁSCARA, por lo mismo que la imagen grande. En el Figma
+     `premio 1 2`, `premio 5 1`, `premio 4 1` y `premio 2 1` son imágenes
+     sueltas —las tres inactivas al 50% de opacidad— sin un solo efecto.
 
-     Los assets del repo también lo traen horneado, pero con forma de cuadrado
-     redondeado, y ese borde recto se ve: alrededor del columpio queda un
-     recuadro claro, que es lo que se nota a simple vista en el teléfono. No lo
-     hace el `drop-shadow` de acá abajo —quitándolo el recuadro sigue—, lo hace
-     la imagen.
+     Acá había dos cosas puestas sobre una premisa que resultó falsa. Estaba
+     escrito que el halo horneado de estos assets tiene «forma de cuadrado
+     redondeado» y que el recuadro seguía al quitar el `drop-shadow`. Medido
+     sobre los 19 archivos, comparando el radio del halo hacia el lado y hacia
+     la esquina —en un círculo los dos son iguales; en un cuadrado el de la
+     esquina es 1,41 veces el del lado—:
 
-     La máscara radial recorta esa esquina cuadrada y deja el halo circular. Los
-     porcentajes están calibrados contra estos assets: 46% cubre entero el
-     producto —incluido el joystick del PS5, abajo a la izquierda, y los pedales
-     del volante— y el desvanecido hasta 72% se come el borde recto.
+       esquina/lado entre 1,02 y 1,09 en los 19 assets
 
-     Lo correcto de verdad sería el asset con el halo redondo, como el que usó
-     el diseñador. Mientras tanto, esto. */
+     O sea que el halo horneado ES redondo. El recuadro lo dibujaba el
+     `drop-shadow`, recortado por WebKit contra la caja del elemento.
+
+     Y la máscara, además de sobrar, se comía producto: se desvanece desde el
+     65% hasta el 102% del semiancho, y el skate llega al 90%, la bicicleta aro
+     20 al 90% y el kit de volante al 88%. Sus bordes quedaban al ~32%. */
   .carousel__thumb img {
     width: 86%;
     height: 86%;
     object-fit: contain;
-    filter: drop-shadow(0 0 2.4cqw rgba(9, 234, 255, 0.75));
-    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 46%, rgba(0, 0, 0, 0) 72%);
-    mask-image: radial-gradient(circle at 50% 50%, #000 46%, rgba(0, 0, 0, 0) 72%);
-  }
-
-  .carousel__thumb--active img {
-    /* Misma razón que la imagen grande: una sola, no dos encadenadas. */
-    filter: drop-shadow(0 0 7cqw var(--c-cyan));
   }
 
   .carousel__thumb:active {
