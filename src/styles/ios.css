@@ -1,0 +1,83 @@
+/* -------------------------------------------------------------------------
+   AJUSTES EXCLUSIVOS DE iPHONE
+
+   Todo lo que haya que corregir SÓLO en iPhone vive acá y en ningún otro lado.
+   Es un archivo aparte a propósito: así se ve de un vistazo cuánto se está
+   desviando el sitio por un motor, y sacar la excepción es borrar un bloque y
+   no salir a buscar reglas sueltas por seis hojas.
+
+   CÓMO APUNTA. `@supports (-webkit-touch-callout: none)` es verdadero sólo en
+   iOS: ahí todos los navegadores son WebKit, y Safari de macOS no soporta esa
+   propiedad, así que queda afuera. El `@media (max-width: 899px)` de adentro lo
+   acota a la rama mobile, que es la única que este archivo puede tocar.
+   ESCRITORIO NO ENTRA ACÁ, en ningún caso.
+
+   LAS TRES CONDICIONES PARA AGREGAR ALGO. Son las que puso la clienta cuando
+   aprobó la técnica, y valen para cada regla nueva:
+
+     1. Es el ÚLTIMO recurso. Si el defecto se puede arreglar de una forma que
+        funcione igual en los dos motores, se arregla así y no se toca esto.
+     2. Los valores salen de MEDIR contra el export en WebKit. No de elegir
+        «algo más suave». Cada regla deja acá abajo su número.
+     3. Nunca `filter: none`. Apagar un efecto entero no es corregirlo.
+
+   OJO CON LOS COMENTARIOS DE ESTE ARCHIVO: no escribir rutas con comodines
+   dentro de un comentario. La forma `src` + doble asterisco + barra + asterisco
+   contiene la secuencia que CIERRA el comentario, y el resto de la prosa pasa a
+   ser CSS suelto: el parser descarta el bloque entero y la regla no se aplica,
+   sin ningun error visible. Paso acá y costó media hora encontrarlo.
+
+   EL CONTROL YA LO SABE. `npm run audit:webkit` recorre todas las hojas de `src`, detecta
+   los `@supports` con prefijo de proveedor y avisa que sus columnas dejaron de
+   comparar el mismo diseño en los dos motores. Este archivo aparece ahí solo,
+   sin tener que registrarlo en ningún lado.
+
+   ESPECIFICIDAD, NO ORDEN DE CARGA. Las reglas de acá suben un escalón —por
+   ejemplo `.result-m .result-m__title--gold` en vez de `.result-m__title--gold`—
+   en lugar de confiar en que esta hoja se cargue última. Las pantallas entran
+   por `React.lazy`, así que su CSS puede inyectarse DESPUÉS que el global y el
+   orden no está garantizado. La especificidad sí.
+   ------------------------------------------------------------------------- */
+
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 899px) {
+    /* GANASTE · el titular «¡Felicidades» (nodo 74:987).
+
+       El nodo pide tres sombras: 0 0 6.288 #FFF, 0 0 44.016 #FFF y
+       0 4 10 #212F5C, que es lo que trae el token `--glow-gold-text`. El
+       problema no son los valores: es que WebKit dibuja ese resplandor mucho
+       más marcado que el render del archivo.
+
+       MEDIDO contra `recursos/mobile/pantallas/ganaste.png`. La métrica es el
+       EXCESO DE HALO: se dilata la máscara del relleno dorado anillo por anillo
+       y se compara el brillo de los anillos 2 a 12 —el halo— contra el de los
+       26 a 34 —el cielo—. La resta no depende del tono del fondo, y eso importa
+       porque el export tiene el cielo más claro que el render: midiendo el
+       brillo medio a secas, el resultado salía al revés.
+
+         export del diseño ....  29.7
+         blanco pleno .........  59.7   <- el doble
+         opacidad 0.32 ........  31.7
+         opacidad 0.28 ........  29.5   <- éste, -0.2 contra el diseño
+         opacidad 0.25 ........  28.1
+         opacidad 0.22 ........  26.5
+
+       SE BAJA LA OPACIDAD, NO EL RADIO. Achicar el radio empeora, y está
+       medido: con el blanco pleno, x0.7 da 60.6, x0.5 da 65.6 y x0.3 da 69.2,
+       todos peor que el 59.7 de partida. Concentrar la luz contra el glifo sube
+       el brillo de los anillos de adentro. Es el mismo resultado que ya había
+       salido en los titulares del landing.
+
+       ANDROID NO SE TOCA, por pedido expreso: esto es sólo para iPhone. Queda
+       dicho que allá el mismo titular mide 64.3 de exceso, o sea +34.6 contra
+       el diseño, y que con esta misma opacidad daría +9.3. El día que se quiera
+       emparejar, el valor ya está medido y el arreglo es sacar la regla de acá
+       y bajar el token para las dos ramas. */
+    .result-m .result-m__title--gold {
+      text-shadow:
+        0 0 6.288px rgba(255, 255, 255, 0.28),
+        0 0 44.016px rgba(255, 255, 255, 0.28),
+        0 4px 10px #212f5c;
+    }
+  }
+}
