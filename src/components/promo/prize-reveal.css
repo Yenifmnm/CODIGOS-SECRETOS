@@ -13,6 +13,16 @@
   will-change: transform, opacity;
 }
 
+/* SÓLO LA RAMA DESKTOP. En desktop los dos resplandores viven dentro de un
+   contenedor girado, así que la imagen llena ese contenedor en vez de llevar su
+   propia caja. En mobile el mismo papel lo cumple `.mlayer-img`, que ya estaba,
+   y por eso esto va en una clase NUEVA y no tocando `.reveal__glow`: esa clase
+   la comparten las dos ramas y cambiarla movería el mobile. */
+.reveal__glow-img {
+  width: 100%;
+  height: 100%;
+}
+
 .reveal__chest-wrap {
   will-change: transform;
   transform-origin: 50% 90%;
@@ -94,8 +104,22 @@
   }
 }
 
+/* En reposo los dos resplandores van al 100%: ni `glow-Photoroom 3` ni el 2
+   declaran opacidad en el frame. Acá remataban en 0.8 —y la animación, en
+   0.75—, que no sale de ningún nodo.
+
+   Medido contra `figma/spec/ganaste.png`, sobre la zona del cofre y el premio
+   y salteando la caja del premio, que en el diseño es una Switch y en el sitio
+   el premio que toque:
+
+     0.75   20.63 de media   49.98% de píxeles lejos
+     0.85   20.43            49.24%
+     1.00   20.13            48.33%   <- esto
+
+   `.reveal--static` es sólo de la rama desktop: el reveal mobile arma su
+   escena con `.mchest` y nunca pasa por esta clase. */
 .reveal--static .reveal__glow {
-  opacity: 0.8;
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
