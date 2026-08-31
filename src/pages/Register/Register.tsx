@@ -11,7 +11,7 @@ import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { useCodeFlow } from '../../app/useCodeFlow';
 import { MIN_AGE, completedAge, isOfAge, maxBirthDate } from '../../app/age';
-import { box, u } from '../../app/stage';
+import { box, centeredText, u } from '../../app/stage';
 import type { RegistrationForm } from '../../types/promo';
 import './register.css';
 
@@ -120,7 +120,7 @@ export default function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const { setParticipant } = useSession();
-  const { redeem } = useCodeFlow();
+  const { redeem, error } = useCodeFlow();
   const prefill = (location.state ?? {}) as { cedula?: string; code?: string };
 
   const [form, setForm] = useState<RegistrationForm>({ ...EMPTY, cedula: prefill.cedula ?? '' });
@@ -265,6 +265,7 @@ export default function Register() {
           onSubmit={onSubmit}
           onCancel={() => navigate('/participar')}
           submitting={submitting}
+          error={error}
         />
       }
     >
@@ -405,6 +406,16 @@ export default function Register() {
         >
           Cancelar
         </RibbonButton>
+
+        {error && (
+          <p
+            className="abs register__flow-error"
+            role="alert"
+            style={{ ...centeredText(960, 928, 26), zIndex: Z.buttons }}
+          >
+            {error}
+          </p>
+        )}
       </form>
     </Stage>
   );
@@ -415,6 +426,7 @@ interface RegisterMobileProps {
   onSubmit: (e: FormEvent) => void;
   onCancel: () => void;
   submitting: boolean;
+  error: string | null;
 }
 
 /* --------------------------------------------------------------------------
@@ -432,7 +444,7 @@ interface RegisterMobileProps {
    La nota va ENTRE la fila de cédula y la de email, igual que en el diseño, así
    que la grilla se parte en dos bloques en vez de recorrer `fields` de corrido.
    -------------------------------------------------------------------------- */
-function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobileProps) {
+function RegisterMobile({ fields, onSubmit, onCancel, submitting, error }: RegisterMobileProps) {
   const [fullName, birthDate, cedula, email, city, phone] = fields;
 
   return (
@@ -612,6 +624,12 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting }: RegisterMobi
               Cancelar
             </RibbonButton>
           </div>
+
+          {error && (
+            <p className="register-m__flow-error" role="alert">
+              {error}
+            </p>
+          )}
         </form>
       </div>
     </div>

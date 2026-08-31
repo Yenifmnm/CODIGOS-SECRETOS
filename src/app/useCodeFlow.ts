@@ -5,14 +5,26 @@ import { getRecaptchaToken } from '../services/recaptcha';
 import { useSession } from './SessionContext';
 import type { PromoCodeStatus } from '../types/promo';
 
-/** Cada estado que devuelve el backend tiene una pantalla del Figma. */
-const ROUTE_BY_STATUS: Record<PromoCodeStatus, string> = {
+/**
+ * Cada estado navegable tiene su pantalla del Figma. `REGISTER_REQUIRED` y
+ * `RATE_LIMITED` no navegan (se resuelven antes), por eso quedan fuera.
+ */
+const ROUTE_BY_STATUS: Record<
+  Exclude<PromoCodeStatus, 'REGISTER_REQUIRED' | 'RATE_LIMITED'>,
+  string
+> = {
   WIN: '/ganaste',
   LOSE: '/perdiste',
   CODE_ALREADY_USED: '/codigo-utilizado',
   CODE_NOT_FOUND: '/codigo-inexistente',
-  REGISTER_REQUIRED: '/registro',
 };
+
+/**
+ * `limite` de Avimovil: no hay pantalla, se avisa en la misma carga de código.
+ * El token que manda el backend no es copy; el mensaje se define acá.
+ */
+const RATE_LIMIT_MESSAGE =
+  'Hiciste muchos intentos seguidos. Esperá unos minutos y volvé a probar.';
 
 /**
  * Orquesta el flujo de participación.
@@ -46,6 +58,12 @@ export function useCodeFlow() {
 
         if (result.status === 'REGISTER_REQUIRED') {
           navigate('/registro', { state: { cedula, code } });
+          return;
+        }
+
+        if (result.status === 'RATE_LIMITED') {
+          // Sin pantalla propia: se queda en la carga de código con el aviso.
+          setError(RATE_LIMIT_MESSAGE);
           return;
         }
 
