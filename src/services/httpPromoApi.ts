@@ -9,8 +9,9 @@ import type {
   Terms,
   UserCodeCount,
 } from '../types/promo';
-import { MOCK_PRIZES } from '../mocks/prizes';
+import { MOCK_PRIZES, prizeByAvimovilId } from '../mocks/prizes';
 import { getTermsText } from '../mocks/terms';
+import { MIN_AGE, isOfAge } from '../app/age';
 
 /**
  * Adapter real: habla con codigos-secretos-backend.
@@ -22,8 +23,8 @@ import { getTermsText } from '../mocks/terms';
  *
  * Qué resuelve cada método:
  *   checkParticipant   localStorage (¿ya se registró en este navegador?)
- *   registerParticipant POST /api/participants (validación del servidor,
- *                       incluida la regla de 18 años) + guarda localmente
+ *   registerParticipant localStorage (no existe endpoint de registro; la regla
+ *                       de edad mínima se valida acá, igual que en el mock)
  *   submitPromoCode    POST /api/codes/redeem con todos los datos
  *   getCodeCount       último contador conocido (viaja en cada respuesta)
  *   getPrizes/getTerms catálogo estático del bundle, igual que el mock
@@ -102,12 +103,23 @@ export class HttpPromoApi implements PromoApi {
   }
 
   async registerParticipant(form: RegistrationForm): Promise<RegistrationResult> {
-    const result = await this.post<RegistrationResult>('/api/participants', form);
-    if (result.ok) {
-      const previous = this.readStored(form.cedula);
-      this.writeStored(form, previous?.codeCount ?? 0);
+    // Regla de la promo, no de la pantalla: sin backend de registro, la edad
+    // mínima se valida acá para que el flujo se comporte igual que con el mock.
+    if (!isOfAge(form.birthDate)) {
+      return {
+        ok: false,
+        fieldErrors: {
+          birthDate: `El registro lo hace un tutor de ${MIN_AGE} años cumplidos.`,
+        },
+      };
     }
-    return result;
+
+    const previous = this.readStored(form.cedula);
+    this.writeStored(form, previous?.codeCount ?? 0);
+    return {
+      ok: true,
+      participant: { cedula: form.cedula, fullName: form.fullName, city: form.city },
+    };
   }
 
   async submitPromoCode({ cedula, code, recaptchaToken }: PromoCode): Promise<PromoCodeResult> {
@@ -132,7 +144,26 @@ export class HttpPromoApi implements PromoApi {
     if (typeof result.codeCount === 'number') {
       this.writeStored(form, result.codeCount);
     }
-    return result;
+    return result.prize ? { ...result, prize: this.enrichPrize(result.prize) } : result;
+  }
+
+  /**
+   * El backend devuelve el premio con el id de Avimovil y el nombre en crudo
+   * (`{ id: '3', name: 'BICICLETA MILANO ARO 16' }`). Acá se cruza con el
+   * catálogo local para resolver imagen, artículo y nombre comercial —los
+   * assets viven en el bundle, no en el backend—.
+   *
+   * Si el id no está en el catálogo (p. ej. el premio de prueba, id 0), se
+   * devuelve lo que vino: se muestra el nombre sin imagen, antes que un premio
+   * equivocado.
+   */
+  private enrichPrize(prize: Prize): Prize {
+    const avimovilId = Number(prize.id);
+    if (Number.isInteger(avimovilId)) {
+      const catalogPrize = prizeByAvimovilId(avimovilId);
+      if (catalogPrize) return catalogPrize;
+    }
+    return prize;
   }
 
   async getCodeCount(cedula: string): Promise<UserCodeCount> {

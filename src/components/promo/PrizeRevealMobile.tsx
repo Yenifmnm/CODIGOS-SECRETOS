@@ -49,7 +49,7 @@ export function PrizeRevealMobile({ prize }: Props) {
         <img src={cofreAbierto} alt="" aria-hidden="true"
           className="mabs mlayer-img mchest__img"
           style={mbox({ x: 96, y: 112, w: 212, h: 188, sceneH: SCENE_H })} />
-        {prize && (
+        {prize?.image && (
           <img src={prize.image} alt={prize.name}
             className="mabs mlayer-img reveal__prize"
             style={mbox({ x: 140, y: 0, w: 216, h: 150, sceneH: SCENE_H })} />
@@ -95,7 +95,7 @@ export function PrizeRevealMobile({ prize }: Props) {
       </motion.div>
 
       {/* Premio: emerge desde dentro del cofre. */}
-      {prize && (
+      {prize?.image && (
       <motion.div
         className="mabs"
         style={mbox({ x: 140, y: 0, w: 216, h: 150, sceneH: SCENE_H })}

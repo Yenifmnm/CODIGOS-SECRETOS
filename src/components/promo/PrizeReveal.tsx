@@ -47,7 +47,7 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
         <img src={glow} alt="" aria-hidden="true" className="abs reveal__glow"
           style={box({ x: 1000, y: 240, w: 900, h: 620 })} />
         <img src={cofreAbierto} alt="" aria-hidden="true" className="abs reveal__chest" style={box(CHEST)} />
-        {prize && (
+        {prize?.image && (
           <img src={prize.image} alt={prize.name} className="abs reveal__prize" style={box(PRIZE)} />
         )}
       </div>
@@ -101,7 +101,7 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
       </motion.div>
 
       {/* Premio: emerge desde dentro del cofre hacia su posición final. */}
-      {prize && (
+      {prize?.image && (
       <motion.div
         className="abs reveal__prize-wrap"
         style={box(PRIZE)}
