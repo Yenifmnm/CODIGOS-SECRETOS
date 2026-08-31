@@ -1,7 +1,8 @@
 .code-counter {
   display: flex;
   align-items: center;
-  gap: 0.9cqw;
+  /* Nodo 64:111 placa en x=1168 y 64:115 rótulo en x=1376: 8 px de separación. */
+  gap: 0.417cqw;
 }
 
 .code-counter__plate {
@@ -36,10 +37,37 @@
   font-family: var(--font-display);
   font-size: 1.354cqw; /* 26 */
   color: var(--c-gold);
-  text-shadow: var(--glow-gold-text);
-  line-height: 1.05;
+  /* El rótulo NO usa `--glow-gold-text`. Ese token trae los valores en px del
+     halo de los titulares (0 0 6.288px y 0 0 44.016px), y sobre un texto de 26
+     px el segundo resplandor mide 1,7 veces el alto de la letra: inunda los
+     contraformas y es lo que el PDF marca como «se ve borroso».
+     Acá van las MISMAS proporciones del token, pero en `em`, de modo que el
+     halo escale con el cuerpo en vez de quedarse en píxeles de titular. Las
+     razones salen del titular de GANASTE, que mide 138 px:
+     6.288/138 = 0.046em, 44.016/138 = 0.319em, 4/138 = 0.029em,
+     10/138 = 0.072em. */
+  text-shadow: 0 0 0.046em #fff, 0 0 0.319em #fff, 0 0.029em 0.072em #212f5c;
+  /* Nodo 64:115: el rótulo se apoya 9 px por debajo del centro de la placa,
+     no alineado a su eje. Con `align-items: center` el margen superior
+     desplaza la caja justo esa mitad. */
+  margin-top: 0.938cqw;
+  /* Nodo 64:115: la caja del rótulo mide 31 px de alto sobre el lienzo de
+     1920. Con 1.05 daba 27 y quedaba 7 px más arriba de su posición. */
+  line-height: 1.192;
   /* El Figma lo tiene en un solo renglón; el `max-width` anterior lo partía. */
   white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  .code-counter__value {
+    text-shadow: none;
+  }
+
+  .code-counter__label {
+    font-size: 1.563cqw; /* 30px sobre el lienzo web de 1920 */
+    line-height: 1.04;
+    text-shadow: 0 0 2.292cqw #fff, 0 0.208cqw 0.521cqw #212f5c;
+  }
 }
 
 @media (max-width: 899px) {
@@ -55,6 +83,7 @@
     gap: 4px;
   }
   .code-counter__label {
+    margin-top: 0;
     font-size: clamp(14px, 4vw, 18px);
     max-width: 110px;
     white-space: normal;

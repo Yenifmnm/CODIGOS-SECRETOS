@@ -2,12 +2,20 @@
 .site-menu {
   position: absolute;
   z-index: 40;
-  width: 18.802cqw; /* 361 / 19.2 */
-  transition: width 420ms var(--ease-soft);
+  width: 18.802cqw;  /* 361 / 19.2 */
+  height: 4.323cqw;  /* 83 */
+  transition: width 420ms var(--ease-soft), height 420ms var(--ease-soft),
+    margin-left 420ms var(--ease-soft);
 }
 
+/* Desplegada el Figma la dibuja más alta y 15 px más a la derecha
+   (nodo 13:51: 1684x109 en 105,34 contra 361x83 en 90,34 del nodo 82:129).
+   El alto nunca se había implementado: la barra tomaba los 83 px del logo y
+   por eso los botones se veían más chicos que en la propuesta. */
 .site-menu--open {
-  width: 87.708cqw; /* 1684 / 19.2 */
+  width: 87.708cqw;    /* 1684 / 19.2 */
+  height: 5.677cqw;    /* 109 */
+  margin-left: 0.781cqw; /* 15 */
 }
 
 .site-menu__bar {
@@ -19,7 +27,9 @@
   padding-inline: 1.25cqw;
   border-radius: 500px;
   background: var(--c-cyan-50);
-  backdrop-filter: blur(2px);
+  /* SIN `backdrop-filter`. El nodo `barra menu mobile` declara `efectos: null`
+     —y su relleno es `#FFFFFF00` con opacidad 0, o sea que en el diseño esta
+     capa no pinta nada—. El desenfoque de 2 px estaba en las once pantallas. */
   box-shadow: 0 0 0 rgba(9, 234, 255, 0);
   transition: box-shadow var(--dur-glow) var(--ease-soft);
 }
@@ -76,7 +86,7 @@
   color: var(--c-deep-blue);
   font-family: var(--font-display);
   font-size: 2.083cqw; /* 40px */
-  line-height: 1.35;
+  line-height: 1.04;
   text-decoration: none;
   white-space: nowrap;
   transition:
@@ -145,6 +155,14 @@
   transition: opacity 220ms var(--ease-soft);
 }
 
+/* Figma desktop: las tres barras y la cruz son blancas sobre el disco claro. */
+@media (min-width: 900px) {
+  .site-menu__toggle-bars rect,
+  .site-menu__toggle-cross rect {
+    fill: #ffffff;
+  }
+}
+
 .site-menu__toggle-cross rect {
   opacity: 0;
 }
@@ -166,8 +184,13 @@
 /* -------------------------------------------------------------------------
    Mobile — Figma "landing" (plegado) y "vista menu desplegado".
 
-   Medidas leídas del mockup sobre el lienzo de 402: píldora 160x49 en x=25,
-   y=25 (ya descontada la barra de estado del sistema, que no se implementa).
+   Medidas del frame sobre el lienzo de 402: la píldora es 162x49 en (24, 79),
+   coordenadas crudas. Los 79 son 17 px por debajo del borde inferior de la
+   barra de estado, y así queda en pantalla: el descuento de esos 62 px lo hace
+   el contenedor para toda la rama mobile, en `layout/mobile-stage.css`. El
+   comentario viejo decía «y=25, ya descontada la barra, que no se implementa»,
+   que era la decisión anterior —dejarle a la barra 62 px libres DENTRO de la
+   página, contándola dos veces— y ya no rige.
    Al abrir, la píldora crece HACIA ABAJO hasta un panel de 195x180 con el logo
    arriba y tres píldoras claras apiladas.
 
@@ -196,11 +219,17 @@
     transition: none;
   }
 
+  /* La píldora va donde la pone el Figma: (24, 79) y 162x49. El `<nav>` que la
+     envuelve NO se mueve: ocupa en flujo desde 25 hasta 74 y ese hueco es el
+     que sostiene el arranque de cada composición mobile —los márgenes de las
+     once pantallas están calculados contra ese 74—. Por eso la píldora se
+     posiciona dentro de él, con 54 px de `top`, que son los 79 del nodo menos
+     los 25 en que arranca el `<nav>`. */
   .site-menu__bar {
     position: absolute;
-    left: 6.219cqw;
-    top: 0;
-    width: 39.801cqw;       /* 160 */
+    left: 5.97cqw;          /* 24 */
+    top: 13.433cqw;         /* 79 - 25 */
+    width: 40.299cqw;       /* 162 */
     height: var(--m-pill-h);
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -210,7 +239,9 @@
     padding-inline: 4.478cqw; /* 18 */
     border-radius: 500px;
     background: var(--c-cyan-50);
-    backdrop-filter: blur(2px);
+    /* Acá tampoco. La rama mobile tenía su propia copia del desenfoque, y es la
+       que efectivamente se aplicaba en las once pantallas: sacar sólo la de la
+       rama de escritorio no cambiaba nada en el teléfono. */
     transition:
       width 300ms var(--ease-soft),
       height 320ms var(--ease-soft),
@@ -224,9 +255,13 @@
     grid-template-rows: var(--m-pill-h) 1fr;
     align-items: start;
     padding: 0 var(--m-pad) 3.483cqw;
-    border-radius: 5.224cqw; /* 21 */
-    background: rgba(214, 236, 248, 0.82);
-    box-shadow: 0 0.5cqw 4cqw rgba(11, 22, 66, 0.28);
+    border-radius: 6.468cqw; /* 26, panel de Figma */
+    background: rgba(255, 255, 255, 0.57);
+    /* `none` y no la ausencia de la línea: si se borrara, ganaría por cascada
+       la de `.site-menu--open .site-menu__bar` de la rama de escritorio —el
+       resplandor cian de más arriba— y el efecto inventado seguiría, sólo que
+       de otro color. El nodo 79:1128 declara `efectos: null`. */
+    box-shadow: none;
   }
 
   /* El logo mantiene su lugar en la fila superior en los dos estados. */
@@ -255,6 +290,14 @@
     align-self: center;
     margin-left: 0;
     position: relative;
+  }
+
+  /* Safari conserva `:hover` después del toque. En mobile el botón no lleva
+     el resplandor de interacción de desktop, así que se neutraliza sólo acá. */
+  .site-menu__toggle:hover,
+  .site-menu__toggle:focus-visible {
+    transform: none;
+    filter: none;
   }
 
   /* El dibujo mantiene la medida del Figma; el área que responde al dedo se
@@ -321,8 +364,8 @@
   }
 
   .site-menu__link--active {
-    background: #fff;
-    box-shadow: 0 0 2.5cqw var(--c-cyan);
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: none;
   }
 
   /* Entrada escalonada, adaptada al lienzo chico. */

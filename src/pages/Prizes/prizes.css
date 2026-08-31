@@ -1,36 +1,104 @@
 /* PREMIOS — Figma 57:86 */
 
+@media (min-width: 900px) {
+  .prizes__background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: max(100vw, calc(100dvh * 16 / 9));
+    height: max(100dvh, calc(100vw * 9 / 16));
+    display: block;
+    max-width: none;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+}
+
 .prizes__name {
   text-align: center;
   transition: opacity 220ms var(--ease-soft);
 }
 
-/* Composición mobile — Figma "Premios.png" (402x913). */
+/* -------------------------------------------------------------------------
+   Composición mobile — frame `Premios` 73:671 (402x913).
+
+   Todo va en coordenadas del frame, absolutas contra este bloque, que arranca
+   en 74 —donde arranca toda composición mobile, detrás del `<nav>` del menú—.
+   De ahí que cada `top` sea la y del spec menos 74; la x va tal cual, porque el
+   bloque ocupa el ancho completo. El alto llega hasta el pie de las
+   miniaturas, en 789.
+
+   El recorte horizontal es el del propio frame: la estela mide 431.8 de
+   envolvente sobre un lienzo de 402 y se sale 30 px por la derecha a
+   propósito. Sin esto, esos 30 px le daban scroll horizontal a `.mstage`
+   —que lo tiene en `hidden`, o sea invisible pero desplazable— y al enfocar
+   una flecha el navegador corría la pantalla entera 30 px. En vertical no se
+   recorta: el resplandor de la ficha activa se apoya en el borde de abajo.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .prizes-m {
+    position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    height: 177.861cqw;   /* 715 = de 74 a 789 */
+     EL RECORTE HORIZONTAL YA NO VA ACÁ. Lo hace `.mstage` con `overflow-x:
+     clip`, o sea en el borde de la PANTALLA.
+
+     Acá recortaba en el borde del LIENZO, que es otra cosa desde que la escala
+     mira los dos ejes: en un teléfono de 360 el lienzo mide 302 y el recorte
+     caía 28,8 px ADENTRO de la pantalla. La decoración que sangra —el planeta
+     de arriba a la izquierda, el barco, el portal— quedaba cortada por una
+     línea vertical recta con cielo a un lado, de punta a punta de la
+     composición. Detectado midiendo el bitmap, no la lista de capas: ninguna
+     capa tenía el borde ahí, lo tenía el contenedor.
+
+     El motivo por el que existía sigue cubierto: `.mstage` pasó de
+     `overflow-x: hidden` a `clip`, y `clip` no crea contenedor de scroll, así
+     que ya no queda nada «invisible pero desplazable» que el navegador pueda
+     correr al enfocar un campo. */
+    overflow: visible;
   }
 
+  /* `glow-Photoroom 3` (73:744) — la estela detrás del premio. Es el mismo
+     asset que los dos resplandores de GANASTE: el nodo lo confirma, comparten
+     el `imageRef a9948b12…`, y la proporción natural del archivo (1013x644 =
+     1.5731) es la del `tamano` sin girar (399.4x253.9 = 1.5731).
+
+     El giro va por CSS con el ángulo del nodo, y además VOLTEADA EN VERTICAL.
+     El volteo no está en el spec: `figma:pull` guarda `rotation` pero no el
+     signo de la escala del nodo, así que un espejo se pierde y la caja
+     envolvente no lo delata —espejar no la cambia—. Se resolvió comparando el
+     render del propio nodo contra el asset girado de las ocho maneras: con
+     `rotate(171.7deg) scaleY(-1)` la correlación da 0.998 y con el giro solo,
+     0.021. Eso es lo que el `scaleX(-1)` de antes trataba de aproximar.
+
+     La caja es la del asset SIN girar, centrada donde el nodo pone la
+     envolvente rotada: (0, 333.8) 431.8x308.7, centro (215.9, 488.15). */
+  .prizes-m__arc {
+    position: absolute;
+    left: 4.03cqw;        /* 16.2 */
+    top: 71.443cqw;       /* 361.2 - 74 */
+    width: 99.353cqw;     /* 399.4 */
+    height: 63.159cqw;    /* 253.9 */
+    max-width: none;
+    transform: rotate(171.7deg) scaleY(-1);
+    /* En el frame la estela va por encima del premio y de la ficha activa, y
+       por debajo del nombre y de las tres fichas chicas. */
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* `codigos secretos logo 1` (73:732): 257x191 en (71, 151). */
   .prizes-m__logo {
-    width: 60.697cqw;      /* 244 */
-    height: auto;
-    margin-top: 2.985cqw;
-    filter: drop-shadow(0 0 5cqw rgba(9, 234, 255, 0.72));
-  }
-
-  .prizes-m .prize-carousel {
-    width: 100%;
-    margin-top: 11.94cqw;
-  }
-
-  /* Flechas: área táctil de 44 px sin agrandar el gráfico. */
-  .prizes-m .prize-carousel__arrow {
-    width: 10.945cqw;
-    height: 10.945cqw;
-    min-width: 44px;
-    min-height: 44px;
+    position: absolute;
+    left: 17.662cqw;      /* 71 */
+    top: 19.154cqw;       /* 151 - 74 */
+    width: 63.93cqw;      /* 257 */
+    height: 47.512cqw;    /* 191 */
+    max-width: none;
+    object-fit: contain;
+    /* El resplandor lo pone `LogoCodigos`, repartido en dos elementos. */
   }
 }

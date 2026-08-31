@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { Sparkles } from '../effects/Sparkles';
 import { box } from '../../app/stage';
 import type { Prize } from '../../types/promo';
 import './prize-reveal.css';
@@ -20,6 +19,36 @@ interface PrizeRevealProps {
 
 /* Coordenadas del Figma (23:3136 cofre, 23:3137 premio, 23:3138/9 glows). */
 const CHEST = { x: 1032, y: 330, w: 682, h: 682 };
+
+/* EL DESTELLO SON DOS CAPAS, NO UNA. Acá había un solo `glow.webp` sin girar en
+   una caja de 900x620 que no sale de ningún nodo. El frame tiene DOS capas del
+   MISMO asset, giradas distinto, y una a cada lado del cofre:
+
+     glow-Photoroom 3   23:3139   -53.7°, espejado   detrás del cofre
+     glow-Photoroom 2   23:3138   -76.5°             delante del cofre
+
+   La versión mobile ya lo hacía así; era el desktop el que estaba corto.
+
+   LAS CAJAS SON LAS SIN GIRAR, CENTRADAS EN EL CENTRO DE LA CAJA GIRADA. El
+   spec da las dos cosas: `tamano` es 939.3x597.2 en las dos —el asset sin
+   girar— y `rect` es la envolvente después del giro. Un elemento rotado se
+   coloca con su tamaño propio y el navegador calcula la envolvente, así que
+   hay que partir del centro:
+
+     glow 3   rect 842, -199, 1037.7 x 1110.5   ->  centro 1360.85, 356.25
+     glow 2   rect 1252.8, -148.9, 799.4 x 1052.5 -> centro 1652.5, 377.35
+
+   Comprobado al revés: girar 939.3x597.2 por -53.7° da una envolvente de
+   1037.4x1110.3 contra las 1037.7x1110.5 del spec, y por -76.5° da
+   799.9x1052.8 contra 799.4x1052.5. Menos de medio píxel de diseño.
+
+   El ESPEJO del 3 está en el spec (`espejo: true`) y coincide con lo que se
+   había medido para mobile por correlación contra el render del nodo: con
+   `scaleY(-1)` da 0.998 y sin él 0.024. */
+const GLOW_3 = { x: 891.2, y: 57.65, w: 939.3, h: 597.2 };
+const GLOW_2 = { x: 1182.85, y: 78.75, w: 939.3, h: 597.2 };
+const GIRO_3 = 'rotate(-53.7deg) scaleY(-1)';
+const GIRO_2 = 'rotate(-76.5deg)';
 /* Ajustado midiendo la silueta de la Switch en GANASTE.png: la caja anterior la
    dejaba un 15% chica y 49 px a la izquierda. */
 const PRIZE = { x: 1270, y: 48, w: 635, h: 653 };
@@ -44,9 +73,13 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
     // Sin movimiento: se muestra el estado final con un fundido simple.
     return (
       <div className="reveal reveal--static">
-        <img src={glow} alt="" aria-hidden="true" className="abs reveal__glow"
-          style={box({ x: 1000, y: 240, w: 900, h: 620 })} />
+        <div className="abs" style={{ ...box(GLOW_3), transform: GIRO_3 }} data-figma="23:3139">
+          <img src={glow} alt="" aria-hidden="true" className="reveal__glow reveal__glow-img" />
+        </div>
         <img src={cofreAbierto} alt="" aria-hidden="true" className="abs reveal__chest" style={box(CHEST)} />
+        <div className="abs" style={{ ...box(GLOW_2), transform: GIRO_2 }} data-figma="23:3138">
+          <img src={glow} alt="" aria-hidden="true" className="reveal__glow reveal__glow-img" />
+        </div>
         {prize?.image && (
           <img src={prize.image} alt={prize.name} className="abs reveal__prize" style={box(PRIZE)} />
         )}
@@ -60,17 +93,21 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
 
   return (
     <div className="reveal">
-      {/* Resplandor que sale del cofre al abrirse. */}
-      <motion.img
-        src={glow}
-        alt=""
-        aria-hidden="true"
-        className="abs reveal__glow"
-        style={box({ x: 1000, y: 240, w: 900, h: 620 })}
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: [0, 1, 0.75], scale: [0.5, 1.16, 1] }}
-        transition={{ delay: lightAt, duration: 1.1, times: [0, 0.45, 1], ease: 'easeOut' }}
-      />
+      {/* Primer resplandor: `glow-Photoroom 3`, DETRÁS del cofre.
+          El giro va en el contenedor y la animación en la imagen de adentro:
+          Framer Motion escribe `transform` y se comería la rotación. Es la
+          misma estructura que usa `PrizeRevealMobile`. */}
+      <div className="abs" style={{ ...box(GLOW_3), transform: GIRO_3 }} data-figma="23:3139">
+        <motion.img
+          src={glow}
+          alt=""
+          aria-hidden="true"
+          className="reveal__glow reveal__glow-img"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: [0, 1, 1], scale: [0.5, 1.16, 1] }}
+          transition={{ delay: lightAt, duration: 1.1, times: [0, 0.45, 1], ease: 'easeOut' }}
+        />
+      </div>
 
       {/* Cofre: anticipación (se comprime) y luego apertura. */}
       <motion.div
@@ -100,6 +137,21 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
         />
       </motion.div>
 
+      {/* Segundo resplandor: `glow-Photoroom 2`, DELANTE del cofre y detrás del
+          premio, como en el orden del frame. Entra un pelo después que el otro,
+          igual que en mobile. */}
+      <div className="abs" style={{ ...box(GLOW_2), transform: GIRO_2 }} data-figma="23:3138">
+        <motion.img
+          src={glow}
+          alt=""
+          aria-hidden="true"
+          className="reveal__glow reveal__glow-img"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: [0, 1, 1], scale: [0.5, 1.16, 1] }}
+          transition={{ delay: lightAt + 0.1, duration: 1.1, times: [0, 0.45, 1], ease: 'easeOut' }}
+        />
+      </div>
+
       {/* Premio: emerge desde dentro del cofre hacia su posición final. */}
       {prize?.image && (
       <motion.div
@@ -121,7 +173,11 @@ export function PrizeReveal({ prize }: PrizeRevealProps) {
             style={{ '--holo-mask': `url(${prize.image})` } as React.CSSProperties}
           />
         </motion.div>
-        <Sparkles count={20} spread={52} />
+        {/* Acá iban unas partículas doradas, el componente `Sparkles`. NO ESTÁN EN EL
+            DISEÑO: en `ganaste` no hay ningún nodo que les corresponda.
+            Alrededor del cofre el frame tiene sólo `glow-Photoroom 3` (-53.7°),
+            `glow-Photoroom 2` (-76.5°) y los dos resplandores del propio nodo
+            `cofre 1`. Se sacaron. */}
       </motion.div>
       )}
     </div>

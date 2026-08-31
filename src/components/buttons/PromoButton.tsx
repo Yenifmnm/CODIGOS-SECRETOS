@@ -24,6 +24,11 @@ interface PromoButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   plate?: PromoPlate;
   /** Tipografía en px del lienzo mobile (402). Sólo aplica bajo 900px. */
   mobileFontSize?: number;
+  /**
+   * Nodo del Figma del RÓTULO. En el diseño el texto es una capa aparte de la
+   * superficie del botón, así que lleva su propia marca.
+   */
+  'data-figma-label'?: string;
   style?: CSSProperties;
 }
 
@@ -44,6 +49,7 @@ export const PromoButton = forwardRef<HTMLButtonElement, PromoButtonProps>(funct
     loading = false,
     plate = 'secundario',
     mobileFontSize,
+    'data-figma-label': figmaLabel,
     style,
     className,
     disabled,
@@ -70,7 +76,9 @@ export const PromoButton = forwardRef<HTMLButtonElement, PromoButtonProps>(funct
       {...rest}
     >
       <img src={PLATES[plate]} alt="" aria-hidden="true" className="promo-btn__plate" />
-      <span className="promo-btn__label">{children}</span>
+      <span className="promo-btn__label" data-figma={figmaLabel}>
+        {children}
+      </span>
       {loading && <span className="promo-btn__spinner" aria-hidden="true" />}
     </button>
   );

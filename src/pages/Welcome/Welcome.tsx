@@ -6,19 +6,26 @@ import { PromoButton } from '../../components/buttons/PromoButton';
 import { PurosolShip } from '../../components/promo/PurosolShip';
 import { IconCode, IconId, ParchmentField } from '../../components/forms/ParchmentField';
 import { useCodeFlow } from '../../app/useCodeFlow';
-import { MobileScene } from '../../components/layout/MobileStage';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { box, centeredText, u } from '../../app/stage';
-import { mbox } from '../../app/mobileStage';
 import './welcome.css';
 
+import { LogoCodigos } from '../../components/promo/LogoCodigos';
+import { Prefetch } from '../../components/layout/Prefetch';
+import jugos from '../../assets/promo/jugos.webp';
+
+/* Estable entre renders: si el array se recreara en cada uno, el efecto de
+   `Prefetch` volvería a correr y a reinsertar el enlace en cada render. */
+const PREFETCH_CODIGO = [jugos];
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
 import pergamino2 from '../../assets/ui/pergamino-2.webp';
 import planetaPremios from '../../assets/planets/planeta-premios.webp';
 import planetaVit1 from '../../assets/planets/planeta-vit-1.webp';
 import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
 import portal from '../../assets/planets/portal.webp';
+import portalDesktop from '../../assets/planets/portal-codehelp-desktop.png';
 import destello from '../../assets/effects/destello.webp';
+import barco from '../../assets/promo/barco.webp';
 
 interface FieldErrors {
   cedula?: string;
@@ -48,6 +55,10 @@ export default function Welcome() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
+    /* La cédula sale SIEMPRE del campo: esta pantalla lo tiene siempre. Hubo
+       una versión que la tomaba de la sesión cuando la persona ya estaba
+       identificada, porque entonces el campo no se dibujaba; ver el comentario
+       de `WelcomeMobile`. */
     const next = validate(cedula, code);
     setErrors(next);
     if (Object.keys(next).length > 0) return;
@@ -59,6 +70,9 @@ export default function Welcome() {
       <ParchmentField
         label="Cédula"
         icon={IconId}
+        data-figma-caja="70:362"
+        data-figma="70:363"
+        data-figma-icono="70:370"
         inputMode="numeric"
         autoComplete="off"
         name="cedula"
@@ -70,6 +84,9 @@ export default function Welcome() {
       <ParchmentField
         label="Código secreto"
         icon={IconCode}
+        data-figma-caja="70:364"
+        data-figma="70:365"
+        data-figma-icono="70:366"
         autoComplete="off"
         autoCapitalize="characters"
         name="code"
@@ -82,22 +99,32 @@ export default function Welcome() {
   );
 
   return (
-    <Stage
-      title="Bienvenidos a bordo, pequeños piratas"
-      compactMenu
+    <>
+      {/* Lo que va a hacer falta en `/donde-esta-el-codigo`, la pantalla a la
+          que se llega desde acá con «¿Dónde encuentro el código secreto?».
+
+          Va UNA sola imagen y no las nueve de esa pantalla: medido, ocho ya
+          están en caché para cuando la persona toca el enlace —el fondo, el
+          logo y su halo, el portal, la nave, el destello, el logo de PuroSol y
+          el cursor, todos compartidos con ésta— y la única que falta es
+          `jugos.webp`, el pack sobre el que va la lupa: 72 kB.
+
+          `prefetch` baja con prioridad de ociosidad, así que no compite con lo
+          que esta pantalla necesita ahora. */}
+      <Prefetch urls={PREFETCH_CODIGO} />
+
+      <Stage
+        title="Bienvenidos a bordo, pequeños piratas"
+        compactMenu
+      mobileCielo={{ nodo: '70:344', x: -46, y: -38, w: 493, h: 1070 }}
       mobile={
-        <WelcomeMobile
-          form={form}
-          onSubmit={onSubmit}
-          loading={loading}
-          error={error}
-        />
+        <WelcomeMobile form={form} onSubmit={onSubmit} loading={loading} error={error} />
       }
     >
       {/* --- Universo --- */}
       <Deco src={planetaPremios} x={-137} y={-308} w={674} h={683} opacity={0.5}
         float={{ amplitude: 6, duration: 7, delay: 0.5 }} />
-      <Deco src={portal} x={-336} y={404} w={873} h={711}
+      <Deco src={portalDesktop} x={-336} y={404} w={873} h={711}
         float={{ amplitude: 9, duration: 6.2, delay: 1.2, rotate: 1 }} />
       <Deco src={destello} x={313} y={187} w={415} h={275} opacity={0.5}
         float={{ amplitude: 10, duration: 4.4 }} />
@@ -114,10 +141,10 @@ export default function Welcome() {
         float={{ amplitude: 6, duration: 5 }} />
 
       {/* --- Titulares --- */}
-      <p className="t-display t-white-glow abs" style={{ ...centeredText(947, 201, 60), zIndex: 5 }}>
+      <p className="t-display welcome__hi abs" style={{ ...centeredText(947, 201, 60), zIndex: 5 }}>
         ¡Bienvenidos a bordo
       </p>
-      <p className="t-display t-gold abs" style={{ ...centeredText(948, 282, 100), zIndex: 5 }}>
+      <p className="t-display welcome__pirates abs" style={{ ...centeredText(948, 282, 100), zIndex: 5 }}>
         Pequeños piratas!
       </p>
 
@@ -153,7 +180,8 @@ export default function Welcome() {
           </Link>
         </form>
       </div>
-    </Stage>
+      </Stage>
+    </>
   );
 }
 
@@ -165,34 +193,106 @@ interface WelcomeMobileProps {
 }
 
 /* --------------------------------------------------------------------------
-   Composición mobile — Figma "CI.png" (402x913).
+   Composición mobile — frame `CI` 70:343 (402x913).
 
-   Medidas del mockup, ya descontada la barra de estado (54 px):
-     logo         x  88..312   y 101..246
-     "¡Bienvenidos a bordo"    y 284   28 px, blanco
-     "Pequeños piratas!"       y 318   38 px, dorado
-     pergamino    x  30..372   y 371   342x230  (misma proporción que el desktop)
-     campos       ancho 276, alto 31, cápsula con ícono a la izquierda
-     escena final portal a la izquierda y nave a la derecha, ambos sangrando
+   Las medidas salen de `figma/spec/participar-mobile.md`, no del PNG: cada
+   capa lleva el nodo del que salió y la geometría vive en `welcome.css`, en
+   coordenadas del frame.
+
+   ES LA ÚNICA COMPOSICIÓN DE ESTA PANTALLA, siempre, esté la persona
+   identificada o no. Cédula y Código Secreto, los dos campos del frame.
+
+   Hubo un segundo estado —sólo el Código Secreto, más el contador— que salía
+   de la página 15B del PDF de ajustes («carga de código con el participante ya
+   identificado»). Entró el 25-08-2026 y se sacó el 27-08-2026: LA CLIENTA NO LO
+   QUIERE. Textual: «participas una vez, y al darle clic a "cargar otro código"
+   me devuelve a esta pantalla pero ya sin el registro, sólo me da el resultado
+   del código que cargué», y sobre esta pantalla completa, «así debe verse, tal
+   cual».
+
+   Ojo con leer eso como que hay que sacar dos cosas: son dos requisitos y sólo
+   uno tocaba a esta pantalla. Volver siempre acá es uno; NO pasar de nuevo por
+   el formulario de registro es el otro, y ése lo resuelve `useCodeFlow` — que
+   no se toca.
+
+   Por eso la página 15B del PDF queda DESCARTADA. Está anotada en
+   `recursos/mobile/CLAUDE.md` para que nadie la vuelva a implementar leyendo
+   el PDF y creyendo que falta.
    -------------------------------------------------------------------------- */
-const WELCOME_SCENE_H = 205;
 
 function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
   return (
-    <div className="welcome-m" id="contenido">
-      <img src={logoCodigos} alt="Códigos Secretos 2026" className="welcome-m__logo" />
+    <div
+      className="welcome-m"
+      id="contenido"
+      data-figma="70:343"
+      data-figma-ejes="x,w"
+      data-figma-omitir="pintura"
+    >
+      {/* El orden de estas capas es el de pintado del frame: logo, planeta de
+          premios, barco, los dos titulares, pergamino, destello, planeta vit y
+          portal. Como todas son absolutas y ninguna declara `z-index`, el orden
+          del DOM es el que manda y no hace falta apilarlas a mano. */}
+      <LogoCodigos
+        className="welcome-m__logo"
+        resplandor="horneado"
+        data-figma="70:345"
+      />
 
-      <p className="welcome-m__hi">¡Bienvenidos a bordo</p>
-      <p className="welcome-m__title">Pequeños piratas!</p>
+      <FloatingLayer amplitude={6} duration={7} delay={0.5}
+        className="welcome-m__planeta" data-figma="70:346">
+        <img src={planetaPremios} alt="" aria-hidden="true" className="mlayer-img" />
+      </FloatingLayer>
+
+      {/* Marcado con el mismo nodo que la nave: ella omite las sombras porque el
+          resplandor no vive ahí, y esta capa es la que lo dibuja. */}
+      <img
+        src={barco}
+        alt=""
+        aria-hidden="true"
+        className="welcome-m__ship-halo"
+        data-figma="70:347"
+        data-figma-omitir="pintura"
+      />
+      <PurosolShip
+        className="welcome-m__ship"
+        data-figma="70:347"
+        /* El resplandor del nodo existe y está con su valor exacto, pero vive
+           en `.welcome-m__ship-halo`, la capa quieta de acá arriba. El control
+           de pintura mira ESTE elemento, así que hay que sacarlo de ahí. Si
+           alguna vez se borra esa capa, el halo desaparece sin que el check
+           avise: van juntas. Se omiten SÓLO las sombras. */
+        data-figma-omitir="sombras"
+      />
+
+      {/* `omitir="sombras"`: el resplandor blanco va al 20% y el nodo lo declara
+          al 100%. NO es un desvío a corregir: es la reducción pedida por la
+          clienta el 27-08-2026, replicada desde HOME por consistencia. */}
+      <p className="welcome-m__hi" data-figma="70:348" data-figma-omitir="sombras">
+        ¡Bienvenidos a bordo
+      </p>
+      {/* `omitir="trazo-ancho"`: el nodo pide 2 px CENTER y el CSS pone 1. Ver
+          la medición en `welcome.css`. Sólo el ancho: color y orden se siguen
+          controlando. */}
+      <p
+        className="welcome-m__title"
+        data-figma="70:349"
+        data-figma-omitir="trazo-ancho,sombras"
+      >
+        Pequeños piratas!
+      </p>
 
       {/* Pergamino real del Figma; el formulario va encima como HTML accesible. */}
-      <div className="welcome-m__scroll">
+      <div className="welcome-m__scroll" data-figma="70:350">
         <img src={pergamino2} alt="" aria-hidden="true" className="welcome-m__scroll-img" />
 
         <form className="welcome-m__form" onSubmit={onSubmit} noValidate>
-          <h2 className="welcome-m__form-title">Ingresá tus datos para participar</h2>
-          <span className="welcome-m__rule" aria-hidden="true" />
+          <h2 className="welcome-m__form-title" data-figma="70:357">
+            Ingresá tus datos para participar
+          </h2>
+          <span className="welcome-m__rule" aria-hidden="true" data-figma="70:360" />
 
+          {/* Sin nodo propio: en el frame los dos campos cuelgan sueltos. */}
           <div className="welcome-m__fields">{form}</div>
 
           {error && (
@@ -202,28 +302,44 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
           )}
 
           <div className="welcome-m__submit">
-            <PromoButton type="submit" mobileFontSize={17} loading={loading}>
+            <PromoButton
+              type="submit"
+              /* `Participar` (70:369) va a 25 px, el cuerpo del nodo. */
+              mobileFontSize={25}
+              loading={loading}
+              data-figma="70:361"
+              data-figma-label="70:369"
+            >
               Participar
             </PromoButton>
           </div>
 
-          <Link className="welcome-m__help" to="/donde-esta-el-codigo">
+          <Link className="welcome-m__help" to="/donde-esta-el-codigo" data-figma="70:358">
             ¿Dónde encuentro el código secreto?
           </Link>
         </form>
       </div>
 
-      <MobileScene height={WELCOME_SCENE_H} className="welcome-m__scene">
-        <FloatingLayer amplitude={7} duration={6.2} delay={1.2} rotate={1}
-          className="mabs" style={mbox({ x: -30, y: 28, w: 168, h: 137, sceneH: WELCOME_SCENE_H })}>
-          <img src={portal} alt="" aria-hidden="true" className="mlayer-img" />
-        </FloatingLayer>
+      <FloatingLayer amplitude={10} duration={4.4}
+        className="welcome-m__destello" data-figma="70:351">
+        <img src={destello} alt="" aria-hidden="true" className="mlayer-img" />
+      </FloatingLayer>
 
-        <PurosolShip
-          className="mabs welcome-m__ship"
-          style={mbox({ x: 206, y: 0, w: 262, h: 179, sceneH: WELCOME_SCENE_H })}
-        />
-      </MobileScene>
+      <FloatingLayer amplitude={5} duration={6.6} drift={4}
+        className="welcome-m__planeta-vit" data-figma="70:353">
+        <img src={planetaVit1} alt="" aria-hidden="true" className="mlayer-img" />
+      </FloatingLayer>
+
+      <FloatingLayer
+        amplitude={7}
+        duration={6.2}
+        delay={1.2}
+        rotate={1}
+        className="welcome-m__portal"
+        data-figma="70:355"
+      >
+        <img src={portal} alt="" aria-hidden="true" className="mlayer-img" />
+      </FloatingLayer>
     </div>
   );
 }

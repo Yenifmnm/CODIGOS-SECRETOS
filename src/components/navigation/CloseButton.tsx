@@ -8,10 +8,18 @@ interface CloseButtonProps {
   label?: string;
   style?: CSSProperties;
   className?: string;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
 }
 
 /** Botón cerrar del Figma (23:3148): aro cian con cruz, 105x105. */
-export function CloseButton({ to, label = 'Cerrar', style, className }: CloseButtonProps) {
+export function CloseButton({
+  to,
+  label = 'Cerrar',
+  style,
+  className,
+  'data-figma': figma,
+}: CloseButtonProps) {
   const navigate = useNavigate();
 
   return (
@@ -19,6 +27,7 @@ export function CloseButton({ to, label = 'Cerrar', style, className }: CloseBut
       type="button"
       className={['close-btn', className].filter(Boolean).join(' ')}
       style={style}
+      data-figma={figma}
       onClick={() => (to ? navigate(to) : navigate(-1))}
     >
       <span className="sr-only">{label}</span>

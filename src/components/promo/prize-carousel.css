@@ -84,97 +84,290 @@
   transform: scale(0.96);
 }
 
-/* ---------- Mobile ---------- */
 /* -------------------------------------------------------------------------
-   Mobile — Figma "Premios.png" (lienzo 402).
-   Fila de flechas y premio, luego el nombre y la tira de miniaturas.
+   Mobile — frame `Premios` 73:671 (402x913).
+
+   El frame no apila nada: las flechas, el premio, el rotulo y las fichas
+   cuelgan sueltos y se superponen. La caja del premio (58.3..341.3) pisa las
+   dos flechas (18..74 y 332..388), asi que una grilla de tres columnas no
+   puede reproducirlo. Cada capa va en coordenadas del frame, absolutas contra
+   `.prizes-m`, que arranca en 74: de ahi que cada `top` sea la y del spec
+   menos 74.
+
+   `.carousel` queda como bloque estatico y sin alto: no es un nodo del Figma,
+   solo sostiene el foco, el teclado y el swipe, que llegan por burbujeo desde
+   las capas de adentro.
+
+   Orden de pintura del frame, de abajo hacia arriba: logo, flechas, premio,
+   ficha activa, estela, nombre, fichas chicas.
    ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .carousel {
-    position: relative;
+    position: static;
+    display: block;
     inset: auto;
     width: 100%;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    justify-items: center;
-    row-gap: 6.965cqw;
-    padding-inline: 3.483cqw;
-    min-height: auto;
+    height: 0;
+    min-height: 0;
+    padding: 0;
   }
 
-  .carousel__arrow--prev { grid-column: 1; grid-row: 1; }
-  .carousel__arrow--next { grid-column: 3; grid-row: 1; }
-
+  /* `premio 1 1` (73:743): 283x291 en (58.3, 303). */
   .carousel__track {
-    grid-column: 2;
-    grid-row: 1;
-    position: relative;
-    left: auto;
-    top: auto;
-    width: 100%;
-    height: 62.189cqw;      /* 250 */
+    position: absolute;
+    left: 14.502cqw;        /* 58.3 */
+    top: 56.965cqw;         /* 303 - 74 */
+    width: 70.398cqw;       /* 283 */
+    height: 72.388cqw;      /* 291 */
     display: grid;
     place-items: center;
+    z-index: 1;
   }
 
   .carousel__item {
-    position: static;
+    /* `relative` y no `static` sólo para que el halo de abajo tenga de dónde
+       colgarse. En el flujo se comporta igual, así que la ranura no se mueve. */
+    position: relative;
+    z-index: 0;
     width: 100%;
-    max-width: 84.577cqw;   /* 340 */
-    height: 62.189cqw;
+    max-width: none;
+    height: 100%;
     margin: 0;
     transform: none !important;
   }
 
-  .carousel__item img {
-    filter: drop-shadow(0 0 6cqw rgba(9, 234, 255, 0.85))
-      drop-shadow(0 0 14cqw rgba(9, 234, 255, 0.45));
+  /* EL HALO, COMO CAPA PROPIA. Antes era un `drop-shadow` sobre la imagen y ese
+     era el CUADRADO de iPhone: WebKit recorta la salida del filtro en la caja
+     del elemento —la región del filtro es la caja más un 10% por lado— y un
+     desenfoque de 56 px no entra ahí. Chromium la deja derramar, y de ahí que
+     Android se viera bien y iPhone no.
+
+     Un degradado no se recorta: se dibuja donde se le dice, igual en los dos
+     motores. Es la misma solución que se usó para el resplandor del logo.
+
+     LOS NÚMEROS SALEN DE MEDIR, no de elegir algo parecido. Barrido de 36
+     combinaciones en WebKit contra `pantallas/Premios.png` —con Nintendo Switch
+     en la ranura, que es el premio que el export muestra— sobre la caja del
+     premio con 24 px de aire:
+
+       con el drop-shadow (lo publicado)   23.29 de media   27.61% de píxeles lejos
+       sin nada                            25.33            37.11%
+       150% · 0.6 · 60%  ← esto            22.20            23.44%
+
+     O sea que además de sacar el cuadrado queda MÁS cerca del diseño que antes.
+     El óptimo es una meseta ancha —de 140 a 170%, alfa 0,5 a 0,6, fin en 60%
+     dan todos entre 22,2 y 22,7—, así que el valor no es delicado.
+
+     El halo del propio asset se queda: el Figma lo tiene horneado ahí y esta
+     capa lo acompaña, no lo reemplaza. */
+  .carousel__item::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150%;
+    height: 150%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(9, 234, 255, 0.6) 0%,
+      rgba(9, 234, 255, 0.6) 18%,
+      rgba(9, 234, 255, 0) 60%
+    );
+    z-index: -1;
+    pointer-events: none;
   }
 
-  /* En mobile sólo se ve el premio activo: los laterales no entran. */
+  /* SIN `will-change` EN MOBILE. La regla de arriba lo pone en `transform,
+     opacity`, y eso promueve cada item a capa propia. En Safari de iPhone esa
+     capa se dibuja con un lienzo del tamaño EXACTO del elemento —283x291— así
+     que el resplandor de la imagen de adentro se recorta ahí: el borde del
+     recorte es el RECTÁNGULO que se veía alrededor de cada premio, y por eso
+     aparecía en todos al pasar con las flechas.
+
+     Verificado en WebKit: apagándolo, el resplandor vuelve a ser redondo con el
+     mismo filtro. NO era el encadenado esta vez —eso ya se había corregido y el
+     cuadro seguía—: era la promoción a capa.
+
+     Sólo la rama mobile; la de escritorio lo conserva. El coste es que el
+     navegador no pre-promueve el elemento antes de la transición, y a cambio el
+     resplandor no se corta. */
+  .carousel__item {
+    will-change: auto;
+  }
+
+  /* SIN FILTRO. El halo cian ya viene HORNEADO en el asset, y el Figma no le
+     pone ningún efecto: `premio 1 1` (58.3, 303, 283x291) es `fill imagen` y
+     nada más. El `drop-shadow` que había acá era un agregado nuestro, y era el
+     que dibujaba el CUADRADO que reportó la clienta en iPhone.
+
+     MEDIDO, la misma imagen en su caja de 283x291 sobre negro, sin nada más
+     alrededor (skate-mediano):
+
+       sin filtro                     halo redondo en los dos motores
+       drop-shadow 56px en Chromium   halo redondo, se derrama fuera de la caja
+       drop-shadow 56px en WebKit     halo CORTADO en los cuatro lados
+
+     WebKit recorta la salida del filtro en la caja del elemento; Chromium la
+     deja derramar. Y el halo horneado ya llega al 93% del semiancho —medido en
+     los 19 assets—, así que su sombra desborda siempre: en iPhone el corte cae
+     dentro de lo que se ve y queda el filo recto.
+
+     Por eso aparecía en TODOS los premios y por eso Android se veía bien.
+
+     Los dos arreglos anteriores —el `will-change` de `.carousel__item` y el
+     recorte de la tira de miniaturas— eran recortes REALES y distintos, pero
+     ninguno era este. Van tres cajas que recortan lo mismo; la diferencia es
+     que sacando el filtro no queda ninguna. */
+  .carousel__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* La regla de escritorio `.carousel__item--active img` (arriba, fuera de la
+     media query) vale también acá y trae DOS `drop-shadow` encadenadas. Se
+     apaga expresamente: sin esto, sacar el filtro del renglón de arriba deja
+     entrar el de escritorio, que es peor —encadenado y recortado igual—.
+     La regla de escritorio no se toca. */
+  .carousel__item--active img {
+    filter: none;
+  }
+
+  /* En mobile solo se ve el premio activo: los laterales no entran. */
   .carousel__item:not(.carousel__item--active) {
     display: none;
   }
 
+  /* `flecha de navegacion 1` (73:739) y `2` (73:741): las dos son el mismo
+     asset de 47x56 girado +-90 —el giro ya lo hacen las reglas de arriba, que
+     son las mismas del desktop—, con la envolvente de 56x47 en y 467.
+
+     La CAJA VISUAL es la del nodo y no se toca. La CAJA TACTIL va aparte, en
+     un `::after` que se estira hasta los 44 px sin mover nada: a 320 de ancho
+     el dibujo del Figma mide 44.6x37.4 y se quedaria corto de alto.
+
+     El centrado NO puede ir por `transform`: las reglas de hover y de active
+     de arriba escriben `transform: scale()` y lo pisarian, con lo cual el
+     boton saltaba 28 px al tocarlo y el clic caia al lado. */
   .carousel__arrow {
-    position: static;
-    width: 11.94cqw;        /* 48 */
-    height: 11.94cqw;
-    min-width: 44px;
-    min-height: 44px;
-    flex: none;
+    position: absolute;
+    /* La caja del boton es la de la imagen SIN girar, 56x56, no la envolvente
+       de 56x47: si la celda es mas baja que la imagen, la grilla deja de
+       centrarla y la pega al arranque, y la flecha bajaba 4.5 px. Con 56 de
+       alto la imagen entra justa y la envolvente cae en los 467 del nodo. */
+    top: 96.642cqw;         /* 462.5 - 74, o sea 490.5 de centro */
+    display: grid;
+    place-items: center;
+    width: 13.93cqw;        /* 56 */
+    height: 13.93cqw;       /* 56 */
+    margin: 0;
+    overflow: visible;
+    /* En el frame las dos flechas van DEBAJO del premio. */
+    z-index: 0;
   }
 
-  /* Nombre del premio activo. */
+  .carousel__arrow--prev { left: 4.478cqw; }    /* 18 */
+  .carousel__arrow--next { left: 82.587cqw; }   /* 332 */
+
+  .carousel__arrow::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+
+  /* 47x56 sin girar, que es lo que declara `tamano` en el spec: girada +-90
+     su envolvente da los 56x47 de la caja del boton. */
+  .carousel__arrow img {
+    width: 11.692cqw;       /* 47 */
+    height: 13.93cqw;       /* 56 */
+    object-fit: contain;
+  }
+
+  /* `Nintendo Switch` (73:745): 222x43 en (89, 591), centro x 200.
+     Se achica a su contenido y se centra, como el mensaje de GANASTE: el ancho
+     lo decide el nombre del premio, que sale del catalogo. */
   .carousel__caption {
-    grid-column: 1 / -1;
-    grid-row: 2;
+    position: absolute;
+    left: 49.751cqw;        /* centro x 200 */
+    top: 128.607cqw;        /* 591 - 74 */
+    transform: translateX(-50%);
+    /* `max-content` porque en un absoluto el ancho disponible se corta en el
+       `left`: sin esto la caja quedaba en 202 —los que sobran hasta el borde
+       derecho— y hasta «Nintendo Switch» se partia en dos renglones. */
+    width: max-content;
+    max-width: 95.522cqw;   /* 384: el ancho util, sin tocar los bordes */
     margin: 0;
     font-family: var(--font-display);
-    font-size: 7.463cqw;    /* 30 */
-    line-height: 1.1;
+    font-size: 9.95cqw;     /* 40 */
+    line-height: 1.04;      /* 41.6 */
     color: var(--c-white);
-    text-shadow: 0 0 3.5cqw #fff, 0 0 8cqw rgba(255, 255, 255, 0.6),
-      0 2px 4px rgba(0, 0, 0, 0.35);
+    /* Los tres efectos del nodo: dos 250 blancos y el 0/4/4 negro al 25%.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%. */
+    text-shadow: 0 0 62.19cqw rgba(255, 255, 255, 0.2),
+      0 0 62.19cqw rgba(255, 255, 255, 0.2),
+      0 0.995cqw 0.995cqw #00000040;
     text-align: center;
+    z-index: 3;
   }
 
   /* Tira de miniaturas.
-     El Figma la dibuja con cuatro premios repartidos a lo ancho. El catálogo
-     real son 19: repartirlos igual daría miniaturas de 15 px, por debajo del
-     área táctil mínima. Se convierte en un carril horizontal que conserva el
-     tamaño de ficha del Figma y desplaza; `PrizeCarousel` centra la activa. */
+
+     El frame dibuja cuatro fichas de 81x84 en y 680 y la activa de 130x134 en
+     655 —las dos comparten el eje 722—. El catalogo real son 19: repartirlas a
+     lo ancho daria fichas de 15 px, muy por debajo del area tactil, asi que la
+     tira conserva la medida del nodo y se convierte en un carril que desplaza;
+     `PrizeCarousel` centra la activa.
+
+     La separacion del frame no es pareja: entre centros da 90.5, 103.5 y 104.5.
+     Se toma 9 px, que es el unico hueco entre dos cajas iguales (`premio 5` y
+     `premio 4`, 91 a 100) y reproduce ese 90.5; alrededor de la activa el
+     frame se solapa porque la ficha esta dibujada mas grande. */
+  /* AIRE ARRIBA Y ABAJO PARA QUE EL RESPLANDOR NO SE RECORTE.
+     `overflow-x: auto` hace de esta tira un contenedor de scroll, y un
+     contenedor de scroll RECORTA en su caja de padding. La miniatura activa
+     mide 135 y la tira medía 134, así que su resplandor se cortaba: en Safari
+     de iPhone eso se veía como un CUADRADO alrededor de la ficha activa, y por
+     eso aparecía en todos los premios al pasar con las flechas.
+
+     No se puede usar `overflow-y: visible` —con `overflow-x: auto` el CSS lo
+     fuerza a `auto`—, así que se agranda la caja de recorte sin mover nada:
+     `top` sube 34, `height` crece 68 y `padding-block` de 34 devuelve el
+     contenido a su lugar. Con `box-sizing: border-box` la caja de contenido
+     sigue midiendo 134 y en la misma `y`; lo único que cambia es dónde
+     recorta. Medido: la tira y la ficha activa quedan en la misma coordenada
+     que antes.
+
+     No confundir con el `will-change` de `.carousel__item`, que era el mismo
+     síntoma en la imagen GRANDE y ya está resuelto aparte. */
   .carousel__thumbs {
-    grid-column: 1 / -1;
-    grid-row: 3;
+    position: absolute;
+    left: 0;
+    top: 136.069cqw;        /* 655 - 74 - 34 de aire */
+    width: 100%;
+    height: 50.249cqw;      /* 134 + 34 de aire arriba y 34 abajo */
     display: flex;
     justify-content: flex-start;
-    align-items: center;
-    gap: 2.488cqw;
-    margin: 5.97cqw 0 0;
-    padding: 0 3.483cqw;
-    width: 100%;
+    align-items: center;    /* el eje 722, comun a la activa y a las chicas */
+    gap: 2.239cqw;          /* 9 */
+    padding: 8.458cqw 2.239cqw;   /* 34 de aire · 9 donde arranca `premio 5 1` */
+    margin: 0;
     list-style: none;
     overflow-x: auto;
     overflow-y: hidden;
@@ -182,6 +375,7 @@
     scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    z-index: 3;
     /* Los extremos se desvanecen: avisa que la tira sigue. */
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
@@ -193,7 +387,7 @@
 
   .carousel__thumbs li {
     flex: 0 0 auto;
-    width: 16.418cqw;       /* 66: ficha del Figma ajustada al carril */
+    width: 20.149cqw;       /* 81 */
     display: flex;
     justify-content: center;
     scroll-snap-align: center;
@@ -203,25 +397,54 @@
     display: grid;
     place-items: center;
     width: 100%;
-    aspect-ratio: 1;
+    height: 20.896cqw;      /* 84 */
+    aspect-ratio: auto;
     min-width: 44px;
     min-height: 44px;
     border-radius: 50%;
+    /* Las tres fichas no activas del frame estan al 50%. */
+    opacity: 0.5;
     transition: transform var(--dur-glow) var(--ease-soft);
   }
 
+  /* La activa se agranda en el lugar en vez de ocupar mas ranura: 130/81 da
+     1.605, y asi la tira no se reacomoda en cada cambio. */
+  .carousel__thumb--active {
+    opacity: 1;
+    transform: scale(1.605);
+    z-index: 1;
+  }
+
+  /* SIN FILTRO Y SIN MÁSCARA, por lo mismo que la imagen grande. En el Figma
+     `premio 1 2`, `premio 5 1`, `premio 4 1` y `premio 2 1` son imágenes
+     sueltas —las tres inactivas al 50% de opacidad— sin un solo efecto.
+
+     Acá había dos cosas puestas sobre una premisa que resultó falsa. Estaba
+     escrito que el halo horneado de estos assets tiene «forma de cuadrado
+     redondeado» y que el recuadro seguía al quitar el `drop-shadow`. Medido
+     sobre los 19 archivos, comparando el radio del halo hacia el lado y hacia
+     la esquina —en un círculo los dos son iguales; en un cuadrado el de la
+     esquina es 1,41 veces el del lado—:
+
+       esquina/lado entre 1,02 y 1,09 en los 19 assets
+
+     O sea que el halo horneado ES redondo. El recuadro lo dibujaba el
+     `drop-shadow`, recortado por WebKit contra la caja del elemento.
+
+     Y la máscara, además de sobrar, se comía producto: se desvanece desde el
+     65% hasta el 102% del semiancho, y el skate llega al 90%, la bicicleta aro
+     20 al 90% y el kit de volante al 88%. Sus bordes quedaban al ~32%. */
   .carousel__thumb img {
     width: 86%;
     height: 86%;
     object-fit: contain;
-    filter: drop-shadow(0 0 2.4cqw rgba(9, 234, 255, 0.75));
-  }
-
-  .carousel__thumb--active img {
-    filter: drop-shadow(0 0 3.5cqw #fff) drop-shadow(0 0 7cqw var(--c-cyan));
   }
 
   .carousel__thumb:active {
     transform: scale(0.94);
+  }
+
+  .carousel__thumb--active:active {
+    transform: scale(1.51);
   }
 }

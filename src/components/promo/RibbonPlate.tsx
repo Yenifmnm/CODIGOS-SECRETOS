@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { u } from '../../app/stage';
+import { RibbonSvg } from './RibbonSvg';
 import './ribbon-plate.css';
 
 interface RibbonPlateProps {
@@ -10,6 +11,16 @@ interface RibbonPlateProps {
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
+  /**
+   * El SVG de la silueta de ESTE nodo, de `assets/ui/cintas/`.
+   *
+   * Con él, la cinta se dibuja con el vector del diseño. Sin él, cae al
+   * `clip-path` genérico de seis puntos, que es lo que sigue usando la rama de
+   * escritorio. Las doce cintas mobile lo pasan.
+   */
+  silueta?: string;
 }
 
 /**
@@ -25,13 +36,26 @@ export function RibbonPlate({
   className,
   style,
   children,
+  silueta,
+  'data-figma': figma,
 }: RibbonPlateProps) {
   return (
     <div
       className={['plate', `plate--${tone}`, className].filter(Boolean).join(' ')}
       style={{ '--plate-notch': u(notch), ...style } as CSSProperties}
     >
-      <span className="plate__bg" aria-hidden="true" />
+      {/* La marca va en la capa que pinta, no en el contenedor: las dos tienen
+          la misma caja —`inset: 0`— y son las que llevan el color, así que el
+          control puede verificarlo.
+
+          Con `silueta`, el dibujo es el vector del nodo. Sin ella, el
+          `clip-path` genérico de `.plate__bg`, que es lo que sigue usando la
+          rama de escritorio. */}
+      {silueta && figma ? (
+        <RibbonSvg src={silueta} nodo={figma} />
+      ) : (
+        <span className="plate__bg" aria-hidden="true" data-figma={figma} />
+      )}
       <span className="plate__content">{children}</span>
     </div>
   );

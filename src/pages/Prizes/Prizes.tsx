@@ -7,7 +7,10 @@ import { centeredText } from '../../app/stage';
 import type { Prize } from '../../types/promo';
 import './prizes.css';
 
+import { LogoCodigos } from '../../components/promo/LogoCodigos';
 import logoCodigos from '../../assets/logos/codigos-secretos.webp';
+import glow from '../../assets/effects/glow.webp';
+import fondoPremiosDesktop from '../../assets/backgrounds/fondo-premios-desktop.png';
 
 /** PREMIOS — Figma 57:86. El catálogo llega de `promoApi.getPrizes()`. */
 export default function Prizes() {
@@ -34,20 +37,50 @@ export default function Prizes() {
     <Stage
       title="Premios"
       mobileBg="halo"
+      mobileCielo={{ nodo: '73:672', x: -46, y: -38, w: 493, h: 1070 }}
       mobile={
         /* Figma "Premios.png": logo → carrusel con flechas → nombre del premio
            → tira de miniaturas. El carrusel ya trae swipe y flechas. */
-        <div className="prizes-m" id="contenido">
-          <img src={logoCodigos} alt="Códigos Secretos 2026" className="prizes-m__logo" />
+        <div
+          className="prizes-m"
+          id="contenido"
+          data-figma="73:671"
+          data-figma-ejes="x,w"
+          data-figma-omitir="pintura"
+        >
+          {/* Estela que barre por detrás del premio activo. Es el mismo asset
+              que usa el reveal de GANASTE, no una aproximación en CSS. */}
+          <img src={glow} alt="" aria-hidden="true" className="prizes-m__arc" data-figma="73:744" />
+
+          <LogoCodigos className="prizes-m__logo" data-figma="73:732" />
           <PrizeCarousel
             prizes={prizes}
             onActiveChange={onActiveChange}
             withThumbs
             caption={activeName}
+            nodos={{
+              flechaIzq: '73:739',
+              flechaDer: '73:741',
+              premio: '73:743',
+              nombre: '73:745',
+              miniActiva: '73:752',
+              miniIzq2: '73:747',
+              miniIzq1: '73:748',
+              miniDer1: '73:750',
+            }}
           />
         </div>
       }
     >
+      {/* En Figma el planeta, el portal y la Vía Láctea forman parte de la
+          misma capa `fondo inicio 1` (57:87), no son objetos separados. */}
+      <img
+        src={fondoPremiosDesktop}
+        alt=""
+        aria-hidden="true"
+        className="prizes__background"
+      />
+
       <Deco src={logoCodigos} x={685} y={117} w={523} h={390} zIndex={4}
         glow="0 0 2.8cqw #09eaff" float={{ amplitude: 7, duration: 5.4 }} />
 

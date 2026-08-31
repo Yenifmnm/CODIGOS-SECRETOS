@@ -359,6 +359,6 @@ README.md                   ← cómo levantarlo, publicarlo y compartirlo
 
 Se resuelven con material del cliente, no bloquean el backend:
 
-1. **Tipografía `DK Prince Frog`** — no está incluida por licencia. Hay un fallback visual activo. Al dejar el `.woff2` en `public/fonts/` y descomentar el `@font-face`, todo el sitio la toma.
+1. **Tipografía `DK Prince Frog`** — está incluida en `src/assets/fonts/DK-Prince-Frog.otf` y se carga globalmente desde `src/styles/global.css` en peso 400.
 2. **Posición del cofre en el Inicio** — el PowerPoint lo pide, el Figma actual no lo ubica en esa pantalla. Está en un espacio libre; se reubica con un solo cambio de coordenadas.
 3. **Íconos vectoriales chicos** (hamburguesa, cruz de cerrar, cintas de botones, íconos de campos) — reconstruidos con la geometría y paleta del Figma porque no vinieron en la exportación de assets. Si el estudio los entrega, se reemplazan.

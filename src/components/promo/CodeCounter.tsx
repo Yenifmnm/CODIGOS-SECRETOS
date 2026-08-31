@@ -9,6 +9,15 @@ interface CodeCounterProps {
   label?: string;
   style?: CSSProperties;
   className?: string;
+  /**
+   * Nodo del Figma de la PLACA. El rótulo de abajo es una capa aparte en el
+   * diseño y lleva su propia marca.
+   */
+  'data-figma'?: string;
+  /** Nodo del Figma del rótulo («Códigos cargados»). */
+  'data-figma-label'?: string;
+  /** Controles que `figma:check` no debe aplicar al rótulo. */
+  'data-figma-label-omitir'?: string;
 }
 
 /**
@@ -22,12 +31,18 @@ export function CodeCounter({
   label = 'Códigos cargados',
   style,
   className,
+  'data-figma': figma,
+  'data-figma-label': figmaLabel,
+  'data-figma-label-omitir': figmaLabelOmitir,
 }: CodeCounterProps) {
   const padded = String(Math.max(0, Math.trunc(count))).padStart(digits, '0').slice(-digits);
 
   return (
-    <div className={['code-counter', className].filter(Boolean).join(' ')} style={style}>
-      <div className="code-counter__plate">
+    <div
+      className={['code-counter', className].filter(Boolean).join(' ')}
+      style={style}
+    >
+      <div className="code-counter__plate" data-figma={figma}>
         <img src={contadorPlate} alt="" aria-hidden="true" />
         <output className="code-counter__value" aria-label={`${count} ${label}`}>
           {padded.split('').map((d, i) => (
@@ -37,7 +52,12 @@ export function CodeCounter({
           ))}
         </output>
       </div>
-      <span className="code-counter__label" aria-hidden="true">
+      <span
+        className="code-counter__label"
+        aria-hidden="true"
+        data-figma={figmaLabel}
+        data-figma-omitir={figmaLabelOmitir}
+      >
         {label}
       </span>
     </div>

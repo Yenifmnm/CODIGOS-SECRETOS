@@ -1,9 +1,52 @@
 /* -------------------------------------------------------------------------
    Lienzo de la rama mobile.
 
-   El diseño está hecho sobre 402 px de ancho. El contenedor se estira hasta
-   `--mstage-max` y a partir de ahí queda centrado: por encima de ese ancho la
-   composición dejaría de leerse como una pantalla de celular.
+   El diseño está hecho sobre un frame de 402x913 (969 en las de resultado) que
+   incluye dibujada la barra de estado del iPhone. Todo lo que sigue son las dos
+   consecuencias de eso, y las dos se resuelven ACÁ, en el contenedor: ninguna
+   composición y ninguna capa cambia una coordenada.
+
+   1. EL ORIGEN. La barra de estado la dibuja el SISTEMA, fuera del viewport de
+      la página. Reservarle además 62 px adentro es contarla dos veces: el
+      contenido termina 62 px más abajo de lo que el diseño muestra respecto del
+      borde visible. Se ve en un número: el frame pone la píldora del menú en
+      y 79, o sea 17 px POR DEBAJO de la barra; sin descontarla, el sitio la
+      pone a 79 px del borde de la página.
+
+      Así que el lienzo se sube 62 px de diseño con un margen negativo, y el
+      cero de las coordenadas del Figma pasa a ser el borde inferior de la
+      barra. La píldora queda en 17, que es lo que el diseño quiere decir.
+      `figma:check` hace la misma resta al comparar (lee el alto de la barra del
+      propio spec), así que las capas siguen dando cero: lo único que cambió es
+      dónde está el cero.
+
+      Lo que el diseño pone por encima de y 62 —el planeta B3, la cabeza del
+      dino— queda en el área segura, debajo de la barra real. Es donde el diseño
+      lo puso: debajo de la suya.
+
+   2. LA ESCALA ES PROPORCIONAL AL ANCHO. El lienzo mide siempre lo que mide la
+      pantalla —hasta `--mstage-max`— y de ahí sale todo lo demás:
+
+          escala = ancho disponible / 402
+
+      Esto es diseño responsive y no una lámina escalada, y la diferencia
+      importa. Hubo una versión que metía el alto en la cuenta,
+      `min(ancho/402, alto útil/útil, 1)`, para garantizar «entra sin scroll».
+      Entraba, pero achicaba: en un teléfono de 360x640 la composición se
+      dibujaba al 0,71 y quedaban 38 px de cielo a cada lado. O sea que para
+      que entrara a lo alto se encogía a lo ancho, y el resultado se veía chico
+      en el medio de la pantalla. El eje vertical no se resuelve encogiendo:
+      se resuelve dejando que la página fluya y scrollee, como cualquier página.
+
+      Lo que sostiene que esto sea responsive y no sólo un zoom son LOS PISOS EN
+      PÍXELES (ver `styles/tokens.css`): el texto que hay que leer, los inputs y
+      las áreas táctiles tienen un mínimo absoluto y dejan de escalar cuando lo
+      tocan. Sin eso, «proporcional» a 320 px significa 8 px de rótulo.
+
+      No se aplica un `transform: scale()` sobre la página: se le da al lienzo
+      el ANCHO de la pantalla, y como `1cqw` es el 1% de ese ancho, `mu()` y
+      todos los porcentajes de las composiciones escalan solos. Sin capas
+      rasterizadas y sin romper el hit-testing.
 
    `container-type: inline-size` es lo que hace funcionar a `mu()`: 1cqw pasa a
    ser el 1% de este ancho. No se usa `size` porque la altura la decide el
@@ -11,23 +54,106 @@
    ------------------------------------------------------------------------- */
 
 .mstage__canvas {
-  --mstage-max: 520px;
-
   container-type: inline-size;
   container-name: mstage;
   position: relative;
-  width: 100%;
-  max-width: var(--mstage-max);
+  width: var(--mstage-w);
   margin-inline: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  /* El origen sube al borde inferior de la barra de estado del diseño. Va en
+     las DOS orientaciones: descontar la barra es una corrección —el sitio no la
+     dibuja— y no depende de cómo esté el teléfono. Lo que sí es de retrato es
+     la fórmula del ancho, más abajo. */
+  margin-top: var(--mstage-corrimiento);
+
   /* Llena el alto del teléfono aunque el contenido sea más corto: así lo que
      se apoya en el pie —como la superficie del planeta— llega al borde y no
      reaparece el cielo debajo. Se descuentan las áreas seguras, que `.mstage`
-     ya reserva como padding, para no generar scroll de más. */
-  min-height: calc(100svh - var(--safe-top) - var(--safe-bottom));
+     ya reserva como padding, para no generar scroll de más, y se suma lo que el
+     lienzo subió, o si no reaparece el cielo debajo del planeta del landing.
+     En retrato lo pisa el bloque de más abajo, donde el alto lo fija el frame:
+     si el frame da más alto que la pantalla, la página scrollea, que es lo que
+     tiene que pasar. */
+  min-height: calc(var(--mstage-alto-util) - var(--mstage-corrimiento));
+}
+
+/* El ancho del lienzo: el de la pantalla, hasta `--mstage-max`. Una sola
+   declaración y en las dos orientaciones — el alto no entra en la cuenta, ver
+   el punto 2 de arriba. El `100%` se resuelve en el momento de usarse, y tanto
+   `.mstage__canvas` como `.mstage__sky-caja` lo usan contra bloques contenedores
+   del mismo ancho, así que los dos dan el mismo número y el cielo escala
+   exactamente como la composición. */
+.mstage {
+  /* Por encima de este ancho la composición dejaría de leerse como una pantalla
+     de celular, así que se centra en vez de seguir creciendo. */
+  --mstage-max: 520px;
+  --mstage-w: min(100%, var(--mstage-max));
+}
+
+@media (orientation: portrait) {
+  /* EL LIENZO CLIPEA COMO CLIPEA EL FRAME.
+
+     Los once frames tienen `clipsContent: true`, y en los once hay capas que se
+     salen: 2 en premios, 7 en inicio, y hasta 855 px en las de resultado. Figma
+     las corta en el borde del frame; el navegador no las cortaba, y esa
+     diferencia no la puede ver la tabla de capas —cada capa está en su caja
+     correcta, medida contra el spec— pero sí se ve en la pantalla. En inicio se
+     veía como 20 px de scroll: el glow `70:173` va hasta y 933 sobre un frame
+     de 913.
+
+     El alto sale del `aspect-ratio` y no de un `height` con porcentajes: los
+     porcentajes de `height` se resuelven contra el alto del bloque contenedor,
+     que acá es indefinido. Con el ancho ya fijado, la proporción del frame da
+     el alto exacto, en los dos ejes y a cualquier escala.
+
+     `min-height: 0` es necesario: sin eso el tamaño mínimo automático del
+     contenido gana sobre el `aspect-ratio` y la caja vuelve a crecer.
+
+     `clip` y no `hidden`: `hidden` crea un contenedor de scroll: la caja
+     quedaría desplazable con el teclado o con un `scrollIntoView` y el
+     contenido cortado se podría traer a la vista, que es justo lo que el frame
+     NO hace.
+
+     La copia de sangrado del fondo no se ve afectada: vive en `.mstage__sky`,
+     que es HERMANA del lienzo y no hija, así que sigue cubriendo el viewport
+     entero por detrás. Lo que el clip corta queda con la foto atrás, no con un
+     vacío.
+
+     SÓLO EL EJE VERTICAL. Verticalmente el frame corta y hay que copiarlo: es
+     lo que saca los 855 px de `Ellipse 1` en las de resultado y los 20 px de
+     scroll de inicio.
+
+     Horizontalmente no, y por dos motivos. En un teléfono el lienzo mide lo
+     mismo que la pantalla, así que el corte coincidiría con el borde y no
+     haría nada; y por encima de `--mstage-max` el lienzo queda centrado y el
+     corte caería ADENTRO de la pantalla, con la decoración que sangra rebanada
+     por una línea vertical recta. El equivalente honesto del borde del frame en
+     horizontal es el borde de la PANTALLA, y de eso se encarga el
+     `overflow-x: clip` de `.mstage`, que es el único lugar donde se recorta a
+     lo ancho.
+
+     El par `visible`/`clip` es legal y Chromium lo conserva —no lo fuerza a
+     `auto`, que crearía un contenedor de scroll—. */
+  .mstage__canvas {
+    aspect-ratio: var(--mstage-diseno-w) / var(--mstage-diseno-h);
+    min-height: 0;
+    overflow-x: visible;
+    overflow-y: clip;
+  }
+
+  /* Con el alto del lienzo ya fijo, cualquier hijo con el `flex-shrink: 1` por
+     defecto se encoge para que el contenido entre. Y no tiene que entrar: tiene
+     que CORTARSE, que es lo que hace el frame. En inicio —la única de las diez
+     cuyo contenido pasa el borde— el menú se comía 20 px y arrastraba la
+     composición entera 20 px hacia arriba: once capas fuera de tolerancia con
+     todas sus cajas bien escritas, y el diff de píxeles de 24% a 53%. */
+  .mstage__canvas > * {
+    flex-shrink: 0;
+  }
 }
 
 /* Escena de proporción fija: sistema de referencia de las capas ilustradas. */
@@ -43,6 +169,18 @@
 .mscene .mabs,
 .mscene .mabs.mabs {
   position: absolute;
+}
+
+/* `global.css` le pone `max-width: 100%` a toda imagen. Varias capas del diseño
+   son más anchas que su contenedor a propósito —el glow del landing mide 411
+   sobre un lienzo de 402, el papel de REGISTRO 534 dentro de un pergamino de
+   340, la foto de fondo 493 sobre la pantalla— y esa regla las recortaba en
+   silencio: el elemento quedaba con la medida del contenedor en vez de la del
+   nodo, y el reporte lo mostraba como un Δw que no venía de ninguna regla.
+   `.mabs` es la clase de toda capa que sangra a propósito, así que la excepción
+   vive acá, una sola vez. Las que no son `.mabs` la declaran por su cuenta. */
+.mabs {
+  max-width: none;
 }
 
 /* Imagen de una capa: llena su caja sin deformarse y nunca captura el puntero. */

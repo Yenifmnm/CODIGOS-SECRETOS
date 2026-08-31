@@ -2,19 +2,6 @@
    Tokens — valores tomados directamente del Figma (13:48 "vistas web").
    ------------------------------------------------------------------------- */
 
-/* Tipografía del diseño. El archivo NO está en el repo: es comercial y hay que
-   comprarla (Hanoded / "Prince Frog"). Basta con dejar el .woff2 en
-   public/fonts/ y todo el sitio la toma sin tocar una línea más: si el archivo
-   no está, la regla falla en silencio y el navegador sigue al siguiente
-   nombre del stack. Ver public/fonts/README.md. */
-@font-face {
-  font-family: 'DK Prince Frog';
-  src: url('/fonts/DKPrinceFrog.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   /* -------------------------------------------------------------------------
      Áreas seguras del dispositivo.
@@ -38,25 +25,115 @@
   --mobile-gap: clamp(8px, 2.5vw, 18px);
   /* Ancho máximo de la columna de contenido mobile. */
   --mobile-content-max: 520px;
-  /* Área táctil mínima recomendada. */
+  /* Área táctil mínima. Ver «los tres pisos» más abajo. */
   --tap-min: 44px;
-  /* Cuerpo mínimo de un input: por debajo de 16px Safari iOS hace zoom al
-     enfocar el campo y descoloca toda la composición. */
+  /* -------------------------------------------------------------------------
+     LOS TRES PISOS EN PÍXELES.
+
+     La rama mobile escala la composición entera con un solo factor (ver
+     `mobile-stage.css`), y a proporciones exactas hay cosas que dejan de
+     funcionar mucho antes de dejar de verse. Estas tres NO escalan: se plantan
+     en un mínimo absoluto y aceptan que a esa escala la proporción con el resto
+     del diseño se rompa. Es a propósito, y es la letra chica de la promesa de
+     «proporciones exactas».
+
+     Cada piso existe por un motivo distinto y no se pueden mezclar:
+
+       · --input-min-fs  el cuerpo de un input. Por debajo de 16px Safari iOS
+                         hace zoom al enfocar el campo y descoloca toda la
+                         composición. Es una regla del navegador, no una
+                         preferencia.
+       · --tap-min       el lado de un área táctil. Por debajo de 44px el dedo
+                         falla; es la cifra de las guías de Apple y de WCAG
+                         2.5.5.
+       · --text-min-fs   el cuerpo de un texto que hay que LEER. Lo decorativo
+                         escala sin piso; una advertencia legal, no.
+
+     EL PISO DE TEXTO ES DE FAMILIA, NO DE NODO. Lo lleva todo el texto que hay
+     que LEER para poder usar el sitio, y se escribe siempre igual:
+
+         font-size: max(var(--text-min-fs), <el valor del diseño en cqw>);
+
+     El `max()` deja que el texto crezca con la composición y le pone el suelo
+     abajo. El interlineado va sin unidad —`1.04`, no `15.6px`— para que siga al
+     cuerpo cuando el piso muerde; con un interlineado en px los renglones se
+     superponen apenas el piso entra en acción.
+
+     Quiénes son la familia hoy:
+
+       · `.register-m__note`     el aviso del tutor (73:618). El Figma lo pone
+                                 en 8; va en 11 y corta en dos renglones
+       · `.terms__viewport`      el cuerpo de las BASES, que se hereda al
+                                 `.terms__body`. Diseño 15
+       · `.result-m__note`       el teléfono para reclamar el premio en las
+                                 cuatro de resultado. Diseño 12
+
+     Los rótulos del formulario NO están en la familia, y es una decisión
+     tomada: son texto DENTRO de cajas medidas contra el nodo, y subirlos los
+     desbordaría en las diez pantallas. Lo que les corresponde es un piso de
+     ESCALA, que es otra discusión y está abierta.
+     ------------------------------------------------------------------------- */
   --input-min-fs: 16px;
+  --text-min-fs: 11px;
+
+  /* -------------------------------------------------------------------------
+     EL HALO DEL LOGO. Un solo valor para las cinco pantallas que lo muestran,
+     porque es el mismo logo y tener cinco números distintos sería peor.
+
+     El nodo `70:169` declara dos `0px 0px 250px #09EAFF`. Acá van las dos, con
+     su color y su opacidad, pero el radio es **125 y no 250**, y ése es el
+     arreglo: EL RADIO DE FIGMA VA ÷2 AL DE CSS TAMBIÉN EN LOS DROP_SHADOW.
+
+     El código decía lo contrario —«en un DROP_SHADOW el radio de Figma va 1:1
+     al de CSS, el ÷2 es de los LAYER_BLUR»— y es falso. Medido contra
+     `recursos/mobile/pantallas/landing.png`, barriendo el radio con las dos
+     sombras puestas y leyendo el diff de píxeles de la pantalla entera:
+
+         2 x 250   24,29%          <- lo que había
+         2 x 190   17,79%
+         2 x 160   13,00%
+         2 x 125   10,22%          <- 250 ÷ 2, y acá la curva se aplana
+         2 x 100   10,06%
+         2 x  75   10,05%
+
+     De 24,3% a 10,2% en una sola pantalla: el halo era el error dominante. La
+     curva toca el piso justo en 250÷2, así que no es un número elegido a ojo
+     para que quede lindo, es la conversión correcta.
+
+     Bajar la LUZ en vez del radio va para el lado contrario: con una sola
+     sombra de 250 el diff sube a 31,6%. El diseño tiene un halo brillante y
+     CONTENIDO, no uno tenue y ancho.
+
+     ES **UNA** SOMBRA, NO LAS DOS. El nodo declara dos, y las dos se dibujan,
+     pero en DOS ELEMENTOS: `components/promo/LogoCodigos.tsx` pone una en el
+     contenedor y otra en la imagen. Encadenarlas en un mismo `filter` es el
+     patrón que WebKit no dibuja bien — medido en el cofre de GANASTE, donde
+     dejaba el 12% de los píxeles, y acá, donde en el landing da 10.404 píxeles
+     cian en WebKit contra 4.975 en Chromium, y en un iPhone 14 hace desaparecer
+     el logo entero. NO se vuelve a poner la segunda sombra en esta línea.
+
+     Si hay que mover el halo, se mueve ACÁ: 31.095cqw son los 125 px. Cambiar
+     este valor cambia las dos, porque las dos leen el mismo token.
+
+     Los logos llevan `data-figma-omitir="sombras"` porque `figma-check.mjs`
+     compara el radio del CSS contra el del nodo 1:1 y por lo tanto espera 250.
+     Esa comparación es la que está mal, no el CSS — ver la nota del reporte.
+     ------------------------------------------------------------------------- */
+  --logo-glow: drop-shadow(0 0 31.095cqw #09eaff);
 
   /* Tipografía */
-  --font-display: 'DK Prince Frog', 'Chewy', 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', system-ui,
-    sans-serif;
+  --font-display: 'DK Prince Frog', sans-serif;
 
   /* Paleta */
   --c-deep-blue: #212f5c;
   --c-cyan: #09eaff;
   --c-cyan-50: rgba(9, 234, 255, 0.5);
   --c-gold: #fcc102;
-  /* Titular de PERDISTE y de los errores de código: relleno rojo con contorno
-     dorado. Muestreados del Figma, no elegidos a ojo. */
-  --c-title-red: #e84115;
-  --c-title-outline: #fcc411;
+  /* Titular de PERDISTE y de los errores de código. El fill sale del nodo
+     23:3163 del Figma: #e63303. Antes estaba en #e84115, muestreado de la
+     captura del PDF, que trae la compresión encima. */
+  --c-title-red: #e63303;
+  --c-title-outline: #fcc102;  /* el trazo del titular, `Estuviste cerca` (74:1107) */
   --c-gold-glow: #eac748;
   --c-brown: #883307;
   --c-brown-dark: #581f09;

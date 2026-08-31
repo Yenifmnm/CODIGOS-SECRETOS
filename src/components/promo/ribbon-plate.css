@@ -22,12 +22,16 @@
   pointer-events: none;
 }
 
+/* Un color plano, no un degradado: el Figma pinta las cintas con un solo
+   `#D8831C`, al 100% en las de titular y botón y al 50% en las de campo. Es así
+   en los dos frames —mobile 73:551 y escritorio 17:2912—, con seis `#D8831C80`
+   y tres `#D8831C` en cada uno. */
 .plate--ochre .plate__bg {
-  background: linear-gradient(180deg, var(--c-plate-ochre-hi) 0%, var(--c-plate-ochre) 100%);
+  background: #d8831c;
 }
 
 .plate--sand .plate__bg {
-  background: linear-gradient(180deg, var(--c-plate-sand-hi) 0%, var(--c-plate-sand) 100%);
+  background: rgba(216, 131, 28, 0.5);
 }
 
 /* El contenido va por encima del recorte. */

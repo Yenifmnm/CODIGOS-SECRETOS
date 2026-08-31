@@ -11,7 +11,15 @@
   position: relative;
   width: 100%;
   height: 100%;
-  touch-action: none;
+  /* `pan-y` y no `none`: esta caja mide 271x443 y cae en el centro de la
+     pantalla, justo donde va el pulgar. Con `none` el navegador nos entregaba
+     TODO el gesto y la pagina quedaba sin scroll en el telefono -- el 43% de
+     la altura era zona muerta. Con `pan-y` el arrastre vertical vuelve a ser
+     scroll de la pagina y el catalejo se queda con el horizontal; una vez que
+     el gesto arranca en horizontal, el navegador nos lo deja entero y el lente
+     se mueve en los dos ejes igual. La otra mitad de la decision esta en
+     `TelescopeMagnifier.tsx`: no se captura el puntero hasta saber el angulo. */
+  touch-action: pan-y;
   border-radius: 18px;
 }
 

@@ -19,3 +19,13 @@ recursos/premios/*.xlsx
 .env.*
 !.env.example
 audit-shots/
+
+# capturas de auditoria visual (se generan en el scratchpad)
+actual/
+
+# comparaciones generadas por scripts/figma-check.mjs
+figma/check/
+
+# assets bajados por `figma:pull --export`: son la copia cruda del nodo. La que
+# se usa vive en src/assets/, versionada; esta se puede volver a bajar.
+figma/assets/

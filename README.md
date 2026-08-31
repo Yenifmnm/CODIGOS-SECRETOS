@@ -126,17 +126,17 @@ amarillo del PowerPoint.
 Cada pantalla lleva en su cabecera el nodo de Figma del que sale. Ningún fondo es
 un screenshot: todos los elementos son capas independientes para poder animarlos.
 
+Para trabajar contra el diseño hay dos scripts: `npm run figma:pull` baja de
+Figma la medida exacta de cada capa a `figma/spec/`, y `npm run figma:check`
+compara lo que renderiza el navegador contra esa medida, capa por capa. El
+detalle está en [`docs/FIGMA-WORKFLOW.md`](docs/FIGMA-WORKFLOW.md).
+
 ## Tipografía
 
-El diseño usa **DK Prince Frog**, que es comercial y no viene en el repo. El
-`@font-face` ya está declarado en `src/styles/tokens.css` apuntando a
-`public/fonts/DKPrinceFrog.woff2`: basta con dejar ese archivo en la carpeta para
-que todo el sitio la tome, sin tocar una línea más.
-
-Mientras no esté, el stack cae en **Chewy** (Google Fonts, OFL, uso comercial
-permitido), elegida por medición contra el Figma: mismo peso de trazo, mismo
-redondeo de marcador y línea de base irregular. Detalle completo en
-`public/fonts/README.md`.
+El sitio usa la fuente real **DK Prince Frog** en peso Regular (400). El archivo
+versionado vive en `src/assets/fonts/DK-Prince-Frog.otf` y la única declaración
+`@font-face` está en `src/styles/global.css`. No depende de Google Fonts, CDN ni
+otro recurso externo.
 
 ---
 

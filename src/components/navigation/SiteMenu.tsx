@@ -29,6 +29,8 @@ interface SiteMenuProps {
    * desplegado abierto por defecto: el menú arranca plegado y no distrae.
    */
   compact?: boolean;
+  /** Recurso alternativo para una composición desktop puntual. */
+  logoSrc?: string;
 }
 
 /**
@@ -38,7 +40,7 @@ interface SiteMenuProps {
  * Permanece siempre accesible durante la navegación (requisito del PPT) y se
  * cierra con ESC o al hacer click fuera.
  */
-export function SiteMenu({ compact = false }: SiteMenuProps) {
+export function SiteMenu({ compact = false, logoSrc = logoPurosol }: SiteMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLElement>(null);
   const panelId = useId();
@@ -69,12 +71,32 @@ export function SiteMenu({ compact = false }: SiteMenuProps) {
     <nav
       ref={rootRef}
       className={`site-menu${open ? ' site-menu--open' : ''}${compact ? ' site-menu--compact' : ''}`}
-      style={{ left: u(90), top: u(34), height: u(83) }}
+      /* Sólo el origen va inline; el tamaño lo resuelve el CSS, que distingue
+         los dos nodos del Figma: plegada 361x83 en (90,34) — nodo 82:129 — y
+         desplegada 1684x109 en (105,34) — nodo 13:51 —. Con el alto inline la
+         barra se quedaba en 83 px también abierta y los botones quedaban más
+         chicos que en la propuesta. */
+      style={{ left: u(90), top: u(34) }}
       aria-label="Navegación principal"
     >
-      <div className="site-menu__bar">
+      {/*
+        La barra es la píldora del Figma mobile: 162x49 en (24, 79), igual en
+        los once frames. Van los once nodos separados por espacio y gana el de
+        la pantalla que se esté midiendo, en este orden: landing, registro, CI,
+        premios, dónde está el código, bases, ganaste, perdiste, código
+        utilizado, código inexistente, menú desplegado.
+      */}
+      <div
+        className="site-menu__bar"
+        data-figma="70:192 73:560 70:352 73:674 73:798 73:896 73:863 74:1028 105:263 131:335 79:1128"
+        /* El nodo marcado es la instancia, que es transparente: el cian lo
+           pinta su hijo `Rectangle 1` con #09EAFF80, que es exactamente lo que
+           vale `--c-cyan-50`. Acá es un solo elemento, así que el control de
+           pintura no aplica. */
+        data-figma-omitir="pintura"
+      >
         <NavLink to="/" className="site-menu__brand" aria-label="PuroSol — Inicio">
-          <img src={logoPurosol} alt="PuroSol" />
+          <img src={logoSrc} alt="PuroSol" />
         </NavLink>
 
         <span className="site-menu__divider" aria-hidden="true" />

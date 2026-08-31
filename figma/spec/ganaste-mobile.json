@@ -1,0 +1,1466 @@
+{
+  "slug": "ganaste-mobile",
+  "ruta": "?scenario=WIN#/ganaste",
+  "fileKey": "MYKVqv9sfUeVc6L3EFs94a",
+  "node": "73:858",
+  "nombre": "ganaste",
+  "frame": {
+    "w": 402,
+    "h": 969
+  },
+  "generado": "figma-pull.mjs",
+  "arbol": {
+    "id": "73:858",
+    "nombre": "ganaste",
+    "tipo": "FRAME",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 402,
+      "h": 969
+    },
+    "tamano": {
+      "w": 402,
+      "h": 969
+    },
+    "pct": {
+      "x": 0,
+      "w": 100
+    },
+    "relleno": [
+      {
+        "tipo": "solido",
+        "color": "#FFFFFF"
+      }
+    ],
+    "anclaje": "LEFT/TOP",
+    "recorta": true,
+    "hijos": [
+      {
+        "id": "73:859",
+        "nombre": "CODIGO 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": -22,
+          "y": -38,
+          "w": 445,
+          "h": 965
+        },
+        "tamano": {
+          "w": 445,
+          "h": 965
+        },
+        "pct": {
+          "x": -5.47,
+          "w": 110.7
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "e843eecf842efe5d11d5063845f6230309cdafa0"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "73:860",
+        "nombre": "codigos secretos logo 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 126,
+          "y": 148,
+          "w": 173,
+          "h": 129
+        },
+        "tamano": {
+          "w": 173,
+          "h": 129
+        },
+        "pct": {
+          "x": 31.34,
+          "w": 43.03
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "d03f7a4cbd92ba5c46d657dfd1cb1d09500603fb"
+          }
+        ],
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 250,
+            "spread": 0,
+            "color": "#09EAFF",
+            "css": "0px 0px 250px 0px #09EAFF"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 250,
+            "spread": 0,
+            "color": "#09EAFF",
+            "css": "0px 0px 250px 0px #09EAFF"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "73:863",
+        "nombre": "barra menu mobile",
+        "tipo": "INSTANCE",
+        "rect": {
+          "x": 24,
+          "y": 79,
+          "w": 162,
+          "h": 49
+        },
+        "tamano": {
+          "w": 162,
+          "h": 49
+        },
+        "pct": {
+          "x": 5.97,
+          "w": 40.3
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF00",
+            "opacidad": 0
+          }
+        ],
+        "anclaje": "LEFT/TOP",
+        "recorta": true,
+        "hijos": [
+          {
+            "id": "I73:863;70:183",
+            "nombre": "Rectangle 1",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 24,
+              "y": 79,
+              "w": 162,
+              "h": 49
+            },
+            "tamano": {
+              "w": 162,
+              "h": 49
+            },
+            "pct": {
+              "x": 5.97,
+              "w": 40.3
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#09EAFF80",
+                "opacidad": 0.5
+              }
+            ],
+            "radio": 500,
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "I73:863;70:184",
+            "nombre": "logo purosolAsset 1 1",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 39,
+              "y": 84,
+              "w": 84,
+              "h": 37
+            },
+            "tamano": {
+              "w": 84,
+              "h": 37
+            },
+            "pct": {
+              "x": 9.7,
+              "w": 20.9
+            },
+            "relleno": [
+              {
+                "tipo": "imagen",
+                "ajuste": "FILL",
+                "ref": "d0a52dbc3a17011f68c77bed8b392215f3724074"
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "I73:863;70:186",
+            "nombre": "Group 5",
+            "tipo": "GROUP",
+            "rect": {
+              "x": 142,
+              "y": 85,
+              "w": 36,
+              "h": 36
+            },
+            "tamano": {
+              "w": 36,
+              "h": 36
+            },
+            "pct": {
+              "x": 35.32,
+              "w": 8.95
+            },
+            "anclaje": "LEFT/TOP",
+            "hijos": [
+              {
+                "id": "I73:863;70:187",
+                "nombre": "Ellipse 1",
+                "tipo": "ELLIPSE",
+                "rect": {
+                  "x": 142,
+                  "y": 85,
+                  "w": 36,
+                  "h": 36
+                },
+                "tamano": {
+                  "w": 36,
+                  "h": 36
+                },
+                "pct": {
+                  "x": 35.32,
+                  "w": 8.95
+                },
+                "relleno": [
+                  {
+                    "tipo": "solido",
+                    "color": "#FFFFFF80",
+                    "opacidad": 0.5
+                  }
+                ],
+                "anclaje": "LEFT/TOP"
+              },
+              {
+                "id": "I73:863;70:188",
+                "nombre": "Group 4",
+                "tipo": "GROUP",
+                "rect": {
+                  "x": 150.1,
+                  "y": 96,
+                  "w": 19.8,
+                  "h": 14.7
+                },
+                "tamano": {
+                  "w": 19.8,
+                  "h": 14.7
+                },
+                "pct": {
+                  "x": 37.33,
+                  "w": 4.93
+                },
+                "anclaje": "LEFT/TOP",
+                "hijos": [
+                  {
+                    "id": "I73:863;70:189",
+                    "nombre": "Vector 2",
+                    "tipo": "VECTOR",
+                    "rotacion": 90,
+                    "rect": {
+                      "x": 150.1,
+                      "y": 96,
+                      "w": 19.8,
+                      "h": 0
+                    },
+                    "tamano": {
+                      "w": 0,
+                      "h": 19.8
+                    },
+                    "pct": {
+                      "x": 37.33,
+                      "w": 4.93
+                    },
+                    "trazo": [
+                      {
+                        "tipo": "solido",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "trazoAncho": 2,
+                    "trazoAlineacion": "CENTER",
+                    "anclaje": "LEFT/TOP"
+                  },
+                  {
+                    "id": "I73:863;70:190",
+                    "nombre": "Vector 3",
+                    "tipo": "VECTOR",
+                    "rotacion": 90,
+                    "rect": {
+                      "x": 150.1,
+                      "y": 103.3,
+                      "w": 19.8,
+                      "h": 0
+                    },
+                    "tamano": {
+                      "w": 0,
+                      "h": 19.8
+                    },
+                    "pct": {
+                      "x": 37.33,
+                      "w": 4.93
+                    },
+                    "trazo": [
+                      {
+                        "tipo": "solido",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "trazoAncho": 2,
+                    "trazoAlineacion": "CENTER",
+                    "anclaje": "LEFT/TOP"
+                  },
+                  {
+                    "id": "I73:863;70:191",
+                    "nombre": "Vector 4",
+                    "tipo": "VECTOR",
+                    "rotacion": 90,
+                    "rect": {
+                      "x": 150.1,
+                      "y": 110.7,
+                      "w": 19.8,
+                      "h": 0
+                    },
+                    "tamano": {
+                      "w": 0,
+                      "h": 19.8
+                    },
+                    "pct": {
+                      "x": 37.33,
+                      "w": 4.93
+                    },
+                    "trazo": [
+                      {
+                        "tipo": "solido",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "trazoAncho": 2,
+                    "trazoAlineacion": "CENTER",
+                    "anclaje": "LEFT/TOP"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "73:865",
+        "nombre": "Status bar - iPhone",
+        "tipo": "INSTANCE",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 402,
+          "h": 62
+        },
+        "tamano": {
+          "w": 402,
+          "h": 62
+        },
+        "pct": {
+          "x": 0,
+          "w": 100
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF80",
+            "opacidad": 0.5
+          }
+        ],
+        "autolayout": {
+          "direccion": "fila",
+          "gap": 154,
+          "padding": "21 24 19 24",
+          "ejePrincipal": "CENTER",
+          "ejeCruzado": "CENTER",
+          "envuelve": "NO_WRAP"
+        },
+        "anclaje": "LEFT/TOP",
+        "hijos": [
+          {
+            "id": "I73:865;5465:16808",
+            "nombre": "Time",
+            "tipo": "FRAME",
+            "rect": {
+              "x": 24,
+              "y": 21,
+              "w": 100,
+              "h": 22
+            },
+            "tamano": {
+              "w": 100,
+              "h": 22
+            },
+            "pct": {
+              "x": 5.97,
+              "w": 24.88
+            },
+            "autolayout": {
+              "direccion": "fila",
+              "gap": 10,
+              "padding": "1.5 0 0 0",
+              "ejePrincipal": "CENTER",
+              "ejeCruzado": "CENTER",
+              "envuelve": "NO_WRAP"
+            },
+            "anclaje": "LEFT/TOP",
+            "hijos": [
+              {
+                "id": "I73:865;5465:16809",
+                "nombre": "Time",
+                "tipo": "TEXT",
+                "rect": {
+                  "x": 55.5,
+                  "y": 21.8,
+                  "w": 37,
+                  "h": 22
+                },
+                "tamano": {
+                  "w": 37,
+                  "h": 22
+                },
+                "pct": {
+                  "x": 13.81,
+                  "w": 9.2
+                },
+                "relleno": [
+                  {
+                    "tipo": "solido",
+                    "color": "#000000"
+                  }
+                ],
+                "texto": "9:41",
+                "tipografia": {
+                  "familia": "SF Pro",
+                  "postScript": "SFPro-Semibold",
+                  "peso": 590,
+                  "tamano": 17,
+                  "interlineado": 22,
+                  "interlineadoPct": 129.4,
+                  "alineacion": "CENTER",
+                  "alineacionV": "TOP"
+                },
+                "anclaje": "LEFT/TOP"
+              }
+            ]
+          },
+          {
+            "id": "I73:865;5465:16811",
+            "nombre": "Levels",
+            "tipo": "FRAME",
+            "rect": {
+              "x": 278,
+              "y": 21,
+              "w": 100,
+              "h": 22
+            },
+            "tamano": {
+              "w": 100,
+              "h": 22
+            },
+            "pct": {
+              "x": 69.15,
+              "w": 24.88
+            },
+            "autolayout": {
+              "direccion": "fila",
+              "gap": 7,
+              "padding": "1 1 0 0",
+              "ejePrincipal": "CENTER",
+              "ejeCruzado": "CENTER",
+              "envuelve": "NO_WRAP"
+            },
+            "anclaje": "LEFT/TOP",
+            "hijos": [
+              {
+                "id": "I73:865;5465:16812",
+                "nombre": "Cellular Connection",
+                "tipo": "VECTOR",
+                "rect": {
+                  "x": 288.7,
+                  "y": 26.4,
+                  "w": 19.2,
+                  "h": 12.2
+                },
+                "tamano": {
+                  "w": 19.2,
+                  "h": 12.2
+                },
+                "pct": {
+                  "x": 71.81,
+                  "w": 4.78
+                },
+                "relleno": [
+                  {
+                    "tipo": "solido",
+                    "color": "#000000"
+                  }
+                ],
+                "anclaje": "LEFT/TOP"
+              },
+              {
+                "id": "I73:865;5465:16813",
+                "nombre": "Wifi",
+                "tipo": "VECTOR",
+                "rect": {
+                  "x": 314.9,
+                  "y": 26.3,
+                  "w": 17.1,
+                  "h": 12.3
+                },
+                "tamano": {
+                  "w": 17.1,
+                  "h": 12.3
+                },
+                "pct": {
+                  "x": 78.32,
+                  "w": 4.26
+                },
+                "relleno": [
+                  {
+                    "tipo": "solido",
+                    "color": "#000000"
+                  }
+                ],
+                "anclaje": "LEFT/TOP"
+              },
+              {
+                "id": "I73:865;6325:1760",
+                "nombre": "Frame",
+                "tipo": "FRAME",
+                "rect": {
+                  "x": 339,
+                  "y": 26,
+                  "w": 27.3,
+                  "h": 13
+                },
+                "tamano": {
+                  "w": 27.3,
+                  "h": 13
+                },
+                "pct": {
+                  "x": 84.33,
+                  "w": 6.8
+                },
+                "anclaje": "LEFT/TOP",
+                "hijos": [
+                  {
+                    "id": "I73:865;5465:16815",
+                    "nombre": "Border",
+                    "tipo": "RECTANGLE",
+                    "opacidad": 0.35,
+                    "rect": {
+                      "x": 339,
+                      "y": 26,
+                      "w": 25,
+                      "h": 13
+                    },
+                    "tamano": {
+                      "w": 25,
+                      "h": 13
+                    },
+                    "pct": {
+                      "x": 84.33,
+                      "w": 6.22
+                    },
+                    "trazo": [
+                      {
+                        "tipo": "solido",
+                        "color": "#000000"
+                      }
+                    ],
+                    "trazoAncho": 1,
+                    "trazoAlineacion": "INSIDE",
+                    "radio": 4.300000190734863,
+                    "anclaje": "CENTER/SCALE"
+                  },
+                  {
+                    "id": "I73:865;5465:16816",
+                    "nombre": "Cap",
+                    "tipo": "VECTOR",
+                    "opacidad": 0.4,
+                    "rect": {
+                      "x": 365,
+                      "y": 30.5,
+                      "w": 1.3,
+                      "h": 4.1
+                    },
+                    "tamano": {
+                      "w": 1.3,
+                      "h": 4.1
+                    },
+                    "pct": {
+                      "x": 90.8,
+                      "w": 0.33
+                    },
+                    "relleno": [
+                      {
+                        "tipo": "solido",
+                        "color": "#000000"
+                      }
+                    ],
+                    "anclaje": "CENTER/SCALE"
+                  },
+                  {
+                    "id": "I73:865;5465:16817",
+                    "nombre": "Capacity",
+                    "tipo": "RECTANGLE",
+                    "rect": {
+                      "x": 341,
+                      "y": 28,
+                      "w": 21,
+                      "h": 9
+                    },
+                    "tamano": {
+                      "w": 21,
+                      "h": 9
+                    },
+                    "pct": {
+                      "x": 84.83,
+                      "w": 5.22
+                    },
+                    "relleno": [
+                      {
+                        "tipo": "solido",
+                        "color": "#000000"
+                      }
+                    ],
+                    "radio": 2.5,
+                    "anclaje": "CENTER/SCALE"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "73:866",
+        "nombre": "Ellipse 1",
+        "tipo": "ELLIPSE",
+        "rect": {
+          "x": -414,
+          "y": 753,
+          "w": 1254,
+          "h": 1071
+        },
+        "tamano": {
+          "w": 1254,
+          "h": 1071
+        },
+        "pct": {
+          "x": -102.99,
+          "w": 311.94
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#061C67"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:987",
+        "nombre": "¡Felicidades",
+        "tipo": "TEXT",
+        "rect": {
+          "x": 49,
+          "y": 269,
+          "w": 313,
+          "h": 83
+        },
+        "tamano": {
+          "w": 313,
+          "h": 83
+        },
+        "pct": {
+          "x": 12.19,
+          "w": 77.86
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FCC102"
+          }
+        ],
+        "trazo": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF"
+          }
+        ],
+        "trazoAncho": 2,
+        "trazoAlineacion": "CENTER",
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 6.288000106811523,
+            "spread": 0,
+            "color": "#FFFFFF",
+            "css": "0px 0px 6.288000106811523px 0px #FFFFFF"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 44.01599884033203,
+            "spread": 0,
+            "color": "#FFFFFF",
+            "css": "0px 0px 44.01599884033203px 0px #FFFFFF"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 4,
+            "blur": 10,
+            "spread": 0,
+            "color": "#212F5C",
+            "css": "0px 4px 10px 0px #212F5C"
+          }
+        ],
+        "texto": "¡Felicidades",
+        "tipografia": {
+          "familia": "DK Prince Frog",
+          "postScript": "DKPrinceFrog",
+          "peso": 400,
+          "tamano": 80,
+          "interlineado": 83.3,
+          "alineacion": "CENTER",
+          "alineacionV": "TOP"
+        },
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:988",
+        "nombre": "te ganaste una Nintendo Switch!",
+        "tipo": "TEXT",
+        "rect": {
+          "x": 39,
+          "y": 352,
+          "w": 333,
+          "h": 31
+        },
+        "tamano": {
+          "w": 333,
+          "h": 31
+        },
+        "pct": {
+          "x": 9.7,
+          "w": 82.84
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF"
+          }
+        ],
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 250,
+            "spread": 0,
+            "color": "#FFFFFF",
+            "css": "0px 0px 250px 0px #FFFFFF"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 250,
+            "spread": 0,
+            "color": "#FFFFFF",
+            "css": "0px 0px 250px 0px #FFFFFF"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 4,
+            "blur": 4,
+            "spread": 0,
+            "color": "#00000040",
+            "css": "0px 4px 4px 0px #00000040"
+          }
+        ],
+        "texto": "te ganaste una Nintendo Switch!",
+        "tipografia": {
+          "familia": "DK Prince Frog",
+          "postScript": "DKPrinceFrog",
+          "peso": 400,
+          "tamano": 30,
+          "interlineado": 31.2,
+          "alineacion": "CENTER",
+          "alineacionV": "TOP"
+        },
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:1005",
+        "nombre": "Group 9",
+        "tipo": "GROUP",
+        "rect": {
+          "x": 91,
+          "y": 385,
+          "w": 228,
+          "h": 76
+        },
+        "tamano": {
+          "w": 228,
+          "h": 76
+        },
+        "pct": {
+          "x": 22.64,
+          "w": 56.72
+        },
+        "anclaje": "LEFT/TOP",
+        "hijos": [
+          {
+            "id": "74:1001",
+            "nombre": "boton secundario 2",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 91,
+              "y": 385,
+              "w": 228,
+              "h": 76
+            },
+            "tamano": {
+              "w": 228,
+              "h": 76
+            },
+            "pct": {
+              "x": 22.64,
+              "w": 56.72
+            },
+            "relleno": [
+              {
+                "tipo": "imagen",
+                "ajuste": "FILL",
+                "ref": "228c8e4793540a70a9d0864187870540a244d5f6"
+              }
+            ],
+            "efectos": [
+              {
+                "tipo": "DROP_SHADOW",
+                "x": 0,
+                "y": 4,
+                "blur": 4,
+                "spread": 0,
+                "color": "#00000040",
+                "css": "0px 4px 4px 0px #00000040"
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "74:1003",
+            "nombre": "Cargar otro código",
+            "tipo": "TEXT",
+            "rect": {
+              "x": 110,
+              "y": 406,
+              "w": 190,
+              "h": 31
+            },
+            "tamano": {
+              "w": 190,
+              "h": 31
+            },
+            "pct": {
+              "x": 27.36,
+              "w": 47.26
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#883307"
+              }
+            ],
+            "texto": "Cargar otro código",
+            "tipografia": {
+              "familia": "DK Prince Frog",
+              "postScript": "DKPrinceFrog",
+              "peso": 400,
+              "tamano": 30,
+              "interlineado": 31.2,
+              "alineacion": "CENTER",
+              "alineacionV": "TOP"
+            },
+            "anclaje": "LEFT/TOP"
+          }
+        ]
+      },
+      {
+        "id": "74:1012",
+        "nombre": "glow-Photoroom 3",
+        "tipo": "RECTANGLE",
+        "espejo": true,
+        "rotacion": -53.7,
+        "rect": {
+          "x": -54,
+          "y": 394.6,
+          "w": 423.8,
+          "h": 453.5
+        },
+        "tamano": {
+          "w": 383.6,
+          "h": 243.9
+        },
+        "pct": {
+          "x": -13.43,
+          "w": 105.42
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "a9948b1204e4c0c6a727736eff9d081f550ea151"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:1013",
+        "nombre": "cofre 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 56,
+          "y": 587.6,
+          "w": 279,
+          "h": 279
+        },
+        "tamano": {
+          "w": 279,
+          "h": 279
+        },
+        "pct": {
+          "x": 13.93,
+          "w": 69.4
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "a47aa3b01ef887114771ae210ebf87aea21246d6"
+          }
+        ],
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 30,
+            "blur": 250,
+            "spread": 0,
+            "color": "#EAC748",
+            "css": "0px 30px 250px 0px #EAC748"
+          },
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 0,
+            "blur": 250,
+            "spread": 0,
+            "color": "#EAC748",
+            "css": "0px 0px 250px 0px #EAC748"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:1014",
+        "nombre": "glow-Photoroom 2",
+        "tipo": "RECTANGLE",
+        "rotacion": -76.5,
+        "rect": {
+          "x": 145.8,
+          "y": 392,
+          "w": 326.5,
+          "h": 429.9
+        },
+        "tamano": {
+          "w": 383.6,
+          "h": 243.9
+        },
+        "pct": {
+          "x": 36.26,
+          "w": 81.21
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "a9948b1204e4c0c6a727736eff9d081f550ea151"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:1015",
+        "nombre": "nintendo -2 1",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 146,
+          "y": 484.6,
+          "w": 224,
+          "h": 230
+        },
+        "tamano": {
+          "w": 224,
+          "h": 230
+        },
+        "pct": {
+          "x": 36.32,
+          "w": 55.72
+        },
+        "relleno": [
+          {
+            "tipo": "imagen",
+            "ajuste": "FILL",
+            "ref": "670ab137e3749dd8a72eebe5f9a059379f64465f"
+          }
+        ],
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:990",
+        "nombre": "Group 3",
+        "tipo": "GROUP",
+        "rect": {
+          "x": 49,
+          "y": 466,
+          "w": 313,
+          "h": 51
+        },
+        "tamano": {
+          "w": 313,
+          "h": 51
+        },
+        "pct": {
+          "x": 12.19,
+          "w": 77.86
+        },
+        "radio": 200,
+        "anclaje": "LEFT/TOP",
+        "hijos": [
+          {
+            "id": "74:991",
+            "nombre": "Rectangle 1",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 49,
+              "y": 466,
+              "w": 313,
+              "h": 51
+            },
+            "tamano": {
+              "w": 313,
+              "h": 51
+            },
+            "pct": {
+              "x": 12.19,
+              "w": 77.86
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#212F5C80",
+                "opacidad": 0.5
+              }
+            ],
+            "radio": 200,
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "74:992",
+            "nombre": "CANJEASTE EL CÓDIGO: ABCDG847FR5 *GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO* ¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!",
+            "tipo": "TEXT",
+            "rect": {
+              "x": 77,
+              "y": 474,
+              "w": 257,
+              "h": 36
+            },
+            "tamano": {
+              "w": 257,
+              "h": 36
+            },
+            "pct": {
+              "x": 19.15,
+              "w": 63.93
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF"
+              }
+            ],
+            "texto": "CANJEASTE EL CÓDIGO: ABCDG847FR5\n*GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO*\n¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!",
+            "tipografia": {
+              "familia": "DK Prince Frog",
+              "postScript": "DKPrinceFrog",
+              "peso": 400,
+              "tamano": 12,
+              "interlineado": 12.5,
+              "alineacion": "CENTER",
+              "alineacionV": "TOP"
+            },
+            "anclaje": "LEFT/TOP"
+          }
+        ]
+      },
+      {
+        "id": "73:871",
+        "nombre": "Rectangle 2",
+        "tipo": "RECTANGLE",
+        "rect": {
+          "x": 124,
+          "y": 935,
+          "w": 149,
+          "h": 7
+        },
+        "tamano": {
+          "w": 149,
+          "h": 7
+        },
+        "pct": {
+          "x": 30.85,
+          "w": 37.06
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#000000"
+          }
+        ],
+        "radio": 20,
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "74:1022",
+        "nombre": "contador",
+        "tipo": "FRAME",
+        "rect": {
+          "x": 71,
+          "y": 853,
+          "w": 107,
+          "h": 60
+        },
+        "tamano": {
+          "w": 107,
+          "h": 60
+        },
+        "pct": {
+          "x": 17.66,
+          "w": 26.62
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF00",
+            "opacidad": 0
+          }
+        ],
+        "anclaje": "LEFT/TOP",
+        "recorta": true,
+        "hijos": [
+          {
+            "id": "74:1023",
+            "nombre": "contador 1",
+            "tipo": "RECTANGLE",
+            "rect": {
+              "x": 71,
+              "y": 853,
+              "w": 110,
+              "h": 60
+            },
+            "tamano": {
+              "w": 110,
+              "h": 60
+            },
+            "pct": {
+              "x": 17.66,
+              "w": 27.36
+            },
+            "relleno": [
+              {
+                "tipo": "imagen",
+                "ajuste": "STRETCH",
+                "ref": "8be7c4c02d3b27b03df8e4148a4548e1da5a0973"
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "74:1024",
+            "nombre": "0 0 0 0",
+            "tipo": "TEXT",
+            "rect": {
+              "x": 95,
+              "y": 875,
+              "w": 61,
+              "h": 26
+            },
+            "tamano": {
+              "w": 61,
+              "h": 26
+            },
+            "pct": {
+              "x": 23.63,
+              "w": 15.17
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF"
+              }
+            ],
+            "texto": "0 0 0 0",
+            "tipografia": {
+              "familia": "DK Prince Frog",
+              "postScript": "DKPrinceFrog",
+              "peso": 400,
+              "tamano": 25,
+              "interlineado": 26,
+              "alineacion": "CENTER",
+              "alineacionV": "TOP"
+            },
+            "anclaje": "LEFT/TOP"
+          }
+        ]
+      },
+      {
+        "id": "74:1018",
+        "nombre": "Códigos cargados",
+        "tipo": "TEXT",
+        "rect": {
+          "x": 191,
+          "y": 874,
+          "w": 148,
+          "h": 26
+        },
+        "tamano": {
+          "w": 148,
+          "h": 26
+        },
+        "pct": {
+          "x": 47.51,
+          "w": 36.82
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FCC102"
+          }
+        ],
+        "trazo": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF"
+          }
+        ],
+        "trazoAncho": 1,
+        "trazoAlineacion": "CENTER",
+        "efectos": [
+          {
+            "tipo": "DROP_SHADOW",
+            "x": 0,
+            "y": 4,
+            "blur": 10,
+            "spread": 0,
+            "color": "#212F5C",
+            "css": "0px 4px 10px 0px #212F5C"
+          }
+        ],
+        "texto": "Códigos cargados",
+        "tipografia": {
+          "familia": "DK Prince Frog",
+          "postScript": "DKPrinceFrog",
+          "peso": 400,
+          "tamano": 25,
+          "interlineado": 26,
+          "alineacion": "CENTER",
+          "alineacionV": "TOP"
+        },
+        "anclaje": "LEFT/TOP"
+      },
+      {
+        "id": "107:164",
+        "nombre": "boton cerrar",
+        "tipo": "FRAME",
+        "rect": {
+          "x": 335,
+          "y": 79,
+          "w": 43,
+          "h": 43
+        },
+        "tamano": {
+          "w": 43,
+          "h": 43
+        },
+        "pct": {
+          "x": 83.33,
+          "w": 10.7
+        },
+        "relleno": [
+          {
+            "tipo": "solido",
+            "color": "#FFFFFF00",
+            "opacidad": 0
+          }
+        ],
+        "anclaje": "LEFT/TOP",
+        "recorta": true,
+        "hijos": [
+          {
+            "id": "107:165",
+            "nombre": "Ellipse 2",
+            "tipo": "ELLIPSE",
+            "rect": {
+              "x": 340,
+              "y": 86,
+              "w": 122,
+              "h": 122
+            },
+            "tamano": {
+              "w": 122,
+              "h": 122
+            },
+            "pct": {
+              "x": 84.58,
+              "w": 30.35
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF00",
+                "opacidad": 0
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          },
+          {
+            "id": "107:166",
+            "nombre": "Group 6",
+            "tipo": "GROUP",
+            "rect": {
+              "x": 345.5,
+              "y": 90,
+              "w": 22,
+              "h": 22
+            },
+            "tamano": {
+              "w": 22,
+              "h": 22
+            },
+            "pct": {
+              "x": 85.95,
+              "w": 5.47
+            },
+            "anclaje": "LEFT/TOP",
+            "hijos": [
+              {
+                "id": "107:167",
+                "nombre": "Vector 5",
+                "tipo": "VECTOR",
+                "rect": {
+                  "x": 345.5,
+                  "y": 90,
+                  "w": 22,
+                  "h": 22
+                },
+                "tamano": {
+                  "w": 22,
+                  "h": 22
+                },
+                "pct": {
+                  "x": 85.95,
+                  "w": 5.47
+                },
+                "trazo": [
+                  {
+                    "tipo": "solido",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "trazoAncho": 3,
+                "trazoAlineacion": "CENTER",
+                "anclaje": "LEFT/TOP"
+              },
+              {
+                "id": "107:168",
+                "nombre": "Vector 6",
+                "tipo": "VECTOR",
+                "rotacion": 90,
+                "rect": {
+                  "x": 345.5,
+                  "y": 90,
+                  "w": 22,
+                  "h": 22
+                },
+                "tamano": {
+                  "w": 22,
+                  "h": 22
+                },
+                "pct": {
+                  "x": 85.95,
+                  "w": 5.47
+                },
+                "trazo": [
+                  {
+                    "tipo": "solido",
+                    "color": "#FFFFFF"
+                  }
+                ],
+                "trazoAncho": 3,
+                "trazoAlineacion": "CENTER",
+                "anclaje": "LEFT/TOP"
+              }
+            ]
+          },
+          {
+            "id": "107:169",
+            "nombre": "Ellipse 3",
+            "tipo": "ELLIPSE",
+            "rect": {
+              "x": 335,
+              "y": 79,
+              "w": 43,
+              "h": 43
+            },
+            "tamano": {
+              "w": 43,
+              "h": 43
+            },
+            "pct": {
+              "x": 83.33,
+              "w": 10.7
+            },
+            "relleno": [
+              {
+                "tipo": "solido",
+                "color": "#FFFFFF80",
+                "opacidad": 0.5
+              }
+            ],
+            "anclaje": "LEFT/TOP"
+          }
+        ]
+      }
+    ]
+  }
+}

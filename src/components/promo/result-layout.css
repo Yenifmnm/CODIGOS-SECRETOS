@@ -36,30 +36,102 @@
 
 .result__title {
   text-align: center;
+  line-height: 1.041;
   /* Aparición del titular. */
   animation: result-title-in 620ms var(--ease-soft) both;
 }
 
-/* GANASTE: dorado con resplandor blanco. */
+/* GANASTE: dorado con resplandor blanco. Nodo `¡Felicidades` (23:3084):
+   relleno #FCC102, borde 4px #FFFFFF y tres sombras —0 0 6.288 #FFF,
+   0 0 44.016 #FFF, 0 4 10 #212F5C—. Exclusiva de esta pantalla: sólo
+   `Winner.tsx` pasa `titleTone="gold"`; las otras tres pasan `outline`.
+
+   COPIAR LOS NÚMEROS DEL PANEL DE FIGMA NO DA EL DIBUJO DE FIGMA, y acá hay
+   dos motivos distintos, medidos por separado contra `figma/spec/ganaste.png`,
+   que es el render del propio archivo.
+
+   1. LAS SOMBRAS NO SE ENCADENAN. Figma calcula las tres desde la MISMA
+      silueta y las compone. `filter: drop-shadow(a) drop-shadow(b)` pasa el
+      resultado de una a la siguiente: la de 44 px se calculaba sobre el texto
+      MÁS la de 6 px, y la oscura sobre todo eso. De ahí el exceso de halo que
+      reportó la clienta. `text-shadow` con las tres separadas por coma es el
+      modelo de Figma: todas salen del mismo glifo.
+
+      Y el radio necesita el DOBLE. Medido el brillo medio de lo que no es
+      tinta —el halo sobre el cielo— contra los 114.8 del render de Figma:
+
+                        Chromium   WebKit
+        encadenado        +12.1     +16.7   <- lo que había
+        text-shadow x1    -12.8      -4.9
+        text-shadow x1.8   -7.3      +1.3
+        text-shadow x2     -6.1      +2.5   <- esto
+        text-shadow x2.2   -5.7      +3.0
+
+      El x2 es el punto donde los dos motores quedan más cerca del diseño; el
+      óptimo de cada uno por separado cae a los lados (2.2 en Chromium, 1.8 en
+      WebKit) y la diferencia entre ellos baja como consecuencia.
+
+   2. `paint-order: stroke fill` ENGORDABA LA LETRA. Mete el borde DETRÁS del
+      relleno, así que no le come nada al glifo. El borde CENTER de Figma va
+      encima y sí se lo come. Contado en píxeles de relleno dorado contra los
+      24.606 del render de Figma:
+
+                                    Chromium   WebKit
+        4px con `stroke fill`         1.29x     1.25x   <- lo que había
+        4px orden normal              0.86x     0.91x
+        3px orden normal              0.94x     0.99x
+        2px orden normal              1.02x     1.07x   <- esto
+
+      Con el orden por defecto de CSS —relleno y después borde—, que es el de
+      Figma, el ancho que reproduce el dibujo es 2 px y no 4. Es el mismo
+      resultado que ya estaba medido para los titulares mobile: el trazo de CSS
+      dibuja más grueso que un borde CENTER, y la traducción no es un factor
+      fijo, se mide por caja.
+
+   Los valores van en `cqw` y no en px para que escalen con el lienzo, como el
+   resto de la composición: 1cqw son 19.2 px de diseño. */
 .result__title--gold {
   color: var(--c-gold);
-  text-shadow: 0 0 0.33cqw #fff, 0 0 2.3cqw #fff, 0 4px 10px var(--c-deep-blue);
+  -webkit-text-stroke: 0.1042cqw #ffffff;   /* 2px sobre el lienzo de 1920 */
+  text-shadow:
+    0 0 0.655cqw #ffffff,                   /* nodo 6.288, x2 medido */
+    0 0 4.585cqw #ffffff,                   /* nodo 44.016, x2 medido */
+    0 0.2083cqw 0.5208cqw #212f5c;          /* nodo 0 4 10, sin tocar */
 }
 
-/* PERDISTE y errores de código: relleno ROJO con contorno DORADO por fuera.
-   Los colores salen de muestrear el titular del Figma
-   (`recursos/correcciones/perdiste.png`): relleno #e84115, contorno #fcc411.
-   Estaban invertidos —dorado adentro y rojo afuera—, que es lo que se veía
-   distinto del diseño. `paint-order` dibuja primero el trazo y encima el
-   relleno, que es lo que evita que el contorno se coma la letra. */
+/* PERDISTE y errores de código: relleno rojo y las sombras del diseño.
+   El contorno se elimina en escritorio por la corrección explícita del
+   cliente: era el efecto que engrosaba y juntaba visualmente los glifos. */
 .result__title--outline {
   color: var(--c-title-red);
-  /* El trazo se centra sobre el contorno del glifo y `paint-order` pinta el
-     relleno encima, así que sólo se ve la mitad: para el grosor del Figma
-     (~9 px) hay que pedir el doble. */
-  -webkit-text-stroke: 0.94cqw var(--c-title-outline);
+  /* Mismas sombras que el nodo 23:3084, que el 23:3163 repite. */
+  text-shadow: 0 0 0.328cqw #ffffff, 0 0 2.292cqw #ffffff,
+    0 0.208cqw 0.521cqw var(--c-deep-blue);
+}
+
+/* PERDISTE web: contorno dorado y sombras del nodo Figma 23:3163. La clase
+   es exclusiva del titular desktop; las variantes mobile usan `result-m__`. */
+.result__title--loser {
+  color: #e63303;
+  -webkit-text-stroke: 4px #fcc102;
   paint-order: stroke fill;
-  text-shadow: 0 0 0.5cqw rgba(255, 255, 255, 0.7), 0 4px 10px var(--c-deep-blue);
+  text-shadow: none;
+  filter: drop-shadow(0 0 6.288px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 4px 10px #212f5c);
+}
+
+/* Las dos pantallas de error comparten el amarillo del titular de PERDISTE,
+   pero con un trazo más fino porque el cuerpo es 100px y no 140px. Esta clase
+   sólo existe en la composición desktop: mobile renderiza `result-m__title`. */
+.result__title--error {
+  color: #e63303;
+  -webkit-text-stroke: 2px #fcc102;
+  paint-order: stroke fill;
+  text-shadow: none;
+  filter: drop-shadow(0 0 6.288px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0 44.016px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 4px 10px #212f5c);
 }
 
 @keyframes result-title-in {
@@ -75,7 +147,7 @@
 
 .result__message {
   text-align: center;
-  line-height: 1.12;
+  line-height: 1.041;
   white-space: normal;
   animation: result-fade-in 560ms var(--ease-soft) 220ms both;
 }
@@ -83,6 +155,16 @@
 /* En desktop se respeta el corte de línea del Figma. */
 .result__message-line {
   display: block;
+}
+
+@media (min-width: 900px) {
+  .result__message--single-line {
+    white-space: nowrap;
+  }
+
+  .result__message--single-line .result__message-line {
+    display: inline;
+  }
 }
 
 @keyframes result-fade-in {
@@ -96,10 +178,6 @@
   }
 }
 
-/* El Figma resuelve cada línea larga en un solo renglón. Con Chewy, más ancha
-   en mayúsculas que "DK Prince Frog", el cuerpo del Figma (25) las parte; 21 es
-   el máximo que entra en un renglón dentro del ancho del panel y deja el bloque
-   del mismo ancho que el diseño. Con la tipografía licenciada se vuelve a 25. */
 .result__note {
   display: flex;
   flex-direction: column;
@@ -110,8 +188,8 @@
   border-radius: 200px;
   background: var(--c-cyan-50);
   font-family: var(--font-display);
-  font-size: 1.09375cqw; /* 21 */
-  line-height: 1.12;
+  font-size: 1.302cqw; /* 25 */
+  line-height: 1.04;
   color: #fff;
   text-align: center;
   white-space: nowrap;
@@ -130,10 +208,43 @@
   letter-spacing: 0.04em;
 }
 
+/* En un viewport desktop más ancho que 16:9, el lienzo se contiene completo
+   y deja dos sangrías laterales. El PDF pide ocuparlas sin deformar imágenes:
+   se redistribuyen los grupos hacia afuera conservando tamaños, alturas y las
+   coordenadas originales cuando el viewport sí es 16:9. */
+@media (min-width: 900px) {
+  .result-stage {
+    --result-sangria-total: calc(100vw - 100cqw);
+  }
+
+  .result-stage .result__left-group,
+  .result-stage .result__right-group {
+    inset: 0;
+  }
+
+  .result-stage .result__left-group {
+    translate: calc(var(--result-sangria-total) * -0.25) 0;
+  }
+
+  .result-stage .result__right-group {
+    translate: calc(var(--result-sangria-total) * 0.25) 0;
+  }
+
+  .result-stage .site-menu {
+    translate: calc(var(--result-sangria-total) * -0.36) 0;
+  }
+
+  .result-stage .result__close {
+    translate: calc(var(--result-sangria-total) * 0.4) 0;
+  }
+}
+
 /* -------------------------------------------------------------------------
    Composición mobile de las cuatro pantallas de resultado (lienzo 402x969).
    Orden: logo → titular → mensaje → botón → píldora del código → cofre →
-   contador. Medidas del Figma, ya descontada la barra de estado (54 px).
+   contador. Medidas del Figma en coordenadas crudas del frame: el descuento de
+   los 62 px de la barra de estado lo hace el contenedor de la rama mobile una
+   sola vez, en `layout/mobile-stage.css`.
    ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
   .result-m {
@@ -144,76 +255,192 @@
     padding-bottom: 7.463cqw;
   }
 
+  /* 10.945cqw son los 44 px del lienzo de 402, pero por debajo de ese ancho la
+     medida cae bajo el mínimo táctil (41 px en un iPhone de 375). El max()
+     conserva la proporción del diseño donde alcanza y planta el piso donde no. */
   .result-m__close {
     position: absolute !important;
-    right: 6.219cqw;
-    top: 6.219cqw;
-    width: 10.945cqw;   /* 44 — área táctil mínima */
-    height: 10.945cqw;
+    left: 83.333cqw;        /* 335 */
+    top: 19.652cqw;         /* 79 */
+    width: max(var(--tap-min), 10.945cqw);
+    height: max(var(--tap-min), 10.945cqw);
     z-index: 41;
   }
 
-  /* Medidas del Figma "perdiste.png" (lienzo 402x969): logo y 145..255,
-     titular 280..320, mensaje 360..405, botón 437..497, píldora 528..580,
-     cofre 627..810, contador 850..895. Los márgenes de abajo reproducen esos
-     huecos, que antes estaban todos comprimidos. */
+  /* Medidas del export "perdiste.png", que mide 402x969 pero cuyos primeros
+     62 px son la barra de estado de iOS. El AREA UTIL es (0,62)-(402,969), o
+     sea 907 px, y contra eso esta medido todo lo de abajo:
+       logo 87, titular 214, mensaje 297, boton 376, pildora 465, cofre 561,
+       borde del planeta 723, contador 797.
+     La tanda anterior habia tomado esas mismas cotas sobre el PNG completo, y
+     por eso la columna entera caia unos 60 px mas abajo de lo que manda el
+     diseno y la pantalla terminaba con scroll. */
+  /* El logo NO va centrado: el nodo lo pone en x 126 y el centro del lienzo
+     esta en 201, asi que sale 11 px a la derecha. */
   .result-m__logo {
-    width: 44.776cqw;   /* 180 */
+    align-self: flex-start;
+    margin-left: 31.343cqw;  /* 126 */
+    width: 43.035cqw;        /* 173 */
     height: auto;
-    margin-top: 17.662cqw;  /* el logo arranca en y=145 */
-    filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
+    margin-top: 18.408cqw;   /* y 148, desde el 74 en que arranca .result-m */
+    /* El resplandor lo pone `LogoCodigos`, repartido en dos elementos. */
   }
 
   .result-m__title {
-    margin: 0.249cqw 0 0;
+    position: relative;
+    top: var(--result-m-title-shift, 0);
+    margin: -1.244cqw 0 0;   /* y 272: pisa 5 px el borde de abajo del logo */
     font-family: var(--font-display);
-    font-size: 13.184cqw;   /* 53 */
-    line-height: 1.05;
+    font-size: var(--result-m-title, 17.164cqw);   /* 69 por defecto */
+    line-height: 1.0417;     /* 62.5 sobre 60 */
     text-align: center;
   }
 
   .result-m__title--gold {
     color: var(--c-gold);
+    /* Mismo caso que el titular del landing —ver la nota larga en `home.css`—:
+       el nodo 74:987 pide 2 px CENTER y en CSS eso dibuja de más.
+
+       CERRADO, NO PENDIENTE. Este trazo se queda a 1 px aunque la proporción diga
+       que sigue grueso. Medido, trazo/relleno contra el recorte del export:
+       
+         74:987 «¡Felicidades»   Figma 0,45   con 1 px 0,59   -> 1,31x
+
+       Bajarlo a ~0,7 px lo mete por debajo del píxel, donde el trazo pasa a
+       depender de la densidad de pantalla y puede desaparecer en un dispositivo a
+       1x. Para esa magnitud el riesgo no se justifica. Decisión del 27-08-2026:
+       no volver a abrirlo sin un motivo nuevo.
+
+           2 px de CSS ....  +14,7 chromium  / +16,8 webkit
+           1 px de CSS ....   +7,1 chromium  / +10,4 webkit   <- éste
+           0 px ...........   -4,6 chromium  /  +4,2 webkit
+
+       Acá NO cae en cero: 1 px mejora los dos motores a la mitad, pero queda
+       un resto. Parte de ese resto no es el trazo —a 0 px WebKit sigue en
+       +4,2— y probablemente sea que el export de GANASTE muestra otro premio
+       que el que renderiza el mock. Se deja en 1 px, que es lo que la medición
+       sostiene, y el resto queda pendiente de un export comparable. */
+    -webkit-text-stroke: 0.249cqw #FFFFFF;  /* nodo 2px CENTER -> 1px de CSS */
     text-shadow: var(--glow-gold-text);
   }
 
   /* PERDISTE y los dos errores: relleno dorado con contorno rojo. */
   .result-m__title--outline {
-    font-size: 8.955cqw;    /* 36 */
-    color: var(--c-title-red);
-    -webkit-text-stroke: 0.6cqw var(--c-title-outline);
-    paint-order: stroke fill;
-    text-shadow: 0 0 4cqw rgba(252, 193, 2, 0.75);
+    font-size: var(--result-m-title, 14.925cqw);   /* 60, el de `Estuviste cerca` */
+    color: var(--c-title-red);          /* #E63303 */
+    /* 1 px, igual que los otros titulares. LA MEDICIÓN QUE DECÍA QUE ACÁ 2 px
+       era lo mejor ESTABA MAL HECHA, y la corrección importa más que el valor.
+
+       Aquel barrido comparaba la LUMINANCIA MEDIA de la franja, y ese promedio
+       NO distingue un contorno grueso con relleno chico de uno fino con relleno
+       grande: las dos combinaciones dan lo mismo. Por eso 2 px «ganaba».
+
+       Para grosor de trazo hay que mirar la PROPORCIÓN trazo/relleno. Medida
+       sobre el recorte del export contra el render:
+
+         74:1107 «Estuviste cerca»     Figma 0,45   con 2 px 1,13   -> 2,51x
+         105:278 y 131:350             Figma 0,79   con 2 px 2,57   -> 3,27x
+
+       La clienta lo midió sobre una captura del iPhone 17 en producción y le
+       dio 0,42 contra 0,96, o sea 2,30x. Dos instrumentos distintos, la misma
+       conclusión.
+
+       `npm run audit:trazo` ahora saca esa proporción como columna propia. */
+    -webkit-text-stroke: 0.249cqw var(--c-title-outline);   /* nodo 2px CENTER -> 1px de CSS */
+    /* `0px 0px 44.016px #FFFFFF` + `0px 4px 10px #212F5C` del nodo.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%.
+
+       El trazo de esta regla NO se toca: los tres titulares rojos (74:1107,
+       105:278, 131:350) quedan a 2 px porque medido es su mejor valor. */
+    text-shadow: 0 0 10.949cqw rgba(255, 255, 255, 0.2),
+      0 0.995cqw 2.488cqw #212F5C;
   }
 
   .result-m__msg {
-    margin: 10.448cqw 0 0;  /* mensaje en y=360 */
-    max-width: 82cqw;
+    margin: 5.97cqw 0 0;    /* y 358 */
+    max-width: 73.383cqw;   /* 295 */
     font-family: var(--font-display);
-    font-size: 4.975cqw;    /* 20 */
-    line-height: 1.25;
+    font-size: 6.219cqw;    /* 25 */
+    line-height: 1.04;      /* 26 */
     color: var(--c-white);
-    text-shadow: 0 0 3cqw #fff, 0 0 7cqw rgba(255, 255, 255, 0.6),
-      0 2px 4px rgba(0, 0, 0, 0.35);
+    /* Los cuatro DROP_SHADOW del nodo: 82.8, 250 y 250 blancos, mas el 0/4/4.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%. */
+    text-shadow: 0 0 20.597cqw rgba(255, 255, 255, 0.2),
+      0 0 62.19cqw rgba(255, 255, 255, 0.2),
+      0 0 62.19cqw rgba(255, 255, 255, 0.2),
+      0 0.995cqw 0.995cqw #00000040;
     text-align: center;
   }
 
+  .result-m__msg-line {
+    display: block;
+  }
+
+  /* Tampoco va centrado: el nodo arranca en x 91 y el centro daria 87. */
   .result-m__cta {
-    width: 54.726cqw;       /* 220 */
-    margin-top: 6.716cqw;   /* botón en y=437 */
+    align-self: flex-start;
+    margin-left: 22.637cqw; /* 91 */
+    width: 56.716cqw;       /* 228 */
+    margin-top: 4.975cqw;   /* y 430 */
   }
 
   /* Píldora cian con el código canjeado y el teléfono de contacto. */
+  /* `Rectangle 1` (74:1041): 313x51 en x 49, azul al 50% y radio 200. */
   .result-m__note {
-    width: 75.871cqw;       /* 305 */
-    margin-top: 3.980cqw;   /* píldora en y=528 */
-    padding: 2.488cqw 3.483cqw;
-    border-radius: 500px;
-    background: var(--c-cyan-50);
-    backdrop-filter: blur(2px);
+    /* Por delante de la escena: en el frame la píldora va después del cofre y
+       de los resplandores, que en GANASTE le pasan por detrás. */
+    position: relative;
+    z-index: 2;
+    align-self: flex-start;
+    margin-left: 12.189cqw; /* 49 */
+    width: 77.861cqw;       /* 313 */
+    /* `min-height` y no `height`: cuando el piso de texto entra en acción el
+       teléfono pasa a tres renglones y con un alto fijo se salía de la píldora
+       —el fondo quedaba detrás de dos renglones y el tercero sobre la escena—.
+       A 402, que es donde mide `figma:check`, el contenido son dos renglones de
+       12,5 y el mínimo manda: la caja sigue dando los 51 del nodo. */
+    min-height: 12.687cqw;  /* 51 */
+    padding-block: 1cqw;
+    margin-top: 5.97cqw;    /* y 530 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 49.751cqw;   /* radio 200 */
+    /* El nodo `Rectangle 1` pide este relleno translúcido y NADA más:
+       `efectos: null`. El `backdrop-filter: blur(2px)` que había acá convertía
+       un panel translúcido en vidrio esmerilado, que es otra cosa. */
+    background: rgba(33, 47, 92, 0.5);   /* #212F5C80 */
     font-family: var(--font-display);
-    font-size: 2.736cqw;    /* 11 */
-    line-height: 1.35;
+    /* Piso de texto legible: acá está el teléfono al que hay que llamar para
+       reclamar el premio, así que es de lo más importante de la pantalla y a la
+       vez de lo más chico. A 320 caía a 7,5 px. Ver la familia completa en
+       `styles/tokens.css`. */
+    font-size: max(var(--text-min-fs), 2.985cqw);   /* 12 */
+    line-height: 1.0417;    /* 12.5 */
     color: #fff;
     text-align: center;
   }
@@ -230,18 +457,60 @@
      La caja está ACOTADA —de y=750 del diseño hasta el pie de la pantalla— y
      recorta al disco. Sin ese recorte el círculo, que mide 190cqw de diámetro,
      se extendía cientos de píxeles por debajo del contenido y alargaba la
-     página con un vacío azul enorme. */
-  .result-m__planet {
+     página con un vacío azul enorme.
+
+     EL ANCHO ES EL DEL VIEWPORT. El horizonte del planeta es una capa que
+     sangra: en el diseño toca los dos bordes del frame. Con `left: 0; right: 0`
+     medía el ancho del LIENZO, y en un teléfono de 320 eso son 268: el planeta
+     quedaba como un rectángulo con dos esquinas rectas a 34 px de cada borde,
+     en vez de un horizonte curvo de punta a punta.
+
+     `100vw` no puede provocar scroll horizontal acá aunque incluya la barra:
+     `.mstage` tiene `overflow-x: hidden`, y el lienzo declara
+     `overflow-x: visible`, así que la caja se puede pasar sin que nada crezca. */
+  .result-m__planet-clip {
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 186.567cqw;        /* 750 */
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    top: 187.313cqw;        /* 753 */
     bottom: 0;
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
   }
 
+  /* `Ellipse 1` (74:1030): 1254x1071 en (-414, 753), plana y en #061C67. La
+     envuelve un recorte porque, suelta, se extenderia 900 px por debajo del
+     contenido y alargaria la pagina con un vacio azul. */
+  .result-m__planet {
+    position: absolute;
+    left: -102.985cqw;      /* -414 */
+    top: 0;
+    width: 311.94cqw;       /* 1254 */
+    height: 266.418cqw;     /* 1071 */
+    border-radius: 50%;
+    background: #061c67;
+  }
+
+  /* Sobre el color del planeta en GANASTE. RESUELTO — este comentario decía
+     antes que faltaba la cota; ya está.
+
+     El diagnóstico seguía siendo el correcto: en `perdiste.png` la superficie
+     da RGB [6,28,103] y en `ganaste.png` [68,75,94], con el nuestro en
+     [15,36,99]. Sube el rojo (+62) y el verde (+47) mientras el azul baja
+     apenas (-9), que es la firma de una luz cálida sobre la MISMA superficie,
+     no la de otro planeta. Esa luz es el cofre abierto.
+
+     La cota que faltaba: medir la calidez (R − B) por bandas en los márgenes
+     contra el export. Y la causa no era que el derrame fuera chico, sino que
+     estaba RECORTADO: `.mchest` cortaba en el pie del cofre y se comía el
+     derrame entero. Quitando ese recorte, la banda 850-900 pasa de -84 a -60
+     —el valor exacto del export— y la del pie de -94 a -66.
+
+     El color del disco NO se toca, que era y sigue siendo corregir el síntoma.
+     El detalle está en el comentario de `.mchest`, en
+     `promo/closed-chest-mobile.css`. */
   .result-m__planet-disc {
     position: absolute;
     left: 50%;
@@ -263,36 +532,163 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    margin-top: 6.716cqw;   /* el cofre arranca en y=627 */
+    margin-top: 4.726cqw;   /* la escena arranca en y 600; el cofre en 621 */
   }
 
-  /* GANASTE es más compacta que PERDISTE en el Figma (ganaste.png): el
-     titular arranca en y=265 contra 280, y el mensaje en 350 contra 360. Con
-     los mismos márgenes la escena del premio no entraba y aparecía scroll. */
+  /* GANASTE tiene su propio ritmo en el export "ganaste.png". Medido sobre el
+     área útil de 907 px: titular en y=215 y con un cuerpo mayor que el de
+     PERDISTE, mensaje en 291, botón en 331, píldora en 425, cofre en 558 y
+     contador en 797 —el mismo que PERDISTE—.
+     La escena lleva margen negativo porque su caja arranca muy por encima del
+     cofre: tiene que dejar sitio al resplandor y al premio, que emergen desde
+     arriba y son casi todo aire transparente. */
   .result-m--gold .result-m__title {
-    margin-top: -3.483cqw;
+    left: 1.02cqw;           /* centro x 205, como el nodo mobile */
+    margin-top: -1.965cqw;   /* y 269 */
   }
 
+  /* El nodo (74:988) mide 333 y arranca en x 39: su centro es 205.5, no el 201
+     del lienzo, igual que el titular. El `max-width` de 295 venía de PERDISTE y
+     acá recortaba 38 px, que es un renglón de más en cuanto el nombre del
+     premio es largo. Como el texto se achica a su contenido, la caja medida es
+     la tinta: sólo coincide con los 333 del nodo cuando el nombre es el que
+     dibujó el mockup.
+
+     Los nombres que no entran en 333 toman dos renglones y empujan 31.2 px lo
+     que va debajo —botón, píldora, escena y contador—. En el diseño no hay
+     lugar para absorberlos: el mensaje termina en 383 y el botón arranca en
+     385. Medido con los 19 premios del catálogo, el peor caso deja el cofre
+     terminando en 897.8 y el contador en 884.2 sobre un lienzo de 969, sin
+     recortes ni desbordes laterales. */
   .result-m--gold .result-m__msg {
-    margin-top: 5.970cqw;
+    position: relative;
+    left: 1.119cqw;          /* centro 205.5 */
+    max-width: 82.836cqw;    /* 333 */
+    margin-top: -0.075cqw;   /* y 352 */
+    font-size: 7.463cqw;   /* 30 */
+    line-height: 1.04;     /* 31.2 */
+  }
+
+  .result-m--gold .result-m__cta {
+    margin-top: 0.448cqw;    /* y 385 */
+  }
+
+  .result-m--gold .result-m__note {
+    margin-top: 1.244cqw;    /* y 425 */
+  }
+
+  /* La escena arranca en y 392 y la píldora termina en 517: se superponen 125
+     px, igual que en el frame, donde el cofre y los dos resplandores pasan por
+     detrás de ella. */
+  .result-m--gold .result-m__scene {
+    margin-top: -31.095cqw;   /* y 392 */
+  }
+
+  /* El cofre ABIERTO lleva los dos resplandores dorados del nodo `cofre 1`
+     (74:1013): `0 30px 250px #EAC748` y `0 0 250px #EAC748`. El cerrado de las
+     otras tres pantallas no declara ninguno y conserva su sombra de apoyo.
+
+     VAN EN DOS ELEMENTOS, UNO CADA UNO, Y NO ENCADENADAS EN UN SOLO `filter`.
+     Encadenadas, WebKit —o sea TODOS los navegadores de iPhone— no las dibuja:
+     medido, deja el 12% de los píxeles cálidos alrededor del cofre, menos que
+     sin filtro ninguno. Chromium las dibuja bien, así que en Android no se ve.
+
+     El límite es el ENCADENADO, no el radio: una sola de 500 sale igual en los
+     dos motores (1,00), dos de 250 en un mismo `filter` fallan (0,12), tres de
+     125 también (0,06), y las mismas dos repartidas en dos elementos salen
+     iguales (1,00). Cualquier `filter` de este proyecto con dos o más
+     `drop-shadow()` grandes encadenados es sospechoso; `npm run audit:webkit`
+     compara los dos motores contra el export. */
+  .result-m--gold .mchest__img {
+    filter: drop-shadow(0 7.463cqw 62.19cqw #eac748);
+  }
+
+  .result-m--gold .mchest__stack {
+    filter: drop-shadow(0 0 62.19cqw #eac748);
+  }
+
+  .result-m--gold .result-m__counter {
+    margin-top: -3.483cqw;    /* y 853, con la escena que termina en 867 */
+  }
+
+  /* `contador` (74:1044) en (71, 853) 107x60, y `Codigos cargados` (74:1047)
+     en (191, 874) 148x26: el rotulo va 13 px a la derecha de la placa y 21 px
+     mas abajo que su borde de arriba. */
+  /* ------------------------------------------------------------------
+     `codigo-utilizado` (105:260) e `codigo-inexistente` (131:332). Entre sí
+     son idénticas —sólo cambia el texto del mensaje— y se apartan de PERDISTE
+     en cuatro cosas, todas del spec:
+       logo      119 en vez de 126        X         323 en vez de 335
+       titular   38,286  341x42           mensaje   32,340  340x78
+     El titular y el mensaje además arrancan más abajo, así que el ritmo de la
+     columna cambia hasta el botón.
+     ------------------------------------------------------------------ */
+  .result-m--orbita .result-m__logo {
+    margin-left: 29.602cqw;   /* 119 */
+  }
+
+  .result-m--orbita .result-m__close {
+    left: 80.348cqw;          /* 323 */
+  }
+
+  .result-m--orbita .result-m__title {
+    align-self: flex-start;
+    margin-left: 9.453cqw;    /* 38 */
+    margin-top: 2.239cqw;     /* y 286 */
+    line-height: 1.04;        /* 41.6 de alto */
+  }
+
+  .result-m--orbita .result-m__msg {
+    align-self: flex-start;
+    margin-left: 7.96cqw;     /* 32 */
+    margin-top: 2.985cqw;     /* y 340 */
+    max-width: 84.577cqw;     /* 340: acá el mensaje es más ancho que en perdiste */
+  }
+
+  .result-m--orbita .result-m__cta {
+    margin-top: 2.985cqw;     /* y 430, con el mensaje de tres renglones */
   }
 
   .result-m__counter {
+    align-self: flex-start;
+    margin-left: 17.662cqw; /* 71 */
     position: relative;
     z-index: 1;
-    margin-top: 9.951cqw;   /* hueco de 40 */
+    margin-top: 9.453cqw;   /* y 853 */
     display: flex;
-    align-items: center;
-    gap: 2.985cqw;
+    align-items: flex-start;
+    gap: 3.234cqw;          /* 13 */
   }
 
   .result-m__counter .code-counter__plate {
-    width: 24.876cqw;   /* 100 */
+    width: 26.617cqw;   /* 107 */
+    height: 14.925cqw;  /* 60 */
   }
 
   .result-m__counter .code-counter__label {
-    font-size: 4.478cqw;  /* 18 */
-    color: var(--c-gold);
+    /* `max-width: 110px` viene del contador mobile generico y aca sobra: con
+       `nowrap` el texto desbordaba su caja, el flex media 110 en vez de los
+       146 reales y el bloque entero quedaba descentrado a la derecha. */
+    max-width: none;
+    margin-top: 5.224cqw;   /* 21: el rotulo cae mas abajo que la placa */
+    font-size: 6.219cqw;    /* 25 */
+    line-height: 1.04;
+    color: var(--c-gold);   /* #FCC102 */
+    /* 0,5 px, la mitad del 1 px del nodo. ERA EL PEOR CASO DEL PROYECTO:
+       medida la proporción trazo/relleno contra el recorte del export, daba
+       2,33 contra 0,30, o sea 7,81 veces más grueso que el diseño.
+
+       Con la luminancia media yo había dicho que esta medición estaba
+       «contaminada por el fondo» —la caja de 148x26 incluye el planeta de
+       atrás—. La proporción no depende del fondo, y ahí se vio que no estaba
+       contaminada: estaba mal.
+
+       Medio píxel es válido acá: en un teléfono a 3x son 1,5 píxeles físicos.
+       Es el mismo motivo por el que NO se baja más el de los titulares que
+       están a 1 px — ahí la mitad caería en 0,5 de un cuerpo mucho mayor y el
+       trazo quedaría por debajo del píxel en pantallas a 1x. */
+    -webkit-text-stroke: 0.1245cqw #FFFFFF;   /* nodo 1px CENTER -> 0,5px de CSS */
+    text-shadow: 0 0.995cqw 2.488cqw #212F5C;
     white-space: nowrap;
   }
 }

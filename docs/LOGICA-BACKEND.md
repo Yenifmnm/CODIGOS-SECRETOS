@@ -208,12 +208,39 @@ persona queda registrada pero sin su código canjeado. Ese caso hay que
 contemplarlo: lo razonable es que el código siga disponible y pueda cargarlo de
 nuevo.
 
-#### `GET /api/participants/{cedula}/code-count` no lo usa nadie
+#### `GET /api/participants/{cedula}/code-count` todavía no lo usa nadie
 
-Está en el contrato pero **ninguna pantalla lo llama**. El contador viaja dentro
-de `codeCount` en cada respuesta de `redeem`, que es lo que las pantallas
-muestran. Queda como endpoint disponible por si más adelante hace falta leer el
-contador sin canjear un código; si no, se puede no implementar.
+Está en el contrato pero **ninguna pantalla lo llama hoy**. El contador viaja
+dentro de `codeCount` en cada respuesta de `redeem`, que es lo que las pantallas
+muestran.
+
+Ya tiene, sin embargo, un consumidor previsto: la pantalla de carga de código
+descrita más abajo. Ahí el contador se muestra **antes** de canjear nada, así
+que no puede venir de `redeem` y es exactamente para lo que sirve este endpoint.
+Conviene implementarlo.
+
+#### Pendiente de diseño: carga de código con el participante ya identificado
+
+La columna central de la página 15 del PDF de ajustes dibuja una pantalla que
+**no existe todavía**: sólo el campo de Código Secreto —sin cédula— más el
+contador de códigos cargados y su rótulo.
+
+Decisión tomada: **no reemplaza a `/participar`**. Es un estado posterior a la
+identificación o registro del participante:
+
+- la persona ya está identificada;
+- sólo ingresa el Código Secreto;
+- ve cuántos códigos lleva cargados.
+
+Queda **PENDIENTE — ESTADO POST-IDENTIFICACIÓN + CONTRATO BACKEND**. Hasta que
+se defina, no se crea una ruta arbitraria, no se toca `PromoApi` y el contador
+no se cablea con un valor fijo: el dato tiene que ser real y equivalente a
+«cantidad de códigos cargados por participante», que es lo que devuelve
+`GET /api/participants/{cedula}/code-count`.
+
+La geometría de referencia ya está medida y anotada; la composición pide además
+una variante **vertical** de `CodeCounter` (placa de 231x100 con el rótulo
+debajo), distinta de la horizontal que se usa hoy en mobile.
 
 ### 4.1 Vista principal — `/participar` (lámina 1)
 

@@ -1,15 +1,25 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import pergamino1 from '../../assets/ui/pergamino-1.webp';
+import pergaminoDefault from '../../assets/ui/pergamino-1.webp';
 import './parchment.css';
 
 interface ParchmentProps {
   children: ReactNode;
+  /** Exportación alternativa para una composición puntual de Figma. */
+  src?: string;
   /** Retardo antes de empezar a desplegar, en ms. */
   delay?: number;
   style?: CSSProperties;
   className?: string;
   onOpened?: () => void;
+  /** Nodo del Figma de esta capa, para `npm run figma:check`. */
+  'data-figma'?: string;
+  /**
+   * Nodo del Figma de la IMAGEN del pergamino. Va aparte porque en mobile el
+   * papel está girado -90° y el giro tiene que vivir en el elemento marcado
+   * para que el control verifique también el ancho y el alto.
+   */
+  imgFigma?: string;
 }
 
 /**
@@ -18,7 +28,16 @@ interface ParchmentProps {
  * Secuencia: rollo cerrado → despliegue vertical → aparece el contenido.
  * Con `prefers-reduced-motion` aparece directamente abierto, con un fundido.
  */
-export function Parchment({ children, delay = 180, style, className, onOpened }: ParchmentProps) {
+export function Parchment({
+  children,
+  src = pergaminoDefault,
+  delay = 180,
+  style,
+  className,
+  onOpened,
+  'data-figma': figma,
+  imgFigma,
+}: ParchmentProps) {
   const reduced = useReducedMotion();
   const [phase, setPhase] = useState<'rolled' | 'unfurling' | 'open'>(
     reduced ? 'open' : 'rolled',
@@ -51,9 +70,16 @@ export function Parchment({ children, delay = 180, style, className, onOpened }:
     <div
       className={['parchment', `parchment--${phase}`, className].filter(Boolean).join(' ')}
       style={style}
+      data-figma={figma}
     >
       <div className="parchment__sheet">
-        <img src={pergamino1} alt="" aria-hidden="true" className="parchment__img" />
+        <img
+          src={src}
+          alt=""
+          aria-hidden="true"
+          className="parchment__img"
+          data-figma={imgFigma}
+        />
       </div>
       <div className="parchment__content">{children}</div>
     </div>

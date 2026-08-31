@@ -1,6 +1,14 @@
 @import './tokens.css';
 @import './stage.css';
 
+@font-face {
+  font-family: 'DK Prince Frog';
+  src: url('../assets/fonts/DK-Prince-Frog.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -16,6 +24,7 @@ body,
 body {
   margin: 0;
   font-family: var(--font-display);
+  font-synthesis: none;
   color: var(--c-white);
   background: #0b1642;
   overflow-x: hidden;
@@ -27,8 +36,8 @@ img {
   max-width: 100%;
 }
 
-/* La display del diseño tiene una sola variante, igual que su sustituta. Sin
-   esto el navegador sintetiza la negrita de los <h*> y engorda el trazo. */
+/* La fuente del diseño tiene una sola variante. Los encabezados conservan el
+   peso real 400 en lugar de pedir una negrita inexistente. */
 h1,
 h2,
 h3,
@@ -115,6 +124,19 @@ select {
 .t-white-glow {
   color: var(--c-white);
   text-shadow: var(--glow-white-text);
+}
+
+/* Tipografía exclusiva de las vistas web de escritorio. La rama mobile
+   conserva sus reglas calibradas por separado. */
+@media (min-width: 900px) {
+  .t-display {
+    line-height: 1.041;
+  }
+
+  .t-white-glow {
+    text-shadow: 0 0 41.4px #fff, 0 0 82.8px #fff, 0 0 250px #fff,
+      0 0 250px #fff, 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
 }
 
 /* ---------- Reduced motion ---------- */

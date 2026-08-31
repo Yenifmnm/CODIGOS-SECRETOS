@@ -1,7 +1,40 @@
 /* Escena del cofre cerrado en mobile — Figma "perdiste.png" (402x969). */
 
+/* EL RECORTE HORIZONTAL YA NO VA ACÁ. Lo hace `.mstage` con `overflow-x: clip`,
+   o sea en el borde de la PANTALLA.
+
+   Acá recortaba en el borde del LIENZO. Con la escala mirando los dos ejes eso
+   dejaba el resplandor del cofre cortado por dos líneas verticales rectas, a 14
+   px de cada borde en un teléfono de 430 y a 34 en uno de 320: un rectángulo
+   más claro en el medio de la pantalla. Se veía a simple vista y yo lo había
+   descartado dos veces como «preexistente» porque la lista de capas no lo
+   marcaba — el borde no era de una capa, era de este contenedor.
+
+   Y EL VERTICAL TAMPOCO. El nodo `cofre 1` (74:1013) declara
+   `0px 30px 250px #EAC748` y `0px 0px 250px #EAC748`: un derrame dorado que,
+   con el cofre terminando en y 866,6 más 30 de desplazamiento y 250 de radio,
+   pasa del borde inferior del frame (969). En el diseño ese derrame tiñe todo
+   el planeta hasta abajo.
+
+   La escena termina justo en el pie del cofre —y 867—, así que este contenedor
+   cortaba el derrame entero. Medido: la calidez (R − B) en los márgenes contra
+   `recursos/mobile/pantallas/ganaste.png`, que es lo que sirve para un derrame
+   cálido sobre un cielo azul —mide el TINTE y no la luz, así que no se confunde
+   con la exposición del export—:
+
+       banda y      FIGMA   con clip   sin clip
+       850-900        -60       -84        -60
+       900-969        -77       -94        -66
+
+   Y el error medio sobre las siete bandas baja de 18 a 14. La banda del pie
+   pasa de 17 puntos fría a 11 caliente.
+
+   Lo que ya no hace falta que corte: la página no crece por esto. El lienzo
+   clipea en el frame (`layout/mobile-stage.css`), así que lo que se sale por
+   abajo se corta ahí, que es donde lo corta Figma. Comprobado: el alto del
+   documento no cambia. */
 .mchest {
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* La superficie del planeta pasó a `.result-m__planet`, a nivel de pantalla:
@@ -30,6 +63,19 @@
   pointer-events: none;
 }
 
+/* ESTA SOMBRA NO ESTÁ EN EL DISEÑO, Y SE QUEDA. Es una decisión, no un olvido.
+
+   `cofre cerrado 1` —74:1105 en PERDISTE, 105:277 y 131:349 en los dos errores—
+   declara `efectos: null`. El cofre ABIERTO de GANASTE es otro nodo, `cofre 1`
+   (74:1013), y ése sí trae sus dos resplandores dorados, que están puestos con
+   sus valores exactos en `result-layout.css`.
+
+   La sombra de apoyo se conserva porque sin ella el cofre cerrado queda flotando
+   sobre el planeta, sin peso. `npm run audit:efectos` la lista como inventada y
+   está bien que lo haga: el control no puede saber cuáles son deliberadas. Es la
+   única de la lista que sobrevivió a la revisión del 27-08-2026; las otras cinco
+   —el vidrio de la barra del menú, el de las dos notas, el resplandor del premio
+   y la sombra del menú desplegado— se sacaron. */
 .mchest__img {
   z-index: 1;
   transform-origin: 50% 92%;

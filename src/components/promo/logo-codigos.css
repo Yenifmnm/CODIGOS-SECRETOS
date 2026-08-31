@@ -1,0 +1,97 @@
+/* El logo CÓDIGOS SECRETOS. El porqué del reparto está en `LogoCodigos.tsx`. */
+
+.logo-cs {
+  display: block;
+  /* SIN `filter`. Acá hubo una de las dos sombras del nodo y la otra en la
+     imagen, y eso DIBUJABA UN HALO CUADRADO en iPhone 17 Pro.
+
+     Anidar no es repartir. La sombra de afuera se aplica sobre el resultado ya
+     desenfocado de la de adentro, y esa segunda pasada se recorta en la región
+     del filtro: el borde recto del recorte es el cuadrado que se veía. Dos
+     sombras en dos elementos, uno dentro del otro, son dos pasadas igual que
+     encadenarlas en un mismo `filter`.
+
+     Ahora va UNA SOLA, en la imagen. Una pasada, sin segunda región que
+     recortar. Es lo que la tabla del cofre ya decía: «una sola de 500 → 1,00,
+     anda; dos de 250 encadenadas → 0,12, falla». El problema nunca fue el
+     radio, fue tener dos. */
+}
+
+.logo-cs > img {
+  display: block;
+  width: 100%;
+  /* Con el contenedor sin alto definido —inicio y las de resultado— esto se
+     resuelve como `auto` y la imagen usa su proporción, que es lo que hacían
+     antes. Con alto definido —participar, premios y código— lo llena. */
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  /* La sombra del nodo, para las tres pantallas que siguen con la variante
+     `css`: PREMIOS, CÓDIGO y las cuatro de resultado. */
+  filter: var(--logo-glow);
+}
+
+/* ---------------------------------------------------------------------------
+   VARIANTE HORNEADA. En INICIO y PARTICIPAR el resplandor NO se calcula: viene
+   dibujado en una imagen exportada del propio nodo 70:169, con sus dos efectos.
+
+   Por qué. Un `drop-shadow` de 125 px obliga a Safari a un buffer aparte que
+   primero dibuja recortado y refina después: eso es el cuadrado que aparecía
+   alrededor del logo y se iba al tocar la pantalla, y es también parte de la
+   demora, porque el desenfoque se calcula antes de poder pintar. Pasar de dos
+   sombras a una no alcanzó porque el problema es el RADIO, no la cantidad.
+
+   Por qué en DOS imágenes y no en una sola. El export del nodo con sus efectos
+   mide 757x691 px de diseño —el nodo es 257x191 y las sombras agregan 250 px
+   por lado— y para que el logo quede tan nítido como hoy habría que exportarlo
+   a 4x: más de 1 MB. En cambio el resplandor es un degradado suave, que
+   soporta baja resolución sin que se note: va a 0,25x y pesa 35 kB, y el logo
+   nítido de siempre (114 kB) se dibuja ENCIMA, tapando la copia borrosa que
+   trae el export debajo. Total 149 kB contra los 613 kB que costaría hornear
+   todo junto a 2x, y con el logo más nítido que esa opción.
+   --------------------------------------------------------------------------- */
+.logo-cs--horneado {
+  position: relative;
+}
+
+/* Cero filtro: ni en el contenedor ni en ninguna de las dos imágenes. */
+.logo-cs--horneado > img {
+  filter: none;
+}
+
+/* Las medidas salen del export: 757x691 con el nodo de 257x191 centrado, o sea
+   250 px de margen por lado. En porcentaje de la caja del logo, para que
+   acompañe si la caja cambia de tamaño. */
+.logo-cs > .logo-cs__halo {
+  position: absolute;
+  /* Los valores por defecto son los del landing. Van por variable porque el
+     resplandor del diseño mide 250 px SIEMPRE y los logos no, así que el margen
+     en PORCENTAJE de la caja del logo cambia de pantalla a pantalla. */
+  left: var(--halo-x, -97.276%);    /* -250 / 257 */
+  top: var(--halo-y, -130.890%);    /* -250 / 191 */
+  width: var(--halo-w, 294.553%);   /*  757 / 257 */
+  height: var(--halo-h, 361.780%);  /*  691 / 191 */
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  /* Detrás del logo nítido, sin sacar la caja del flujo: al ser `absolute` no
+     cambia lo que mide `figma:check` sobre el contenedor. */
+  z-index: 0;
+}
+
+.logo-cs--horneado > img:not(.logo-cs__halo) {
+  position: relative;
+  z-index: 1;
+}
+
+/* LAS CUATRO PANTALLAS DE RESULTADO. Su logo mide 173x129 y no 257x191, y el
+   resplandor del nodo sigue siendo 250 px por lado: el export es 673x629. Con
+   los porcentajes del landing el halo habría quedado en 168 px en vez de 250,
+   o sea dos tercios del diseño, así que estas cuatro llevan los suyos y su
+   propio archivo. */
+.logo-cs--halo-resultado {
+  --halo-x: -144.509%;   /* -250 / 173 */
+  --halo-y: -193.798%;   /* -250 / 129 */
+  --halo-w: 389.017%;    /*  673 / 173 */
+  --halo-h: 487.597%;    /*  629 / 129 */
+}

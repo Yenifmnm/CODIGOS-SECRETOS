@@ -1,36 +1,46 @@
 /* DÓNDE ESTÁ EL CÓDIGO — Figma 19:2982 */
 
-@font-face {
-  font-family: 'DK Prince Frog Code Help';
-  src: url('/fonts/DKPrinceFrog.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-.codehelp__halo {
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(9, 234, 255, 0.26) 0%,
-    rgba(9, 234, 255, 0.12) 40%,
-    rgba(9, 234, 255, 0) 66%
-  );
-  pointer-events: none;
-}
+/* Esta pantalla toma la declaración global de DK Prince Frog mediante
+   `--font-display`, igual que el resto del sitio. */
 
 .codehelp__title {
   margin: 0;
-  font-family: 'DK Prince Frog Code Help', var(--font-display);
+  font-family: var(--font-display);
   text-align: center;
-  line-height: 1.08;
+  line-height: 1.0417;
   transform: translateX(-50%);
   white-space: normal;
+  -webkit-text-stroke: 2px #ffffff;
+  paint-order: stroke fill;
+  text-shadow: 0 0 0.328cqw rgba(255, 255, 255, 0.7),
+    0 0 2.292cqw rgba(255, 255, 255, 0.55),
+    0 0.208cqw 0.521cqw #212f5c;
 }
 
 .codehelp__title span {
   display: block;
   white-space: nowrap;
+}
+
+/* El frame desktop es estático: la flotación compartida alteraba las
+   coordenadas de la nave al tomar una captura de comparación. */
+.codehelp__ship {
+  animation: none;
+}
+
+/* En monitores más anchos que 16:9 el lienzo permanece centrado y contenido,
+   igual que Figma. Las piezas ligadas al grupo izquierdo (menú, logo, portal
+   y barco) compensan el margen de ese lado; la escena del planeta, el pack,
+   el título y el cometa hacen lo mismo contra el borde derecho. */
+@media (min-aspect-ratio: 16 / 9) and (min-width: 900px) {
+  .stage--codehelp .codehelp__left-anchor,
+  .stage--codehelp .site-menu {
+    translate: calc((100vw - 100cqw) / -2) 0;
+  }
+
+  .stage--codehelp .codehelp__right-anchor {
+    translate: calc((100vw - 100cqw) / 2) 0;
+  }
 }
 
 .codehelp__note {
@@ -41,9 +51,9 @@
   padding: 0.5cqw 2.4cqw;
   border-radius: 200px;
   background: #0783b3;
-  font-family: 'DK Prince Frog Code Help', var(--font-display);
+  font-family: var(--font-display);
   font-size: 1.302cqw; /* 25 */
-  line-height: 1.12;
+  line-height: 1.04;
   color: #fff;
   text-align: center;
 }
@@ -52,139 +62,284 @@
   margin: 0;
 }
 
-/* Composición mobile — Figma "donde esta el codigo.png" (402x913). */
+/* -------------------------------------------------------------------------
+   Composición mobile — export "donde esta el codigo.png" (402x913).
+
+   Las cotas de abajo NO se comparan contra los 913 px del PNG: sus primeros
+   64 px son la barra de estado de iOS dibujada dentro del mock. El área útil
+   es (0,64)-(402,913), 849 px de alto, y contra eso está medido todo. De ahí
+   salen además los topes `svh`: se habían calibrado sobre 913, pero en un
+   teléfono `svh` ya excluye esa barra, así que achicaban logo, título y nota
+   un 7,5% de más.
+
+   Desviación deliberada: en el export la columna centrada (logo, título, pack)
+   está 11-16 px a la derecha del centro del marco, mientras que todo lo
+   anclado a un borde —portal, nave, X— cae en su lugar. Es un corrimiento del
+   grupo de contenido en el archivo de diseño, no una intención: replicarlo
+   obligaría a desplazar cada elemento centrado y rompería el centrado en
+   cualquier otro ancho. Se mantiene el centrado real.
+   ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------
+   Composición mobile — frame `donde esta el codigo` 73:781 (402x913).
+
+   Este bloque se tira 74 px hacia arriba —el hueco que deja en flujo el
+   `<nav>` del menú— para arrancar en el borde de la pantalla. Con eso cada
+   `top` es la y del spec TAL CUAL, sin restar nada, y el recorte del frame se
+   reproduce solo: el portal asoma por arriba y se corta en 0 como allá, y la
+   superficie del planeta, que es un círculo de 1254 px, se corta en 913.
+
+   El menú sigue por encima: es `position: relative` con `z-index: 40`.
+   ------------------------------------------------------------------------- */
 @media (max-width: 899px) {
-  /* Sin `position` a propósito: el botón de cerrar se ubica contra el lienzo
-     mobile, alineado con la barra superior. Si esta caja se vuelve el contexto
-     de posicionamiento, la X baja y se monta sobre el logo. */
   .codehelp-m {
+    position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 1.493cqw;
+    margin-top: -18.408cqw;   /* -74: arranca en el borde, como el frame */
+    height: 227.114cqw;       /* 913 */
+    padding-bottom: 0;
+    /* El fondo sangra 22 a la izquierda, el barco 107, el portal se sale por
+       arriba y por la derecha, y el círculo del planeta mide 1254x1071 sobre un
+       lienzo de 402.
+     EL RECORTE HORIZONTAL YA NO VA ACÁ. Lo hace `.mstage` con `overflow-x:
+     clip`, o sea en el borde de la PANTALLA.
+
+     Acá recortaba en el borde del LIENZO, que es otra cosa desde que la escala
+     mira los dos ejes: en un teléfono de 360 el lienzo mide 302 y el recorte
+     caía 28,8 px ADENTRO de la pantalla. La decoración que sangra —el planeta
+     de arriba a la izquierda, el barco, el portal— quedaba cortada por una
+     línea vertical recta con cielo a un lado, de punta a punta de la
+     composición. Detectado midiendo el bitmap, no la lista de capas: ninguna
+     capa tenía el borde ahí, lo tenía el contenedor.
+
+     El motivo por el que existía sigue cubierto: `.mstage` pasó de
+     `overflow-x: hidden` a `clip`, y `clip` no crea contenedor de scroll, así
+     que ya no queda nada «invisible pero desplazable» que el navegador pueda
+     correr al enfocar un campo.
+
+     Vertical se queda: el casquete del planeta se extiende cientos de píxeles
+     por debajo del contenido. */
+    overflow-x: visible;
+    overflow-y: clip;
   }
 
-  /* Superficie curva del planeta, como en las pantallas de resultado: un
-     círculo muy ancho que asoma por abajo. En el Figma el pack se apoya sobre
-     ella y la píldora de contacto queda encima, no sobre el cielo. */
+  /* `Ellipse 1` (73:819): 1254x1071 en (-414, 681), relleno #061C67. Es la
+     superficie del planeta: un círculo enorme del que sólo se ve el casquete. */
   .codehelp-m__planet {
     position: absolute;
-    left: 50%;
-    top: 77%;
-    width: 210cqw;
-    aspect-ratio: 1;
-    transform: translateX(-50%);
+    left: -102.985cqw;    /* -414 */
+    top: 169.403cqw;      /* 681 */
+    width: 311.94cqw;     /* 1254 */
+    height: 266.418cqw;   /* 1071 */
     border-radius: 50%;
-    background: radial-gradient(
-      circle at 50% 40%,
-      rgba(20, 46, 118, 0.96) 0%,
-      rgba(13, 31, 88, 0.98) 55%,
-      #0a1440 100%
-    );
-    box-shadow: 0 -0.5cqw 5cqw rgba(9, 234, 255, 0.22);
-    z-index: 0;
+    background: #061c67;
+    transform: none;
+    box-shadow: none;
+    z-index: 1;
     pointer-events: none;
   }
 
-  /* Portal: asoma por la esquina superior derecha, sangrando por el borde.
-     Va por debajo de la barra y de la X, que se apoyan encima. */
+  /* `portal 1` (73:817): envolvente 313x325.9 en (200, -4), y 253.7x206.7 sin
+     girar, a -56.1°. La caja es la del asset SIN girar, puesta donde su centro
+     coincide con el de la envolvente: (356.5, 158.95). */
   .codehelp-m__portal {
     position: absolute;
-    left: 51.493cqw;       /* 207 */
-    top: -0.498cqw;
-    width: 53.234cqw;      /* 214: se ve el arco y sangra por el borde derecho */
-    height: auto;
-    opacity: 0.95;
+    left: 57.127cqw;      /* 229.65 */
+    top: 13.831cqw;       /* 55.6 */
+    width: 63.109cqw;     /* 253.7 */
+    height: 51.418cqw;    /* 206.7 */
+    max-width: none;
+    object-fit: contain;
+    transform: rotate(-56.1deg);
     z-index: 0;
     pointer-events: none;
   }
 
+  /* `boton cerrar` (99:258): 43x43 en (330, 82). El área táctil no baja de 44
+     px aunque el dibujo del diseño sea menor. */
   .codehelp-m__close {
     position: absolute !important;
-    right: 6.219cqw;
-    top: 6.219cqw;
-    width: 10.945cqw;
-    height: 10.945cqw;
+    left: 82.09cqw;       /* 330 */
+    top: 20.398cqw;       /* 82 */
+    right: auto;
+    width: max(var(--tap-min), 10.697cqw);    /* 43 */
+    height: max(var(--tap-min), 10.697cqw);
     z-index: 41;
   }
 
-  /* Igual que el pack: la medida del Figma mientras haya alto, y proporcional
-     al alto real cuando el teléfono es más bajo que el lienzo de 913. */
+  /* `codigos secretos logo 1` (73:783): 257x191 en (84, 148). */
   .codehelp-m__logo {
-    width: min(58.209cqw, 25.6svh);   /* 234 en el lienzo del Figma */
-    height: auto;
-    margin-top: 2.985cqw;
-    filter: drop-shadow(0 0 4cqw rgba(9, 234, 255, 0.7));
+    position: absolute;
+    left: 20.896cqw;      /* 84 */
+    top: 36.816cqw;       /* 148 */
+    width: 63.93cqw;      /* 257 */
+    height: 47.512cqw;    /* 191 */
+    max-width: none;
+    object-fit: contain;
+    margin: 0;
+    /* El resplandor lo pone `LogoCodigos`, repartido en dos elementos. */
   }
 
+  /* `Buscá el Código Secreto…` (73:827): 326x72 en (49, 322), centro x 212.
+     No está centrado en el lienzo: el nodo lo corre 11 px a la derecha. */
   .codehelp-m__title {
-    margin: 2.488cqw 0 0;
-    max-width: 88cqw;
+    position: absolute;
+    left: 52.736cqw;      /* centro x 212 */
+    top: 80.099cqw;       /* 322 */
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 97.015cqw;
+    margin: 0;
     font-family: var(--font-display);
-    font-size: min(7.463cqw, 3.285svh);   /* 30 en el lienzo del Figma */
-    line-height: 1.12;
+    font-size: 8.706cqw;  /* 35 */
+    line-height: 1.04;    /* 36.4 */
     color: var(--c-gold);
-    text-shadow: var(--glow-gold-text);
+    /* 0,5 px, la mitad del 1 px del nodo 73:827. Medida la proporción
+       trazo/relleno contra el recorte del export daba 1,27 contra 0,23: 5,43
+       veces más grueso que el diseño, el segundo peor caso del proyecto.
+
+       Medio píxel es válido acá: en un teléfono a 3x son 1,5 píxeles físicos. */
+    -webkit-text-stroke: 0.1245cqw #ffffff;   /* nodo 1px CENTER -> 0,5px de CSS */
+    /* `0 0 6.288` + `0 0 44.016` blancos y `0 4px 10px #212F5C`.
+
+       RESPLANDOR AL 20%. Decision de la clienta del 27-08-2026, replicada
+       desde HOME por CONSISTENCIA entre pantallas: no es una correccion
+       contra el Figma. El nodo declara el blanco al 100% y aca va al 20%, asi
+       que el diff contra el export SUBE, y esta aceptado.
+
+       Se cambia SOLO la opacidad. El radio queda intacto: achicarlo concentra
+       la luz sobre el glifo y empeora --medido en HOME, a 20 px de radio la
+       franja llega a +20,1 contra el export, peor que a 44--. Las sombras
+       negras y de color no se tocan.
+
+       SOLO EL BLOQUE MOBILE. La regla de escritorio de esta misma hoja sigue
+       con el blanco al 100%. */
+    text-shadow: 0 0 1.564cqw rgba(255, 255, 255, 0.2),
+      0 0 10.949cqw rgba(255, 255, 255, 0.2),
+      0 0.995cqw 2.488cqw #212f5c;
     text-align: center;
+    z-index: 3;
   }
 
-  /* El pack ocupa el centro; la nave navega a su izquierda, más chica. */
+  /* No es un nodo: el destello, la nave y el pack cuelgan sueltos del frame.
+     Queda como bloque estático y sin alto para que sus hijos se posicionen
+     contra `.codehelp-m`. */
   .codehelp-m__scene {
-    position: relative;
+    position: static;
+    display: block;
     width: 100%;
-    margin-top: 1.244cqw;
-    display: flex;
-    justify-content: center;
-    z-index: 1;
+    height: 0;
+    margin: 0;
   }
 
-  /* Destello detrás del pack: aporta el halo cálido del diseño sin tapar nada. */
+  /* `destello-Photoroom` (73:793): 186x123 en (298, 343). */
   .codehelp-m__flare {
     position: absolute;
-    left: 50%;
-    top: 12.438cqw;        /* 50 */
-    width: 99.502cqw;      /* 400 */
-    height: auto;
-    transform: translateX(-50%);
-    opacity: 0.5;
-    z-index: 0;
+    left: 74.129cqw;      /* 298 */
+    top: 85.323cqw;       /* 343 */
+    width: 46.269cqw;     /* 186 */
+    height: 30.597cqw;    /* 123 */
+    max-width: none;
+    object-fit: contain;
+    transform: none;
+    opacity: 1;
+    z-index: 2;
     pointer-events: none;
   }
 
-  /* La nave entra completa: en el Figma se ve entera contra el cielo, no
-     sangrando por el borde izquierdo. */
+  /* El `0 0 250px #FFFFFF` del nodo `barco 1`, en capa quieta y aparte: el
+     mismo patrón del landing y de participar. Sobre la nave —que flota— un
+     desenfoque de 250 px se rasteriza en cada cuadro.
+  /* CÓMO SE DIBUJA. `brightness(0)` deja la silueta en negro y `invert(1)` la
+     pasa a blanco —ninguno de los dos toca el canal alfa—, y `blur()` la
+     desparrama. Eso ES la sombra que dibujaría `drop-shadow`, pero sin la copia
+     del barco encima, que era todo el problema.
+
+     El radio va a la MITAD porque no son la misma unidad: `drop-shadow(0 0 B)`
+     desenfoca con sigma B/2, y `blur(R)` usa R como sigma. 62.19 → 31.095cqw,
+     que son los 250 px del nodo.
+
+     Antes esto era la sombra de una copia corrida 1000 px a la izquierda, con
+     la sombra devuelta otros 1000 px. Lo que resolvía el problema de
+     rendimiento NO era el desplazamiento: era que el desenfoque de 250 px
+     viviera en una capa QUIETA en vez de sobre el barco, que se anima. Esta
+     capa sigue quieta, así que cuesta lo mismo. El desplazamiento sólo servía
+     para esconder la copia del barco, y a cambio ataba el resplandor a la
+     región del filtro: si el navegador la recortaba, el halo se cortaba. */
+  .codehelp-m__ship-halo {
+    position: absolute;
+    left: -26.617cqw;     /* -107 */
+    top: 100.746cqw;      /* 405 */
+    width: 61.94cqw;      /* 249 */
+    height: 42.537cqw;    /* 171 */
+    max-width: none;
+    object-fit: contain;
+    /* Sin espejo a propósito: lo que se ve de esta capa es sólo el resplandor,
+       y un desenfoque de 250 px de una silueta espejada es indistinguible. */
+    filter: brightness(0) invert(1) blur(31.095cqw);
+    z-index: 2;
+  }
+
+  /* `barco 1` (73:789): 249x171 en (-107, 405).
+
+     El spec dice `rotado 180°`, y NO es lo que se ve. Bajado el render del
+     propio nodo, la nave aparece derecha —el mástil arriba y la tripulación
+     de pie— con la proa a la derecha; un giro de 180° la dejaría cabeza
+     abajo. Lo que hay es un ESPEJO horizontal, que en Figma se guarda como
+     giro más escala negativa y el pull no registra. La caja envolvente es la
+     misma en los dos casos, así que el control tampoco puede distinguirlos:
+     por eso se resuelve mirando el render del nodo. Ver
+     `docs/FIGMA-WORKFLOW.md`, «El espejo no está en el spec».
+
+     El espejo va en la imagen de adentro (`flipped`) y no acá: `.ship` lleva
+     la animación de flotación, que escribe `transform` y se lo comería. */
   .codehelp-m__ship {
     position: absolute;
-    left: 2.985cqw;        /* 12 */
-    top: 8.706cqw;         /* 35: navega a media altura del pack, como el Figma */
-    width: 33.582cqw;      /* 135 */
-    aspect-ratio: 1016 / 696;
+    left: -26.617cqw;     /* -107 */
+    top: 100.746cqw;      /* 405 */
+    width: 61.94cqw;      /* 249 */
+    height: 42.537cqw;    /* 171 */
+    aspect-ratio: auto;
     z-index: 2;
   }
 
-  /* El pack es el bloque más alto de la pantalla y manda el largo total.
-     En el lienzo del Figma (402x913) mide 260 px; en teléfonos más bajos esa
-     misma proporción no entra y obliga a scrollear, dejando media pantalla de
-     planeta vacío debajo. El `min()` conserva la medida del diseño donde hay
-     alto suficiente y la achica cuando no. `svh` y no `dvh` a propósito: así no
-     cambia de tamaño cuando el navegador esconde su barra al scrollear. */
+  /* `jugos 1` (73:821): 271x443 en (82, 336). */
   .codehelp-m .telescope {
-    width: min(64.677cqw, 28.5svh);   /* 260 en el lienzo del Figma */
+    position: absolute;
+    left: 20.398cqw;      /* 82 */
+    top: 83.582cqw;       /* 336 */
+    width: 67.413cqw;     /* 271 */
+    height: 110.199cqw;   /* 443 */
+    z-index: 3;
   }
 
+  /* `Rectangle 1` (73:824): 347x82 en (31, 779), radio 200. `Group 3`
+     (73:823) es el grupo que la envuelve y tiene la misma caja. */
   .codehelp-m__note {
-    position: relative;
-    z-index: 2;
-    width: 78.607cqw;      /* 316: corta tras "GANADORES", como el Figma */
-    margin-top: 3.483cqw;
-    padding: 2.985cqw 3.98cqw;
-    border-radius: 500px;
+    position: absolute;
+    left: 7.711cqw;       /* 31 */
+    top: 193.781cqw;      /* 779 */
+    width: 86.318cqw;     /* 347 */
+    height: 20.398cqw;    /* 82 */
+    margin: 0;
+    padding: 0;
+    border-radius: 49.751cqw;   /* 200 */
     background: var(--c-cyan-50);
-    backdrop-filter: blur(2px);
+    z-index: 4;
+  }
+
+  /* El texto de la píldora (73:825): 310x52 en (50, 792), o sea 19 y 13
+     adentro de la superficie. Los 52 son la TINTA de los tres renglones, no
+     sus cajas de línea: tres de 18.7 dan 56.1. Se declara la caja del nodo y
+     el interlineado desborda, igual que en Figma. */
+  .codehelp-m__note-text {
+    position: absolute;
+    left: 4.726cqw;       /* 19 */
+    top: 3.234cqw;        /* 13 */
+    height: 12.935cqw;    /* 52 */
+    width: 77.114cqw;     /* 310 */
     font-family: var(--font-display);
-    font-size: min(3.234cqw, 1.424svh);   /* 13 en el lienzo del Figma */
-    line-height: 1.35;
+    font-size: 4.478cqw;  /* 18 */
+    line-height: 1.0389;  /* 18.7 */
     color: #fff;
     text-align: center;
   }
