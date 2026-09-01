@@ -1,0 +1,14 @@
+.git
+.github
+.worktrees
+node_modules
+dist
+.env
+.env.*
+deploy/production.env
+audit-shots
+actual
+figma/check
+*.log
+*.patch
+*.docx

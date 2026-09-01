@@ -1,0 +1,24 @@
+name: codigos-secretos
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:?Defina VITE_API_URL en deploy/production.env}
+        VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY:?Defina VITE_RECAPTCHA_SITE_KEY en deploy/production.env}
+    image: codigos-secretos-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    init: true
+    ports:
+      # El contenedor queda accesible sólo desde el propio servidor. El proxy
+      # HTTPS del cliente publica purosol.com.py hacia este puerto.
+      - "127.0.0.1:${FRONTEND_PORT:-8080}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    security_opt:
+      - no-new-privileges:true

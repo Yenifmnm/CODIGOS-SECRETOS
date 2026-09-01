@@ -18,6 +18,7 @@ recursos/premios/*.xlsx
 .env
 .env.*
 !.env.example
+deploy/production.env
 audit-shots/
 
 # capturas de auditoria visual (se generan en el scratchpad)
