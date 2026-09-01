@@ -9,6 +9,7 @@ import type {
   Terms,
   UserCodeCount,
 } from '../types/promo';
+import { ErrorCanje, interpretarRespuestaCanje } from './respuestaCanje';
 import { MOCK_PRIZES, prizeByAvimovilId } from '../mocks/prizes';
 import { getTermsText } from '../mocks/terms';
 import { MIN_AGE, isOfAge } from '../app/age';
@@ -38,19 +39,37 @@ export class HttpPromoApi implements PromoApi {
 
   // ------------------------------------------------------------------ HTTP
 
-  private async post<T>(path: string, body: unknown): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
-    });
+  private async post(path: string, body: unknown): Promise<unknown> {
+    let response: Response;
+    try {
+      response = await fetch(`${this.baseUrl}${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(body),
+      });
+    } catch (cause) {
+      throw new ErrorCanje('conectividad', `no hubo respuesta de ${path}: ${String(cause)}`);
+    }
 
     if (!response.ok) {
-      // 403 = reCAPTCHA rechazado; el resto, errores del servidor. En ambos
-      // casos se lanza: useCodeFlow ya muestra el mensaje de error genérico.
-      throw new Error(`API ${path} respondió ${response.status}`);
+      if (response.status === 403) {
+        throw new ErrorCanje('recaptcha-rechazado', `${path} rechazó el reCAPTCHA`, {
+          estadoHttp: 403,
+        });
+      }
+      if (response.status === 429) {
+        throw new ErrorCanje('limite-http', `${path} respondió 429`, { estadoHttp: 429 });
+      }
+      throw new ErrorCanje('http', `${path} respondió ${response.status}`, {
+        estadoHttp: response.status,
+      });
     }
-    return (await response.json()) as T;
+
+    try {
+      return await response.json();
+    } catch (cause) {
+      throw new ErrorCanje('respuesta-ilegible', `${path} no devolvió JSON: ${String(cause)}`);
+    }
   }
 
   // ------------------------------------------------- registro (localStorage)
@@ -130,7 +149,7 @@ export class HttpPromoApi implements PromoApi {
     }
 
     const { form } = stored;
-    const result = await this.post<PromoCodeResult>('/api/codes/redeem', {
+    const rawResult = await this.post('/api/codes/redeem', {
       cedula: form.cedula,
       code,
       recaptchaToken,
@@ -141,10 +160,34 @@ export class HttpPromoApi implements PromoApi {
       localidad: form.city,
     });
 
-    if (typeof result.codeCount === 'number') {
-      this.writeStored(form, result.codeCount);
+    const parsed = interpretarRespuestaCanje(rawResult);
+    if (!parsed.ok) {
+      console.error('[canje] respuesta no interpretable:', parsed.motivo, '—', parsed.diagnostico);
+      const type = parsed.motivo === 'error-del-backend' ? 'backend-reportado' : 'contrato';
+      throw new ErrorCanje(type, `canje no resuelto: ${parsed.motivo}`, {
+        motivo: parsed.motivo,
+      });
     }
-    return result.prize ? { ...result, prize: this.enrichPrize(result.prize) } : result;
+
+    const codeCount = parsed.coupons ?? stored.codeCount;
+    this.writeStored(form, codeCount);
+
+    if (parsed.status !== 'WIN') {
+      return { status: parsed.status, code, codeCount };
+    }
+
+    if (!parsed.premio) {
+      throw new ErrorCanje('contrato', 'WIN sin premio', {
+        motivo: 'premio-formato-invalido',
+      });
+    }
+
+    return {
+      status: 'WIN',
+      code,
+      codeCount,
+      prize: this.enrichPrize({ id: parsed.premio.id, name: parsed.premio.name, image: '' }),
+    };
   }
 
   /**
