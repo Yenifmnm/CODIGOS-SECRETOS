@@ -1,15 +1,23 @@
 # Entrega para `purosol.com.py`
 
-Esta guía empaqueta el frontend como un contenedor estático. El contenedor no
-incluye el backend, credenciales de Avimovil ni secretos de reCAPTCHA.
+Esta entrega contiene el frontend empaquetado como un contenedor estático y
+listo para publicarse en `purosol.com.py`. El frontend ya está configurado para
+consumir el backend publicado en `https://promo.edge.com.py/purosol` y para
+utilizar la clave pública de reCAPTCHA Enterprise asignada al proyecto.
 
-## 1. Responsabilidades
+El cliente no debe esperar ni solicitar otro paquete de backend para desplegar
+este contenedor: el backend continúa funcionando como un servicio externo en
+la URL indicada. Sus credenciales privadas permanecen correctamente en ese
+servidor y no forman parte del frontend.
+
+## 1. Arquitectura de la entrega
 
 El frontend contiene únicamente valores públicos incorporados durante el
 build:
 
-- `VITE_API_URL`: URL pública del backend.
-- `VITE_RECAPTCHA_SITE_KEY`: clave pública del sitio de reCAPTCHA Enterprise.
+- `VITE_API_URL`: `https://promo.edge.com.py/purosol`.
+- `VITE_RECAPTCHA_SITE_KEY`: clave pública del sitio de reCAPTCHA Enterprise
+  ya suministrada para el proyecto.
 
 Estas variables no son configurables en runtime: Vite las incorpora dentro del
 JavaScript. Todo cambio exige reconstruir la imagen.
@@ -21,16 +29,16 @@ aparecer en este repositorio o imagen:
 - Credenciales privadas de Google Cloud o reCAPTCHA.
 - Tokens personales de Figma.
 
-## 2. Requisitos previos del cliente
+## 2. Requisitos del servidor del cliente
 
 1. Docker Engine con Docker Compose.
 2. DNS de `purosol.com.py` apuntando al servidor.
 3. Certificado TLS válido para `purosol.com.py` y, si se publica, `www`.
-4. `purosol.com.py` autorizado en la clave de reCAPTCHA Enterprise.
-5. El backend debe permitir por CORS el origen exacto
-   `https://purosol.com.py` (y `https://www.purosol.com.py` si no se redirige).
-6. El backend y Avimovil deben estar validados con un código exclusivo de
-   prueba antes de abrir la campaña al público.
+4. Publicar el contenedor bajo el dominio final `https://purosol.com.py`.
+
+La clave pública de reCAPTCHA y la dirección del backend ya están incluidas en
+`deploy/production.env.example`. No es necesario que otro desarrollador le
+entregue al cliente un segundo contenedor o repositorio de backend.
 
 ## 3. Configuración
 
@@ -40,8 +48,9 @@ En el servidor, desde la raíz del repositorio:
 cp deploy/production.env.example deploy/production.env
 ```
 
-Completar `deploy/production.env` con los valores públicos entregados por el
-responsable del proyecto. El archivo está ignorado por Git.
+El archivo copiado ya contiene los valores públicos del proyecto. Está ignorado
+por Git para que el servidor pueda ajustar el puerto o la etiqueta de imagen
+sin modificar el repositorio.
 
 ## 4. Construcción y arranque
 
@@ -104,13 +113,9 @@ IMAGE_TAG=7ac90a6
 Construir y desplegar nuevamente. Para volver atrás, iniciar la imagen con la
 etiqueta anterior que el cliente haya conservado.
 
-## 8. Bloqueos conocidos al preparar esta entrega
+## 8. Prueba final posterior al despliegue
 
-La infraestructura queda lista para el dominio final, pero mover el frontend
-no corrige problemas del backend o Avimovil. Antes de producción debe estar
-resuelto y demostrado:
-
-- el reenvío efectivo backend → Avimovil;
-- el ambiente y secreto correctos de Avimovil;
-- la sustitución de `INSTANT_WIN_PRIZE` por el ID/nombre del premio;
-- el contrato final de respuesta de `/api/codes/redeem`.
+La entrega no requiere otro paquete de software. Después de publicarla en el
+dominio definitivo sólo corresponde ejecutar la validación funcional indicada
+en la sección 6. Esa prueba confirma, en el ambiente real, el recorrido ya
+integrado: frontend → backend publicado → Avimovil → pantalla de resultado.
