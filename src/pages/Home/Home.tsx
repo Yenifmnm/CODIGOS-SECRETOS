@@ -20,7 +20,7 @@ import auriculares from '../../assets/prizes/auriculares.webp';
 import playstation from '../../assets/prizes/playstation.webp';
 /* En mobile el cúmulo lleva la consola SOLA: landing.png no dibuja el joystick,
    que sí trae `playstation.webp` y es el que usa la composición de desktop. */
-import playstationConsola from '../../assets/prizes/playstation-consola.webp';
+import playstationConsola from '../../assets/prizes/playstation-consola.png';
 import nintendo from '../../assets/prizes/nintendo.webp';
 import barco from '../../assets/promo/barco.webp';
 
