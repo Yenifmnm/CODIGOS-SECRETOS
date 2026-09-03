@@ -80,4 +80,107 @@
         0 4px 10px #212f5c;
     }
   }
+
+  /* EL CIELO ASOMANDO DEBAJO DEL PLANETA · iPhone en retrato.
+
+     LA PIEZA QUE FALTA YA EXISTÍA EN EL PROYECTO. `mobile-stage.css` declara
+
+         min-height: calc(var(--mstage-alto-util) - var(--mstage-corrimiento))
+
+     y su comentario describe este defecto palabra por palabra: «así lo que se
+     apoya en el pie —como la superficie del planeta— llega al borde y no
+     reaparece el cielo debajo». El bloque de RETRATO la pisa con
+     `min-height: 0` para que el alto lo fije el `aspect-ratio` del frame, que
+     es lo que hace que el lienzo recorte como recorta el frame. Todo correcto,
+     salvo en un caso: cuando el teléfono es MÁS ALTO que la proporción del
+     diseño, el lienzo termina antes que la pantalla y ahí aparece la franja.
+
+     LA CUENTA. El lienzo mide el alto del frame y sube 62 px de diseño para que
+     su cero sea el borde inferior de la barra de estado, así que su borde
+     inferior cae en el alto ÚTIL del diseño: 851 px en los frames de 913. En un
+     iPhone 15 eso son 851 × 393/402 = 832 px de CSS, contra 852 de pantalla.
+
+     MEDIDO en cuatro iPhones, al final del scroll, el sobrante del lienzo
+     respecto del borde inferior de la ventana:
+
+                        393x852   402x874   430x932   390x844
+       las seis de 913    -20       -23       -22       -18   <- hueco
+       las cuatro de 969   +0        +0        +0        +0
+
+     O sea que el hueco está en inicio, participar, registro, premios, código y
+     bases, que además NO scrollean: la franja se ve siempre. Las cuatro
+     pantallas de resultado no lo tienen, porque su frame de 969 es más alto que
+     el teléfono y la página scrollea.
+
+     Es un PISO de alto, no una altura fija: donde el frame ya es más alto que la
+     pantalla —las cuatro de resultado— el `aspect-ratio` gana y esto no hace
+     nada. Donde el teléfono es más alto, el piso estira hasta el borde.
+
+     Y HAY DOS RECORTES, NO UNO. Estirar el lienzo no alcanza: en las pantallas
+     con planeta al pie el recorte vive en el BLOQUE de adentro, que tiene su
+     propio `overflow-y: clip` y no crece con el lienzo. Medido en un iPhone 15,
+     los hijos directos del lienzo:
+
+       pantalla     bloque          alto   termina en   overflow-y
+       inicio       .home-m          840      852        visible
+       participar   .welcome-m       820      832        visible
+       registro     .register-m      658      670        visible
+       premios      .prizes-m        699      711        visible
+       código       .codehelp-m      893      832        clip
+       bases        .terms-m         893      832        clip
+
+     Las dos que recortan son las que muestran la franja: su planeta llega hasta
+     y=1652 —medido, con fondo #061c67— y el bloque lo corta en 832, con la
+     pantalla terminando en 852. Los 20 px de diferencia son cielo, y ese cielo
+     es azul brillante justo ahí: de un lado #061c67, del otro #0349d5. Un filo
+     recto en las 393 columnas.
+
+     Por eso el piso va a los tres: al lienzo, que recorta por fuera, y a los dos
+     bloques que recortan por dentro. `.home-m` ya llega al borde y no necesita
+     nada; `.register-m` y `.prizes-m` terminan mucho más arriba y ahí el cielo
+     ES el fondo previsto, sin planeta que se corte.
+
+     NO SE RELLENA CON UN COLOR PLANO. Se podría pintar esa franja de #061c67,
+     pero no hace falta y sería peor: el planeta YA está dibujado hasta bien
+     abajo, así que dejando de recortarlo aparece el planeta de verdad, con su
+     degradado y sus estrellas, en vez de una banda lisa que se notaría contra
+     el resto.
+
+     `lvh` Y NO `dvh`. El hueco se abre justo cuando la barra de Safari se
+     pliega y el alto útil CRECE. Con `svh` —lo que usa `--mstage-alto-util`— el
+     piso se calcularía contra el alto chico y la franja volvería al plegarse la
+     barra. `dvh` también cubre, pero recalcula el layout en cada transición de
+     la barra; `lvh` es el alto máximo, así que cubre siempre y no se mueve.
+     Por eso el piso se escribe acá y no se toca esa variable, que la comparten
+     Android y escritorio.
+
+     POR QUÉ NO SE USA `--mstage-corrimiento` ACÁ, aunque sea justo el valor que
+     hay que sumar. Esa variable vale `-1 * var(--mstage-w) * 62 / 402`, y
+     `--mstage-w` es `min(100%, 520px)`. Ese `100%` sólo significa «el ancho»
+     cuando la variable se usa en `width` o en `margin`; en `min-height` los
+     porcentajes se resuelven contra el ALTO del bloque contenedor, que acá es
+     indefinido. El proyecto ya avisa de esta trampa en `stage.css`, donde el
+     corrimiento va en `margin-top` y no en `top` por exactamente lo mismo.
+     Probado: con la variable, el `min-height` se calculaba —se veía en el
+     estilo computado— y no floreaba nada; el lienzo seguía en 893 px con un
+     piso supuesto de 912. Con `vw` la base es el ancho en cualquier propiedad.
+
+     Los números no son mágicos: son `--mstage-barra` (62) sobre
+     `--mstage-diseno-w` (402), la misma proporción que usa el corrimiento, y el
+     tope es `--mstage-max`.
+
+     Android no cumple el `@supports`; escritorio y el iPhone en horizontal
+     quedan fuera del media query. No se toca ninguna coordenada, ni el ancho,
+     ni la escala: sólo hasta dónde llega el borde de abajo. */
+  @media (orientation: portrait) and (max-width: 899px) {
+    .mstage__canvas,
+    .codehelp-m,
+    .terms-m {
+      min-height: calc(
+        100lvh - var(--safe-top) - var(--safe-bottom) +
+          min(100vw, var(--mstage-max)) * var(--mstage-barra) /
+          var(--mstage-diseno-w)
+      );
+    }
+  }
 }
