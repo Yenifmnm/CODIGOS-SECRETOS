@@ -30,17 +30,18 @@ import playstation from '../../assets/prizes/playstation.webp';
 /* En mobile el cúmulo lleva la consola SOLA: landing.png no dibuja el joystick,
    que sí trae `playstation.webp` y es el que usa la composición de desktop. */
 import playstationConsola from '../../assets/prizes/playstation-consola.png';
-import nintendo from '../../assets/prizes/nintendo.webp';
-/* El Nintendo de MOBILE tambien va aparte, pero por un motivo distinto a los
-   otros dos. Del Switch OLED blanco NO existe version en alta: el original que
-   guarda el Figma en el nodo 70:176 mide 325x326, igual que el asset, asi que el
-   1,16x de estiramiento no se puede evitar. Lo que si se puede es dejar de
-   perder detalle por compresion. El webp pesa 24 kB y el PNG original 87, y la
-   diferencia se mide: 8,98 niveles de media sobre 255, maximo 47, con el 83,9%
-   de los pixeles fuera de 3 niveles. Mismo dibujo, mismo encuadre y misma caja
-   —283x287 en las mismas coordenadas normalizadas, comprobado—, sin la papilla
-   del webp. ESCRITORIO SIGUE CON EL WEBP: no se pidio tocarlo. */
-import nintendoMobile from '../../assets/prizes/nintendo-mobile.png';
+/* El Nintendo del landing, en las DOS composiciones. Reemplazo de imagen pedido
+   el 03-09-2026: el Switch OLED blanco visto de frente, con la pantalla
+   encendida. Va en PNG y en un solo archivo para escritorio y mobile, que antes
+   eran dos —`nintendo.webp` y `nintendo-mobile.png`— porque el asset viejo
+   llegaba comprimido y en mobile convenia el original sin perdida. Con la imagen
+   nueva esa distincion deja de tener sentido.
+
+   MISMO LIENZO QUE EL ASSET VIEJO: 325x326, asi que la capa no cambia de caja ni
+   de posicion en ninguna de las dos vistas. El aparato queda mas ancho y mas
+   bajo porque la pose es otra —el nuevo esta horizontal y el anterior en
+   diagonal—, no porque se haya tocado ninguna medida. */
+import nintendo from '../../assets/prizes/nintendo.png';
 import barco from '../../assets/promo/barco.webp';
 
 /**
@@ -323,7 +324,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         <FloatingLayer amplitude={8} duration={5.4} delay={1.4} drift={4} rotate={2}
           className="mabs" style={mbox({ x: 83, y: 198, w: 129, h: 130, sceneH: SCENE_H })}
           data-figma="70:176">
-          <img src={nintendoMobile} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
+          <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
         </FloatingLayer>
 
         {/* El halo del barco va en su propia capa, quieta. El `drop-shadow` de
