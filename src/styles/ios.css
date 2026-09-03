@@ -129,16 +129,43 @@
        código       .codehelp-m      893      832        clip
        bases        .terms-m         893      832        clip
 
-     Las dos que recortan son las que muestran la franja: su planeta llega hasta
-     y=1652 —medido, con fondo #061c67— y el bloque lo corta en 832, con la
-     pantalla terminando en 852. Los 20 px de diferencia son cielo, y ese cielo
-     es azul brillante justo ahí: de un lado #061c67, del otro #0349d5. Un filo
-     recto en las 393 columnas.
+     De las dos que recortan, sólo UNA tiene planeta al pie, y conviene no
+     confundirlas:
 
-     Por eso el piso va a los tres: al lienzo, que recorta por fuera, y a los dos
-     bloques que recortan por dentro. `.home-m` ya llega al borde y no necesita
-     nada; `.register-m` y `.prizes-m` terminan mucho más arriba y ahí el cielo
-     ES el fondo previsto, sin planeta que se corte.
+       código  `.codehelp-m__planet`   fondo #061c67, alto 1047, llega a y=1652
+       bases   `.terms-m__planeta`     TRANSPARENTE, alto 87, termina en y=818
+
+     El de bases es `planeta vit 1 1` del Figma —(278, 810, 182, 89), un
+     planetita decorativo con desenfoque—, no una superficie. Bases NO tiene
+     piso de planeta: ahí el cielo al pie ES el diseño, y medido en los seis
+     tamaños su último píxel es azul de cielo con o sin esta regla. Así que bases
+     queda fuera: estirar su bloque no arreglaría nada y destaparía 20 px de una
+     pantalla que no tiene el defecto.
+
+     En código, en cambio, el bloque corta el planeta en 832 con la pantalla
+     terminando en 852. Esos 20 px son cielo, y ahí el cielo es azul brillante:
+     #061c67 de un lado, #0349d5 del otro. Un filo recto en las 393 columnas.
+
+     LAS CUATRO DE RESULTADO QUEDAN FUERA, y conviene dejar dicho por qué, porque
+     es donde se reportó el defecto por segunda vez —un 17 Pro en
+     `codigo-inexistente`— y aun así la medición dice que ahí no falta nada.
+
+     Su planeta va envuelto en `.result-m__planet-clip`, anclado con
+     `top: 753 · bottom: 0`, así que sigue al lienzo. Y el lienzo, con el frame
+     de 969, mide W×2.410 y arranca en −W×0.1542: en un 17 Pro son 969 de alto
+     terminando en y=907, contra una ventana de 874. Sobran 33 px de scroll, así
+     que el lienzo cubre la ventana en cualquier posición, también con la barra
+     de Safari plegada. Medido en cinco tamaños —390, 393, 402, 430 y 440 de
+     ancho—: el último píxel es el navy del planeta, #061c67, en las cuatro
+     pantallas.
+
+     Se probó agregarlas al piso y NO cambia un píxel: su `aspect-ratio` ya da
+     más alto que `lvh` más los 62, así que gana el aspect y el piso no hace
+     nada. Una regla que no cambia nada no se deja puesta.
+
+     Las otras que quedan fuera: `.home-m` ya llega al borde; `.register-m` y
+     `.prizes-m` terminan mucho más arriba y ahí el cielo es el fondo previsto,
+     sin planeta que se corte; y bases, por lo dicho arriba.
 
      NO SE RELLENA CON UN COLOR PLANO. Se podría pintar esa franja de #061c67,
      pero no hace falta y sería peor: el planeta YA está dibujado hasta bien
@@ -173,14 +200,89 @@
      quedan fuera del media query. No se toca ninguna coordenada, ni el ancho,
      ni la escala: sólo hasta dónde llega el borde de abajo. */
   @media (orientation: portrait) and (max-width: 899px) {
-    .mstage__canvas,
-    .codehelp-m,
-    .terms-m {
+    .mstage__canvas:has(.codehelp-m),
+    .codehelp-m {
       min-height: calc(
         100lvh - var(--safe-top) - var(--safe-bottom) +
           min(100vw, var(--mstage-max)) * var(--mstage-barra) /
           var(--mstage-diseno-w)
       );
+    }
+  }
+  /* EL PLANETA CORTADO AL SCROLLEAR · las cuatro pantallas de resultado.
+
+     OTRO DEFECTO, NO EL DE ARRIBA. Al de arriba le faltaba alto y se veía
+     quieto; este sólo aparece MIENTRAS SE SCROLLEA, y justo en las cuatro
+     pantallas que el arreglo anterior deja fuera. Reportado en un 17 Pro en
+     `codigo-inexistente` y presente «desde el 14 en adelante».
+
+     LA CAUSA SON DOS AZULES DISTINTOS. `global.css` pinta
+
+         body { background: #0b1642 }   rgb(11, 22, 66)
+
+     y la superficie del planeta es `#061c67`, rgb(6, 28, 103). Distinto tono y
+     distinto brillo. Ese fondo del cuerpo no se ve nunca... salvo cuando iOS
+     rebota.
+
+     POR QUÉ SÓLO EN iPHONE Y SÓLO ACÁ. Las cuatro de resultado son las únicas
+     que scrollean: su frame de 969 da un documento más alto que la ventana, y
+     queda recorrido de sobra —medido, al final del scroll: 36 px en un 13, 35 en
+     un 15, 33 en un 17 Pro, 38 en un Pro Max, 37 en un 17 Pro Max—. Al llegar al
+     final y seguir tirando, WebKit despega el documento del borde y pinta esa
+     franja con el fondo de la RAÍZ, que sale del `body`. Ahí aparece el #0b1642
+     debajo del #061c67 del planeta, con un filo recto de lado a lado: el planeta
+     «cortado». Android no descubre fondo al pasarse del final —hace un destello
+     y nada más— y en escritorio no hay rebote.
+
+     Cuadra con lo medido y con lo reportado: en las seis pantallas que no
+     scrollean esto no puede pasar, y son justamente las que nadie reportó por
+     este síntoma; quietas, las cuatro de resultado terminan en navy del planeta
+     en los cinco tamaños. Sólo se rompe en movimiento.
+
+     SE IGUALA EL COLOR; NO SE PUEDE FRENAR EL REBOTE. Lo primero que se probó
+     fue `overscroll-behavior-y: none`, que es la forma limpia de que no haya
+     sobrepaso. NO SIRVE ACÁ: WebKit no implementa la propiedad. Medido con
+     `CSS.supports('overscroll-behavior-y','none')` en WebKit 26.5 —el Safari más
+     nuevo que hay para probar—, devuelve `false`; Chromium devuelve `true`. O
+     sea que esa regla no habría hecho nada en el único navegador donde pasa el
+     defecto, y de paso habría cambiado el sobrepaso en Android, que es lo que no
+     hay que tocar. Se descartó.
+
+     Queda igualar el color, que es además lo que se pidió: que la franja salga
+     del mismo azul del planeta. Con el fondo del cuerpo en #061c67 el rebote
+     sigue existiendo pero deja de notarse, porque lo que descubre es el mismo
+     tono que la superficie que lo tapa. No hay filo.
+
+     POR QUÉ ESTO NO CAMBIA NADA MÁS. El fondo del cuerpo NO SE VE en iPhone
+     vertical. Medido: se lo pintó de magenta y se contaron sus píxeles en las
+     diez pantallas por los cinco tamaños —50 capturas, al final del scroll—, y
+     el resultado es CERO en las cincuenta. El lienzo lo tapa entero. Así que
+     este color no puede alterar nada de lo que hoy se dibuja: su único papel es
+     el del rebote.
+
+     VA ACOTADO A VERTICAL, y es a propósito. En horizontal el teléfono es más
+     ancho que el tope de 520 px del lienzo, así que el fondo del cuerpo SÍ se ve
+     como dos barras a los costados. Ahí no está medido y no se toca.
+
+     Lo que sí queda distinto es el rebote de ARRIBA, que pasa de #0b1642 a
+     #061c67. Los dos son navy oscuro y ninguno coincide con el cielo del diseño,
+     así que ese extremo no mejora ni empeora: no se puede acertar en los dos
+     bordes con un color solo.
+
+     ANDROID NO SE TOCA, por pedido expreso, y no lo necesita: su sobrepaso no
+     descubre fondo. Escritorio queda fuera del `@supports`.
+
+     LA ESPECIFICIDAD, COMO EN EL RESTO DEL ARCHIVO. `global.css` declara el
+     fondo con el atajo `background` sobre `body`, que pesa lo mismo que un
+     `body` de acá: quedaría decidido por el orden de carga. Por eso se escribe
+     `:root` y `html body`, que pesan más, y gana esta regla venga cuando venga.
+     Se pintan los dos elementos porque el fondo de la raíz sale del `html` si lo
+     tiene, y si no se hereda del `body`; con los dos iguales no depende de cuál
+     de los dos caminos tome el navegador. */
+  @media (orientation: portrait) and (max-width: 899px) {
+    :root,
+    html body {
+      background-color: #061c67;
     }
   }
 }
