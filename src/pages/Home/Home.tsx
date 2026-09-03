@@ -17,6 +17,15 @@ import planetaVit2 from '../../assets/planets/planeta-vit-2.webp';
 import glow from '../../assets/effects/glow.webp';
 import destello from '../../assets/effects/destello.webp';
 import auriculares from '../../assets/prizes/auriculares.webp';
+/* El auricular de MOBILE va aparte. La capa se dibuja a 78x78 px de diseno, que
+   en un telefono a 3x son unos 229 px fisicos, y `auriculares.webp` tiene 168:
+   se estiraba 1,36x, el peor de los tres premios del cumulo. Este PNG sale del
+   original de la clienta a 4167 px. Es el mismo producto en otra pose —mas
+   frontal, con las dos copas a la vista—, cambio aprobado el 03-09-2026 porque
+   del dibujo actual no existe version en alta. ESCRITORIO SIGUE CON EL WEBP: su
+   capa mide 168x169, o sea exactamente el tamano del archivo, y ahi no hay nada
+   que corregir. */
+import auricularesMobile from '../../assets/prizes/auriculares-mobile.png';
 import playstation from '../../assets/prizes/playstation.webp';
 /* En mobile el cúmulo lleva la consola SOLA: landing.png no dibuja el joystick,
    que sí trae `playstation.webp` y es el que usa la composición de desktop. */
@@ -292,7 +301,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         <FloatingLayer amplitude={10} duration={3.6} delay={0.1} rotate={-3}
           className="mabs" style={mbox({ x: 199, y: 197, w: 78, h: 78, sceneH: SCENE_H })}
           data-figma="70:174">
-          <img src={auriculares} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
+          <img src={auricularesMobile} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
         </FloatingLayer>
 
         <FloatingLayer amplitude={9} duration={4.2} delay={0.6} rotate={-2}
