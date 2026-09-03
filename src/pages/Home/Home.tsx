@@ -31,6 +31,16 @@ import playstation from '../../assets/prizes/playstation.webp';
    que sí trae `playstation.webp` y es el que usa la composición de desktop. */
 import playstationConsola from '../../assets/prizes/playstation-consola.png';
 import nintendo from '../../assets/prizes/nintendo.webp';
+/* El Nintendo de MOBILE tambien va aparte, pero por un motivo distinto a los
+   otros dos. Del Switch OLED blanco NO existe version en alta: el original que
+   guarda el Figma en el nodo 70:176 mide 325x326, igual que el asset, asi que el
+   1,16x de estiramiento no se puede evitar. Lo que si se puede es dejar de
+   perder detalle por compresion. El webp pesa 24 kB y el PNG original 87, y la
+   diferencia se mide: 8,98 niveles de media sobre 255, maximo 47, con el 83,9%
+   de los pixeles fuera de 3 niveles. Mismo dibujo, mismo encuadre y misma caja
+   —283x287 en las mismas coordenadas normalizadas, comprobado—, sin la papilla
+   del webp. ESCRITORIO SIGUE CON EL WEBP: no se pidio tocarlo. */
+import nintendoMobile from '../../assets/prizes/nintendo-mobile.png';
 import barco from '../../assets/promo/barco.webp';
 
 /**
@@ -313,7 +323,7 @@ function HomeMobile({ onStart }: { onStart: () => void }) {
         <FloatingLayer amplitude={8} duration={5.4} delay={1.4} drift={4} rotate={2}
           className="mabs" style={mbox({ x: 83, y: 198, w: 129, h: 130, sceneH: SCENE_H })}
           data-figma="70:176">
-          <img src={nintendo} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
+          <img src={nintendoMobile} alt="" aria-hidden="true" className="mlayer-img" fetchPriority="low" />
         </FloatingLayer>
 
         {/* El halo del barco va en su propia capa, quieta. El `drop-shadow` de
