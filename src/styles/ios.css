@@ -285,4 +285,140 @@
       background-color: #061c67;
     }
   }
+
+  /* EL CIELO QUE SE QUEDA QUIETO · la causa de fondo de todo lo anterior.
+
+     LO ANTERIOR NO ALCANZABA, y esta es la razón. El cielo NO scrollea con la
+     pagina: `.mstage__sky` es `position: fixed`, hermana del lienzo, con la foto
+     a pantalla completa y 160 px de sangrado por arriba y por abajo. Cuando iOS
+     rebota, el DOCUMENTO se despega del borde y sube, pero esa capa se queda
+     clavada al viewport. Entonces lo que aparece debajo del planeta no es el
+     fondo del cuerpo —por eso pintarlo no cambio nada, el cielo fijo se dibuja
+     encima— sino la foto del cielo, azul brillante y con estrellas. El filo
+     recto es el borde de abajo del lienzo.
+
+     MEDIDO, forzando una ventana mas alta que el lienzo —que geometricamente es
+     la misma situacion que el rebote: el lienzo termina antes que el viewport y
+     la capa fija queda a la vista—. A 402x960, columna del medio:
+
+       y=906   6,28,103     <- superficie del planeta
+       y=907   17,126,228   <- cielo. En un pixel.
+
+     QUE PANTALLAS. Se midio el ultimo pixel de adentro del lienzo y el primero
+     de afuera, en las diez, al final del scroll:
+
+       inicio         37,72,142  ->  20,60,146    cielo contra cielo
+       participar     41,94,189  ->   7,73,201    cielo contra cielo
+       registro       21,79,183  ->   7,73,201    cielo contra cielo
+       premios        17,93,183  ->  16,92,182    cielo contra cielo
+       bases           4,72,213  ->   4,72,211    cielo contra cielo
+       codigo          6,28,103  ->   4,72,211    PLANETA contra cielo
+       ganaste         6,28,103  ->  15,126,228   PLANETA contra cielo
+       perdiste        6,28,103  ->  15,126,228   PLANETA contra cielo
+       codigo-usado    6,28,103  ->  15,126,228   PLANETA contra cielo
+       codigo-inexist  6,28,103  ->  15,126,228   PLANETA contra cielo
+
+     Las cinco de arriba terminan en cielo y abajo sigue cielo: no hay costura y
+     no se tocan. Las cinco de abajo son las que tienen el planeta al pie, y son
+     exactamente las cinco donde se reporto el corte.
+
+     TRES INTENTOS DESCARTADOS, los tres MEDIDOS, porque cada uno parece la
+     solucion obvia y no lo es:
+
+       1. Relleno pegado al LIENZO (`::after` de `.mstage`, `top: 100%`), para
+          que acompanara al documento. NO SIRVE: un elemento absoluto sigue
+          generando desbordamiento DESPLAZABLE, asi que el documento paso de 907
+          a 1781 px y la pagina gano 900 px de scroll vacio.
+       2. `overflow-clip-margin` sobre el lienzo, que extenderia el recorte sin
+          tocar layout ni scroll. Seria exacto. NO EXISTE EN WEBKIT:
+          `CSS.supports('overflow-clip-margin','100px')` da `false` en WebKit
+          26.5 y `true` en Chromium.
+       3. Un RECTANGULO en la capa fija por debajo del horizonte. Cubre el hueco,
+          pero el horizonte del planeta es una CURVA: a la altura donde el
+          rectangulo empieza, en las esquinas todavia hay cielo. Medido en
+          reposo, asomaban ~2.000 px por pantalla en las cuatro de resultado.
+
+     LO QUE FUNCIONA es copiar el planeta. Los dos planetas del proyecto son EL
+     MISMO CIRCULO —`.codehelp-m__planet` (73:819) y `.result-m__planet`
+     (74:1030), los dos 1254x1071 en x=-414 con radio 50% y relleno #061C67— y en
+     vertical el lienzo mide lo mismo que la pantalla, asi que `1cqw` es `1vw` y
+     ese circulo se puede reescribir en unidades del viewport sin aproximar nada:
+     `left: -102.985vw`, `311.94vw` x `266.418vw`.
+
+     Va como `::after` de `.mstage__sky`, que es `fixed`: queda clavado al
+     viewport, encima de la foto del cielo y debajo del lienzo. En reposo cae
+     EXACTAMENTE sobre el planeta de verdad —misma curva, mismo color, misma
+     posicion— asi que no se ve. Cuando el rebote despega la pagina, el planeta
+     sube y este se queda: lo que el planeta deja al descubierto ya esta pintado,
+     con la misma curva y el mismo azul.
+
+     DONDE SE APOYA, y de donde salen los numeros. Todo en unidades de diseno
+     divididas por 402, que es como esta escrito el resto del archivo:
+
+       alto del lienzo      969 / 402 = 241.045vw
+       corrimiento           62 / 402 =  15.423vw   (el lienzo arranca en -eso)
+       borde de abajo                  = 225.622vw
+       horizonte resultado  753 / 402 = 187.313vw  ->  225.622 - 171.890 = 53.731
+       horizonte codigo     681 / 402 = 169.403vw  ->  169.403 -  15.423 = 153.980
+
+     En las de resultado el horizonte queda a 53.731vw del borde inferior del
+     lienzo, que al final del scroll es el borde de la ventana: de ahi
+     `100vh - 53.731vw`. En codigo el lienzo llega hasta el borde por la regla de
+     mas arriba, asi que el horizonte cae directo en `153.980vw`. Comprobado
+     contra la medicion: a 402 de ancho dan 658 y 619 px, y lo medido en el
+     navegador fue 658 y 619.
+
+     CUANTO AGUANTA. El circulo mide 266.418vw de alto —1.071 px a 402 de
+     ancho— y de eso se ven 216: quedan mas de 850 px pintados por debajo. Un
+     rebote de iOS no se acerca. Y pasados los 160 px de sangrado de la capa fija
+     lo que se ve es el fondo del cuerpo, que por la regla de aca arriba es este
+     mismo color: los dos remiendos se encadenan y el color no cambia nunca.
+
+     LO QUE SE NOTA, dicho con precision: durante el rebote el horizonte se queda
+     QUIETO en vez de subir con la pagina, porque el que se ve es el de esta
+     copia. Es el precio de resolverlo con una capa fija, y es preferible a que
+     se abra una franja de cielo.
+
+     NO AGREGA SCROLL: vive dentro de `.mstage__sky`, que es `fixed` y
+     `overflow: hidden`. Verificado, el alto del documento no se mueve.
+
+     NO SE VE EN REPOSO, medido igual que siempre: pintado de magenta y contando
+     sus pixeles en las diez pantallas por cinco tamanos, da CERO en las
+     cincuenta.
+
+     ANDROID NO SE TOCA, por pedido expreso: no rebota descubriendo fondo.
+     Escritorio queda fuera del `@supports`. */
+  @media (orientation: portrait) and (max-width: 899px) {
+    .mstage:has(.codehelp-m) .mstage__sky::after,
+    .mstage:has(.result-m) .mstage__sky::after {
+      content: '';
+      position: absolute;
+      /* El circulo del Figma, en unidades del viewport. */
+      left: -102.985vw;
+      width: 311.94vw;
+      height: 266.418vw;
+      border-radius: 50%;
+      background-color: #061c67;
+      z-index: 0;
+
+      /* MEDIO PIXEL HACIA ABAJO, y hace falta. Con el circulo puesto en su
+         posicion exacta, a 393 de ancho —un iPhone 15— asomaban 180 px en
+         reposo: menos de media fila, o sea la curva de la copia quedando una
+         fraccion de pixel por encima de la del planeta por redondeo. En los
+         otros cuatro anchos daba cero. Bajarlo medio pixel lo lleva a cero en
+         los cinco sin mover nada mas: por debajo, la copia queda tapada por el
+         planeta, que es justo lo que se busca. */
+      --ios-planeta-pelo: 0.5px;
+    }
+
+    /* La capa fija empieza `--mstage-sangrado` por encima de la pantalla, asi
+       que hay que devolverle esos px para contar desde el borde de arriba. */
+    .mstage:has(.result-m) .mstage__sky::after {
+      top: calc(var(--mstage-sangrado) + 100vh - 53.731vw + var(--ios-planeta-pelo));
+    }
+
+    .mstage:has(.codehelp-m) .mstage__sky::after {
+      top: calc(var(--mstage-sangrado) + 153.980vw + var(--ios-planeta-pelo));
+    }
+  }
 }
