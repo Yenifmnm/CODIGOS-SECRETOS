@@ -419,13 +419,46 @@
     text-align: center;
   }
 
+  /* AVISO DE reCAPTCHA — CORRIDO A LA DERECHA, FUERA DE LA NENA.
+
+     Estaba en `left: 10%; top: 90%; width: 80%`: cruzaba todo el ancho del
+     pergamino por abajo, que es justo por donde asoma la nena (73:610). Medida
+     su caja en porcentaje del pergamino: x -42,66%..34,08%, y 76,96%..147,41%.
+     El arranque del texto le caía sobre la cara.
+
+     Los porcentajes son del pergamino, que tiene `aspect-ratio: 340/534`: la
+     geometría relativa es la MISMA en cualquier teléfono, no depende del alto
+     de la ventana. Por eso alcanza con correr la caja más allá del 34,08% en
+     el que ella termina; no hace falta ninguna media query ni nada atado a un
+     dispositivo.
+
+     Va debajo de los botones —terminan en 79,57%— y ahí queda papel libre
+     hasta el rodillo de abajo. Sobra alto: aunque en las pantallas angostas el
+     piso de 9 px de la tipografía haga caer un renglón más, entra sin tocar
+     nada.
+
+     NO SE TOCA NADA MÁS: la nena conserva su caja y su `filter: drop-shadow`,
+     y los botones, las cápsulas y el papel quedan donde estaban. */
   .register-m__recaptcha-notice {
     position: absolute;
-    left: 10%;
-    top: 90%;
-    width: 80%;
+    left: 36%;             /* la nena termina en 34,08% */
+    top: 80%;              /* los botones terminan en 79,57% */
+    width: 52.235%;        /* hasta 88,235%, el borde derecho de las cápsulas */
     color: var(--c-brown-dark);
-    font-size: max(9px, 2.2388cqw);
+    /* EL PISO BAJA DE 9 A 8 px. Con 9 el piso ganaba en CASI TODOS los
+       teléfonos —a 402 de viewport el contenedor mide 386,8 y 2,2388cqw da
+       8,66—, así que este párrafo quedaba más grande de lo que le toca en una
+       composición que por lo demás escala entera. En un SE de 320 eso se
+       cobraba un cuarto renglón que terminaba contra el filo enrollado del
+       papel. Con 8 manda el cqw y el aviso vuelve a acompañar al resto.
+
+       Lo que se pierde son 0,3 px en los equipos del medio; lo que se gana es
+       que la caja del aviso deja de depender de dónde cae el piso.
+
+       Medido en 320, 375, 390, 393, 402, 428 y 440 de ancho: tres renglones en
+       todos salvo el SE de 320, que hace cuatro, y en todos el bloque termina
+       antes del 89,4% del pergamino —el papel llega al 92%—. */
+    font-size: max(8px, 2.2388cqw);
     z-index: 5;
   }
 }
