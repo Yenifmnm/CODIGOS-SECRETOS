@@ -103,19 +103,6 @@
   text-align: center;
 }
 
-.recaptcha-notice {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  font-weight: 400;
-  line-height: 1.25;
-  text-align: center;
-}
-
-.recaptcha-notice a {
-  color: inherit;
-  text-decoration: underline;
-}
-
 .register__recaptcha-notice {
   position: absolute;
   left: 30.0521cqw;

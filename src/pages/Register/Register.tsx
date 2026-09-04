@@ -7,6 +7,7 @@ import { RibbonPlate } from '../../components/promo/RibbonPlate';
 import { RibbonSvg } from '../../components/promo/RibbonSvg';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
+import { RecaptchaNotice } from '../../components/legal/RecaptchaNotice';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { useCodeFlow } from '../../app/useCodeFlow';
@@ -80,22 +81,6 @@ const EMPTY: RegistrationForm = {
   city: '',
   phone: '',
 };
-
-function RecaptchaNotice({ className }: { className: string }) {
-  return (
-    <p className={`recaptcha-notice ${className}`}>
-      Este sitio está protegido por reCAPTCHA y se aplican la{' '}
-      <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">
-        Política de Privacidad
-      </a>{' '}
-      y los{' '}
-      <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">
-        Términos de Servicio
-      </a>{' '}
-      de Google.
-    </p>
-  );
-}
 
 /**
  * Validación exclusivamente de formato. No verifica identidad, no consulta
