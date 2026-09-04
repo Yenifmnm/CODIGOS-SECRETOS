@@ -27,6 +27,14 @@ const RATE_LIMIT_MESSAGE =
   'Hiciste muchos intentos seguidos. Esperá unos minutos y volvé a probar.';
 
 /**
+ * Respuesta que el frontend no sabe interpretar. NO se adivina qué quiso decir
+ * el backend: se avisa y se deja a la persona donde estaba, con el código
+ * escrito, para que pueda reintentar.
+ */
+const ESTADO_DESCONOCIDO_MESSAGE =
+  'Recibimos una respuesta que no pudimos interpretar. Probá de nuevo; si sigue pasando, avisanos.';
+
+/**
  * Orquesta el flujo de participación.
  *
  * NO contiene ninguna regla de negocio: pregunta al adapter y navega a la
@@ -67,7 +75,31 @@ export function useCodeFlow() {
           return;
         }
 
-        navigate(ROUTE_BY_STATUS[result.status]);
+        /* EL TIPO NO ES UNA GARANTÍA. `result.status` está tipado como
+           `PromoCodeStatus`, pero ese tipo describe lo que el frontend ESPERA,
+           no lo que la red entrega: la respuesta se castea en `httpPromoApi` sin
+           validar. Si el backend manda un estado que no está en la tabla —otro
+           vocabulario, un caso nuevo, un error serializado como éxito—,
+           `ROUTE_BY_STATUS[...]` da `undefined` y `navigate(undefined)` deja a la
+           persona en la pantalla de carga sin pantalla nueva y sin aviso: parece
+           que el botón no hace nada.
+
+           Por eso se busca la ruta primero y se comprueba. El `as` es a
+           propósito: obliga a TypeScript a admitir la comprobación que él cree
+           innecesaria y que en tiempo de ejecución sí hace falta. */
+        const ruta = (ROUTE_BY_STATUS as Record<string, string | undefined>)[
+          result.status
+        ];
+
+        if (!ruta) {
+          /* Queda en la consola para poder diagnosticarlo contra el backend
+             real. Se registra sólo el token del estado, que no es dato personal. */
+          console.warn('[canje] estado no reconocido en la respuesta:', result.status);
+          setError(ESTADO_DESCONOCIDO_MESSAGE);
+          return;
+        }
+
+        navigate(ruta);
       } catch {
         setError('No pudimos contactar la nave nodriza. Probá de nuevo en un momento.');
       } finally {
