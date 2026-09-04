@@ -75,10 +75,12 @@ Debe responder `ok`.
 
 El archivo `deploy/purosol.com.py.nginx.example` muestra cómo redirigir `www`
 al dominio principal y enviar HTTPS al contenedor. El administrador debe copiar
-su contenido a la configuración Nginx del servidor, sustituir las rutas de los
-certificados y validar antes de recargar:
+su contenido a la configuración Nginx del servidor, instalar también la
+política de cabeceras y sustituir las rutas de los certificados:
 
 ```bash
+sudo mkdir -p /etc/nginx/snippets
+sudo cp deploy/security-headers.conf /etc/nginx/snippets/codigos-secretos-security.conf
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -100,6 +102,15 @@ contenedor.
    `[variables!INSTANT_WIN_PRIZE]`.
 8. Verificar las pantallas ganadora, perdedora, repetido, inexistente y límite.
 9. Revisar desktop y mobile/iPhone sin cambiar sus estilos.
+10. Comprobar las cabeceras públicas con
+    `curl -I https://purosol.com.py/`: deben aparecer CSP, HSTS,
+    `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` y
+    `X-Frame-Options`.
+
+La política no usa `includeSubDomains` en HSTS durante esta primera entrega,
+para no imponer HTTPS sobre otros subdominios del cliente. Debe probarse primero
+en el ambiente de homologación, incluido un canje autorizado, porque la CSP
+controla las conexiones necesarias para reCAPTCHA Enterprise y el backend.
 
 ## 7. Actualización y reversión
 

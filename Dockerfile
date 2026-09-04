@@ -23,6 +23,7 @@ RUN test -n "$VITE_API_URL" \
 
 FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
 
+COPY deploy/security-headers.conf /etc/nginx/snippets/codigos-secretos-security.conf
 COPY deploy/nginx-container.conf /etc/nginx/conf.d/default.conf
 COPY --from=build --chown=101:101 /app/dist /usr/share/nginx/html
 
