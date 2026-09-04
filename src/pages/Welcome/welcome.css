@@ -118,6 +118,13 @@
   text-shadow: 0 0 0.8cqw rgba(252, 193, 2, 0.9);
 }
 
+.welcome__recaptcha-notice {
+  width: 82%;
+  margin-top: 0.45cqw;
+  color: var(--c-brown-dark);
+  font-size: max(10px, 0.625cqw);
+}
+
 /* ---------- Mobile ---------- */
 /* -------------------------------------------------------------------------
    Composición mobile — Figma "CI.png". Ver comentario en Welcome.tsx para las
@@ -389,6 +396,15 @@
     inset: -7px -10px -24px;
     min-width: var(--tap-min);
     min-height: var(--tap-min);
+  }
+
+  .welcome-m__recaptcha-notice {
+    flex: none;
+    width: 84cqw;
+    margin-top: 0.5cqw;
+    color: var(--c-brown-dark);
+    font-size: max(9px, 2.2388cqw);
+    line-height: 1.15;
   }
 
   /* `planeta premios 1` (70:346): 282x286 en (-117, -143). Arranca 217 px por

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Stage } from '../../components/layout/Stage';
 import { Deco } from '../../components/layout/Deco';
 import { PromoButton } from '../../components/buttons/PromoButton';
+import { RecaptchaNotice } from '../../components/legal/RecaptchaNotice';
 import { PurosolShip } from '../../components/promo/PurosolShip';
 import { IconCode, IconId, ParchmentField } from '../../components/forms/ParchmentField';
 import { useCodeFlow } from '../../app/useCodeFlow';
@@ -178,6 +179,8 @@ export default function Welcome() {
           <Link className="welcome__help" to="/donde-esta-el-codigo" style={{ fontSize: u(30) }}>
             ¿Dónde encuentro el código secreto?
           </Link>
+
+          <RecaptchaNotice className="welcome__recaptcha-notice" />
         </form>
       </div>
       </Stage>
@@ -317,6 +320,8 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
           <Link className="welcome-m__help" to="/donde-esta-el-codigo" data-figma="70:358">
             ¿Dónde encuentro el código secreto?
           </Link>
+
+          <RecaptchaNotice className="welcome-m__recaptcha-notice" />
         </form>
       </div>
 
