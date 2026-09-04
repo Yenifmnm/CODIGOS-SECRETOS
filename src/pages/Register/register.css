@@ -103,6 +103,29 @@
   text-align: center;
 }
 
+.recaptcha-notice {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.recaptcha-notice a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.register__recaptcha-notice {
+  position: absolute;
+  left: 30.0521cqw;
+  top: 50.2083cqw;
+  width: 39.5469cqw;
+  color: var(--c-brown-dark);
+  font-size: max(10px, 0.625cqw);
+  z-index: 8;
+}
+
 /* ---------- Mobile ---------- */
 /* -------------------------------------------------------------------------
    Composición mobile — Figma "Registro.png". Coordenadas en el comentario de
@@ -407,5 +430,15 @@
     font-size: 2.6cqw;
     color: #8f1f0a;
     text-align: center;
+  }
+
+  .register-m__recaptcha-notice {
+    position: absolute;
+    left: 10%;
+    top: 90%;
+    width: 80%;
+    color: var(--c-brown-dark);
+    font-size: max(9px, 2.2388cqw);
+    z-index: 5;
   }
 }

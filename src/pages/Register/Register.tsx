@@ -81,6 +81,22 @@ const EMPTY: RegistrationForm = {
   phone: '',
 };
 
+function RecaptchaNotice({ className }: { className: string }) {
+  return (
+    <p className={`recaptcha-notice ${className}`}>
+      Este sitio está protegido por reCAPTCHA y se aplican la{' '}
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">
+        Política de Privacidad
+      </a>{' '}
+      y los{' '}
+      <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">
+        Términos de Servicio
+      </a>{' '}
+      de Google.
+    </p>
+  );
+}
+
 /**
  * Validación exclusivamente de formato. No verifica identidad, no consulta
  * padrones y no persiste nada: el backend hará la validación real.
@@ -407,6 +423,8 @@ export default function Register() {
           Cancelar
         </RibbonButton>
 
+        <RecaptchaNotice className="register__recaptcha-notice" />
+
         {error && (
           <p
             className="abs register__flow-error"
@@ -631,6 +649,8 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting, error }: Regis
             </p>
           )}
         </form>
+
+        <RecaptchaNotice className="register-m__recaptcha-notice" />
       </div>
     </div>
   );
