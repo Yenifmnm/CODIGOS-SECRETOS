@@ -118,9 +118,28 @@
   text-shadow: 0 0 0.8cqw rgba(252, 193, 2, 0.9);
 }
 
+/* AVISO DE reCAPTCHA — ANCLADO AL BORDE DEL PAPEL, NO AL FLUJO.
+
+   En flujo quedaba pegado al enlace de ayuda y su segunda línea caía sobre el
+   filo enrollado del pergamino. Medido sobre el propio asset
+   (`ui/pergamino-2.webp`, 1024x1024, barriendo los píxeles de papel): el papel
+   termina al 91,1% del alto y va del 6,0% al 94,3% del ancho. Sobre la caja de
+   918x616 eso da 810 px de papel útil y 55 px libres por debajo del aviso.
+
+   Absoluto contra `.welcome__form`, que es `inset: 0` sobre el pergamino: al
+   colgar de `bottom` el bloque CRECE HACIA ARRIBA, hacia el papel vacío. Si en
+   una relación de aspecto angosta el texto pasa a dos líneas, se mete en el
+   pergamino en vez de desbordarlo, que es lo que pasaba antes. */
 .welcome__recaptcha-notice {
-  width: 82%;
-  margin-top: 0.45cqw;
+  position: absolute;
+  left: 50%;
+  /* 9,5% de 616 = 58,5: el papel termina 54,8 px antes del borde de la caja,
+     así que quedan ~4 px de aire real contra el filo. */
+  bottom: 9.5%;
+  transform: translateX(-50%);
+  /* 42cqw = 806, apenas por dentro de los 810 de papel. A 1920 el texto entra
+     en UNA línea (624 px a 12 px), que es como se lee mejor. */
+  width: 42cqw;
   color: var(--c-brown-dark);
   font-size: max(10px, 0.625cqw);
 }
@@ -398,13 +417,32 @@
     min-height: var(--tap-min);
   }
 
+  /* AVISO DE reCAPTCHA — VA DEBAJO DEL PERGAMINO, NO ADENTRO.
+
+     Adentro no entra, y no es cuestión de achicar la letra: el enlace de ayuda
+     (70:358) termina en y 631,5 del frame y el papel del pergamino termina en
+     639,2 —el 91,1% de los 246 de alto, medido sobre `ui/pergamino-2.webp`—.
+     Son 7,7 px de hueco. Una sola línea de 9 px ya no entra.
+
+     Lo que había antes daba las dos cosas a la vez: `width: 84cqw` son 338 px
+     contra 324 de papel útil, así que se salía por los dos costados, y las dos
+     líneas terminaban montadas sobre el rodillo de abajo.
+
+     Así que sale del pergamino y se apoya en el cielo, justo debajo. Blanco con
+     sombra porque ahí abajo el fondo es azul y además pasa la nave: el marrón
+     del pergamino no se leería. No pisa ningún campo ni el botón —los dos
+     quedan adentro del papel— y la composición del Figma no se mueve. */
   .welcome-m__recaptcha-notice {
-    flex: none;
-    width: 84cqw;
-    margin-top: 0.5cqw;
-    color: var(--c-brown-dark);
-    font-size: max(9px, 2.2388cqw);
-    line-height: 1.15;
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    margin-top: 1.99cqw;      /* 8 de aire contra el filo del pergamino */
+    width: 69.154cqw;         /* 278: la misma columna que las cápsulas */
+    color: var(--c-white);
+    text-shadow: 0 0.249cqw 0.746cqw rgba(0, 0, 0, 0.65);
+    font-size: max(10px, 2.4876cqw);   /* 10 */
+    line-height: 1.2;
   }
 
   /* `planeta premios 1` (70:346): 282x286 en (-117, -143). Arranca 217 px por

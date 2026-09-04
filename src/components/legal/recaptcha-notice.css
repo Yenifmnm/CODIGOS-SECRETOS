@@ -1,13 +1,28 @@
+/* Aviso legal de reCAPTCHA.
+
+   Google exige mostrar este texto cuando se OCULTA la insignia flotante, que
+   es lo que hace este sitio. Va en las dos pantallas que ejecutan reCAPTCHA:
+   `#/participar` y `#/registro`.
+
+   Acá viven sólo tipografía y color de los enlaces. La CAJA —dónde se ubica y
+   cuánto mide— la decide cada pantalla, porque cada pergamino le deja un hueco
+   distinto y los números salen de medir ese hueco. */
 .recaptcha-notice {
   margin: 0;
-  font-family: Arial, sans-serif;
+  /* NO Arial. El proyecto no usa Arial en ningún lado y en medio del pergamino
+     canta como texto pegado. La pila del sistema es neutra —que es lo que
+     conviene para una nota legal, no la display de la marca— y no agrega una
+     fuente más para descargar. */
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-weight: 400;
   line-height: 1.25;
   text-align: center;
+  /* Si no entra en una línea, que las dos queden parejas en vez de dejar una
+     larga y un colgajo de dos palabras. */
+  text-wrap: balance;
 }
 
 .recaptcha-notice a {
   color: inherit;
   text-decoration: underline;
 }
-
