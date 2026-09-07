@@ -141,7 +141,7 @@
      en UNA línea (624 px a 12 px), que es como se lee mejor. */
   width: 42cqw;
   color: var(--c-brown-dark);
-  font-size: max(10px, 0.625cqw);
+  font-size: max(12px, 0.625cqw);
 }
 
 /* ---------- Mobile ---------- */
