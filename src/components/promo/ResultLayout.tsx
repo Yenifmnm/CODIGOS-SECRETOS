@@ -60,8 +60,6 @@ export interface ResultLayoutProps {
   /** Escena de la derecha: cofre + premio, en coordenadas de diseño. */
   scene: ReactNode;
   code?: string;
-  /** true → "CANJEASTE EL CÓDIGO"; false → "CÓDIGO INGRESADO" (no se consumió). */
-  codeRedeemed?: boolean;
   codeCount: number;
   /** Versión mobile de la escena. */
   mobileScene: ReactNode;
@@ -81,8 +79,13 @@ export interface ResultLayoutProps {
   pageTitle: string;
 }
 
+/* Texto pedido por la clienta el 14-09-2026 (captura de WhatsApp): reemplaza
+   «CANJEASTE EL CÓDIGO: … / GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU
+   PREMIO». Es el mismo para las cuatro pantallas de resultado. */
 const CONTACT_LINES = [
-  '*GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO*',
+  /* Un solo párrafo, como lo mandó: separado en dos, en desktop la píldora
+     daba seis renglones y se salía del lienzo por abajo. */
+  '¡SEGUÍ CARGANDO CÓDIGOS PARA PARTICIPAR POR MÁS PREMIOS INSTANTÁNEOS Y AUMENTAR TUS CHANCES DE GANAR EL VIAJE AL CARIBE! RECORDÁ GUARDAR TUS STICKERS.',
   '¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!',
 ];
 
@@ -111,7 +114,6 @@ export function ResultLayout({
   ctaY = 711,
   scene,
   code,
-  codeRedeemed = true,
   codeCount,
   mobileScene,
   mobileVariante,
@@ -152,13 +154,11 @@ export function ResultLayout({
     return () => window.removeEventListener('resize', fit);
   }, [desktopMessageSingleLine, desktopMessageText, messageSize, messageWidth]);
 
-  const codeLabel = codeRedeemed ? 'CANJEASTE EL CÓDIGO' : 'CÓDIGO INGRESADO';
-
   const note = (
     <>
       {code && (
         <p className="result__note-code">
-          {codeLabel}: <strong>{code}</strong>
+          INGRESASTE EL CÓDIGO <strong>{code}</strong>.
         </p>
       )}
       {CONTACT_LINES.map((line) => (
@@ -318,20 +318,15 @@ export function ResultLayout({
               con su radio, y el texto adentro. Acá también, para que las dos se
               puedan medir.
 
-              DESVÍO CONOCIDO — el texto da Δh -11 contra el nodo, y no es de
-              CSS: el mockup dibuja TRES renglones porque incluye la línea
-              «CANJEASTE EL CÓDIGO: …», y esa línea sólo existe cuando hay un
-              código en la sesión. Abriendo la ruta directamente —que es como
-              mide `figma:check`— no lo hay y quedan dos: los 11 px que faltan
-              son ese renglón.
-
-              Medido recorriendo el flujo de verdad (participar → registro →
-              ganaste, con el código del mockup): la caja da 252.1x37.5 contra
-              los 257x36 del nodo, o sea Δh +1.5. Lo que queda es que el nodo es
-              4.9 px más ancho que su propia tinta, y como el texto va centrado
-              eso corre la x la mitad: 2.4. El centro coincide, 205.45 contra
-              205.5. La condición que lo cierra: si con un código en la sesión
-              el alto se aparta de 37.5, ahí sí hay CSS que mirar. */}
+              DESVÍO INTENCIONAL — el 14-09-2026 la clienta cambió el texto de
+              la píldora por uno más largo («¡SEGUÍ CARGANDO CÓDIGOS…!», ver
+              `CONTACT_LINES`), así que ya no cabe en los 313x51 del nodo: el
+              texto ocupa todo el ancho útil de la píldora (+56w contra los 257
+              del nodo) y la píldora crece con `min-height` —+7h sin código en
+              la sesión, que es como mide `figma:check`; +19h en el flujo real,
+              con el renglón «INGRESASTE EL CÓDIGO …»—. El cofre y el contador
+              bajan esos mismos px. La x, la y y el ancho de la píldora siguen
+              siendo los del Figma. */}
           <div
             className="result-m__note"
             data-figma="74:1041 74:991 105:270 131:342"
@@ -455,7 +450,12 @@ export function ResultLayout({
       </PromoButton>
 
       {/* --- Pie: aviso de stickers y contador --- */}
-      <div className="result__note abs" style={{ ...box({ x: 150, y: 896, w: 630, h: 97 }), zIndex: 7 }}>
+      {/* Alto mínimo y no fijo: con el texto nuevo (14-09-2026) son cinco
+          renglones y la píldora crece hacia abajo desde la y del nodo. */}
+      <div
+        className="result__note abs"
+        style={{ ...box({ x: 150, y: 896, w: 630, h: 97 }), height: 'auto', minHeight: u(97), zIndex: 7 }}
+      >
         {note}
       </div>
       </div>

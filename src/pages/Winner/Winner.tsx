@@ -39,7 +39,6 @@ export default function Winner() {
       messageY={616}
       ctaY={711}
       code={lastResult?.code}
-      codeRedeemed
       codeCount={codeCount}
       scene={<PrizeReveal prize={prize} />}
       mobileScene={<PrizeRevealMobile prize={prize} />}
