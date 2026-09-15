@@ -11,6 +11,7 @@ import { RecaptchaNotice } from '../../components/legal/RecaptchaNotice';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { useCodeFlow } from '../../app/useCodeFlow';
+import { readStoredParticipant } from '../../services/participantStorage';
 import { MIN_AGE, completedAge, isOfAge, maxBirthDate } from '../../app/age';
 import { box, centeredText, u } from '../../app/stage';
 import type { RegistrationForm } from '../../types/promo';
@@ -124,7 +125,16 @@ export default function Register() {
   const { redeem, error } = useCodeFlow();
   const prefill = (location.state ?? {}) as { cedula?: string; code?: string };
 
-  const [form, setForm] = useState<RegistrationForm>({ ...EMPTY, cedula: prefill.cedula ?? '' });
+  /* Si el navegador ya tiene el registro de esa cédula, el formulario arranca
+     con esos datos. Normalmente con registro guardado no se llega acá —la
+     carga de código va derecho al canje—; se llega cuando el backend igual
+     respondió REGISTER_REQUIRED (p. ej. una fecha de nacimiento que no pasa la
+     regla de edad). Con los datos puestos, la persona corrige lo que falla en
+     vez de tipear los seis campos de vuelta. */
+  const [form, setForm] = useState<RegistrationForm>(() => {
+    const stored = prefill.cedula ? readStoredParticipant(prefill.cedula) : null;
+    return stored ? stored.form : { ...EMPTY, cedula: prefill.cedula ?? '' };
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -142,30 +152,45 @@ export default function Register() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    // Con el botón deshabilitado no debería llegar un segundo envío; si llega
+    // igual (un submit programático, por ejemplo), se ignora.
+    if (submitting) return;
     const next = validate(form);
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
+    /* EL BOTÓN QUEDA DESHABILITADO HASTA QUE TERMINE TODO EL ENVÍO, no sólo el
+       registro. El envío son dos llamadas: `registerParticipant` —que contra el
+       backend real resuelve en localStorage, al instante— y, si vino con
+       código, `redeem`, que es la que de verdad viaja por la red y tarda.
+       Antes `submitting` volvía a false entre una y otra: durante el canje el
+       botón decía «Registrarme», estaba habilitado y un segundo click mandaba
+       un segundo POST con el mismo código. El `finally` lo suelta recién
+       cuando el canje respondió —o falló—; si navegó a otra pantalla, el
+       componente ya no está y el set no hace nada. */
     setSubmitting(true);
-    const result = await promoApi.registerParticipant(form);
-    setSubmitting(false);
+    try {
+      const result = await promoApi.registerParticipant(form);
 
-    if (!result.ok) {
-      setErrors(result.fieldErrors ?? {});
-      return;
+      if (!result.ok) {
+        setErrors(result.fieldErrors ?? {});
+        return;
+      }
+
+      setParticipant(result.participant ?? { cedula: form.cedula, fullName: form.fullName });
+
+      /* La mecánica (lámina 2) va del registro derecho al resultado: el código
+         ya lo escribió en la pantalla anterior y no se le puede pedir que lo
+         cargue de nuevo. Si llegó al registro sin código —entrando por la URL—
+         no hay nada que canjear y se lo manda a cargarlo. */
+      if (prefill.code) {
+        await redeem(form.cedula, prefill.code.trim().toUpperCase());
+        return;
+      }
+      navigate('/participar', { state: { cedula: form.cedula } });
+    } finally {
+      setSubmitting(false);
     }
-
-    setParticipant(result.participant ?? { cedula: form.cedula, fullName: form.fullName });
-
-    /* La mecánica (lámina 2) va del registro derecho al resultado: el código ya
-       lo escribió en la pantalla anterior y no se le puede pedir que lo cargue
-       de nuevo. Si llegó al registro sin código —entrando por la URL— no hay
-       nada que canjear y se lo manda a cargarlo. */
-    if (prefill.code) {
-      await redeem(form.cedula, prefill.code.trim().toUpperCase());
-      return;
-    }
-    navigate('/participar', { state: { cedula: form.cedula } });
   };
 
   const fieldEls = [
@@ -388,6 +413,7 @@ export default function Register() {
           height={58}
           fontSize={40}
           disabled={submitting}
+          aria-busy={submitting || undefined}
           style={{ left: u(646), top: u(FORM.buttonsY), zIndex: Z.buttons }}
         >
           {submitting ? 'Enviando…' : 'Registrarme'}
@@ -609,6 +635,7 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting, error }: Regis
               tone="ochre"
               mobileFontSize={14}
               disabled={submitting}
+              aria-busy={submitting || undefined}
               data-figma="73:620"
               silueta={cinta621}
               data-figma-cinta="73:621"

@@ -114,6 +114,10 @@ export function useCodeFlow() {
       setLoading(true);
       setError(null);
       try {
+        /* ¿Hay que pasar por REGISTRO? Lo responde el adapter mirando el
+           registro guardado en este navegador (`participantStorage`): con
+           datos para esa cédula se saltea el formulario y el canje viaja con
+           esos datos; sin datos, se abre el formulario conservando el código. */
         const check = await promoApi.checkParticipant(cedula);
 
         if (!check.registered) {
