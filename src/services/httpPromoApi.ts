@@ -12,22 +12,28 @@ import type {
 import { MOCK_PRIZES, prizeByAvimovilId } from '../mocks/prizes';
 import { getTermsText } from '../mocks/terms';
 import { MIN_AGE, isOfAge } from '../app/age';
+import {
+  readStoredParticipant,
+  saveStoredParticipant,
+  toParticipant,
+} from './participantStorage';
 
 /**
  * Adapter real: habla con codigos-secretos-backend.
  * ---------------------------------------------------------------------------
  * El backend no tiene base de datos propia: reenvía cada canje a Avimovil con
  * los datos del participante como variables (nombre, telefono, email, cedula,
- * dob, localidad). Por eso este adapter guarda el registro en localStorage
- * —igual que la promo anterior— y lo manda completo en cada canje.
+ * dob, localidad). Por eso el registro vive en el navegador
+ * (`participantStorage`) y se manda completo en cada canje.
  *
  * Qué resuelve cada método:
- *   checkParticipant   localStorage (¿ya se registró en este navegador?)
+ *   checkParticipant    localStorage: ¿hay registro para esta cédula en este
+ *                       navegador? Si lo hay, la carga de código saltea REGISTRO.
  *   registerParticipant localStorage (no existe endpoint de registro; la regla
  *                       de edad mínima se valida acá, igual que en el mock)
- *   submitPromoCode    POST /api/codes/redeem con todos los datos
- *   getCodeCount       último contador conocido (viaja en cada respuesta)
- *   getPrizes/getTerms catálogo estático del bundle, igual que el mock
+ *   submitPromoCode     POST /api/codes/redeem con los datos guardados
+ *   getCodeCount        último contador conocido (viaja en cada respuesta)
+ *   getPrizes/getTerms  catálogo estático del bundle, igual que el mock
  */
 export class HttpPromoApi implements PromoApi {
   private readonly baseUrl: string;
@@ -53,53 +59,12 @@ export class HttpPromoApi implements PromoApi {
     return (await response.json()) as T;
   }
 
-  // ------------------------------------------------- registro (localStorage)
-
-  private storageKey(cedula: string): string {
-    return `codigos-secretos:participant:${this.normalizeCedula(cedula)}`;
-  }
-
-  private normalizeCedula(cedula: string): string {
-    return cedula.replace(/[.\-\s]/g, '');
-  }
-
-  private readStored(cedula: string): { form: RegistrationForm; codeCount: number } | null {
-    try {
-      const raw = localStorage.getItem(this.storageKey(cedula));
-      if (!raw) return null;
-      const data = JSON.parse(raw) as { form?: RegistrationForm; codeCount?: number };
-      if (!data.form?.cedula) return null;
-      return { form: data.form, codeCount: data.codeCount ?? 0 };
-    } catch {
-      return null;
-    }
-  }
-
-  private writeStored(form: RegistrationForm, codeCount: number): void {
-    try {
-      localStorage.setItem(
-        this.storageKey(form.cedula),
-        JSON.stringify({ form, codeCount, savedAt: new Date().toISOString() }),
-      );
-    } catch {
-      // Sin localStorage (modo privado, etc.) el flujo sigue: sólo se pierde
-      // el recuerdo del registro y la persona vuelve a pasar por REGISTRO.
-    }
-  }
-
   // -------------------------------------------------------------- PromoApi
 
   async checkParticipant(cedula: string): Promise<ParticipantCheckResult> {
-    const stored = this.readStored(cedula);
+    const stored = readStoredParticipant(cedula);
     if (!stored) return { registered: false };
-    return {
-      registered: true,
-      participant: {
-        cedula: stored.form.cedula,
-        fullName: stored.form.fullName,
-        city: stored.form.city,
-      },
-    };
+    return { registered: true, participant: toParticipant(stored.form) };
   }
 
   async registerParticipant(form: RegistrationForm): Promise<RegistrationResult> {
@@ -114,21 +79,19 @@ export class HttpPromoApi implements PromoApi {
       };
     }
 
-    const previous = this.readStored(form.cedula);
-    this.writeStored(form, previous?.codeCount ?? 0);
-    return {
-      ok: true,
-      participant: { cedula: form.cedula, fullName: form.fullName, city: form.city },
-    };
+    saveStoredParticipant(form);
+    return { ok: true, participant: toParticipant(form) };
   }
 
   async submitPromoCode({ cedula, code, recaptchaToken }: PromoCode): Promise<PromoCodeResult> {
-    const stored = this.readStored(cedula);
+    const stored = readStoredParticipant(cedula);
     if (!stored) {
       // Sin datos no hay canje: Avimovil los necesita en cada envío.
       return { status: 'REGISTER_REQUIRED', code, codeCount: 0 };
     }
 
+    // Los datos que viajan son los guardados en el registro, no los de la
+    // pantalla: la carga de código sólo pide cédula y código.
     const { form } = stored;
     const result = await this.post<PromoCodeResult>('/api/codes/redeem', {
       cedula: form.cedula,
@@ -142,7 +105,7 @@ export class HttpPromoApi implements PromoApi {
     });
 
     if (typeof result.codeCount === 'number') {
-      this.writeStored(form, result.codeCount);
+      saveStoredParticipant(form, result.codeCount);
     }
     return result.prize ? { ...result, prize: this.enrichPrize(result.prize) } : result;
   }
@@ -167,7 +130,7 @@ export class HttpPromoApi implements PromoApi {
   }
 
   async getCodeCount(cedula: string): Promise<UserCodeCount> {
-    return { cedula, count: this.readStored(cedula)?.codeCount ?? 0 };
+    return { cedula, count: readStoredParticipant(cedula)?.codeCount ?? 0 };
   }
 
   /** El catálogo y las bases siguen siendo estáticos del bundle, como el mock. */
