@@ -55,6 +55,12 @@ button {
   cursor: pointer;
 }
 
+/* Google permite ocultar la insignia cuando el aviso con sus enlaces legales
+   permanece visible dentro del flujo protegido (pantalla de registro). */
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 3px solid var(--c-cyan);
   outline-offset: 3px;

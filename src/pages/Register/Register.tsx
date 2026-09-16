@@ -7,6 +7,7 @@ import { RibbonPlate } from '../../components/promo/RibbonPlate';
 import { RibbonSvg } from '../../components/promo/RibbonSvg';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
+import { RecaptchaNotice } from '../../components/legal/RecaptchaNotice';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { useCodeFlow } from '../../app/useCodeFlow';
@@ -433,6 +434,8 @@ export default function Register() {
           Cancelar
         </RibbonButton>
 
+        <RecaptchaNotice className="register__recaptcha-notice" />
+
         {error && (
           <p
             className="abs register__flow-error"
@@ -658,6 +661,8 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting, error }: Regis
             </p>
           )}
         </form>
+
+        <RecaptchaNotice className="register-m__recaptcha-notice" />
       </div>
     </div>
   );
