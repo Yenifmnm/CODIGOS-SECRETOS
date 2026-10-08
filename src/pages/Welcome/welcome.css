@@ -103,10 +103,7 @@
 }
 
 .welcome__help {
-  /* 0.2 y no 0.68: el aviso de reCAPTCHA pasó a ir DEBAJO de este enlace, en
-     flujo, y en pantallas de menos de 1152 ocupa dos renglones. Los px que se
-     recortan acá son los que necesita para no pisarlo. */
-  margin-top: 0.2cqw;
+  margin-top: 0.68cqw;
   font-family: var(--font-display);
   color: var(--c-brown);
   text-decoration: underline;
@@ -125,47 +122,6 @@
 .welcome__help:focus-visible {
   color: var(--c-brown-dark);
   text-shadow: 0 0 0.8cqw rgba(252, 193, 2, 0.9);
-}
-
-/* AVISO DE reCAPTCHA — EN FLUJO, ÚLTIMO DEL PERGAMINO.
-
-   Estuvo anclado con `position: absolute; bottom: 9.5%` al filo del papel, y
-   así crecía HACIA ARRIBA: por debajo de 1440 el texto pasa a dos renglones y
-   se metía encima de «¿Dónde encuentro el código secreto?». Medido en el
-   navegador, el solape iba de 4 px a 1440 hasta 15 px a 900, o sea toda la
-   franja de portátiles.
-
-   La causa no es el ancla sino el piso en px: todo lo demás escala en cqw y
-   encoge con el lienzo, pero el aviso se quedaba clavado en 12 px, así que a
-   1280 pesaba 1,5 veces lo que le toca en el diseño y ya no entraba.
-
-   Ahora va en flujo detrás del enlace —el orden natural de lectura, y el
-   navegador garantiza que no se pisen— y el piso baja a 10 px. La clienta
-   autorizó achicar la letra si hacía falta; es una nota legal, no texto de
-   lectura. El `padding-bottom` del formulario reserva el filo enrollado, así
-   que el bloque nunca se apoya sobre el rollo.
-
-   Verificado de 1920x1080 a 900x650 (el piso del rango desktop; por debajo
-   manda la composición mobile): ni un solo solape y el aviso siempre dentro
-   del papel. */
-.welcome__recaptcha-notice {
-  /* 34cqw = 653. NO son los 810 de papel: en la FRANJA DE ABAJO, que es donde
-     cae el aviso, el papel plano llega sólo hasta los cilindros enrollados de
-     los extremos. Con 42cqw el renglón se montaba encima de esos cilindros en
-     cuanto el piso de 10 px lo ensanchaba en proporción (visible de 1280 a
-     1440). Acotado a la zona plana, el texto se parte en dos renglones antes
-     de llegar a ellos. */
-  width: 34cqw;
-  /* `auto` y no un número: con espacio de sobra —1920, donde el aviso entra en
-     un renglón— el margen se come el hueco y el bloque vuelve a apoyarse en el
-     filo del papel, que es donde lo dejaba el `bottom: 9.5%` original. Cuando
-     el espacio se acaba, el margen se anula y el aviso queda pegado al enlace,
-     nunca encima. El `padding-top` es el aire mínimo de ese caso. */
-  margin-top: auto;
-  padding-top: 0.15cqw;
-  color: var(--c-brown-dark);
-  font-size: max(10px, 0.625cqw);
-  line-height: 1.1;
 }
 
 /* ---------- Mobile ---------- */
@@ -439,34 +395,6 @@
     inset: -7px -10px -24px;
     min-width: var(--tap-min);
     min-height: var(--tap-min);
-  }
-
-  /* AVISO DE reCAPTCHA — VA DEBAJO DEL PERGAMINO, NO ADENTRO.
-
-     Adentro no entra, y no es cuestión de achicar la letra: el enlace de ayuda
-     (70:358) termina en y 631,5 del frame y el papel del pergamino termina en
-     639,2 —el 91,1% de los 246 de alto, medido sobre `ui/pergamino-2.webp`—.
-     Son 7,7 px de hueco. Una sola línea de 9 px ya no entra.
-
-     Lo que había antes daba las dos cosas a la vez: `width: 84cqw` son 338 px
-     contra 324 de papel útil, así que se salía por los dos costados, y las dos
-     líneas terminaban montadas sobre el rodillo de abajo.
-
-     Así que sale del pergamino y se apoya en el cielo, justo debajo. Blanco con
-     sombra porque ahí abajo el fondo es azul y además pasa la nave: el marrón
-     del pergamino no se leería. No pisa ningún campo ni el botón —los dos
-     quedan adentro del papel— y la composición del Figma no se mueve. */
-  .welcome-m__recaptcha-notice {
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    transform: translateX(-50%);
-    margin-top: 1.99cqw;      /* 8 de aire contra el filo del pergamino */
-    width: 69.154cqw;         /* 278: la misma columna que las cápsulas */
-    color: var(--c-white);
-    text-shadow: 0 0.249cqw 0.746cqw rgba(0, 0, 0, 0.65);
-    font-size: max(10px, 2.4876cqw);   /* 10 */
-    line-height: 1.2;
   }
 
   /* `planeta premios 1` (70:346): 282x286 en (-117, -143). Arranca 217 px por

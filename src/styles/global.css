@@ -55,12 +55,6 @@ button {
   cursor: pointer;
 }
 
-/* Google permite ocultar la insignia cuando el aviso con sus enlaces legales
-   permanece visible dentro del flujo protegido (pantalla de registro). */
-.grecaptcha-badge {
-  visibility: hidden !important;
-}
-
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 3px solid var(--c-cyan);
   outline-offset: 3px;
@@ -73,16 +67,6 @@ textarea,
 select {
   cursor: auto;
   font-family: inherit;
-}
-
-/* ---------- reCAPTCHA (formularios de Participar y Registro) ---------- */
-/* Google inserta la insignia como un <div> fijo en el <body>, fuera de
-   cualquier formulario, y sigue ahí al pasar a las pantallas de resultado.
-   Por eso la regla vive acá y no en el CSS de cada página (lazy-load).
-   Ojo: al ocultarla, Google exige mostrar el aviso "Este sitio está
-   protegido por reCAPTCHA…" en algún punto del flujo del usuario. */
-.grecaptcha-badge {
-  visibility: hidden;
 }
 
 .sr-only {

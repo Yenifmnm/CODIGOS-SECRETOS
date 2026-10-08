@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { promoApi } from '../services/promoApi';
-import { getRecaptchaToken } from '../services/recaptcha';
+import { getTurnstileToken, isTurnstileEnabled, resetTurnstile } from '../services/turnstile';
+import { BotCheckRejectedError } from '../services/httpPromoApi';
 import { useSession } from './SessionContext';
 import type { PromoCodeStatus } from '../types/promo';
 
@@ -34,6 +35,16 @@ const RATE_LIMIT_MESSAGE =
 const ESTADO_DESCONOCIDO_MESSAGE =
   'Recibimos una respuesta que no pudimos interpretar. Probá de nuevo; si sigue pasando, avisanos.';
 
+/** Fallo de red o del servidor: el mismo texto para `submit` y `redeem`. */
+const NAVE_NODRIZA_MESSAGE =
+  'No pudimos contactar la nave nodriza. Probá de nuevo en un momento.';
+
+/**
+ * No hay token de Turnstile (no llegó en 20 s) o el backend lo rechazó. Se
+ * pide reintentar: el widget ya se reseteó y está generando uno nuevo.
+ */
+const TURNSTILE_MESSAGE = 'No pasó la verificación de seguridad. Probá de nuevo en un momento.';
+
 /**
  * Orquesta el flujo de participación.
  *
@@ -46,6 +57,10 @@ export function useCodeFlow() {
   const { setParticipant, setLastResult } = useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /* Un canje por vez. `loading` deshabilita el botón recién en el próximo
+     render; un doble tap o Enter + click puede entrar dos veces antes. Como
+     el token es de un solo uso, el segundo envío sería un 403 seguro. */
+  const inFlight = useRef(false);
 
   /**
    * Canjea el código y abre la pantalla del `status` recibido, sin volver a
@@ -56,13 +71,25 @@ export function useCodeFlow() {
    */
   const redeem = useCallback(
     async (cedula: string, code: string) => {
+      if (inFlight.current) return;
+      inFlight.current = true;
+      // Si el canje terminó en una pantalla de resultado, no se resetea el
+      // widget acá (ver el `finally`).
+      let navigatedToResult = false;
       setLastResult(null);
       setLoading(true);
       setError(null);
       try {
-        // Se pide recién acá: el token dura dos minutos y es de un solo uso.
-        const recaptchaToken = await getRecaptchaToken('redeem_code');
-        const result = await promoApi.submitPromoCode({ cedula, code, recaptchaToken });
+        /* El desafío corre en segundo plano desde que cargó la página, así que
+           el token casi siempre ya está. Si no llegó en 20 s NO se manda el
+           canje: el backend lo rechazaría con 403 igual. El `finally` resetea
+           el widget también en este camino. */
+        const turnstileToken = await getTurnstileToken();
+        if (isTurnstileEnabled() && !turnstileToken) {
+          setError(TURNSTILE_MESSAGE);
+          return;
+        }
+        const result = await promoApi.submitPromoCode({ cedula, code, turnstileToken });
         setLastResult(result);
 
         if (result.status === 'REGISTER_REQUIRED') {
@@ -100,10 +127,19 @@ export function useCodeFlow() {
           return;
         }
 
+        navigatedToResult = true;
         navigate(ruta);
-      } catch {
-        setError('No pudimos contactar la nave nodriza. Probá de nuevo en un momento.');
+      } catch (e) {
+        setError(e instanceof BotCheckRejectedError ? TURNSTILE_MESSAGE : NAVE_NODRIZA_MESSAGE);
       } finally {
+        // El token es de un solo uso. Si la persona se queda en esta pantalla
+        // (error, registro pendiente, límite), se pide ya un desafío nuevo para
+        // que el reintento tenga token. Si se fue a una pantalla de resultado,
+        // no: el próximo canje lo pide recién cuando lo necesite (ver
+        // `getTurnstileToken`), así el checkbox no aparece donde no hay nada
+        // que enviar.
+        if (!navigatedToResult) resetTurnstile();
+        inFlight.current = false;
         setLoading(false);
       }
     },
@@ -130,7 +166,7 @@ export function useCodeFlow() {
 
         setParticipant(check.participant ?? { cedula, fullName: '' });
       } catch {
-        setError('No pudimos contactar la nave nodriza. Probá de nuevo en un momento.');
+        setError(NAVE_NODRIZA_MESSAGE);
         setLoading(false);
         return;
       }
