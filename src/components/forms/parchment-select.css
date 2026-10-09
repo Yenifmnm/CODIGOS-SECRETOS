@@ -1,4 +1,13 @@
-/* Sólo el nuevo selector: reutiliza la geometría del campo de registro. */
+/* Mantiene el estilo del pergamino con una fuente legible sólo en el selector. */
+.pfield.pfield--select {
+  font-family: Arial, sans-serif;
+}
+
+/* El rótulo inicial conserva la tipografía original del formulario. */
+.pfield--select .pfield__label {
+  font-family: var(--font-display);
+}
+
 .pfield--select .pfield__input {
   appearance: none;
   cursor: pointer;
@@ -16,6 +25,7 @@
 }
 
 .pfield--select option {
+  font-family: Arial, sans-serif;
   color: #581f09;
   background: #fff3d5;
 }
