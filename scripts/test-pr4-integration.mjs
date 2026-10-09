@@ -26,7 +26,7 @@ function load(file, imports = {}, globals = {}, env = {}) {
 }
 const contract = load('src/services/respuestaCanje.ts');
 const form = { cedula: 'TEST-ID', fullName: 'Prueba Local', phone: 'TEST-PHONE',
-  email: 'test@example.invalid', birthDate: '1990-01-01', city: 'Prueba' };
+  email: 'test@example.invalid', birthDate: '1990-01-01', city: 'Alto Paraguay' };
 function adapter(reply, status = 200) {
   const requests = [];
   let stored = { form, codeCount: 4 };
@@ -62,6 +62,7 @@ test('V2 sends Turnstile, code and registration; preserves raw winner and coupon
   assert.equal(a.requests[0].url, 'https://backend.example.invalid/purosol/api/v2/codes/redeem');
   assert.equal(a.requests[0].body.turnstileToken, 'TEST-TOKEN');
   assert.equal(a.requests[0].body.nombre, form.fullName);
+  assert.equal(a.requests[0].body.localidad, 'Alto Paraguay');
   assert.equal(a.requests[0].body.code, input.code);
   assert.ok(!('recaptchaToken' in a.requests[0].body));
 });

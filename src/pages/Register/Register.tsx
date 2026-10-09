@@ -7,6 +7,8 @@ import { RibbonPlate } from '../../components/promo/RibbonPlate';
 import { RibbonSvg } from '../../components/promo/RibbonSvg';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
+import { ParchmentSelect } from '../../components/forms/ParchmentSelect';
+import { DEPARTAMENTOS, esDepartamento } from '../../app/departamentos';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
 import { useCodeFlow } from '../../app/useCodeFlow';
@@ -108,7 +110,7 @@ function validate(form: RegistrationForm): Errors {
   if (!form.email.trim()) errors.email = 'Ingresá un email.';
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) errors.email = 'Email inválido.';
 
-  if (!form.city.trim()) errors.city = 'Indicá tu ciudad.';
+  if (!esDepartamento(form.city)) errors.city = 'Seleccioná tu departamento.';
 
   if (!form.phone.trim()) errors.phone = 'Ingresá un teléfono.';
   else if (!/^[0-9+\-\s()]{6,20}$/.test(form.phone.trim())) errors.phone = 'Teléfono inválido.';
@@ -132,12 +134,16 @@ export default function Register() {
      vez de tipear los seis campos de vuelta. */
   const [form, setForm] = useState<RegistrationForm>(() => {
     const stored = prefill.cedula ? readStoredParticipant(prefill.cedula) : null;
-    return stored ? stored.form : { ...EMPTY, cedula: prefill.cedula ?? '' };
+    // Un registro anterior puede contener una ciudad libre, no un departamento.
+    // Conservamos el resto de sus datos y pedimos elegir una opción válida.
+    return stored
+      ? { ...stored.form, city: esDepartamento(stored.form.city) ? stored.form.city : '' }
+      : { ...EMPTY, cedula: prefill.cedula ?? '' };
   });
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const set = (key: keyof RegistrationForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const set = (key: keyof RegistrationForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm((f) => ({ ...f, [key]: e.target.value }));
     // El error se borra apenas el usuario retoca el campo; se vuelve a evaluar
     // al enviar. Si no, queda un cartel rojo contradiciendo lo que ya corrigió.
@@ -248,14 +254,15 @@ export default function Register() {
       error={errors.email}
       required
     />,
-    <ParchmentField
+    <ParchmentSelect
       key="city"
-      variant="line"
       fontSize={30}
-      label="Ciudad"
+      label="Departamento"
+      options={DEPARTAMENTOS}
       data-figma="73:637" data-figma-ejes="x,y"
+      // Se conserva city/localidad para no cambiar el contrato del backend.
       name="city"
-      autoComplete="address-level2"
+      autoComplete="address-level1"
       value={form.city}
       onChange={set('city')}
       error={errors.city}
