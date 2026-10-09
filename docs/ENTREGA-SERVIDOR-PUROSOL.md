@@ -1,132 +1,140 @@
-# Entrega para `purosol.com.py`
+# Entrega Docker para PuroSol — Turnstile / PR #4
 
-Esta entrega contiene el frontend empaquetado como un contenedor estático y
-listo para publicarse en `purosol.com.py`. El frontend ya está configurado para
-consumir el backend publicado en `https://promo.edge.com.py/purosol` y para
-utilizar la clave pública de reCAPTCHA Enterprise asignada al proyecto.
+Usar la rama `codex/entrega-purosol` y el commit aprobado de esta entrega.
+No desplegar el commit anterior `dcef18d` para esta migración: todavía usa
+reCAPTCHA y la ruta V1. El push no actualiza el servidor del cliente.
 
-El cliente no debe esperar ni solicitar otro paquete de backend para desplegar
-este contenedor: el backend continúa funcionando como un servicio externo en
-la URL indicada. Sus credenciales privadas permanecen correctamente en ese
-servidor y no forman parte del frontend.
+## Qué incluye
 
-## 1. Arquitectura de la entrega
+Frontend React/Vite, Nginx sin privilegios en 8080, healthcheck y Compose.
+El backend sigue externo en `https://promo.edge.com.py/purosol`.
+El canje ahora usa `POST /api/v2/codes/redeem` con `turnstileToken`.
+Se conserva el intérprete de `shortMessage/coupons` y
+`status/codeCount/prize`, el contador, el catálogo y la sesión del resultado.
 
-El frontend contiene únicamente valores públicos incorporados durante el
-build:
+La pantalla ganadora muestra, tanto en móvil como en escritorio:
 
-- `VITE_API_URL`: `https://promo.edge.com.py/purosol`.
-- `VITE_RECAPTCHA_SITE_KEY`: clave pública del sitio de reCAPTCHA Enterprise
-  ya suministrada para el proyecto.
+> *GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO*
+>
+> ¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!
 
-Estas variables no son configurables en runtime: Vite las incorpora dentro del
-JavaScript. Todo cambio exige reconstruir la imagen.
+Las otras pantallas conservan su aviso de seguir participando, sin teléfono.
 
-Los siguientes valores pertenecen exclusivamente al backend y nunca deben
-aparecer en este repositorio o imagen:
+## Antes de desplegar — obligatorio
 
-- `AVIMOVIL_SECRET` y credenciales de campaña/ambiente.
-- Credenciales privadas de Google Cloud o reCAPTCHA.
-- Tokens personales de Figma.
+1. Solicitar a Edge la **clave pública del widget Turnstile**
+   (`VITE_TURNSTILE_SITE_KEY`). La antigua clave de Google no sirve.
+2. Edge debe confirmar que el widget autoriza los hostnames efectivamente usados:
+   `purosol.com.py`, `www.purosol.com.py` y los dominios de prueba que correspondan.
+3. Edge debe tener configurada la clave **secreta** en el backend, la validación
+   de Turnstile (acción `redeem_code`) y CORS para los orígenes HTTPS del sitio.
+4. Confirmar con Edge que V2 está disponible. No retirar V1 hasta validar esta
+   entrega; el rollback anterior depende de V1 y de reCAPTCHA.
+5. Conservar la imagen anterior, su configuración y su política CSP para rollback.
 
-## 2. Requisitos del servidor del cliente
+No incluir secretos de Turnstile, `AVIMOVIL_SECRET` ni credenciales de Google
+en Git, archivos públicos o variables `VITE_*`.
 
-1. Docker Engine con Docker Compose.
-2. DNS de `purosol.com.py` apuntando al servidor.
-3. Certificado TLS válido para `purosol.com.py` y, si se publica, `www`.
-4. Publicar el contenedor bajo el dominio final `https://purosol.com.py`.
+## Configuración en el servidor
 
-La clave pública de reCAPTCHA y la dirección del backend ya están incluidas en
-`deploy/production.env.example`. No es necesario que otro desarrollador le
-entregue al cliente un segundo contenedor o repositorio de backend.
-
-## 3. Configuración
-
-En el servidor, desde la raíz del repositorio:
+Desde la raíz del checkout del commit aprobado:
 
 ```bash
-cp deploy/production.env.example deploy/production.env
+test -f deploy/production.env || cp deploy/production.env.example deploy/production.env
 ```
 
-El archivo copiado ya contiene los valores públicos del proyecto. Está ignorado
-por Git para que el servidor pueda ajustar el puerto o la etiqueta de imagen
-sin modificar el repositorio.
+Editar el archivo existente sin sobrescribir ajustes propios:
 
-## 4. Construcción y arranque
+```ini
+VITE_API_URL=https://promo.edge.com.py/purosol
+VITE_TURNSTILE_SITE_KEY=
+FRONTEND_PORT=8080
+IMAGE_TAG=commit-aprobado
+```
+
+Completar la sitekey real y reemplazar `commit-aprobado` por el SHA aprobado.
+La plantilla deja la clave vacía intencionalmente: Compose debe detenerse hasta
+que se configure. No usar claves de prueba en producción. Quitar
+`VITE_RECAPTCHA_SITE_KEY` de este archivo: ya no se consume.
+
+**Vite incorpora estas variables durante el build. Reiniciar no las actualiza.**
+No basta con definirlas como variables del contenedor en runtime.
+
+## Construcción y arranque
+
+En el servidor Linux, verificar primero la identidad del checkout:
 
 ```bash
-docker compose --env-file deploy/production.env build --pull
-docker compose --env-file deploy/production.env up -d
+git status --short
+git rev-parse HEAD
+unset VITE_API_URL VITE_TURNSTILE_SITE_KEY FRONTEND_PORT IMAGE_TAG
+docker compose --env-file deploy/production.env config
+docker compose --env-file deploy/production.env build --pull --no-cache frontend
+docker compose --env-file deploy/production.env up -d --no-build --force-recreate frontend
 docker compose --env-file deploy/production.env ps
-```
-
-El build se detiene si falta `VITE_API_URL` o
-`VITE_RECAPTCHA_SITE_KEY`; de ese modo no se publica accidentalmente el mock.
-
-Comprobar el contenedor desde el servidor:
-
-```bash
+docker compose --env-file deploy/production.env logs --tail=100 frontend
 curl --fail http://127.0.0.1:8080/healthz
 ```
 
-Debe responder `ok`.
+Mantener el nombre de proyecto Compose usado previamente si el operador lo
+personalizó. No ejecutar `down` ni eliminar la imagen anterior.
+El contenedor escucha sólo en el loopback del servidor. El proxy HTTPS debe
+enviar las visitas a ese puerto; si está en otro contenedor/equipo, adaptar la red.
 
-## 5. Publicación HTTPS
+## HTTPS y CSP: actualizar también el proxy exterior
 
-El archivo `deploy/purosol.com.py.nginx.example` muestra cómo redirigir `www`
-al dominio principal y enviar HTTPS al contenedor. El administrador debe copiar
-su contenido a la configuración Nginx del servidor, instalar también la
-política de cabeceras y sustituir las rutas de los certificados:
+La CSP debe permitir `https://challenges.cloudflare.com` en
+`script-src` y `frame-src`. Una CSP antigua en Nginx/Cloudflare puede bloquear
+Turnstile aunque el contenedor esté actualizado. Las políticas múltiples se
+aplican juntas; agregar una nueva no neutraliza una anterior restrictiva.
+
+Revisar `deploy/purosol.com.py.nginx.example`, certificados y configuración
+actual antes de copiar nada. Si el proxy ya utiliza el snippet suministrado:
 
 ```bash
-sudo mkdir -p /etc/nginx/snippets
 sudo cp deploy/security-headers.conf /etc/nginx/snippets/codigos-secretos-security.conf
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Si el cliente utiliza Traefik, Caddy, Kubernetes o un balanceador externo,
-debe aplicar la configuración equivalente y apuntar al puerto `8080` del
-contenedor.
+Recargar sólo si la validación de Nginx fue exitosa. Si hay otro proxy, aplicar
+el equivalente sin borrar reglas propias del cliente.
 
-## 6. Validación antes de habilitar al público
+## Validación
 
-1. Abrir `https://purosol.com.py/` en una ventana privada.
-2. Confirmar que no hay recursos 404 ni errores de consola.
-3. Confirmar que reCAPTCHA no muestra “dominio no válido”.
-4. Realizar un único canje con cédula y código autorizados para pruebas.
-5. Verificar en los logs del backend que el POST llegó.
-6. Verificar en Avimovil que `Origen` contiene la cédula y `Mensaje` el código.
-7. Confirmar que la respuesta contiene un resultado definitivo; para premio,
-   debe incluir un ID y nombre reales, no el placeholder
-   `[variables!INSTANT_WIN_PRIZE]`.
-8. Verificar las pantallas ganadora, perdedora, repetido, inexistente y límite.
-9. Revisar desktop y mobile/iPhone sin cambiar sus estilos.
-10. Comprobar las cabeceras públicas con
-    `curl -I https://purosol.com.py/`: deben aparecer CSP, HSTS,
-    `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` y
-    `X-Frame-Options`.
+Pruebas de regresión locales sin enviar códigos al backend:
 
-La política no usa `includeSubDomains` en HSTS durante esta primera entrega,
-para no imponer HTTPS sobre otros subdominios del cliente. Debe probarse primero
-en el ambiente de homologación, incluido un canje autorizado, porque la CSP
-controla las conexiones necesarias para reCAPTCHA Enterprise y el backend.
-
-## 7. Actualización y reversión
-
-Antes de cada entrega, cambiar `IMAGE_TAG` por una versión identificable, por
-ejemplo el commit aprobado:
-
-```text
-IMAGE_TAG=7ac90a6
+```bash
+npm ci
+npm run typecheck
+node --test scripts/test-result-session.mjs scripts/test-pr4-integration.mjs
 ```
 
-Construir y desplegar nuevamente. Para volver atrás, iniciar la imagen con la
-etiqueta anterior que el cliente haya conservado.
+La integración se comprobó con 21 pruebas, build y contenedor local (healthcheck,
+Nginx sin privilegios y CSP). Para la imagen de prueba se usaron una URL ficticia
+y una clave pública de prueba: **esa imagen no es para producción**. Debe
+reconstruirse con la URL real y la sitekey del proyecto.
+Persisten el warning CSS previo y avisos de auditoría de dependencias existentes;
+no se modificó el lockfile en esta integración. No hay script de lint configurado.
 
-## 8. Prueba final posterior al despliegue
+- Healthcheck `ok` confirma Nginx, no el canje ni Avimovil.
+- Abrir el sitio con una sesión nueva: sin avisos de Google, errores de CSP
+  ni hostname de Turnstile no autorizado.
+- El widget puede pedir una interacción; no es garantía de invisibilidad.
+- Con datos autorizados exclusivamente para pruebas, comprobar en Network el
+  POST a V2, el token presente (sin compartirlo) y el resultado del backend.
+- Sin token no debe enviarse el canje. Un 403 muestra el aviso de seguridad.
+- Verificar ganador, participación, inexistente, repetido y límite, contador
+  incluido. Una respuesta desconocida no debe inventar un premio.
+- El ganador conserva premio y contador al recargar dentro de la misma pestaña;
+  abrir `#/ganaste` sin resultado debe volver a Participar.
+- Confirmar el aviso exacto de ganador y que las demás pantallas no cambiaron.
+- Probar escritorio y móvil/iPhone. No consumir códigos de participantes.
 
-La entrega no requiere otro paquete de software. Después de publicarla en el
-dominio definitivo sólo corresponde ejecutar la validación funcional indicada
-en la sección 6. Esa prueba confirma, en el ambiente real, el recorrido ya
-integrado: frontend → backend publicado → Avimovil → pantalla de resultado.
+## Rollback
+
+Volver a la imagen anterior **sin reconstruirla**, con su configuración de
+Compose compatible, y restaurar la CSP anterior si vuelve a reCAPTCHA.
+Coordinar con Edge: el frontend anterior requiere V1 activa.
+No se considera validado el circuito real hasta completar una prueba controlada
+contra Edge/Avimovil en el dominio final.

@@ -97,6 +97,7 @@ const SEGUI_CARGANDO =
    —perdiste, código utilizado, código inexistente— y en el reemplazo no lo
    incluye: ahí no hay ningún premio que retirar, así que el número sobraba. */
 const TELEFONO = '¡COMUNICATE AL +595 984 324 335 PARA RETIRARLO!';
+const AVISO_GANADOR = '*GUARDÁ TUS STICKERS GANADORES PARA CANJEAR TU PREMIO*';
 
 /**
  * Estructura común de las cuatro pantallas de resultado
@@ -171,7 +172,7 @@ export function ResultLayout({
           INGRESASTE EL CÓDIGO <strong>{code}</strong>.
         </p>
       )}
-      <p>{SEGUI_CARGANDO}</p>
+      <p>{muestraTelefono ? AVISO_GANADOR : SEGUI_CARGANDO}</p>
       {muestraTelefono && <p>{TELEFONO}</p>}
     </>
   );

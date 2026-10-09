@@ -32,10 +32,18 @@ import {
  *                       navegador? Si lo hay, la carga de código saltea REGISTRO.
  *   registerParticipant localStorage (no existe endpoint de registro; la regla
  *                       de edad mínima se valida acá, igual que en el mock)
- *   submitPromoCode     POST /api/codes/redeem con los datos guardados
+ *   submitPromoCode     POST /api/v2/codes/redeem con los datos guardados
  *   getCodeCount        último contador conocido (viaja en cada respuesta)
  *   getPrizes/getTerms  catálogo estático del bundle, igual que el mock
  */
+export class BotCheckRejectedError extends Error {
+  constructor(path: string) {
+    super(`API ${path} rechazó la verificación de seguridad (403)`);
+    this.name = 'BotCheckRejectedError';
+  }
+}
+
+/** Conserva los dos contratos de premios y los errores detallados de la entrega Docker. */
 export class HttpPromoApi implements PromoApi {
   private readonly baseUrl: string;
 
@@ -59,9 +67,7 @@ export class HttpPromoApi implements PromoApi {
 
     if (!response.ok) {
       if (response.status === 403) {
-        throw new ErrorCanje('recaptcha-rechazado', `${path} rechazó el reCAPTCHA`, {
-          estadoHttp: 403,
-        });
+        throw new BotCheckRejectedError(path);
       }
       if (response.status === 429) {
         throw new ErrorCanje('limite-http', `${path} respondió 429`, { estadoHttp: 429 });
@@ -102,7 +108,7 @@ export class HttpPromoApi implements PromoApi {
     return { ok: true, participant: toParticipant(form) };
   }
 
-  async submitPromoCode({ cedula, code, recaptchaToken }: PromoCode): Promise<PromoCodeResult> {
+  async submitPromoCode({ cedula, code, turnstileToken }: PromoCode): Promise<PromoCodeResult> {
     const stored = readStoredParticipant(cedula);
     if (!stored) {
       // Sin datos no hay canje: Avimovil los necesita en cada envío.
@@ -112,10 +118,10 @@ export class HttpPromoApi implements PromoApi {
     // Los datos que viajan son los guardados en el registro, no los de la
     // pantalla: la carga de código sólo pide cédula y código.
     const { form } = stored;
-    const rawResult = await this.post('/api/codes/redeem', {
+    const rawResult = await this.post('/api/v2/codes/redeem', {
       cedula: form.cedula,
       code,
-      recaptchaToken,
+      turnstileToken,
       nombre: form.fullName,
       telefono: form.phone,
       email: form.email,

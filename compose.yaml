@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL:?Defina VITE_API_URL en deploy/production.env}
-        VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY:?Defina VITE_RECAPTCHA_SITE_KEY en deploy/production.env}
+        VITE_TURNSTILE_SITE_KEY: ${VITE_TURNSTILE_SITE_KEY:?Defina la clave publica REAL de Turnstile en deploy/production.env}
     image: codigos-secretos-frontend:${IMAGE_TAG:-latest}
     restart: unless-stopped
     init: true
