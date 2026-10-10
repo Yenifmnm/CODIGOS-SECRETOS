@@ -1,6 +1,6 @@
-/* Mantiene el estilo del pergamino con una fuente legible sólo en el selector. */
+/* Todo el selector conserva la tipografía original del formulario. */
 .pfield.pfield--select {
-  font-family: Arial, sans-serif;
+  font-family: var(--font-display);
 }
 
 /* El rótulo inicial conserva la tipografía original del formulario. */
@@ -25,7 +25,7 @@
 }
 
 .pfield--select option {
-  font-family: Arial, sans-serif;
+  font-family: var(--font-display);
   color: #581f09;
   background: #fff3d5;
 }
