@@ -3,12 +3,15 @@
   color: #482a1b;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: min(11px, 1.4cqw);
   line-height: 1.35;
   flex-shrink: 0;
 }
 .form-privacy-notice p { margin: 0; }
-.form-privacy-notice p > span { display: block; }
+.form-privacy-notice p > span {
+  display: block;
+  white-space: nowrap;
+}
 .form-privacy-notice a {
   color: #134e78;
   text-decoration: underline;
@@ -30,7 +33,7 @@
   .welcome__scroll > .welcome__scroll-img { height: calc(100% + 32px); }
 }
 @media (max-width: 899px) {
-  .form-privacy-notice { font-size: 12px; }
+  .form-privacy-notice { font-size: min(10px, 2.4cqw); }
   .welcome-m .welcome-m__scroll {
     height: auto;
     min-height: 61.194cqw;
@@ -49,8 +52,8 @@
   .register-m__form > .form-privacy-notice {
     position: absolute;
     top: 81%;
-    left: 16%;
-    width: 68%;
+    left: 11.765%;
+    width: 76.471%;
   }
   /* Extend only the bottom of the rotated paper, preserving field positions. */
   .register-m .register-m__sheet .register-m__paper {
