@@ -1,0 +1,98 @@
+.privacy-page {
+  min-height: 100vh;
+  padding: 28px 20px 64px;
+  background: #0b1642 url('../../assets/backgrounds/fondo-mobile.webp') center top / 100% auto no-repeat;
+}
+
+.privacy-page__header {
+  max-width: 920px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.privacy-page__header img {
+  display: block;
+  height: auto;
+}
+
+.privacy-page__back {
+  color: #fff;
+  font-size: 21px;
+  text-underline-offset: 5px;
+}
+
+.privacy-page__paper {
+  max-width: 920px;
+  margin: auto;
+  padding: clamp(24px, 5vw, 64px);
+  border: 1px solid #dfbd83;
+  border-radius: 20px;
+  background: #fff6e5;
+  color: #482a1b;
+  box-shadow: 0 18px 50px #06112a55;
+}
+
+.privacy-page__paper h1 {
+  margin: 0 0 16px;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.1;
+}
+
+.privacy-page__updated {
+  margin: 0 0 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #dfbd83;
+  font-size: 20px;
+  color: #745135;
+}
+
+.privacy-page__body {
+  font-size: 21px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.privacy-page__body h2 {
+  margin: 40px 0 16px;
+  font-size: clamp(26px, 3vw, 32px);
+  line-height: 1.2;
+  color: #7b3413;
+}
+
+.privacy-page__body p {
+  margin: 0 0 18px;
+}
+
+.privacy-page__body ul {
+  margin: 0 0 24px;
+  padding-left: 26px;
+}
+
+.privacy-page__body li {
+  margin-bottom: 8px;
+}
+
+.privacy-page__paper a {
+  color: #134e78;
+  text-underline-offset: 4px;
+}
+
+.privacy-page__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid #dfbd83;
+  font-size: 21px;
+}
+
+@media (max-width: 480px) {
+  .privacy-page { padding: 20px 12px 36px; }
+  .privacy-page__header { gap: 16px; }
+  .privacy-page__header img { width: 110px; }
+  .privacy-page__back { font-size: 18px; }
+}

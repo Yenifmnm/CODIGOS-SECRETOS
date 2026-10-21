@@ -1,0 +1,187 @@
+Política de Privacidad de PuroSol
+
+Última actualización: 20 de octubre de 2026
+
+En PuroSol respetamos la privacidad de nuestros usuarios y nos comprometemos a proteger la información personal recopilada a través de nuestros sitios web y formularios de participación.
+
+La presente Política de Privacidad explica cómo recopilamos, utilizamos, almacenamos y protegemos los datos personales de quienes acceden a https://purosol.com.py y https://www.purosol.com.py, especialmente en el marco de la promoción “El Tesoro Galáctico de los Códigos Secretos”.
+
+1. Responsable del tratamiento
+
+Los sitios web de PuroSol y sus formularios de participación son administrados bajo la responsabilidad de Distribuidora del Paraguay S.A., con RUC N.º 80020653-3, domiciliada en Acceso Sur Km. 32, ciudad de San Antonio, República del Paraguay.
+
+Teléfono de contacto: 021 919-7000.
+
+Distribuidora del Paraguay S.A. es la empresa organizadora de la promoción “El Tesoro Galáctico de los Códigos Secretos”, desarrollada bajo su marca PuroSol.
+
+2. Información que recopilamos
+
+Al participar en nuestras promociones o utilizar las funcionalidades del sitio web, podremos recopilar los datos personales que los usuarios proporcionen a través de los formularios correspondientes.
+
+Esta información podrá comprender, según corresponda:
+
+* Nombre y apellido del participante.
+* Número de documento de identidad.
+* Número de teléfono y dirección de correo electrónico.
+* Códigos promocionales registrados.
+* Información relacionada con las participaciones y premios adjudicados.
+
+Para la verificación y entrega de premios, podrán solicitarse documentos adicionales, como la cédula de identidad vigente y el sticker físico que contiene el código ganador.
+
+En el caso del premio mayor consistente en un viaje al Caribe mexicano, será necesario presentar la documentación requerida para realizar las reservas, incluyendo el pasaporte vigente del ganador y de sus acompañantes, según las bases y condiciones.
+
+Adicionalmente, el sitio web podrá procesar información técnica relacionada con el dispositivo, navegador, dirección IP y conexión utilizada, con fines de funcionamiento y seguridad.
+
+3. Finalidad del tratamiento de datos
+
+Los datos recopilados serán utilizados para:
+
+* Registrar las participaciones en la promoción.
+* Verificar la autenticidad de los códigos promocionales ingresados.
+* Comprobar el cumplimiento de los requisitos establecidos en las bases y condiciones.
+* Identificar a los participantes seleccionados y comunicar los resultados.
+* Coordinar la adjudicación y entrega de premios.
+* Prevenir registros fraudulentos, participaciones automatizadas y usos indebidos de la plataforma.
+* Atender consultas relacionadas con la promoción.
+* Cumplir las obligaciones legales aplicables.
+
+La información no será utilizada para comunicaciones comerciales ajenas a las finalidades informadas sin la autorización correspondiente, cuando esta resulte necesaria.
+
+4. Protección contra bots y Cloudflare Turnstile
+
+Con el objetivo de proteger nuestros formularios contra actividades automatizadas, spam, accesos abusivos y posibles intentos de fraude, utilizamos Cloudflare Turnstile, una herramienta de seguridad proporcionada por Cloudflare, Inc.
+
+Turnstile permite realizar verificaciones de seguridad que pueden ejecutarse de manera invisible, sin requerir que el usuario complete manualmente un desafío.
+
+Durante este proceso, Cloudflare puede procesar señales técnicas, incluyendo:
+
+* Dirección IP.
+* Agente de usuario del navegador (User-Agent).
+* Huella digital de la conexión TLS.
+* Identificador técnico del sitio (Sitekey).
+* Información del origen asociado al sitio web.
+
+Estas señales se utilizan para distinguir el tráfico legítimo de posibles interacciones automatizadas y proteger la plataforma.
+
+Cloudflare también puede procesar estas señales para mejorar sus capacidades de detección de bots, conforme a sus propias condiciones de privacidad.
+
+Para más información sobre este tratamiento, podés consultar el documento oficial:
+
+Anexo de Privacidad de Cloudflare Turnstile.
+
+5. Cookies y tecnologías de seguridad
+
+El sitio web podrá utilizar cookies y tecnologías técnicas necesarias para garantizar su funcionamiento, mantener la seguridad de las conexiones y prevenir actividades fraudulentas.
+
+Cloudflare Turnstile puede emplear mecanismos técnicos asociados a la verificación de seguridad de los visitantes.
+
+Los usuarios pueden gestionar las cookies desde la configuración de su navegador. La restricción de determinadas tecnologías necesarias podría afectar el funcionamiento de algunos formularios o impedir completar correctamente una participación.
+
+En caso de incorporarse herramientas adicionales de análisis o publicidad que utilicen cookies u otras tecnologías de seguimiento, esta política deberá actualizarse para informar sobre su funcionamiento y las autorizaciones que correspondan.
+
+6. Participación en promociones y verificación de ganadores
+
+La promoción “El Tesoro Galáctico de los Códigos Secretos” estará vigente desde el 14 de septiembre hasta el 14 de diciembre de 2026, conforme a sus bases y condiciones oficiales.
+
+La participación está destinada a personas mayores de 18 años que cumplan los requisitos de nacionalidad paraguaya o residencia legal en la República del Paraguay, así como las demás condiciones establecidas por el organizador.
+
+Los participantes deberán registrar los códigos promocionales a través del sitio web de PuroSol.
+
+Los datos proporcionados permitirán validar las participaciones, identificar a los potenciales ganadores y administrar los premios correspondientes.
+
+Para la entrega de premios, el organizador podrá verificar la identidad de los ganadores y la validez de los stickers físicos.
+
+La información falsa, las participaciones fraudulentas o el uso de mecanismos destinados a alterar el funcionamiento de la promoción podrán ocasionar la descalificación correspondiente, conforme a las bases y condiciones.
+
+7. Publicación de ganadores y utilización de imágenes
+
+Conforme a las bases y condiciones de la promoción, los resultados podrán comunicarse a través del sitio web de PuroSol y sus canales oficiales de comunicación.
+
+Al momento de la entrega de premios, podrán obtenerse fotografías de los ganadores para acreditar y comunicar públicamente la adjudicación.
+
+Asimismo, las bases y condiciones establecen que el ganador, al aceptar y retirar el premio, otorga gratuitamente al organizador el derecho a utilizar su nombre e imagen para difundir los resultados de la promoción en televisión, radio, prensa escrita o redes sociales.
+
+Esta utilización estará limitada a la publicidad de los resultados de la promoción, durante un período de 12 meses posteriores a su finalización, y no se extenderá a otras finalidades.
+
+El tratamiento y la publicación de esta información deberán respetar las condiciones establecidas en el reglamento oficial y la legislación aplicable.
+
+8. Acceso a los datos y proveedores externos
+
+Distribuidora del Paraguay S.A. procurará limitar el acceso a la información personal a las personas autorizadas que necesiten utilizarla para la administración de la promoción, verificación de participaciones, gestión de premios y mantenimiento de los sistemas.
+
+Asimismo, podrán intervenir proveedores tecnológicos y prestadores de servicios necesarios para el funcionamiento de la plataforma.
+
+Entre estos servicios se encuentra Cloudflare Turnstile, que procesa determinadas señales técnicas para proteger los formularios contra actividades automatizadas.
+
+En el caso de los ganadores del viaje a México, podrá resultar necesario comunicar datos y documentación a los proveedores encargados de gestionar reservas aéreas, hoteleras y otros servicios incluidos en el premio.
+
+Cuando resulte necesaria una comunicación de datos a proveedores ubicados fuera del Paraguay, deberán observarse las disposiciones legales aplicables y las medidas de protección correspondientes.
+
+9. Seguridad de la información
+
+Procuramos aplicar medidas técnicas y organizativas razonables para proteger la información personal contra accesos no autorizados, alteraciones, pérdidas, divulgaciones o tratamientos indebidos.
+
+Estas medidas podrán incluir controles de acceso, mecanismos de validación y herramientas de protección de los formularios web.
+
+No obstante, ningún sistema conectado a Internet puede garantizar una seguridad absoluta.
+
+10. Conservación de los datos personales
+
+Los datos recopilados se conservarán durante el tiempo necesario para cumplir las finalidades de la promoción y las obligaciones legales que correspondan.
+
+Se considerarán especialmente los siguientes períodos establecidos en las bases y condiciones:
+
+* 14 de diciembre de 2026: finalización de la promoción y comunicación del ganador del premio mayor.
+* 12 de febrero de 2027: fecha límite establecida para el retiro de los premios instantáneos.
+* 31 de diciembre de 2027: última fecha prevista para hacer efectivo el viaje correspondiente al premio mayor, conforme a sus condiciones.
+* 12 meses posteriores a la finalización de la promoción: plazo de utilización del nombre e imagen de los ganadores para la difusión de resultados.
+
+Estos períodos corresponden a la ejecución de la promoción y no implican que todos los registros personales deban conservarse hasta la misma fecha.
+
+Una vez cumplidas las finalidades correspondientes, los datos deberán eliminarse o anonimizarse cuando ya no exista una justificación legítima o una obligación legal para conservarlos.
+
+11. Derechos de los participantes
+
+Los participantes podrán solicitar información sobre el tratamiento de sus datos personales y ejercer, según corresponda, los derechos de acceso, actualización, rectificación, oposición o eliminación, de conformidad con la legislación paraguaya aplicable.
+
+Las solicitudes podrán presentarse a través de los canales oficiales de contacto del organizador.
+
+Para proteger la información personal, podrá requerirse una verificación razonable de la identidad del solicitante antes de procesar su pedido.
+
+12. Bases y condiciones de la promoción
+
+La participación en “El Tesoro Galáctico de los Códigos Secretos” implica la aceptación de las bases y condiciones oficiales de la promoción.
+
+Esta Política de Privacidad complementa dichas bases y condiciones en los aspectos relacionados con el tratamiento de datos personales.
+
+La información completa sobre requisitos de participación, adjudicación, premios, restricciones y procedimientos de retiro se encuentra detallada en el reglamento oficial de la promoción.
+
+13. Modificaciones de esta política
+
+Distribuidora del Paraguay S.A. podrá actualizar esta Política de Privacidad para reflejar modificaciones en sus procesos, servicios tecnológicos, medidas de seguridad o disposiciones legales aplicables.
+
+La versión vigente estará disponible en los sitios web de PuroSol e indicará la fecha de su última actualización.
+
+14. Contacto
+
+Para consultas relacionadas con esta Política de Privacidad o con el tratamiento de datos personales, los usuarios podrán contactar al organizador mediante los siguientes datos:
+
+Distribuidora del Paraguay S.A.
+
+Marca: PuroSol
+
+RUC: 80020653-3
+
+Dirección: Acceso Sur Km. 32, San Antonio, Paraguay.
+
+Teléfono: 021 919-7000.
+
+Sitios web:
+
+https://purosol.com.py
+
+https://www.purosol.com.py
+
+Política de Privacidad:
+
+https://purosol.com.py/#/privacidad

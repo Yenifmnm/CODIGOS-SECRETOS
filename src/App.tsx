@@ -16,6 +16,7 @@ const Register = lazy(() => import('./pages/Register/Register'));
 const Prizes = lazy(() => import('./pages/Prizes/Prizes'));
 const CodeHelp = lazy(() => import('./pages/CodeHelp/CodeHelp'));
 const Terms = lazy(() => import('./pages/Terms/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy/Privacy'));
 const Winner = lazy(() => import('./pages/Winner/Winner'));
 const Loser = lazy(() => import('./pages/Loser/Loser'));
 const CodeUsed = lazy(() => import('./pages/CodeUsed/CodeUsed'));
@@ -63,6 +64,7 @@ export function App() {
             <Route path="/premios" element={<Prizes />} />
             <Route path="/donde-esta-el-codigo" element={<CodeHelp />} />
             <Route path="/bases" element={<Terms />} />
+            <Route path="/privacidad" element={<Privacy />} />
             <Route path="/ganaste" element={<Winner />} />
             <Route path="/perdiste" element={<Loser />} />
             <Route path="/codigo-utilizado" element={<CodeUsed />} />

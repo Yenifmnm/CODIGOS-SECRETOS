@@ -8,6 +8,7 @@ import { RibbonSvg } from '../../components/promo/RibbonSvg';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { ParchmentField } from '../../components/forms/ParchmentField';
 import { ParchmentSelect } from '../../components/forms/ParchmentSelect';
+import { FormPrivacyNotice } from '../../components/forms/FormPrivacyNotice';
 import { DEPARTAMENTOS, esDepartamento } from '../../app/departamentos';
 import { promoApi } from '../../services/promoApi';
 import { useSession } from '../../app/SessionContext';
@@ -301,7 +302,7 @@ export default function Register() {
         />
       }
     >
-      <Deco src={pergamino1} x={347} y={253} w={1226} h={780} zIndex={1} />
+      <Deco src={pergamino1} x={347} y={253} w={1226} h={806} zIndex={1} />
       <Deco src={destello} x={134} y={-50} w={745} h={494} zIndex={2} />
       <Deco src={planetaVit1} x={-130} y={792} w={339} h={166} blur={5} opacity={0.9} zIndex={2} />
       <Deco
@@ -444,11 +445,12 @@ export default function Register() {
           <p
             className="abs register__flow-error"
             role="alert"
-            style={{ ...centeredText(960, 928, 26), zIndex: Z.buttons }}
+            style={{ ...centeredText(960, 1000, 26), zIndex: Z.buttons }}
           >
             {error}
           </p>
         )}
+        <FormPrivacyNotice />
       </form>
     </Stage>
   );
@@ -664,6 +666,7 @@ function RegisterMobile({ fields, onSubmit, onCancel, submitting, error }: Regis
               {error}
             </p>
           )}
+          <FormPrivacyNotice />
         </form>
       </div>
     </div>

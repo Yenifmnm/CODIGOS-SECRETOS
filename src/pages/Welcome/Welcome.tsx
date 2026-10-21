@@ -5,6 +5,7 @@ import { Deco } from '../../components/layout/Deco';
 import { PromoButton } from '../../components/buttons/PromoButton';
 import { PurosolShip } from '../../components/promo/PurosolShip';
 import { IconCode, IconId, ParchmentField } from '../../components/forms/ParchmentField';
+import { FormPrivacyNotice } from '../../components/forms/FormPrivacyNotice';
 import { useCodeFlow } from '../../app/useCodeFlow';
 import { FloatingLayer } from '../../components/effects/FloatingLayer';
 import { box, centeredText, u } from '../../app/stage';
@@ -178,6 +179,7 @@ export default function Welcome() {
           <Link className="welcome__help" to="/donde-esta-el-codigo" style={{ fontSize: u(30) }}>
             ¿Dónde encuentro el código secreto?
           </Link>
+          <FormPrivacyNotice />
         </form>
       </div>
       </Stage>
@@ -317,6 +319,7 @@ function WelcomeMobile({ form, onSubmit, loading, error }: WelcomeMobileProps) {
           <Link className="welcome-m__help" to="/donde-esta-el-codigo" data-figma="70:358">
             ¿Dónde encuentro el código secreto?
           </Link>
+          <FormPrivacyNotice />
         </form>
       </div>
 
