@@ -6,9 +6,10 @@ import { TurnstileHost } from './components/security/TurnstileHost';
 import cursorAnchor from './assets/ui/cursor-ancla-32.png';
 
 /**
- * Las demás pantallas se cargan cuando se visita su ruta.
+ * Todas las pantallas salvo el Home entran por lazy-load: la carga inicial sólo
+ * arrastra el KV, el logo y el cofre.
  */
-import ComingBack from './pages/ComingBack/ComingBack';
+import Home from './pages/Home/Home';
 
 const Welcome = lazy(() => import('./pages/Welcome/Welcome'));
 const Register = lazy(() => import('./pages/Register/Register'));
@@ -56,7 +57,7 @@ export function App() {
         </a>
         <Suspense fallback={<Fallback />}>
           <Routes>
-            <Route path="/" element={<ComingBack />} />
+            <Route path="/" element={<Home />} />
             <Route path="/participar" element={<Welcome />} />
             <Route path="/registro" element={<Register />} />
             <Route path="/premios" element={<Prizes />} />
